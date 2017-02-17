@@ -1,0 +1,50 @@
+{
+    // Use IntelliSense to learn about possible Node.js debug attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [{
+            //
+            "name": "Launch index.html (01)",
+            "type": "chrome",
+            "request": "launch",
+            "file": "${workspaceRoot}/01/index.html",
+            "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe"
+        }, {
+            //
+            "name": "Launch index.html (02)",
+            "type": "chrome",
+            "request": "launch",
+            "file": "${workspaceRoot}/02/index.html",
+            "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe"
+        }, {
+            //
+            "name": "Launch index.html (03)",
+            "type": "chrome",
+            "request": "launch",
+            "file": "${workspaceRoot}/03/index.html",
+            "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe"
+        }, {
+            //
+            "name": "Launch index.html (01a)",
+            "type": "chrome",
+            "request": "launch",
+            "file": "${workspaceRoot}/more/no-req/01a/index.html",
+            "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe"
+        }, {
+            //
+            "name": "Launch index.html (02a)",
+            "type": "chrome",
+            "request": "launch",
+            "file": "${workspaceRoot}/more/no-req/02a/index.html",
+            "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe"
+        }, {
+            //
+            "name": "Launch index.html (02b)",
+            "type": "chrome",
+            "request": "launch",
+            "file": "${workspaceRoot}/more/no-req/02b/index.html",
+            "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe"
+        }
+    ]
+}

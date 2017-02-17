@@ -1,0 +1,36 @@
+"use strict";
+
+define ([
+    // No parameters.
+], function (
+    // No parameters.
+){
+    function PositionOnly() {
+        // No contents.
+    }
+
+    Object.defineProperty(PositionOnly, "vertexShaderSource", {
+        //
+        get: function() { return (
+        "   //                                                             \n" +
+        "   attribute vec3 vertexPosition;                                 \n" +
+        "   uniform mat4 transform;                                        \n" +
+        "                                                                  \n" +
+        "   void main() {                                                  \n" +
+        "       gl_Position = transform * vec4(vertexPosition, 1.0);       \n" +
+        "   }                                                              \n"
+        ); }
+    });
+
+    Object.defineProperty(PositionOnly, "fragmentShaderSource", {
+        //
+        get: function() { return (
+        "   //                                                             \n" +
+        "   void main() {                                                  \n" +
+        "       gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);                   \n" +
+        "   }                                                              \n"
+        ); }
+    });    
+
+    return PositionOnly;
+});
