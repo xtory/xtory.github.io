@@ -1,11 +1,12 @@
 define ([
-    "../../lib/xtory/vector-3d",
-    "../../lib/xtory/matrix-4x4",
-    "../../lib/xtory/xcene",
-    "../../lib/xtory/graphics/color",
-    "../../lib/xtory/graphics/fx/helpers/shader-helper",
-    "../../lib/xtory/graphics/fx/shader-type",
-    "../../lib/xtory/assets/shaders/position-only"
+    "../../lib/" + xPaths["3d-vector"],
+    "../../lib/" + xPaths["4x4-matrix"],
+    "../../lib/" + xPaths["scene"],
+    "../../lib/" + xPaths["color"],
+    "../../lib/" + xPaths["shader-helper"],
+    "../../lib/" + xPaths["shader-type"],
+    "../../lib/" + xPaths["position-only"],
+    "../../lib/" + xPaths["position-only"],
 ], function (
     Vector3D,
     Matrix4x4,

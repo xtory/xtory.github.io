@@ -1,6 +1,6 @@
 define ([
-    "../../lib/xtory/xcene",
-    "../../lib/xtory/graphics/color"
+    "../../lib/" + xPaths["scene"],
+    "../../lib/" + xPaths["color"]
 ], function (
     Scene,
     Color
