@@ -1,5 +1,3 @@
-"use strict";
-
 define ([
     "./graphics/graphics-manager",
     "./assets/asset-manager"
@@ -7,6 +5,8 @@ define ([
     GraphicsManager,
     AssetManager
 ){
+    "use strict";
+    
     function Xcene(_mainCanvas) {
         //
         var _graphicsManager;

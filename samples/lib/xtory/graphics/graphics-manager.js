@@ -1,5 +1,3 @@
-"use strict";
-
 define ([
     "../helpers/js-helper",
     "./color"
@@ -7,6 +5,8 @@ define ([
     JSHelper,
     Color
 ){
+    "use strict";
+    
     function GraphicsManager(_xcene) {
         //
         var _renderingContext;

@@ -1,5 +1,3 @@
-"use strict";
-
 define ([
     "../../lib/xtory/vector-3d",
     "../../lib/xtory/matrix-4x4",
@@ -17,6 +15,8 @@ define ([
     ShaderType,
     PositionOnly
 ){
+    "use strict";
+    
     var mainCanvas;
     var scene;
     var shaderHelper;

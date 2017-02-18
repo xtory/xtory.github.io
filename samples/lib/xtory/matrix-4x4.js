@@ -1,10 +1,10 @@
-"use strict";
-
 define ([
     // No parameters.
 ], function (
     // No parameters.
 ){
+    "use strict";
+    
     function Matrix4x4 (
         _s11, _s12, _s13, _s14,
         _s21, _s22, _s23, _s24,

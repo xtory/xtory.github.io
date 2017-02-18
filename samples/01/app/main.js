@@ -1,5 +1,3 @@
-"use strict";
-
 define ([
     "../../lib/xtory/xcene",
     "../../lib/xtory/graphics/color"
@@ -7,6 +5,8 @@ define ([
     Scene,
     Color
 ){
+    "use strict";
+    
     var mainCanvas;
     var scene;
 

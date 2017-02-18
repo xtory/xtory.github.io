@@ -1,5 +1,3 @@
-"use strict";
-
 define ([
     "../../../helpers/js-helper",
     "../shader-type"
@@ -7,6 +5,8 @@ define ([
     JSHelper,
     ShaderType
 ){
+    "use strict";
+    
     function ShaderHelper(_graphicsManager) {
         //
         var _renderingContext =

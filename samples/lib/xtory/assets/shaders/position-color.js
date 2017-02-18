@@ -1,10 +1,10 @@
-"use strict";
-
 define ([
     // No parameters.
 ], function (
     // No parameters.
 ){
+    "use strict";
+    
     function PositionColor() {
         // No contents.
     }

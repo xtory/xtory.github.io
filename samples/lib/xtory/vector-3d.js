@@ -1,10 +1,10 @@
-"use strict";
-
 define ([
     // No parameters.
 ], function (
     // No parameters.
 ){
+    "use strict";
+    
     function Vector3D(_x, _y, _z) {
         //
         this.x = _x;

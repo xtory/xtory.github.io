@@ -1,5 +1,3 @@
-"use strict";
-
 define ([
     "../graphics/fx/shader-type",
     "../helpers/js-helper"
@@ -7,6 +5,8 @@ define ([
     ShaderType,
     JSHelper
 ){
+    "use strict";
+    
     function AssetManager(_xcene) {
         //
         var _renderingContext;
