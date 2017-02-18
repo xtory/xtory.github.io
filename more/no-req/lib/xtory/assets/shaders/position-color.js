@@ -4,7 +4,7 @@ function PositionColor() {
     // No contents.
 }
 
-Object.defineProperty(PositionColor, "vertexShaderSource", {
+Object.defineProperty(PositionColor, "VERTEX_SHADER_SOURCE", {
     //
     get: function() { return (
     "   //                                                              \n" +
@@ -17,7 +17,7 @@ Object.defineProperty(PositionColor, "vertexShaderSource", {
     ); }
 });
 
-Object.defineProperty(PositionColor, "fragmentShaderSource", {
+Object.defineProperty(PositionColor, "FRAGMENT_SHADER_SOURCE", {
     //
     get: function() { return (
     "   //                                                              \n" +

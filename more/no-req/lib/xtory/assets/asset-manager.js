@@ -22,13 +22,13 @@ AssetManager.prototype = {
         //
         var shader;
 
-        if (shaderType === ShaderType.vertexShader) {
+        if (shaderType === ShaderType.VERTEX_SHADER) {
             //
             shader = this.renderingContext.createShader (
                 WebGLRenderingContext.VERTEX_SHADER
             );
         } else if (
-            shaderType === ShaderType.fragmentShader
+            shaderType === ShaderType.FRAGMENT_SHADER
         ){
             shader = this.renderingContext.createShader (
                 WebGLRenderingContext.FRAGMENT_SHADER

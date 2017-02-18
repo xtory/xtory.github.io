@@ -1,11 +1,11 @@
 define ([
-    "../../lib/" + xPaths["3d-vector"],
-    "../../lib/" + xPaths["4x4-matrix"],
-    "../../lib/" + xPaths["scene"],
-    "../../lib/" + xPaths["color"],
-    "../../lib/" + xPaths["shader-helper"],
-    "../../lib/" + xPaths["shader-type"],
-    "../../lib/" + xPaths["position-color"]
+    "../../lib/xtory/3d-vector",
+    "../../lib/xtory/4x4-matrix",
+    "../../lib/xtory/xcene",
+    "../../lib/xtory/graphics/color",
+    "../../lib/xtory/graphics/fx/helpers/shader-helper",
+    "../../lib/xtory/graphics/fx/shader-type",
+    "../../lib/xtory/assets/shaders/position-color"
 ], function (
     Vector3D,
     Matrix4x4,
@@ -52,13 +52,13 @@ define ([
     function setUpShaders() {
         //
         var vertexShader = scene.assetManager.loadShader (
-            ShaderType.vertexShader,
-            PositionColor.vertexShaderSource
+            ShaderType.VERTEX_SHADER,
+            PositionColor.VERTEX_SHADER_SOURCE
         );
             
         var fragmentShader = scene.assetManager.loadShader (
-            ShaderType.fragmentShader,
-            PositionColor.fragmentShaderSource
+            ShaderType.FRAGMENT_SHADER,
+            PositionColor.FRAGMENT_SHADER_SOURCE
         );
 
         shaderProgram = shaderHelper.setUpShaderProgram (
@@ -68,28 +68,22 @@ define ([
 
         scene.graphicsManager.shaderProgram = shaderProgram;
 
-        vertexPositionAttribute = scene.graphicsManager.getAttributeLocation (
-            shaderProgram,
-            "vertexPosition"
-        );
+        vertexPositionAttribute =
+            scene.graphicsManager.getAttributeLocation("vertexPosition");
         
         scene.graphicsManager.enableVertexAttributeArray (
             vertexPositionAttribute
         );
 
-        vertexColorAttribute = scene.graphicsManager.getAttributeLocation (
-            shaderProgram,
-            "vertexColor"
-        );
+        vertexColorAttribute =
+            scene.graphicsManager.getAttributeLocation("vertexColor");
         
         scene.graphicsManager.enableVertexAttributeArray (
             vertexColorAttribute
         );
         
-        transformUniform = scene.graphicsManager.getUniformLocation (
-            shaderProgram,
-            "transform"
-        );
+        transformUniform =
+            scene.graphicsManager.getUniformLocation("transform");
     }
 
     function setUpBuffers() {
@@ -215,7 +209,7 @@ define ([
             mainCanvas.clientWidth / mainCanvas.clientHeight,
             10,
             100000
-        );        
+        );
         
         setTransformUniform();
         

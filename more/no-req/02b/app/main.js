@@ -45,19 +45,14 @@ function main() {
     //
     function setUpShaders() {
         //
-        // var vertexShader = scene.assetManager.loadShader (
-            // ShaderType.vertexShader,
-            // positionColorVertexShaderSource
-        // );
-
         var vertexShader = scene.assetManager.loadShader (
-            ShaderType.vertexShader,
-            PositionColor.vertexShaderSource
+            ShaderType.VERTEX_SHADER,
+            PositionColor.VERTEX_SHADER_SOURCE
         );
 
         var fragmentShader = scene.assetManager.loadShader (
-            ShaderType.fragmentShader,
-            PositionColor.fragmentShaderSource
+            ShaderType.FRAGMENT_SHADER,
+            PositionColor.FRAGMENT_SHADER_SOURCE
         );
 
         shaderProgram =
