@@ -21,8 +21,8 @@ define ([
     var scene;
     var shaderHelper;
     var shaderProgram;
-    var vertexPositionAttribute;
-    var transformUniform;
+    var vertexPositionAttributeLocation;
+    var transformUniformLocation;
     var vertexPositionBuffer;
     var modelViewMatrix;
     var projectionMatrix;
@@ -66,14 +66,14 @@ define ([
 
         scene.graphicsManager.shaderProgram = shaderProgram;
 
-        vertexPositionAttribute =
+        vertexPositionAttributeLocation =
             scene.graphicsManager.getAttributeLocation("vertexPosition");
         
         scene.graphicsManager.enableVertexAttributeArray (
-            vertexPositionAttribute
+            vertexPositionAttributeLocation
         );
-        
-        transformUniform =
+
+        transformUniformLocation =
             scene.graphicsManager.getUniformLocation("transform");
     }
 
@@ -139,7 +139,7 @@ define ([
         );
         
         renderingContext.vertexAttribPointer (
-            vertexPositionAttribute,
+            vertexPositionAttributeLocation,
             3,
             WebGLRenderingContext.FLOAT,
             false,
@@ -178,7 +178,7 @@ define ([
             projectionMatrix.multiply(modelViewMatrix);
 
         scene.graphicsManager.renderingContext.uniformMatrix4fv (
-            transformUniform,
+            transformUniformLocation,
             false,
             new Float32Array(transform.elements)
         );

@@ -12,8 +12,8 @@ function main() {
     var scene;
     var shaderHelper;
     var shaderProgram;
-    var vertexPositionAttribute;
-    var transformUniform;
+    var vertexPositionAttributeLocation;
+    var transformUniformLocation;
     var squareVerticesBuffer;
     var modelViewMatrix;
     var projectionMatrix;
@@ -60,12 +60,12 @@ function main() {
 
         scene.graphicsManager.shaderProgram = shaderProgram;
 
-        vertexPositionAttribute =
+        vertexPositionAttributeLocation =
             scene.graphicsManager.getAttributeLocation(shaderProgram, "vertexPosition");
 
-        scene.graphicsManager.enableVertexAttributeArray(vertexPositionAttribute);
+        scene.graphicsManager.enableVertexAttributeArray(vertexPositionAttributeLocation);
 
-        transformUniform =
+        transformUniformLocation =
             scene.graphicsManager.getUniformLocation(shaderProgram, "transform");
     }
 
@@ -96,9 +96,9 @@ function main() {
 
         var vertices = [
             50.0,  50.0,  0.0,
-        -50.0,  50.0,  0.0,
+           -50.0,  50.0,  0.0,
             50.0, -50.0,  0.0,
-        -50.0, -50.0,  0.0
+           -50.0, -50.0,  0.0
         ];
 
         // Now pass the list of vertices into WebGL to build the shape. We
@@ -164,7 +164,7 @@ function main() {
         );
 
         renderingContext.vertexAttribPointer (
-            vertexPositionAttribute,
+            vertexPositionAttributeLocation,
             3,
             renderingContext.FLOAT,
             false,
@@ -175,7 +175,7 @@ function main() {
         var transform = projectionMatrix.multiply(modelViewMatrix);
 
         renderingContext.uniformMatrix4fv (
-            transformUniform,
+            transformUniformLocation,
             false,
             new Float32Array(transform.flatten())
         );

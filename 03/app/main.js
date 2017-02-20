@@ -21,9 +21,9 @@ define ([
     var scene;
     var shaderHelper;
     var shaderProgram;
-    var vertexPositionAttribute;
-    var vertexColorAttribute;
-    var transformUniform;
+    var vertexPositionAttributeLocation;
+    var vertexColorAttributeLocation;
+    var transformUniformLocation;
     var vertexPositionBuffer;
     var vertexColorBuffer;
     var modelViewMatrix;
@@ -68,21 +68,21 @@ define ([
 
         scene.graphicsManager.shaderProgram = shaderProgram;
 
-        vertexPositionAttribute =
+        vertexPositionAttributeLocation =
             scene.graphicsManager.getAttributeLocation("vertexPosition");
         
         scene.graphicsManager.enableVertexAttributeArray (
-            vertexPositionAttribute
+            vertexPositionAttributeLocation
         );
 
-        vertexColorAttribute =
+        vertexColorAttributeLocation =
             scene.graphicsManager.getAttributeLocation("vertexColor");
         
         scene.graphicsManager.enableVertexAttributeArray (
-            vertexColorAttribute
+            vertexColorAttributeLocation
         );
         
-        transformUniform =
+        transformUniformLocation =
             scene.graphicsManager.getUniformLocation("transform");
     }
 
@@ -109,17 +109,24 @@ define ([
         // Select the vertexPositionBuffer as the one to apply vertex
         // operations to from here out.
 
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            vertexPositionBuffer
-        );
+        // renderingContext.bindBuffer (
+        //     WebGLRenderingContext.ARRAY_BUFFER,
+        //     vertexPositionBuffer
+        // );
         
-        // Now pass the list of vertex positions into WebGL to build the shape.
-        // We do this by creating a Float32Array from the JavaScript array, then
-        // use it to fill the current vertex buffer.
+        // // Now pass the list of vertex positions into WebGL to build the shape.
+        // // We do this by creating a Float32Array from the JavaScript array, then
+        // // use it to fill the current vertex buffer.
 
-        renderingContext.bufferData (
+        // renderingContext.bufferData (
+        //     WebGLRenderingContext.ARRAY_BUFFER,
+        //     new Float32Array(vertexPositions),
+        //     WebGLRenderingContext.STATIC_DRAW
+        // );
+
+        scene.graphicsManager.setUpBuffer (
             WebGLRenderingContext.ARRAY_BUFFER,
+            vertexPositionBuffer,
             new Float32Array(vertexPositions),
             WebGLRenderingContext.STATIC_DRAW
         );
@@ -136,13 +143,19 @@ define ([
         vertexColorBuffer =
             renderingContext.createBuffer();
 
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            vertexColorBuffer
-        );
+        // renderingContext.bindBuffer (
+        //     WebGLRenderingContext.ARRAY_BUFFER,
+        //     vertexColorBuffer
+        // );
 
-        renderingContext.bufferData (
+        // renderingContext.bufferData (
+        //     WebGLRenderingContext.ARRAY_BUFFER,
+        //     new Float32Array(vertexColors),
+        //     WebGLRenderingContext.STATIC_DRAW
+        // );
+        scene.graphicsManager.setUpBuffer (
             WebGLRenderingContext.ARRAY_BUFFER,
+            vertexColorBuffer,
             new Float32Array(vertexColors),
             WebGLRenderingContext.STATIC_DRAW
         );
@@ -171,7 +184,7 @@ define ([
         );
         
         renderingContext.vertexAttribPointer (
-            vertexPositionAttribute,
+            vertexPositionAttributeLocation,
             3,
             WebGLRenderingContext.FLOAT,
             false,
@@ -187,7 +200,7 @@ define ([
         );
 
         renderingContext.vertexAttribPointer (
-            vertexColorAttribute,
+            vertexColorAttributeLocation,
             4,
             WebGLRenderingContext.FLOAT,
             false,
@@ -226,7 +239,7 @@ define ([
             projectionMatrix.multiply(modelViewMatrix);
 
         scene.graphicsManager.renderingContext.uniformMatrix4fv (
-            transformUniform,
+            transformUniformLocation,
             false,
             new Float32Array(transform.elements)
         );
