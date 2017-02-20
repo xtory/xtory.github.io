@@ -149,7 +149,7 @@ define ([
         
         modelViewMatrix = Matrix4x4.createIdentityMatrix();
 
-        var v = new Vector3D(0, 0, -250);
+        var v = new Vector3D(0, 0, -325);
 
         modelViewMatrix = Matrix4x4.multiplyMatrices (
             modelViewMatrix,

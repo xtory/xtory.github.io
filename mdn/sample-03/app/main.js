@@ -109,24 +109,17 @@ define ([
         // Select the vertexPositionBuffer as the one to apply vertex
         // operations to from here out.
 
-        // renderingContext.bindBuffer (
-        //     WebGLRenderingContext.ARRAY_BUFFER,
-        //     vertexPositionBuffer
-        // );
-        
-        // // Now pass the list of vertex positions into WebGL to build the shape.
-        // // We do this by creating a Float32Array from the JavaScript array, then
-        // // use it to fill the current vertex buffer.
-
-        // renderingContext.bufferData (
-        //     WebGLRenderingContext.ARRAY_BUFFER,
-        //     new Float32Array(vertexPositions),
-        //     WebGLRenderingContext.STATIC_DRAW
-        // );
-
-        scene.graphicsManager.setUpBuffer (
+        renderingContext.bindBuffer (
             WebGLRenderingContext.ARRAY_BUFFER,
-            vertexPositionBuffer,
+            vertexPositionBuffer
+        );
+        
+        // Now pass the list of vertex positions into WebGL to build the shape.
+        // We do this by creating a Float32Array from the JavaScript array, then
+        // use it to fill the current vertex buffer.
+
+        renderingContext.bufferData (
+            WebGLRenderingContext.ARRAY_BUFFER,
             new Float32Array(vertexPositions),
             WebGLRenderingContext.STATIC_DRAW
         );
@@ -143,19 +136,13 @@ define ([
         vertexColorBuffer =
             renderingContext.createBuffer();
 
-        // renderingContext.bindBuffer (
-        //     WebGLRenderingContext.ARRAY_BUFFER,
-        //     vertexColorBuffer
-        // );
-
-        // renderingContext.bufferData (
-        //     WebGLRenderingContext.ARRAY_BUFFER,
-        //     new Float32Array(vertexColors),
-        //     WebGLRenderingContext.STATIC_DRAW
-        // );
-        scene.graphicsManager.setUpBuffer (
+        renderingContext.bindBuffer (
             WebGLRenderingContext.ARRAY_BUFFER,
-            vertexColorBuffer,
+            vertexColorBuffer
+        );
+
+        renderingContext.bufferData (
+            WebGLRenderingContext.ARRAY_BUFFER,
             new Float32Array(vertexColors),
             WebGLRenderingContext.STATIC_DRAW
         );
@@ -208,7 +195,7 @@ define ([
             0
         );
 
-        var v = new Vector3D(0, 0, -250);
+        var v = new Vector3D(0, 0, -325);
 
         modelViewMatrix =
             Matrix4x4.createTranslationMatrix(v);

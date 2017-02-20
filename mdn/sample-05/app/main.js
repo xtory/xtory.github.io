@@ -28,8 +28,11 @@ define ([
     var transformUniformLocation;
     var vertexPositionBuffer;
     var vertexColorBuffer;
+    var indexBuffer;
     var modelViewMatrix;
     var projectionMatrix;
+
+    var rotationX = 0; // in radians.
     var rotationY = 0; // in radians.
 
     mainCanvas = document.getElementById("mainCanvas");
@@ -99,11 +102,50 @@ define ([
         // Create an array of vertex positions for the square. Note that the Z
         // coordinate is always 0 here.
 
+        // var vertexPositions = [
+        //     50.0,  50.0,  0.0,
+        //    -50.0,  50.0,  0.0,
+        //     50.0, -50.0,  0.0,
+        //    -50.0, -50.0,  0.0
+        // ];
+
         var vertexPositions = [
-            50.0,  50.0,  0.0,
-           -50.0,  50.0,  0.0,
-            50.0, -50.0,  0.0,
-           -50.0, -50.0,  0.0
+            //
+            // Front face.
+           -50, -50,  50,
+            50, -50,  50,
+            50,  50,  50,
+           -50,  50,  50,
+            
+            // Back face.
+           -50, -50, -50,
+           -50,  50, -50,
+            50,  50, -50,
+            50, -50, -50,
+            
+            // Top face.
+           -50,  50, -50,
+           -50,  50,  50,
+            50,  50,  50,
+            50,  50, -50,
+            
+            // Bottom face.
+           -50, -50, -50,
+            50, -50, -50,
+            50, -50,  50,
+           -50, -50,  50,
+            
+            // Right face.
+            50, -50, -50,
+            50,  50, -50,
+            50,  50,  50,
+            50, -50,  50,
+            
+            // Left face.
+           -50, -50, -50,
+           -50, -50,  50,
+           -50,  50,  50,
+           -50,  50, -50
         ];
 
         vertexPositionBuffer =
@@ -129,12 +171,36 @@ define ([
 
         // Now set up the colors for the vertices
 
-        var vertexColors = [
-            157/255,  10/255,  14/255, 1.0, // photoshop's dark red
-            163/255,  97/255,   9/255, 1.0, // photoshop's dark yellow orange
-              0/255,  52/255, 113/255, 1.0, // photoshop's dark blue
-              0/255, 114/255,  54/255, 1.0  // photoshop's dark green
+        // var vertexColors = [
+        //     157/255,  10/255,  14/255, 1.0, // photoshop's dark red
+        //     163/255,  97/255,   9/255, 1.0, // photoshop's dark yellow orange
+        //       0/255,  52/255, 113/255, 1.0, // photoshop's dark blue
+        //       0/255, 114/255,  54/255, 1.0  // photoshop's dark green
+        // ];
+
+        var faceColors = [
+            [ 157/255,  10/255,  14/255, 1 ], // photoshop's dark red
+            [ 163/255,  97/255,   9/255, 1 ], // photoshop's dark yellow orange
+            [   0/255, 114/255,  54/255, 1 ], // photoshop's dark green
+            //[   0/255, 118/255, 163/255, 1 ], // photoshop's dark cyan
+            [   0/255, 115/255, 106/255, 1 ], // photoshop's dark green cyan
+            [   0/255,  52/255, 113/255, 1 ], // photoshop's dark blue
+            //[ 158/255,       0, 193/255, 1 ]  // photoshop's dark magenta
+            [  98/255,   4/255,  96/255, 1 ]  // photoshop's dark violet magenta
         ];
+
+        var vertexColors = [];
+
+        for (var i=0; i<6; i++) {
+            //
+            var item = faceColors[i];
+
+            // Repeat each color four times for the four vertices of the face
+
+            for (var j=0; j<4; j++) {
+                vertexColors = vertexColors.concat(item);
+            }
+        }
 
         vertexColorBuffer =
             renderingContext.createBuffer();
@@ -147,6 +213,38 @@ define ([
         renderingContext.bufferData (
             WebGLRenderingContext.ARRAY_BUFFER,
             new Float32Array(vertexColors),
+            WebGLRenderingContext.STATIC_DRAW
+        );
+
+        // Build the element array buffer; this specifies the indices
+        // into the vertex array for each face's vertices.
+
+        indexBuffer =
+            renderingContext.createBuffer();
+
+        renderingContext.bindBuffer (
+            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
+            indexBuffer
+        );
+
+        // This array defines each face as two triangles, using the
+        // indices into the vertex array to specify each triangle's
+        // position.
+
+        var vertexIndices = [
+            0,  1,  2,      0,  2,  3,    // front
+            4,  5,  6,      4,  6,  7,    // back
+            8,  9,  10,     8,  10, 11,   // top
+            12, 13, 14,     12, 14, 15,   // bottom
+            16, 17, 18,     16, 18, 19,   // right
+            20, 21, 22,     20, 22, 23    // left
+        ]
+
+        // Now send the element array to GL
+
+        renderingContext.bufferData (
+            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
+            new Uint16Array(vertexIndices),
             WebGLRenderingContext.STATIC_DRAW
         );
     }
@@ -198,10 +296,22 @@ define ([
             0
         );
 
+        // renderingContext.bindBuffer (
+        //     WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
+        //     indexBuffer
+        // );
+
         modelViewMatrix =
             Matrix4x4.createRotationMatrix(CartesianAxis.Y, rotationY);
 
         rotationY += 0.05;
+
+        modelViewMatrix = Matrix4x4.multiplyMatrices (
+            Matrix4x4.createRotationMatrix(CartesianAxis.X, rotationX),
+            modelViewMatrix
+        );
+
+        rotationX -= 0.025;
 
         var v = new Vector3D(0, 0, -325);
 
@@ -216,13 +326,24 @@ define ([
             undefined,
             undefined
         );
-        
+
         setTransformUniform();
+
+        renderingContext.bindBuffer (
+            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
+            indexBuffer
+        );
         
-        renderingContext.drawArrays (
-            WebGLRenderingContext.TRIANGLE_STRIP,
-            0,
-            4
+        // renderingContext.drawArrays (
+        //     WebGLRenderingContext.TRIANGLE_STRIP,
+        //     0,
+        //     4
+        // );
+        renderingContext.drawElements (
+            WebGLRenderingContext.TRIANGLES,
+            36,
+            WebGLRenderingContext.UNSIGNED_SHORT,
+            0
         );
     }
 
