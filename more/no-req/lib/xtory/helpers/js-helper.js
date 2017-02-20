@@ -5,7 +5,7 @@ function JSHelper() {
 }
 
 //
-// Static Methods.
+// Static methods.
 //
 JSHelper.isNullOrUndefined = function(value) {
     //

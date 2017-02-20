@@ -72,7 +72,7 @@ Object.defineProperty(GraphicsManager, "DEFAULT_STENCIL_BUFFER_VALUE", {
 
 GraphicsManager.prototype = {
     //
-    // Methods.
+    // Public methods.
     //
     enableVertexAttributeArray: function(index) {
         this.renderingContext.enableVertexAttribArray(index);

@@ -6,7 +6,7 @@ define ([
     Color
 ){
     "use strict";
-    
+
     var mainCanvas;
     var scene;
 

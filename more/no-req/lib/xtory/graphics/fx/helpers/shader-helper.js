@@ -12,7 +12,7 @@ function ShaderHelper(_graphicsManager) {
 
 ShaderHelper.prototype = {
     //
-    // Methods.
+    // Public methods.
     //
     setUpShaderProgram: function(vertexShader, fragmentShader) {
         //

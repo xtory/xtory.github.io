@@ -16,7 +16,7 @@ define ([
     PositionColor
 ){
     "use strict";
-    
+
     var mainCanvas;
     var scene;
     var shaderHelper;
@@ -45,7 +45,7 @@ define ([
 
     // Set up to draw the scene periodically.
     setInterval(drawScene, 15);
-    
+
     //
     // Functions.
     //

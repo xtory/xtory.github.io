@@ -24,7 +24,7 @@ function Xcene(_mainCanvas) {
 
 Xcene.prototype = {
     //
-    // Methods.
+    // Public methods.
     //
     resize: function() {
         //
