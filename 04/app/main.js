@@ -1,6 +1,7 @@
 define ([
     "../../lib/xtory/3d-vector",
     "../../lib/xtory/4x4-matrix",
+    "../../lib/xtory/cartesian-axis",
     "../../lib/xtory/xcene",
     "../../lib/xtory/graphics/color",
     "../../lib/xtory/graphics/fx/helpers/shader-helper",
@@ -9,6 +10,7 @@ define ([
 ], function (
     Vector3D,
     Matrix4x4,
+    CartesianAxis,
     Scene,
     Color,
     ShaderHelper,
@@ -28,6 +30,7 @@ define ([
     var vertexColorBuffer;
     var modelViewMatrix;
     var projectionMatrix;
+    var rotationY = 0; // in radians.
 
     mainCanvas = document.getElementById("mainCanvas");
 
@@ -208,10 +211,17 @@ define ([
             0
         );
 
+        modelViewMatrix =
+            Matrix4x4.createRotationMatrix(CartesianAxis.Y, rotationY);
+
+        rotationY += 0.05;
+
         var v = new Vector3D(0, 0, -250);
 
-        modelViewMatrix =
-            Matrix4x4.createTranslationMatrix(v);
+        modelViewMatrix = Matrix4x4.multiplyMatrices (
+            Matrix4x4.createTranslationMatrix(v),
+            modelViewMatrix
+        );
 
         projectionMatrix = Matrix4x4.createProjectionMatrix (
             undefined,

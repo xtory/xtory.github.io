@@ -157,10 +157,10 @@ define ([
         );
 
         projectionMatrix = Matrix4x4.createProjectionMatrix (
-            Math.PI / 4,
+            undefined,
             mainCanvas.clientWidth / mainCanvas.clientHeight,
-            10,
-            100000
+            undefined,
+            undefined
         );
 
         setTransformUniform();

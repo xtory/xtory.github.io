@@ -26,6 +26,13 @@
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe"
         }, {
             //
+            "name": "Launch index.html (04)",
+            "type": "chrome",
+            "request": "launch",
+            "file": "${workspaceRoot}/04/index.html",
+            "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe"
+        }, {
+            //
             "name": "Launch index.html (01a)",
             "type": "chrome",
             "request": "launch",
