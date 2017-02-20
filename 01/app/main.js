@@ -1,6 +1,6 @@
 define ([
-    "../../lib/xtory/xcene",
-    "../../lib/xtory/graphics/color"
+    "../../lib/3d-engine/xcene",
+    "../../lib/3d-engine/graphics/color"
 ], function (
     Scene,
     Color
