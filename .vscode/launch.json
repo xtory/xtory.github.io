@@ -8,49 +8,49 @@
             "name": "MDN Sample-01",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/01/index.html",
+            "file": "${workspaceRoot}/mdn/sample-01/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe"
         }, {
             //
             "name": "MDN Sample-02",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/02/index.html",
+            "file": "${workspaceRoot}/mdn/sample-02/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe"
         }, {
             //
             "name": "MDN Sample-03",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/03/index.html",
+            "file": "${workspaceRoot}/mdn/sample-03/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe"
         }, {
             //
             "name": "MDN Sample-04",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/04/index.html",
+            "file": "${workspaceRoot}/mdn/sample-04/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe"
         }, {
             //
             "name": "MDN Sample-01a",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/more/01a/index.html",
+            "file": "${workspaceRoot}/more/mdn/sample-01a/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe"
         }, {
             //
             "name": "MDN Sample-02a",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/more/02a/index.html",
+            "file": "${workspaceRoot}/more/mdn/sample-02a/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe"
         }, {
             //
             "name": "MDN Sample-02b",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/more/02b/index.html",
+            "file": "${workspaceRoot}/more/mdn/sample-02b/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe"
         }
     ]

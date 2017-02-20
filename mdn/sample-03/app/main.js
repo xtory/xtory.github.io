@@ -1,11 +1,11 @@
 define ([
-    "../../lib/3d-engine/3d-vector",
-    "../../lib/3d-engine/4x4-matrix",
-    "../../lib/3d-engine/xcene",
-    "../../lib/3d-engine/graphics/color",
-    "../../lib/3d-engine/graphics/fx/helpers/shader-helper",
-    "../../lib/3d-engine/graphics/fx/shader-type",
-    "../../lib/3d-engine/assets/shaders/position-color"
+    "../../../lib/3d-engine/3d-vector",
+    "../../../lib/3d-engine/4x4-matrix",
+    "../../../lib/3d-engine/xcene",
+    "../../../lib/3d-engine/graphics/color",
+    "../../../lib/3d-engine/graphics/fx/helpers/shader-helper",
+    "../../../lib/3d-engine/graphics/fx/shader-type",
+    "../../../lib/3d-engine/assets/shaders/position-color"
 ], function (
     Vector3D,
     Matrix4x4,
