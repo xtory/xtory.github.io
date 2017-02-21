@@ -147,7 +147,7 @@ function main() {
         // Now move the drawing position a bit to where we want to start
         // drawing the square.
 
-        var v = Vector.create([-0.0, 0.0, -250.0]);
+        var v = Vector.create([-0.0, 0.0, -325.0]);
 
         modelViewMatrix = modelViewMatrix.multiply (
             Matrix.Translation(v).ensure4x4()

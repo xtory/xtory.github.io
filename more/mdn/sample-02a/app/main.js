@@ -279,7 +279,7 @@ function main() {
         // Now move the drawing position a bit to where we want to start
         // drawing the square.
 
-        moveSquare([-0.0, 0.0, -250.0]);
+        moveSquare([-0.0, 0.0, -325.0]);
 
         // Draw the square by binding the array buffer to the square's vertices
         // array, setting attributes, and pushing it to GL.

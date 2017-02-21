@@ -4,6 +4,7 @@ define ([
     "../../../lib/3d-engine/cartesian-axis",
     "../../../lib/3d-engine/xcene",
     "../../../lib/3d-engine/graphics/color",
+    "../../../lib/3d-engine/graphics/colors",
     "../../../lib/3d-engine/graphics/fx/helpers/shader-helper",
     "../../../lib/3d-engine/graphics/fx/shader-type",
     "../../../lib/3d-engine/assets/shaders/position-color"
@@ -13,6 +14,7 @@ define ([
     CartesianAxis,
     Scene,
     Color,
+    Colors,
     ShaderHelper,
     ShaderType,
     PositionColor
@@ -102,13 +104,6 @@ define ([
         // Create an array of vertex positions for the square. Note that the Z
         // coordinate is always 0 here.
 
-        // var vertexPositions = [
-        //     50.0,  50.0,  0.0,
-        //    -50.0,  50.0,  0.0,
-        //     50.0, -50.0,  0.0,
-        //    -50.0, -50.0,  0.0
-        // ];
-
         var vertexPositions = [
             //
             // Front face.
@@ -171,22 +166,13 @@ define ([
 
         // Now set up the colors for the vertices
 
-        // var vertexColors = [
-        //     157/255,  10/255,  14/255, 1.0, // photoshop's dark red
-        //     163/255,  97/255,   9/255, 1.0, // photoshop's dark yellow orange
-        //       0/255,  52/255, 113/255, 1.0, // photoshop's dark blue
-        //       0/255, 114/255,  54/255, 1.0  // photoshop's dark green
-        // ];
-
         var faceColors = [
-            [ 157/255,  10/255,  14/255, 1 ], // photoshop's dark red
-            [ 163/255,  97/255,   9/255, 1 ], // photoshop's dark yellow orange
-            [   0/255, 114/255,  54/255, 1 ], // photoshop's dark green
-            //[   0/255, 118/255, 163/255, 1 ], // photoshop's dark cyan
-            [   0/255, 115/255, 106/255, 1 ], // photoshop's dark green cyan
-            [   0/255,  52/255, 113/255, 1 ], // photoshop's dark blue
-            //[ 158/255,       0, 193/255, 1 ]  // photoshop's dark magenta
-            [  98/255,   4/255,  96/255, 1 ]  // photoshop's dark violet magenta
+            Colors.PHOTOSHOP_DARK_RED.toArray(),
+            Colors.PHOTOSHOP_DARK_YELLOW_ORANGE.toArray(),
+            Colors.PHOTOSHOP_DARK_GREEN.toArray(),
+            Colors.PHOTOSHOP_DARK_GREEN_CYAN.toArray(),
+            Colors.PHOTOSHOP_DARK_BLUE.toArray(),
+            Colors.PHOTOSHOP_DARK_VIOLET.toArray(),
         ];
 
         var vertexColors = [];

@@ -3,6 +3,7 @@ define ([
     "../../../lib/3d-engine/4x4-matrix",
     "../../../lib/3d-engine/xcene",
     "../../../lib/3d-engine/graphics/color",
+    "../../../lib/3d-engine/graphics/colors",
     "../../../lib/3d-engine/graphics/fx/helpers/shader-helper",
     "../../../lib/3d-engine/graphics/fx/shader-type",
     "../../../lib/3d-engine/assets/shaders/position-color"
@@ -11,6 +12,7 @@ define ([
     Matrix4x4,
     Scene,
     Color,
+    Colors,
     ShaderHelper,
     ShaderType,
     PositionColor
@@ -126,12 +128,12 @@ define ([
 
         // Now set up the colors for the vertices
 
-        var vertexColors = [
-            157/255,  10/255,  14/255, 1.0, // photoshop's dark red
-            163/255,  97/255,   9/255, 1.0, // photoshop's dark yellow orange
-              0/255,  52/255, 113/255, 1.0, // photoshop's dark blue
-              0/255, 114/255,  54/255, 1.0  // photoshop's dark green
-        ];
+        var vertexColors = [].concat (
+            Colors.PHOTOSHOP_DARK_RED.toArray(),
+            Colors.PHOTOSHOP_DARK_YELLOW_ORANGE.toArray(),
+            Colors.PHOTOSHOP_DARK_BLUE.toArray(),
+            Colors.PHOTOSHOP_DARK_GREEN.toArray()
+        );
 
         vertexColorBuffer =
             renderingContext.createBuffer();
