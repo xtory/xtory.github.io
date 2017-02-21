@@ -1,6 +1,6 @@
 define ([
-    "../../../lib/3d-engine/xcene",
-    "../../../lib/3d-engine/graphics/color"
+    "../../../lib/cybo/xcene",
+    "../../../lib/cybo/graphics/color"
 ], function (
     Scene,
     Color
