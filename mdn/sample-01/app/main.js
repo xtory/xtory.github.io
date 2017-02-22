@@ -1,9 +1,11 @@
 define ([
     "../../../lib/cybo/xcene",
-    "../../../lib/cybo/graphics/color"
+    "../../../lib/cybo/graphics/color",
+    "../../../lib/cybo/helpers/exception-helper"
 ], function (
     Scene,
-    Color
+    Color,
+    ExceptionHelper
 ){
     "use strict";
 
@@ -12,11 +14,16 @@ define ([
 
     mainCanvas = document.getElementById("mainCanvas");
 
-    scene = new Scene(mainCanvas);
-
+    try {
+        scene = new Scene(mainCanvas);
+    } catch (e) {
+        ExceptionHelper.displayMessageOf(e);
+        return;
+    } 
+    
     scene.graphicsManager.clear (
         WebGLRenderingContext.COLOR_BUFFER_BIT,
-        new Color(0.25, 0.25, 0.25, 1.0),
+        undefined,
         undefined,
         undefined
     );

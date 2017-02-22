@@ -25,7 +25,7 @@ ShaderHelper.prototype = {
 
         // If creating the shader program failed, alert
 
-        if (JSHelper.isNullOrUndefined (
+        if (JSHelper.isUndefinedOrNull (
                 this.renderingContext.getProgramParameter (
                     shaderProgram,
                     WebGLRenderingContext.LINK_STATUS

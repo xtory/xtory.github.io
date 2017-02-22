@@ -120,12 +120,7 @@ function main() {
     function drawScene() {
         //
         // Clear the mainCanvas before we start drawing on it.
-        scene.graphicsManager.clear (
-            undefined,
-            undefined, //new Color(0.25, 0.25, 0.25, 1.0), //0.25, 0.25, 0.25, 1.0,
-            undefined, //1.0,
-            undefined //1.0
-        );
+        scene.graphicsManager.clear();
 
         // Establish the perspective with which we want to view the
         // scene. Our field of view is 45 degrees, with a width/height

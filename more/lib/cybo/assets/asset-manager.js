@@ -44,7 +44,7 @@ AssetManager.prototype = {
         this.renderingContext.compileShader(shader);
 
         // See if it compiled successfully
-        if (JSHelper.isNullOrUndefined (
+        if (JSHelper.isUndefinedOrNull (
                 this.renderingContext.getShaderParameter (
                     shader,
                     this.renderingContext.COMPILE_STATUS
@@ -117,7 +117,7 @@ AssetManager.prototype = {
         this.renderingContext.compileShader(shader);
 
         // See if it compiled successfully
-        if (JSHelper.isNullOrUndefined (
+        if (JSHelper.isUndefinedOrNull (
                 this.renderingContext.getShaderParameter (
                     shader,
                     this.renderingContext.COMPILE_STATUS

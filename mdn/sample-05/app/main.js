@@ -3,21 +3,23 @@ define ([
     "../../../lib/cybo/4x4-matrix",
     "../../../lib/cybo/cartesian-axis",
     "../../../lib/cybo/xcene",
+    "../../../lib/cybo/assets/shaders/position-color",
     "../../../lib/cybo/graphics/color",
     "../../../lib/cybo/graphics/colors",
     "../../../lib/cybo/graphics/fx/helpers/shader-helper",
     "../../../lib/cybo/graphics/fx/shader-type",
-    "../../../lib/cybo/assets/shaders/position-color"
+    "../../../lib/cybo/helpers/exception-helper"
 ], function (
     Vector3D,
     Matrix4x4,
     CartesianAxis,
     Scene,
+    PositionColor,
     Color,
     Colors,
     ShaderHelper,
     ShaderType,
-    PositionColor
+    ExceptionHelper
 ){
     "use strict";
 
@@ -39,7 +41,12 @@ define ([
 
     mainCanvas = document.getElementById("mainCanvas");
 
-    scene = new Scene(mainCanvas);
+    try {
+        scene = new Scene(mainCanvas);
+    } catch (e) {
+        ExceptionHelper.displayMessageOf(e);
+        return;
+    } 
     
     shaderHelper = new ShaderHelper(scene.graphicsManager);
 
@@ -241,13 +248,7 @@ define ([
             scene.graphicsManager.renderingContext;
 
         // Clear the mainCanvas before we start drawing on it.
-
-        scene.graphicsManager.clear (
-            undefined,
-            new Color(0.25, 0.25, 0.25, 1.0),
-            undefined,
-            undefined
-        );
+        scene.graphicsManager.clear();
 
         // Draw the square by binding the array buffer to the square's vertices
         // array, setting attributes, and pushing it to GL.

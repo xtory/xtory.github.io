@@ -20,7 +20,7 @@ function GraphicsManager(_xcene) {
 
         // If we don't have a GL context, give up now
         //if (!this.renderingContext)
-        if (JSHelper.isNullOrUndefined(_renderingContext) === true)
+        if (JSHelper.isUndefinedOrNull(_renderingContext) === true)
         {
             // alert("Unable to initialize WebGL. Your browser may not support it.");
             // return;

@@ -2,20 +2,22 @@ define ([
     "../../../lib/cybo/3d-vector",
     "../../../lib/cybo/4x4-matrix",
     "../../../lib/cybo/xcene",
+    "../../../lib/cybo/assets/shaders/position-color",
     "../../../lib/cybo/graphics/color",
     "../../../lib/cybo/graphics/colors",
     "../../../lib/cybo/graphics/fx/helpers/shader-helper",
     "../../../lib/cybo/graphics/fx/shader-type",
-    "../../../lib/cybo/assets/shaders/position-color"
+    "../../../lib/cybo/helpers/exception-helper"
 ], function (
     Vector3D,
     Matrix4x4,
     Scene,
+    PositionColor,
     Color,
     Colors,
     ShaderHelper,
     ShaderType,
-    PositionColor
+    ExceptionHelper
 ){
     "use strict";
 
@@ -33,7 +35,12 @@ define ([
 
     mainCanvas = document.getElementById("mainCanvas");
 
-    scene = new Scene(mainCanvas);
+    try {
+        scene = new Scene(mainCanvas);
+    } catch (e) {
+        ExceptionHelper.displayMessageOf(e);
+        return;
+    } 
     
     shaderHelper = new ShaderHelper(scene.graphicsManager);
 
@@ -126,6 +133,17 @@ define ([
             WebGLRenderingContext.STATIC_DRAW
         );
 
+        // *Test*
+        renderingContext.vertexAttribPointer (
+            vertexPositionAttributeLocation,
+            3,
+            WebGLRenderingContext.FLOAT,
+            false,
+            0,
+            0
+        );
+        // *_Test*
+
         // Now set up the colors for the vertices
 
         var vertexColors = [].concat (
@@ -148,6 +166,17 @@ define ([
             new Float32Array(vertexColors),
             WebGLRenderingContext.STATIC_DRAW
         );
+
+        // *Test*
+        renderingContext.vertexAttribPointer (
+            vertexColorAttributeLocation,
+            4,
+            WebGLRenderingContext.FLOAT,
+            false,
+            0,
+            0
+        );
+        // *_Test*
     }
 
     function drawScene() {
@@ -156,17 +185,13 @@ define ([
             scene.graphicsManager.renderingContext;
 
         // Clear the mainCanvas before we start drawing on it.
-
-        scene.graphicsManager.clear (
-            undefined,
-            new Color(0.25, 0.25, 0.25, 1.0),
-            undefined,
-            undefined
-        );
+        scene.graphicsManager.clear();
 
         // Draw the square by binding the array buffer to the square's vertices
         // array, setting attributes, and pushing it to GL.
 
+        // *Test*
+        /*
         renderingContext.bindBuffer (
             WebGLRenderingContext.ARRAY_BUFFER,
             vertexPositionBuffer
@@ -196,6 +221,7 @@ define ([
             0,
             0
         );
+        */
 
         var v = new Vector3D(0, 0, -325);
 
