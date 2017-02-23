@@ -83,14 +83,14 @@ define ([
         vertexPositionAttributeLocation =
             scene.graphicsManager.getAttributeLocation("vertexPosition");
         
-        scene.graphicsManager.enableVertexAttributeArray (
+        scene.graphicsManager.enableVertexAttribute (
             vertexPositionAttributeLocation
         );
 
         vertexColorAttributeLocation =
             scene.graphicsManager.getAttributeLocation("vertexColor");
         
-        scene.graphicsManager.enableVertexAttributeArray (
+        scene.graphicsManager.enableVertexAttribute (
             vertexColorAttributeLocation
         );
 
@@ -109,10 +109,10 @@ define ([
         // coordinate is always 0 here.
 
         var vertexPositions = [
-            50.0,  50.0,  0.0,
-           -50.0,  50.0,  0.0,
             50.0, -50.0,  0.0,
-           -50.0, -50.0,  0.0
+            50.0,  50.0,  0.0,
+           -50.0, -50.0,  0.0,
+           -50.0,  50.0,  0.0
         ];
 
         vertexPositionBuffer =
@@ -168,6 +168,33 @@ define ([
         // Clear the mainCanvas before we start drawing on it.
         scene.graphicsManager.clear();
 
+        modelViewMatrix =
+            Matrix4x4.createRotationMatrix(CartesianAxis.Y, rotationY);
+
+        rotationY += 0.05;
+
+        var v = new Vector3D(0, 0, -325);
+
+        modelViewMatrix = Matrix4x4.multiplyMatrices (
+            Matrix4x4.createTranslationMatrix(v),
+            modelViewMatrix
+        );
+
+        projectionMatrix = Matrix4x4.createProjectionMatrix (
+            undefined,
+            mainCanvas.clientWidth / mainCanvas.clientHeight,
+            undefined,
+            undefined
+        );
+        
+        var transform =
+            projectionMatrix.multiply(modelViewMatrix);
+
+        scene.graphicsManager.setMatrix4x4Uniform (
+            transformUniformLocation,
+            transform
+        );        
+
         // Draw the square by binding the array buffer to the square's vertices
         // array, setting attributes, and pushing it to GL.
 
@@ -200,44 +227,11 @@ define ([
             0,
             0
         );
-
-        modelViewMatrix =
-            Matrix4x4.createRotationMatrix(CartesianAxis.Y, rotationY);
-
-        rotationY += 0.05;
-
-        var v = new Vector3D(0, 0, -325);
-
-        modelViewMatrix = Matrix4x4.multiplyMatrices (
-            Matrix4x4.createTranslationMatrix(v),
-            modelViewMatrix
-        );
-
-        projectionMatrix = Matrix4x4.createProjectionMatrix (
-            undefined,
-            mainCanvas.clientWidth / mainCanvas.clientHeight,
-            undefined,
-            undefined
-        );
-        
-        setTransformUniform();
         
         renderingContext.drawArrays (
             WebGLRenderingContext.TRIANGLE_STRIP,
             0,
             4
-        );
-    }
-
-    function setTransformUniform() {
-        //
-        var transform =
-            projectionMatrix.multiply(modelViewMatrix);
-
-        scene.graphicsManager.renderingContext.uniformMatrix4fv (
-            transformUniformLocation,
-            false,
-            new Float32Array(transform.elements)
         );
     }
 });

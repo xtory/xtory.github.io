@@ -1,8 +1,9 @@
 define ([
     "../../../lib/cybo/3d-vector",
     "../../../lib/cybo/4x4-matrix",
+    "../../../lib/cybo/cartesian-axis",
     "../../../lib/cybo/xcene",
-    "../../../lib/cybo/assets/shaders/position-color",
+    "../../../lib/cybo/assets/shaders/position-texture-coordinates",
     "../../../lib/cybo/graphics/color",
     "../../../lib/cybo/graphics/colors",
     "../../../lib/cybo/graphics/fx/helpers/shader-helper",
@@ -11,8 +12,9 @@ define ([
 ], function (
     Vector3D,
     Matrix4x4,
+    CartesianAxis,
     Scene,
-    PositionColor,
+    PositionTextureCoordinates,
     Color,
     Colors,
     ShaderHelper,
@@ -26,12 +28,15 @@ define ([
     var shaderHelper;
     var shaderProgram;
     var vertexPositionAttributeLocation;
-    var vertexColorAttributeLocation;
+    var vertexTextureCoordinateAttributeLocation;
     var transformUniformLocation;
     var vertexPositionBuffer;
-    var vertexColorBuffer;
+    var vertexTextureCoordinateBuffer
     var modelViewMatrix;
     var projectionMatrix;
+    var mainImage;
+    var mainTexture;
+    var rotationY = 0;
 
     mainCanvas = document.getElementById("mainCanvas");
 
@@ -52,6 +57,8 @@ define ([
     // we'll be drawing.
     setUpBuffers();
 
+    setUpTextures();
+
     // Set up to draw the scene periodically.
     setInterval(drawScene, 15);
 
@@ -62,12 +69,12 @@ define ([
         //
         var vertexShader = scene.assetManager.loadShader (
             ShaderType.VERTEX_SHADER,
-            PositionColor.VERTEX_SHADER_SOURCE
+            PositionTextureCoordinates.VERTEX_SHADER_SOURCE
         );
             
         var fragmentShader = scene.assetManager.loadShader (
             ShaderType.FRAGMENT_SHADER,
-            PositionColor.FRAGMENT_SHADER_SOURCE
+            PositionTextureCoordinates.FRAGMENT_SHADER_SOURCE
         );
 
         shaderProgram = shaderHelper.setUpShaderProgram (
@@ -84,11 +91,11 @@ define ([
             vertexPositionAttributeLocation
         );
 
-        vertexColorAttributeLocation =
-            scene.graphicsManager.getAttributeLocation("vertexColor");
+        vertexTextureCoordinateAttributeLocation =
+            scene.graphicsManager.getAttributeLocation("vertexTextureCoordinates");
         
         scene.graphicsManager.enableVertexAttribute (
-            vertexColorAttributeLocation
+            vertexTextureCoordinateAttributeLocation
         );
 
         transformUniformLocation =
@@ -110,7 +117,7 @@ define ([
             50.0,  50.0,  0.0,
            -50.0, -50.0,  0.0,
            -50.0,  50.0,  0.0
-        ];
+        ];        
 
         vertexPositionBuffer =
             renderingContext.createBuffer();
@@ -144,40 +151,146 @@ define ([
         );
         // *_Test*
 
-        // Now set up the colors for the vertices
+        var textureCoordinates = [
+            1.0, 0.0,
+            1.0, 1.0,
+            0.0, 0.0,
+            0.0, 1.0
+        ];        
 
-        var vertexColors = [].concat (
-            Colors.PHOTOSHOP_DARK_RED.toArray(),
-            Colors.PHOTOSHOP_DARK_YELLOW_ORANGE.toArray(),
-            Colors.PHOTOSHOP_DARK_BLUE.toArray(),
-            Colors.PHOTOSHOP_DARK_GREEN.toArray()
-        );
-
-        vertexColorBuffer =
+        vertexTextureCoordinateBuffer =
             renderingContext.createBuffer();
 
         renderingContext.bindBuffer (
             WebGLRenderingContext.ARRAY_BUFFER,
-            vertexColorBuffer
+            vertexTextureCoordinateBuffer
         );
 
         renderingContext.bufferData (
             WebGLRenderingContext.ARRAY_BUFFER,
-            new Float32Array(vertexColors),
+            new Float32Array(textureCoordinates),
             WebGLRenderingContext.STATIC_DRAW
         );
 
-        // *Test*
         renderingContext.vertexAttribPointer (
-            vertexColorAttributeLocation,
-            4,
+            vertexTextureCoordinateAttributeLocation,
+            2,
             WebGLRenderingContext.FLOAT,
             false,
             0,
             0
         );
-        // *_Test*
     }
+
+    //
+    // initTextures
+    //
+    // Initialize the textures we'll be using, then initiate a load of
+    // the texture images. The handleTextureLoaded() callback will finish
+    // the job; it gets called each time a texture finishes loading.
+    //
+    function setUpTextures() {
+        //
+        // mainTexture =
+        //     scene.graphicsManager.renderingContext.createTexture();
+
+        // mainImage = new Image();
+
+        // mainImage.addEventListener("load", function() {
+        //     //
+        //     handleTextureLoaded (
+        //         scene.graphicsManager.renderingContext,
+        //         mainImage,
+        //         mainTexture
+        //     );
+        // });
+
+        // mainImage.src = "assets/images/fujima.jpg";
+
+        var url = "app/assets/images/fujima.jpg";
+        mainTexture = scene.assetManager.loadTexture2D(url);
+
+        // mainImage = new Image();
+
+        // mainImage.addEventListener("load", function() {
+        //     //
+        //     handleTextureLoaded (
+        //         scene.graphicsManager.renderingContext,
+        //         mainImage,
+        //         mainTexture
+        //     );
+        // });
+
+        // mainImage.src = "assets/images/fujima.jpg";
+    }
+
+    // function handleTextureLoaded(renderingContext, image, texture) {
+    //     //
+    //     renderingContext.bindTexture (
+    //         WebGLRenderingContext.TEXTURE_2D,
+    //         texture
+    //     );
+
+    //     renderingContext.texImage2D (
+    //         WebGLRenderingContext.TEXTURE_2D,    // target
+    //         0,                                   // level
+    //         WebGLRenderingContext.RGBA,          // internalformat
+    //         WebGLRenderingContext.RGBA,          // format
+    //         WebGLRenderingContext.UNSIGNED_BYTE, // type
+    //         image                                // htmlImageElement
+    //     );
+
+    //     if (MathHelper.isPowerOfTwo(image.width) === true &&
+    //         MathHelper.isPowerOfTwo(image.height) === true) {
+    //         //
+    //         renderingContext.generateMipmap (
+    //             WebGLRenderingContext.TEXTURE_2D
+    //         );
+            
+    //         renderingContext.texParameteri (
+    //             WebGLRenderingContext.TEXTURE_2D,
+    //             WebGLRenderingContext.TEXTURE_MIN_FILTER,
+    //             WebGLRenderingContext.LINEAR_MIPMAP_LINEAR
+    //         );
+
+    //         renderingContext.texParameteri (
+    //             WebGLRenderingContext.TEXTURE_2D,
+    //             WebGLRenderingContext.TEXTURE_MAG_FILTER,
+    //             WebGLRenderingContext.LINEAR_MIPMAP_LINEAR
+    //         );
+
+    //     } else {
+    //         //
+    //         renderingContext.texParameteri (
+    //             WebGLRenderingContext.TEXTURE_2D,
+    //             WebGLRenderingContext.TEXTURE_MIN_FILTER,
+    //             WebGLRenderingContext.LINEAR
+    //         );
+
+    //         renderingContext.texParameteri (
+    //             WebGLRenderingContext.TEXTURE_2D,
+    //             WebGLRenderingContext.TEXTURE_MAG_FILTER,
+    //             WebGLRenderingContext.LINEAR
+    //         );
+    //     }
+
+    //     renderingContext.texParameteri (
+    //         WebGLRenderingContext.TEXTURE_2D,
+    //         WebGLRenderingContext.TEXTURE_WRAP_S,
+    //         WebGLRenderingContext.CLAMP_TO_EDGE
+    //     );
+
+    //     renderingContext.texParameteri (
+    //         WebGLRenderingContext.TEXTURE_2D,
+    //         WebGLRenderingContext.TEXTURE_WRAP_T,
+    //         WebGLRenderingContext.CLAMP_TO_EDGE
+    //     );
+
+    //     renderingContext.bindTexture (
+    //         WebGLRenderingContext.TEXTURE_2D,
+    //         null
+    //     );
+    // }
 
     function drawScene() {
         //
@@ -223,10 +336,17 @@ define ([
         );
         */
 
+        modelViewMatrix =
+            Matrix4x4.createRotationMatrix(CartesianAxis.Y, rotationY);
+
+        rotationY += 0.05;
+
         var v = new Vector3D(0, 0, -325);
 
-        modelViewMatrix =
-            Matrix4x4.createTranslationMatrix(v);
+        modelViewMatrix = Matrix4x4.multiplyMatrices (
+            Matrix4x4.createTranslationMatrix(v),
+            modelViewMatrix
+        );
 
         projectionMatrix = Matrix4x4.createProjectionMatrix (
             undefined,
@@ -241,6 +361,20 @@ define ([
         scene.graphicsManager.setMatrix4x4Uniform (
             transformUniformLocation,
             transform
+        );
+
+        renderingContext.activeTexture (
+            WebGLRenderingContext.TEXTURE0
+        );
+
+        renderingContext.bindTexture (
+            WebGLRenderingContext.TEXTURE_2D,
+            mainTexture
+        );
+
+        renderingContext.uniform1i (
+            renderingContext.getUniformLocation(shaderProgram, "sampler"),
+            0
         );
         
         renderingContext.drawArrays (

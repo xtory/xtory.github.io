@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "target": "ES5", //"ES6",
+        "target": "ES6", //"ES6",
         "module": "amd"  //"commonjs"
     }
 }

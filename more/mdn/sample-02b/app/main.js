@@ -63,7 +63,7 @@ function main() {
         vertexPositionAttributeLocation =
             scene.graphicsManager.getAttributeLocation(shaderProgram, "vertexPosition");
 
-        scene.graphicsManager.enableVertexAttributeArray(vertexPositionAttributeLocation);
+        scene.graphicsManager.enableVertexAttribute(vertexPositionAttributeLocation);
 
         transformUniformLocation =
             scene.graphicsManager.getUniformLocation(shaderProgram, "transform");
@@ -167,7 +167,8 @@ function main() {
             0
         );
 
-        var transform = projectionMatrix.multiply(modelViewMatrix);
+        var transform =
+            projectionMatrix.multiply(modelViewMatrix);
 
         renderingContext.uniformMatrix4fv (
             transformUniformLocation,

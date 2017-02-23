@@ -279,7 +279,11 @@ function main() {
         // Now move the drawing position a bit to where we want to start
         // drawing the square.
 
-        moveSquare([-0.0, 0.0, -325.0]);
+        var v = Vector.create([-0.0, 0.0, -325.0]);
+
+        modelViewMatrix = modelViewMatrix.multiply (
+            Matrix.Translation(v).ensure4x4()
+        );
 
         // Draw the square by binding the array buffer to the square's vertices
         // array, setting attributes, and pushing it to GL.
@@ -298,29 +302,15 @@ function main() {
             0
         );
         
-        setTransformUniform();
-        
-        renderingContext.drawArrays(renderingContext.TRIANGLE_STRIP, 0, 4);
-    }
-
-    //
-    // Matrix utility functions
-    //
-
-    function moveSquare(v) {
-        modelViewMatrix = modelViewMatrix.multiply (
-            Matrix.Translation(Vector.create([v[0], v[1], v[2]])).ensure4x4()
-        );
-    }
-
-    function setTransformUniform() {
-        //
-        var transform = projectionMatrix.multiply(modelViewMatrix);
+        var transform =
+            projectionMatrix.multiply(modelViewMatrix);
 
         renderingContext.uniformMatrix4fv (
             transformUniformLocation,
             false,
             new Float32Array(transform.flatten())
         );
+        
+        renderingContext.drawArrays(renderingContext.TRIANGLE_STRIP, 0, 4);
     }
 }

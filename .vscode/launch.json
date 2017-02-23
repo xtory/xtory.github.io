@@ -47,6 +47,13 @@
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe"
         }, {
             //
+            "name": "mdn/sample-06",
+            "type": "chrome",
+            "request": "launch",
+            "file": "${workspaceRoot}/mdn/sample-06/index.html",
+            "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe"
+        }, {
+            //
             "name": "more/mdn/sample-01a",
             "type": "chrome",
             "request": "launch",

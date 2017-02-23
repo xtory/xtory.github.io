@@ -74,8 +74,8 @@ GraphicsManager.prototype = {
     //
     // Public methods.
     //
-    enableVertexAttributeArray: function(index) {
-        this.renderingContext.enableVertexAttribArray(index);
+    enableVertexAttribute: function(vertexAttributeLocation) {
+        this.renderingContext.enableVertexAttribArray(vertexAttributeLocation);
     },    
     
     clear: function (

@@ -76,7 +76,7 @@ define ([
         vertexPositionAttributeLocation =
             scene.graphicsManager.getAttributeLocation("vertexPosition");
         
-        scene.graphicsManager.enableVertexAttributeArray (
+        scene.graphicsManager.enableVertexAttribute (
             vertexPositionAttributeLocation
         );
 
@@ -95,11 +95,11 @@ define ([
         // coordinate is always 0 here.
 
         var vertexPositions = [
-            50.0,  50.0,  0.0,
-           -50.0,  50.0,  0.0,
             50.0, -50.0,  0.0,
-           -50.0, -50.0,  0.0
-        ];    
+            50.0,  50.0,  0.0,
+           -50.0, -50.0,  0.0,
+           -50.0,  50.0,  0.0
+        ];
 
         vertexPositionBuffer =
             renderingContext.createBuffer();
@@ -164,24 +164,18 @@ define ([
             undefined
         );
 
-        setTransformUniform();
+        var transform =
+            projectionMatrix.multiply(modelViewMatrix);
+
+        scene.graphicsManager.setMatrix4x4Uniform (
+            transformUniformLocation,
+            transform
+        );
         
         renderingContext.drawArrays (
             WebGLRenderingContext.TRIANGLE_STRIP,
             0,
             4
-        );
-    }
-
-    function setTransformUniform() {
-        //
-        var transform =
-            projectionMatrix.multiply(modelViewMatrix);
-
-        scene.graphicsManager.renderingContext.uniformMatrix4fv (
-            transformUniformLocation,
-            false,
-            new Float32Array(transform.elements)
         );
     }
 });

@@ -82,7 +82,7 @@ define ([
         vertexPositionAttributeLocation =
             scene.graphicsManager.getAttributeLocation("vertexPosition");
         
-        scene.graphicsManager.enableVertexAttributeArray (
+        scene.graphicsManager.enableVertexAttribute (
             vertexPositionAttributeLocation
         );
 
@@ -103,7 +103,7 @@ define ([
         vertexColorAttributeLocation =
             scene.graphicsManager.getAttributeLocation("vertexColor");
         
-        scene.graphicsManager.enableVertexAttributeArray (
+        scene.graphicsManager.enableVertexAttribute (
             vertexColorAttributeLocation
         );
 
@@ -122,11 +122,11 @@ define ([
         // coordinate is always 0 here.
 
         var vertexPositions = [
-           -50.0,   50.0,  0.0,
-           -150.0,  50.0,  0.0,
            -50.0,  -50.0,  0.0,
-           -150.0, -50.0,  0.0
-        ];
+           -50.0,   50.0,  0.0,
+           -150.0, -50.0,  0.0,
+           -150.0,  50.0,  0.0
+        ];        
 
         vertexPositionBuffer =
             renderingContext.createBuffer();
@@ -150,11 +150,11 @@ define ([
         );
 
         var vertexPositions2 = [
-            150.0,  50.0,  0.0,
-            50.0,   50.0,  0.0,
             150.0, -50.0,  0.0,
-            50.0,  -50.0,  0.0
-        ];
+            150.0,  50.0,  0.0,
+            50.0,  -50.0,  0.0,
+            50.0,   50.0,  0.0
+        ];        
 
         vertexPositionBuffer2 =
             renderingContext.createBuffer();
@@ -229,25 +229,7 @@ define ([
 
         scene.graphicsManager.clear();
 
-        var v = new Vector3D(0, 0, -325);
-
-        modelViewMatrix = Matrix4x4.createTranslationMatrix(v);
-
-        projectionMatrix = Matrix4x4.createProjectionMatrix (
-            undefined,
-            mainCanvas.clientWidth / mainCanvas.clientHeight,
-            undefined,
-            undefined
-        );
-        
-        var transform =
-            projectionMatrix.multiply(modelViewMatrix);
-
-        scene.graphicsManager.renderingContext.uniformMatrix4fv (
-            transformUniformLocation,
-            false,
-            new Float32Array(transform.elements)
-        );
+        setUpTransform();
 
         // Draw the square by binding the array buffer to the square's vertices
         // array, setting attributes, and pushing it to GL.
@@ -321,6 +303,28 @@ define ([
             WebGLRenderingContext.TRIANGLE_STRIP,
             0,
             4
+        );
+    }
+
+    function setUpTransform() {
+        //
+        var v = new Vector3D(0, 0, -325);
+
+        modelViewMatrix = Matrix4x4.createTranslationMatrix(v);
+
+        projectionMatrix = Matrix4x4.createProjectionMatrix (
+            undefined,
+            mainCanvas.clientWidth / mainCanvas.clientHeight,
+            undefined,
+            undefined
+        );
+        
+        var transform =
+            projectionMatrix.multiply(modelViewMatrix);
+
+        scene.graphicsManager.setMatrix4x4Uniform (
+            transformUniformLocation,
+            transform
         );
     }
 });
