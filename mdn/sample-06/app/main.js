@@ -25,11 +25,13 @@ define ([
 
     var mainCanvas;
     var scene;
+    var renderingContext;
     var shaderHelper;
     var shaderProgram;
     var vertexPositionAttributeLocation;
     var vertexTextureCoordinateAttributeLocation;
     var transformUniformLocation;
+    var samplerUniformLocation;
     var vertexPositionBuffer;
     var vertexTextureCoordinateBuffer
     var modelViewMatrix;
@@ -45,7 +47,10 @@ define ([
     } catch (e) {
         ExceptionHelper.displayMessageOf(e);
         return;
-    } 
+    }
+
+    renderingContext =
+        scene.graphicsManager.renderingContext;
     
     shaderHelper = new ShaderHelper(scene.graphicsManager);
 
@@ -82,33 +87,37 @@ define ([
             fragmentShader
         );
 
-        scene.graphicsManager.shaderProgram = shaderProgram;
-
-        vertexPositionAttributeLocation =
-            scene.graphicsManager.getAttributeLocation("vertexPosition");
+        vertexPositionAttributeLocation = (
+            scene.graphicsManager.getAttributeLocation (
+                shaderProgram,
+                "vertexPosition"
+            )
+        );
         
-        scene.graphicsManager.enableVertexAttribute (
-            vertexPositionAttributeLocation
+        vertexTextureCoordinateAttributeLocation = (
+            scene.graphicsManager.getAttributeLocation (
+                shaderProgram,
+                "vertexTextureCoordinates"
+            )
+        );
+        
+        transformUniformLocation = (
+            scene.graphicsManager.getUniformLocation (
+                shaderProgram,
+                "transform"
+            )
         );
 
-        vertexTextureCoordinateAttributeLocation =
-            scene.graphicsManager.getAttributeLocation("vertexTextureCoordinates");
-        
-        scene.graphicsManager.enableVertexAttribute (
-            vertexTextureCoordinateAttributeLocation
+        samplerUniformLocation = (
+            scene.graphicsManager.getUniformLocation (
+                shaderProgram,
+                "sampler"
+            )
         );
-
-        transformUniformLocation =
-            scene.graphicsManager.getUniformLocation("transform");
     }
 
     function setUpBuffers() {
         //
-        // Create a buffer for the square's vertices.
-        
-        var renderingContext =
-            scene.graphicsManager.renderingContext;
-
         // Create an array of vertex positions for the square. Note that the Z
         // coordinate is always 0 here.
 
@@ -140,17 +149,6 @@ define ([
             WebGLRenderingContext.STATIC_DRAW
         );
 
-        // *Test*
-        renderingContext.vertexAttribPointer (
-            vertexPositionAttributeLocation,
-            3,
-            WebGLRenderingContext.FLOAT,
-            false,
-            0,
-            0
-        );
-        // *_Test*
-
         var textureCoordinates = [
             1.0, 0.0,
             1.0, 1.0,
@@ -171,15 +169,6 @@ define ([
             new Float32Array(textureCoordinates),
             WebGLRenderingContext.STATIC_DRAW
         );
-
-        renderingContext.vertexAttribPointer (
-            vertexTextureCoordinateAttributeLocation,
-            2,
-            WebGLRenderingContext.FLOAT,
-            false,
-            0,
-            0
-        );
     }
 
     //
@@ -191,120 +180,24 @@ define ([
     //
     function setUpTextures() {
         //
-        // mainTexture =
-        //     scene.graphicsManager.renderingContext.createTexture();
-
-        // mainImage = new Image();
-
-        // mainImage.addEventListener("load", function() {
-        //     //
-        //     handleTextureLoaded (
-        //         scene.graphicsManager.renderingContext,
-        //         mainImage,
-        //         mainTexture
-        //     );
-        // });
-
-        // mainImage.src = "assets/images/fujima.jpg";
-
         var url = "app/assets/images/fujima.jpg";
         mainTexture = scene.assetManager.loadTexture2D(url);
-
-        // mainImage = new Image();
-
-        // mainImage.addEventListener("load", function() {
-        //     //
-        //     handleTextureLoaded (
-        //         scene.graphicsManager.renderingContext,
-        //         mainImage,
-        //         mainTexture
-        //     );
-        // });
-
-        // mainImage.src = "assets/images/fujima.jpg";
     }
-
-    // function handleTextureLoaded(renderingContext, image, texture) {
-    //     //
-    //     renderingContext.bindTexture (
-    //         WebGLRenderingContext.TEXTURE_2D,
-    //         texture
-    //     );
-
-    //     renderingContext.texImage2D (
-    //         WebGLRenderingContext.TEXTURE_2D,    // target
-    //         0,                                   // level
-    //         WebGLRenderingContext.RGBA,          // internalformat
-    //         WebGLRenderingContext.RGBA,          // format
-    //         WebGLRenderingContext.UNSIGNED_BYTE, // type
-    //         image                                // htmlImageElement
-    //     );
-
-    //     if (MathHelper.isPowerOfTwo(image.width) === true &&
-    //         MathHelper.isPowerOfTwo(image.height) === true) {
-    //         //
-    //         renderingContext.generateMipmap (
-    //             WebGLRenderingContext.TEXTURE_2D
-    //         );
-            
-    //         renderingContext.texParameteri (
-    //             WebGLRenderingContext.TEXTURE_2D,
-    //             WebGLRenderingContext.TEXTURE_MIN_FILTER,
-    //             WebGLRenderingContext.LINEAR_MIPMAP_LINEAR
-    //         );
-
-    //         renderingContext.texParameteri (
-    //             WebGLRenderingContext.TEXTURE_2D,
-    //             WebGLRenderingContext.TEXTURE_MAG_FILTER,
-    //             WebGLRenderingContext.LINEAR_MIPMAP_LINEAR
-    //         );
-
-    //     } else {
-    //         //
-    //         renderingContext.texParameteri (
-    //             WebGLRenderingContext.TEXTURE_2D,
-    //             WebGLRenderingContext.TEXTURE_MIN_FILTER,
-    //             WebGLRenderingContext.LINEAR
-    //         );
-
-    //         renderingContext.texParameteri (
-    //             WebGLRenderingContext.TEXTURE_2D,
-    //             WebGLRenderingContext.TEXTURE_MAG_FILTER,
-    //             WebGLRenderingContext.LINEAR
-    //         );
-    //     }
-
-    //     renderingContext.texParameteri (
-    //         WebGLRenderingContext.TEXTURE_2D,
-    //         WebGLRenderingContext.TEXTURE_WRAP_S,
-    //         WebGLRenderingContext.CLAMP_TO_EDGE
-    //     );
-
-    //     renderingContext.texParameteri (
-    //         WebGLRenderingContext.TEXTURE_2D,
-    //         WebGLRenderingContext.TEXTURE_WRAP_T,
-    //         WebGLRenderingContext.CLAMP_TO_EDGE
-    //     );
-
-    //     renderingContext.bindTexture (
-    //         WebGLRenderingContext.TEXTURE_2D,
-    //         null
-    //     );
-    // }
 
     function drawScene() {
         //
-        var renderingContext =
-            scene.graphicsManager.renderingContext;
-
         // Clear the mainCanvas before we start drawing on it.
         scene.graphicsManager.clear();
 
-        // Draw the square by binding the array buffer to the square's vertices
-        // array, setting attributes, and pushing it to GL.
+        setUpTransform();
 
-        // *Test*
-        /*
+        scene.graphicsManager.shaderProgram =
+            shaderProgram;
+
+        scene.graphicsManager.enableVertexAttribute (
+            vertexPositionAttributeLocation
+        );
+
         renderingContext.bindBuffer (
             WebGLRenderingContext.ARRAY_BUFFER,
             vertexPositionBuffer
@@ -319,29 +212,53 @@ define ([
             0
         );
 
-        // Set the colors attribute for the vertices.
+        scene.graphicsManager.enableVertexAttribute (
+            vertexTextureCoordinateAttributeLocation
+        );
 
         renderingContext.bindBuffer (
             WebGLRenderingContext.ARRAY_BUFFER,
-            vertexColorBuffer
+            vertexTextureCoordinateBuffer
         );
 
         renderingContext.vertexAttribPointer (
-            vertexColorAttributeLocation,
-            4,
+            vertexTextureCoordinateAttributeLocation,
+            2,
             WebGLRenderingContext.FLOAT,
             false,
             0,
             0
+        );        
+        
+        renderingContext.activeTexture (
+            WebGLRenderingContext.TEXTURE0
         );
-        */
+        
+        renderingContext.bindTexture (
+            WebGLRenderingContext.TEXTURE_2D,
+            mainTexture
+        );
 
+        scene.graphicsManager.setSamplerUniform (
+            samplerUniformLocation,
+            0
+        );
+        
+        renderingContext.drawArrays (
+            WebGLRenderingContext.TRIANGLE_STRIP,
+            0,
+            4
+        );
+    }
+
+    function setUpTransform() {
+        //
         modelViewMatrix =
             Matrix4x4.createRotationMatrix(CartesianAxis.Y, rotationY);
 
         rotationY += 0.05;
 
-        var v = new Vector3D(0, 0, -325);
+        var v = new Vector3D(0, 0, -275);
 
         modelViewMatrix = Matrix4x4.multiplyMatrices (
             Matrix4x4.createTranslationMatrix(v),
@@ -361,26 +278,6 @@ define ([
         scene.graphicsManager.setMatrix4x4Uniform (
             transformUniformLocation,
             transform
-        );
-
-        renderingContext.activeTexture (
-            WebGLRenderingContext.TEXTURE0
-        );
-
-        renderingContext.bindTexture (
-            WebGLRenderingContext.TEXTURE_2D,
-            mainTexture
-        );
-
-        renderingContext.uniform1i (
-            renderingContext.getUniformLocation(shaderProgram, "sampler"),
-            0
-        );
-        
-        renderingContext.drawArrays (
-            WebGLRenderingContext.TRIANGLE_STRIP,
-            0,
-            4
         );
     }
 });

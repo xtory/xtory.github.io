@@ -23,6 +23,7 @@ define ([
 
     var mainCanvas;
     var scene;
+    var renderingContext;
     var shaderHelper;
     var shaderProgram;
     var vertexPositionAttributeLocation;
@@ -42,7 +43,10 @@ define ([
     } catch (e) {
         ExceptionHelper.displayMessageOf(e);
         return;
-    } 
+    }
+
+    renderingContext =
+        scene.graphicsManager.renderingContext;
     
     shaderHelper = new ShaderHelper(scene.graphicsManager);
 
@@ -77,47 +81,32 @@ define ([
             fragmentShader
         );
 
-        scene.graphicsManager.shaderProgram = shaderProgram;
-
-        vertexPositionAttributeLocation =
-            scene.graphicsManager.getAttributeLocation("vertexPosition");
-        
-        scene.graphicsManager.enableVertexAttribute (
-            vertexPositionAttributeLocation
+        vertexPositionAttributeLocation = (
+            scene.graphicsManager.getAttributeLocation (
+                shaderProgram,
+                "vertexPosition"
+            )
         );
 
-        // *Test*
-        var renderingContext =
-            scene.graphicsManager.renderingContext;
-
-        renderingContext.vertexAttribPointer (
-            vertexPositionAttributeLocation,
-            3,
-            WebGLRenderingContext.FLOAT,
-            false,
-            0,
-            0
-        );        
-        // *_Test*
-
-        vertexColorAttributeLocation =
-            scene.graphicsManager.getAttributeLocation("vertexColor");
-        
-        scene.graphicsManager.enableVertexAttribute (
-            vertexColorAttributeLocation
+        vertexColorAttributeLocation = (
+            scene.graphicsManager.getAttributeLocation (
+                shaderProgram,
+                "vertexColor"
+            )
         );
 
-        transformUniformLocation =
-            scene.graphicsManager.getUniformLocation("transform");
+        transformUniformLocation = (
+            scene.graphicsManager.getUniformLocation (
+                shaderProgram,
+                "transform"
+            )
+        );
     }
 
     function setUpBuffers() {
         //
         // Create a buffer for the square's vertices.
         
-        var renderingContext =
-            scene.graphicsManager.renderingContext;
-
         // Create an array of vertex positions for the square. Note that the Z
         // coordinate is always 0 here.
 
@@ -224,12 +213,16 @@ define ([
 
     function drawScene() {
         //
-        var renderingContext =
-            scene.graphicsManager.renderingContext;
-
         scene.graphicsManager.clear();
 
         setUpTransform();
+
+        scene.graphicsManager.shaderProgram =
+            shaderProgram;
+
+        scene.graphicsManager.enableVertexAttribute (
+            vertexPositionAttributeLocation
+        );
 
         // Draw the square by binding the array buffer to the square's vertices
         // array, setting attributes, and pushing it to GL.
@@ -249,6 +242,10 @@ define ([
         );
 
         // Set the colors attribute for the vertices.
+
+        scene.graphicsManager.enableVertexAttribute (
+            vertexColorAttributeLocation
+        );
 
         renderingContext.bindBuffer (
             WebGLRenderingContext.ARRAY_BUFFER,
@@ -271,6 +268,10 @@ define ([
         );
 
         // Part 2.
+        scene.graphicsManager.enableVertexAttribute (
+            vertexPositionAttributeLocation
+        );
+
         renderingContext.bindBuffer (
             WebGLRenderingContext.ARRAY_BUFFER,
             vertexPositionBuffer2
@@ -283,6 +284,10 @@ define ([
             false,
             0,
             0
+        );
+
+        scene.graphicsManager.enableVertexAttribute (
+            vertexColorAttributeLocation
         );
 
         renderingContext.bindBuffer (
@@ -308,8 +313,7 @@ define ([
 
     function setUpTransform() {
         //
-        var v = new Vector3D(0, 0, -325);
-
+        var v = new Vector3D(0, 0, -275);
         modelViewMatrix = Matrix4x4.createTranslationMatrix(v);
 
         projectionMatrix = Matrix4x4.createProjectionMatrix (

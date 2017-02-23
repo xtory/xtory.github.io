@@ -25,6 +25,7 @@ define ([
 
     var mainCanvas;
     var scene;
+    var renderingContext;
     var shaderHelper;
     var shaderProgram;
     var vertexPositionAttributeLocation;
@@ -46,7 +47,10 @@ define ([
     } catch (e) {
         ExceptionHelper.displayMessageOf(e);
         return;
-    } 
+    }
+
+    renderingContext =
+        scene.graphicsManager.renderingContext;
     
     shaderHelper = new ShaderHelper(scene.graphicsManager);
 
@@ -81,33 +85,30 @@ define ([
             fragmentShader
         );
 
-        scene.graphicsManager.shaderProgram = shaderProgram;
-
-        vertexPositionAttributeLocation =
-            scene.graphicsManager.getAttributeLocation("vertexPosition");
-        
-        scene.graphicsManager.enableVertexAttribute (
-            vertexPositionAttributeLocation
+        vertexPositionAttributeLocation = (
+            scene.graphicsManager.getAttributeLocation (
+                shaderProgram,
+                "vertexPosition"
+            )
         );
 
-        vertexColorAttributeLocation =
-            scene.graphicsManager.getAttributeLocation("vertexColor");
-        
-        scene.graphicsManager.enableVertexAttribute (
-            vertexColorAttributeLocation
+        vertexColorAttributeLocation = (
+            scene.graphicsManager.getAttributeLocation (
+                shaderProgram,
+                "vertexColor"
+            )
         );
 
-        transformUniformLocation =
-            scene.graphicsManager.getUniformLocation("transform");
+        transformUniformLocation = (
+            scene.graphicsManager.getUniformLocation (
+                shaderProgram,
+                "transform"
+            )
+        );
     }
 
     function setUpBuffers() {
         //
-        // Create a buffer for the square's vertices.
-        
-        var renderingContext =
-            scene.graphicsManager.renderingContext;
-
         // Create an array of vertex positions for the square. Note that the Z
         // coordinate is always 0 here.
 
@@ -212,14 +213,6 @@ define ([
         // Build the element array buffer; this specifies the indices
         // into the vertex array for each face's vertices.
 
-        indexBuffer =
-            renderingContext.createBuffer();
-
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
-            indexBuffer
-        );
-
         // This array defines each face as two triangles, using the
         // indices into the vertex array to specify each triangle's
         // position.
@@ -232,6 +225,14 @@ define ([
             16, 17, 18,     16, 18, 19,   // right
             20, 21, 22,     20, 22, 23    // left
         ]
+        
+        indexBuffer =
+            renderingContext.createBuffer();
+
+        renderingContext.bindBuffer (
+            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
+            indexBuffer
+        );
 
         // Now send the element array to GL
 
@@ -244,12 +245,70 @@ define ([
 
     function drawScene() {
         //
-        var renderingContext =
-            scene.graphicsManager.renderingContext;
-
         // Clear the mainCanvas before we start drawing on it.
         scene.graphicsManager.clear();
 
+        setUpTransform();
+
+        scene.graphicsManager.shaderProgram =
+            shaderProgram;
+        
+        scene.graphicsManager.enableVertexAttribute (
+            vertexPositionAttributeLocation
+        );
+
+        // Draw the square by binding the array buffer to the square's vertices
+        // array, setting attributes, and pushing it to GL.
+
+        renderingContext.bindBuffer (
+            WebGLRenderingContext.ARRAY_BUFFER,
+            vertexPositionBuffer
+        );
+        
+        renderingContext.vertexAttribPointer (
+            vertexPositionAttributeLocation,
+            3,
+            WebGLRenderingContext.FLOAT,
+            false,
+            0,
+            0
+        );
+
+        // Set the colors attribute for the vertices.
+
+        scene.graphicsManager.enableVertexAttribute (
+            vertexColorAttributeLocation
+        );
+
+        renderingContext.bindBuffer (
+            WebGLRenderingContext.ARRAY_BUFFER,
+            vertexColorBuffer
+        );
+
+        renderingContext.vertexAttribPointer (
+            vertexColorAttributeLocation,
+            4,
+            WebGLRenderingContext.FLOAT,
+            false,
+            0,
+            0
+        );
+
+        renderingContext.bindBuffer (
+            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
+            indexBuffer
+        );
+        
+        renderingContext.drawElements (
+            WebGLRenderingContext.TRIANGLES,
+            36,
+            WebGLRenderingContext.UNSIGNED_SHORT,
+            0
+        );
+    }
+
+    function setUpTransform() {
+        //
         modelViewMatrix =
             Matrix4x4.createRotationMatrix(CartesianAxis.Y, rotationY);
 
@@ -282,51 +341,6 @@ define ([
         scene.graphicsManager.setMatrix4x4Uniform (
             transformUniformLocation,
             transform
-        );
-
-        // Draw the square by binding the array buffer to the square's vertices
-        // array, setting attributes, and pushing it to GL.
-
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            vertexPositionBuffer
-        );
-        
-        renderingContext.vertexAttribPointer (
-            vertexPositionAttributeLocation,
-            3,
-            WebGLRenderingContext.FLOAT,
-            false,
-            0,
-            0
-        );
-
-        // Set the colors attribute for the vertices.
-
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            vertexColorBuffer
-        );
-
-        renderingContext.vertexAttribPointer (
-            vertexColorAttributeLocation,
-            4,
-            WebGLRenderingContext.FLOAT,
-            false,
-            0,
-            0
-        );
-
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
-            indexBuffer
-        );
-        
-        renderingContext.drawElements (
-            WebGLRenderingContext.TRIANGLES,
-            36,
-            WebGLRenderingContext.UNSIGNED_SHORT,
-            0
         );
     }
 });

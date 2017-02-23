@@ -25,6 +25,7 @@ define ([
 
     var mainCanvas;
     var scene;
+    var renderingContext;
     var shaderHelper;
     var shaderProgram;
     var vertexPositionAttributeLocation;
@@ -43,7 +44,10 @@ define ([
     } catch (e) {
         ExceptionHelper.displayMessageOf(e);
         return;
-    } 
+    }
+
+    renderingContext =
+        scene.graphicsManager.renderingContext; 
     
     shaderHelper = new ShaderHelper(scene.graphicsManager);
 
@@ -78,33 +82,30 @@ define ([
             fragmentShader
         );
 
-        scene.graphicsManager.shaderProgram = shaderProgram;
-
-        vertexPositionAttributeLocation =
-            scene.graphicsManager.getAttributeLocation("vertexPosition");
-        
-        scene.graphicsManager.enableVertexAttribute (
-            vertexPositionAttributeLocation
+        vertexPositionAttributeLocation = (
+            scene.graphicsManager.getAttributeLocation (
+                shaderProgram,
+                "vertexPosition"
+            )
         );
-
-        vertexColorAttributeLocation =
-            scene.graphicsManager.getAttributeLocation("vertexColor");
         
-        scene.graphicsManager.enableVertexAttribute (
-            vertexColorAttributeLocation
+        vertexColorAttributeLocation = (
+            scene.graphicsManager.getAttributeLocation (
+                shaderProgram,
+                "vertexColor"
+            )
         );
-
-        transformUniformLocation =
-            scene.graphicsManager.getUniformLocation("transform");
+        
+        transformUniformLocation = (
+            scene.graphicsManager.getUniformLocation (
+                shaderProgram,
+                "transform"
+            )
+        );
     }
 
     function setUpBuffers() {
         //
-        // Create a buffer for the square's vertices.
-        
-        var renderingContext =
-            scene.graphicsManager.renderingContext;
-
         // Create an array of vertex positions for the square. Note that the Z
         // coordinate is always 0 here.
 
@@ -162,41 +163,24 @@ define ([
 
     function drawScene() {
         //
-        var renderingContext =
-            scene.graphicsManager.renderingContext;
-
         // Clear the mainCanvas before we start drawing on it.
         scene.graphicsManager.clear();
 
-        modelViewMatrix =
-            Matrix4x4.createRotationMatrix(CartesianAxis.Y, rotationY);
+        setUpTransform();
 
-        rotationY += 0.05;
+        scene.graphicsManager.shaderProgram =
+            shaderProgram;
 
-        var v = new Vector3D(0, 0, -325);
-
-        modelViewMatrix = Matrix4x4.multiplyMatrices (
-            Matrix4x4.createTranslationMatrix(v),
-            modelViewMatrix
+        scene.graphicsManager.enableVertexAttribute (
+            vertexPositionAttributeLocation
         );
-
-        projectionMatrix = Matrix4x4.createProjectionMatrix (
-            undefined,
-            mainCanvas.clientWidth / mainCanvas.clientHeight,
-            undefined,
-            undefined
-        );
-        
-        var transform =
-            projectionMatrix.multiply(modelViewMatrix);
-
-        scene.graphicsManager.setMatrix4x4Uniform (
-            transformUniformLocation,
-            transform
-        );        
 
         // Draw the square by binding the array buffer to the square's vertices
         // array, setting attributes, and pushing it to GL.
+
+        scene.graphicsManager.enableVertexAttribute (
+            vertexColorAttributeLocation
+        );
 
         renderingContext.bindBuffer (
             WebGLRenderingContext.ARRAY_BUFFER,
@@ -233,5 +217,35 @@ define ([
             0,
             4
         );
+    }
+
+    function setUpTransform() {
+        //
+        modelViewMatrix =
+            Matrix4x4.createRotationMatrix(CartesianAxis.Y, rotationY);
+
+        rotationY += 0.05;
+
+        var v = new Vector3D(0, 0, -275);
+
+        modelViewMatrix = Matrix4x4.multiplyMatrices (
+            Matrix4x4.createTranslationMatrix(v),
+            modelViewMatrix
+        );
+
+        projectionMatrix = Matrix4x4.createProjectionMatrix (
+            undefined,
+            mainCanvas.clientWidth / mainCanvas.clientHeight,
+            undefined,
+            undefined
+        );
+        
+        var transform =
+            projectionMatrix.multiply(modelViewMatrix);
+
+        scene.graphicsManager.setMatrix4x4Uniform (
+            transformUniformLocation,
+            transform
+        );  
     }
 });

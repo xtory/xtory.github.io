@@ -23,6 +23,7 @@ define ([
 
     var mainCanvas;
     var scene;
+    var renderingContext;
     var shaderHelper;
     var shaderProgram;
     var vertexPositionAttributeLocation;
@@ -40,7 +41,10 @@ define ([
     } catch (e) {
         ExceptionHelper.displayMessageOf(e);
         return;
-    } 
+    }
+
+    renderingContext =
+        scene.graphicsManager.renderingContext;
     
     shaderHelper = new ShaderHelper(scene.graphicsManager);
 
@@ -75,32 +79,31 @@ define ([
             fragmentShader
         );
 
-        scene.graphicsManager.shaderProgram = shaderProgram;
-
-        vertexPositionAttributeLocation =
-            scene.graphicsManager.getAttributeLocation("vertexPosition");
-        
-        scene.graphicsManager.enableVertexAttribute (
-            vertexPositionAttributeLocation
+        vertexPositionAttributeLocation = (
+            scene.graphicsManager.getAttributeLocation (
+                shaderProgram,
+                "vertexPosition"
+            )
         );
-
-        vertexColorAttributeLocation =
-            scene.graphicsManager.getAttributeLocation("vertexColor");
         
-        scene.graphicsManager.enableVertexAttribute (
-            vertexColorAttributeLocation
+        vertexColorAttributeLocation = (
+            scene.graphicsManager.getAttributeLocation (
+                shaderProgram,
+                "vertexColor"
+            )
         );
-
-        transformUniformLocation =
-            scene.graphicsManager.getUniformLocation("transform");
+        
+        transformUniformLocation = (
+            scene.graphicsManager.getUniformLocation (
+                shaderProgram,
+                "transform"
+            )
+        );
     }
 
     function setUpBuffers() {
         //
         // Create a buffer for the square's vertices.
-        
-        var renderingContext =
-            scene.graphicsManager.renderingContext;
 
         // Create an array of vertex positions for the square. Note that the Z
         // coordinate is always 0 here.
@@ -133,17 +136,6 @@ define ([
             WebGLRenderingContext.STATIC_DRAW
         );
 
-        // *Test*
-        renderingContext.vertexAttribPointer (
-            vertexPositionAttributeLocation,
-            3,
-            WebGLRenderingContext.FLOAT,
-            false,
-            0,
-            0
-        );
-        // *_Test*
-
         // Now set up the colors for the vertices
 
         var vertexColors = [].concat (
@@ -166,37 +158,27 @@ define ([
             new Float32Array(vertexColors),
             WebGLRenderingContext.STATIC_DRAW
         );
-
-        // *Test*
-        renderingContext.vertexAttribPointer (
-            vertexColorAttributeLocation,
-            4,
-            WebGLRenderingContext.FLOAT,
-            false,
-            0,
-            0
-        );
-        // *_Test*
     }
 
     function drawScene() {
         //
-        var renderingContext =
-            scene.graphicsManager.renderingContext;
-
         // Clear the mainCanvas before we start drawing on it.
         scene.graphicsManager.clear();
 
-        // Draw the square by binding the array buffer to the square's vertices
-        // array, setting attributes, and pushing it to GL.
+        setUpTransform();
 
-        // *Test*
-        /*
+        scene.graphicsManager.shaderProgram =
+            shaderProgram;
+
+        scene.graphicsManager.enableVertexAttribute (
+            vertexPositionAttributeLocation
+        );
+        
         renderingContext.bindBuffer (
             WebGLRenderingContext.ARRAY_BUFFER,
             vertexPositionBuffer
         );
-        
+
         renderingContext.vertexAttribPointer (
             vertexPositionAttributeLocation,
             3,
@@ -206,7 +188,9 @@ define ([
             0
         );
 
-        // Set the colors attribute for the vertices.
+        scene.graphicsManager.enableVertexAttribute (
+            vertexColorAttributeLocation
+        );
 
         renderingContext.bindBuffer (
             WebGLRenderingContext.ARRAY_BUFFER,
@@ -221,12 +205,18 @@ define ([
             0,
             0
         );
-        */
+        
+        renderingContext.drawArrays (
+            WebGLRenderingContext.TRIANGLE_STRIP,
+            0,
+            4
+        );
+    }
 
-        var v = new Vector3D(0, 0, -325);
-
-        modelViewMatrix =
-            Matrix4x4.createTranslationMatrix(v);
+    function setUpTransform() {
+        //
+        var v = new Vector3D(0, 0, -275);
+        modelViewMatrix = Matrix4x4.createTranslationMatrix(v);
 
         projectionMatrix = Matrix4x4.createProjectionMatrix (
             undefined,
@@ -241,12 +231,6 @@ define ([
         scene.graphicsManager.setMatrix4x4Uniform (
             transformUniformLocation,
             transform
-        );
-        
-        renderingContext.drawArrays (
-            WebGLRenderingContext.TRIANGLE_STRIP,
-            0,
-            4
         );
     }
 });
