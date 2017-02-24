@@ -3,7 +3,8 @@ define ([
     "../../../lib/cybo/4x4-matrix",
     "../../../lib/cybo/cartesian-axis",
     "../../../lib/cybo/xcene",
-    "../../../lib/cybo/assets/shaders/position-color",
+    //"../../../lib/cybo/assets/shaders/position-texture-coordinates",
+    "./assets/shaders/phong-shading",
     "../../../lib/cybo/graphics/color",
     "../../../lib/cybo/graphics/colors",
     "../../../lib/cybo/graphics/fx/helpers/shader-helper",
@@ -14,7 +15,7 @@ define ([
     Matrix4x4,
     CartesianAxis,
     Scene,
-    PositionColor,
+    PhongShading, //PositionTextureCoordinates,
     Color,
     Colors,
     ShaderHelper,
@@ -29,13 +30,18 @@ define ([
     var shaderHelper;
     var shaderProgram;
     var vertexPositionAttributeLocation;
-    var vertexColorAttributeLocation;
+    var vertexNormalAttributeLocation;
+    var vertexTextureCoordinateAttributeLocation;
     var transformUniformLocation;
+    var normalMatrixUniformLocation;
+    var samplerUniformLocation;
     var vertexPositionBuffer;
-    var vertexColorBuffer;
+    var vertexNormalBuffer;
+    var vertexTextureCoordinateBuffer;
     var indexBuffer;
     var modelViewMatrix;
     var projectionMatrix;
+    var mainTexture;
 
     var rotationX = 0; // in radians.
     var rotationY = 0; // in radians.
@@ -62,6 +68,8 @@ define ([
     // we'll be drawing.
     setUpBuffers();
 
+    setUpTextures();
+
     // Set up to draw the scene periodically.
     setInterval(drawScene, 15);
 
@@ -72,12 +80,12 @@ define ([
         //
         var vertexShader = scene.assetManager.loadShader (
             ShaderType.VERTEX_SHADER,
-            PositionColor.VERTEX_SHADER_SOURCE
+            PhongShading.VERTEX_SHADER_SOURCE
         );
             
         var fragmentShader = scene.assetManager.loadShader (
             ShaderType.FRAGMENT_SHADER,
-            PositionColor.FRAGMENT_SHADER_SOURCE
+            PhongShading.FRAGMENT_SHADER_SOURCE
         );
 
         shaderProgram = shaderHelper.setUpShaderProgram (
@@ -92,180 +100,44 @@ define ([
             )
         );
 
-        vertexColorAttributeLocation = (
+        vertexNormalAttributeLocation = (
             scene.graphicsManager.getAttributeLocation (
                 shaderProgram,
-                "vertexColor"
+                "vertexNormal"
             )
         );
-
+        
+        vertexTextureCoordinateAttributeLocation = (
+            scene.graphicsManager.getAttributeLocation (
+                shaderProgram,
+                "vertexTextureCoordinates"
+            )
+        );
+        
         transformUniformLocation = (
             scene.graphicsManager.getUniformLocation (
                 shaderProgram,
                 "transform"
             )
         );
+
+        normalMatrixUniformLocation = (
+            scene.graphicsManagergl.getUniformLocation (
+                shaderProgram,
+                "normalMatrix"
+            )
+        );
+
+        samplerUniformLocation = (
+            scene.graphicsManager.getUniformLocation (
+                shaderProgram,
+                "sampler"
+            )
+        );
     }
-
-    // function setUpBuffers() {
-    //     //
-    //     // Create an array of vertex positions for the square. Note that the Z
-    //     // coordinate is always 0 here.
-
-    //     var vertexPositions = [
-    //         //
-    //         // Front face.
-    //        -50, -50,  50,
-    //         50, -50,  50,
-    //         50,  50,  50,
-    //        -50,  50,  50,
-            
-    //         // Back face.
-    //        -50, -50, -50,
-    //        -50,  50, -50,
-    //         50,  50, -50,
-    //         50, -50, -50,
-            
-    //         // Top face.
-    //        -50,  50, -50,
-    //        -50,  50,  50,
-    //         50,  50,  50,
-    //         50,  50, -50,
-            
-    //         // Bottom face.
-    //        -50, -50, -50,
-    //         50, -50, -50,
-    //         50, -50,  50,
-    //        -50, -50,  50,
-            
-    //         // Right face.
-    //         50, -50, -50,
-    //         50,  50, -50,
-    //         50,  50,  50,
-    //         50, -50,  50,
-            
-    //         // Left face.
-    //        -50, -50, -50,
-    //        -50, -50,  50,
-    //        -50,  50,  50,
-    //        -50,  50, -50
-    //     ];
-
-    //     vertexPositionBuffer =
-    //         renderingContext.createBuffer();
-
-    //     // Select the vertexPositionBuffer as the one to apply vertex
-    //     // operations to from here out.
-
-    //     renderingContext.bindBuffer (
-    //         WebGLRenderingContext.ARRAY_BUFFER,
-    //         vertexPositionBuffer
-    //     );
-        
-    //     // Now pass the list of vertex positions into WebGL to build the shape.
-    //     // We do this by creating a Float32Array from the JavaScript array, then
-    //     // use it to fill the current vertex buffer.
-
-    //     renderingContext.bufferData (
-    //         WebGLRenderingContext.ARRAY_BUFFER,
-    //         new Float32Array(vertexPositions),
-    //         WebGLRenderingContext.STATIC_DRAW
-    //     );
-
-    //     // Now set up the colors for the vertices
-
-    //     var faceColors = [
-    //         Colors.PHOTOSHOP_DARK_RED.toArray(),
-    //         Colors.PHOTOSHOP_DARK_YELLOW_ORANGE.toArray(),
-    //         Colors.PHOTOSHOP_DARK_GREEN.toArray(),
-    //         Colors.PHOTOSHOP_DARK_GREEN_CYAN.toArray(),
-    //         Colors.PHOTOSHOP_DARK_BLUE.toArray(),
-    //         Colors.PHOTOSHOP_DARK_VIOLET.toArray(),
-    //     ];
-
-    //     var vertexColors = [];
-
-    //     for (var i=0; i<6; i++) {
-    //         //
-    //         var item = faceColors[i];
-
-    //         // Repeat each color four times for the four vertices of the face
-
-    //         for (var j=0; j<4; j++) {
-    //             vertexColors = vertexColors.concat(item);
-    //         }
-    //     }
-
-    //     vertexColorBuffer =
-    //         renderingContext.createBuffer();
-
-    //     renderingContext.bindBuffer (
-    //         WebGLRenderingContext.ARRAY_BUFFER,
-    //         vertexColorBuffer
-    //     );
-
-    //     renderingContext.bufferData (
-    //         WebGLRenderingContext.ARRAY_BUFFER,
-    //         new Float32Array(vertexColors),
-    //         WebGLRenderingContext.STATIC_DRAW
-    //     );
-
-    //     // Build the element array buffer; this specifies the indices
-    //     // into the vertex array for each face's vertices.
-
-    //     // This array defines each face as two triangles, using the
-    //     // indices into the vertex array to specify each triangle's
-    //     // position.
-
-    //     var vertexIndices = [
-    //         //
-    //         // Front face.
-    //         0,  1,  2,
-    //         0,  2,  3,
-
-    //         // Back face.
-    //         4,  5,  6,
-    //         4,  6,  7,
-
-    //         // Top face.
-    //         8,  9,  10,
-    //         8,  10, 11,
-
-    //         // Bottom face.
-    //         12, 13, 14,
-    //         12, 14, 15,
-
-    //         // Right face.
-    //         16, 17, 18,
-    //         16, 18, 19,
-
-    //         // Left face.
-    //         20, 21, 22,
-    //         20, 22, 23
-    //     ]
-        
-    //     indexBuffer =
-    //         renderingContext.createBuffer();
-
-    //     renderingContext.bindBuffer (
-    //         WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
-    //         indexBuffer
-    //     );
-
-    //     // Now send the element array to GL
-
-    //     renderingContext.bufferData (
-    //         WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
-    //         new Uint16Array(vertexIndices),
-    //         WebGLRenderingContext.STATIC_DRAW
-    //     );
-    // }
 
     function setUpBuffers() {
         //
-        // Create an array of vertex positions for the square. Note that the Z
-        // coordinate is always 0 here.
-
         var vertexPositions = [
             //
             // Front face.
@@ -326,50 +198,113 @@ define ([
             WebGLRenderingContext.STATIC_DRAW
         );
 
-        // Now set up the colors for the vertices
+        // Set up the normals for the vertices, so that we can compute lighting.
 
-        var faceColors = [
-            Colors.PHOTOSHOP_DARK_RED.toArray(),
-            Colors.PHOTOSHOP_DARK_YELLOW_ORANGE.toArray(),
-            Colors.PHOTOSHOP_DARK_GREEN.toArray(),
-            Colors.PHOTOSHOP_DARK_GREEN_CYAN.toArray(),
-            Colors.PHOTOSHOP_DARK_BLUE.toArray(),
-            Colors.PHOTOSHOP_DARK_VIOLET.toArray(),
-        ];
-
-        var vertexColors = [];
-
-        for (var i=0; i<6; i++) {
+        var vertexNormals = [
             //
-            var item = faceColors[i];
+            // Front face.
+            0.0,  0.0,  1.0,
+            0.0,  0.0,  1.0,
+            0.0,  0.0,  1.0,
+            0.0,  0.0,  1.0,
 
-            // Repeat each color four times for the four vertices of the face
+            // Back face.
+            0.0,  0.0, -1.0,
+            0.0,  0.0, -1.0,
+            0.0,  0.0, -1.0,
+            0.0,  0.0, -1.0,
 
-            for (var j=0; j<4; j++) {
-                vertexColors = vertexColors.concat(item);
-            }
-        }
+            // Top face.
+            0.0,  1.0,  0.0,
+            0.0,  1.0,  0.0,
+            0.0,  1.0,  0.0,
+            0.0,  1.0,  0.0,
 
-        vertexColorBuffer =
+            // Bottom face.
+            0.0, -1.0,  0.0,
+            0.0, -1.0,  0.0,
+            0.0, -1.0,  0.0,
+            0.0, -1.0,  0.0,
+
+            // Right face.
+            1.0,  0.0,  0.0,
+            1.0,  0.0,  0.0,
+            1.0,  0.0,  0.0,
+            1.0,  0.0,  0.0,
+
+            // Left face.
+           -1.0,  0.0,  0.0,
+           -1.0,  0.0,  0.0,
+           -1.0,  0.0,  0.0,
+           -1.0,  0.0,  0.0
+        ];        
+
+        vertexNormalBuffer =
             renderingContext.createBuffer();
 
         renderingContext.bindBuffer (
             WebGLRenderingContext.ARRAY_BUFFER,
-            vertexColorBuffer
+            vertexNormalBuffer
         );
 
         renderingContext.bufferData (
             WebGLRenderingContext.ARRAY_BUFFER,
-            new Float32Array(vertexColors),
+            new Float32Array(vertexNormals),
             WebGLRenderingContext.STATIC_DRAW
         );
 
-        // Build the element array buffer; this specifies the indices
-        // into the vertex array for each face's vertices.
+        var textureCoordinates = [
+            //
+            // Front face.
+            1.0,  0.0,
+            1.0,  1.0,
+            0.0,  1.0,
+            0.0,  0.0,
 
-        // This array defines each face as two triangles, using the
-        // indices into the vertex array to specify each triangle's
-        // position.
+            // Back face.
+            1.0,  0.0,
+            1.0,  1.0,
+            0.0,  1.0,
+            0.0,  0.0,
+
+            // Top face.
+            1.0,  0.0,
+            1.0,  1.0,
+            0.0,  1.0,
+            0.0,  0.0,
+
+            // Bottom face.
+            1.0,  0.0,
+            1.0,  1.0,
+            0.0,  1.0,
+            0.0,  0.0,
+
+            // Right face.
+            1.0,  0.0,
+            1.0,  1.0,
+            0.0,  1.0,
+            0.0,  0.0,
+
+            // Left face.
+            1.0,  0.0,
+            1.0,  1.0,
+            0.0,  1.0,
+            0.0,  0.0,
+        ];        
+
+        vertexTextureCoordinateBuffer =
+            renderingContext.createBuffer();
+
+        renderingContext.bindBuffer (
+            WebGLRenderingContext.ARRAY_BUFFER,
+            vertexTextureCoordinateBuffer
+        );
+
+        renderingContext.bufferData (
+            WebGLRenderingContext.ARRAY_BUFFER,
+            new Float32Array(textureCoordinates),
+            WebGLRenderingContext.STATIC_DRAW
+        );
 
         var vertexIndices = [
             //
@@ -415,6 +350,22 @@ define ([
         );
     }
 
+    //
+    // setUpTextures
+    //
+    // Initialize the textures we'll be using, then initiate a load of
+    // the texture images. The handleTextureLoaded() callback will finish
+    // the job; it gets called each time a texture finishes loading.
+    //
+    function setUpTextures() {
+        //
+        var url = // which is relative to index.html, not main.js
+            //"../assets/images/market-street.jpg";
+            "../assets/images/white.jpg";
+
+        mainTexture = scene.assetManager.loadTexture2D(url);
+    }
+
     function drawScene() {
         //
         // Clear the mainCanvas before we start drawing on it.
@@ -424,13 +375,10 @@ define ([
 
         scene.graphicsManager.shaderProgram =
             shaderProgram;
-        
+
         scene.graphicsManager.enableVertexAttribute (
             vertexPositionAttributeLocation
         );
-
-        // Draw the square by binding the array buffer to the square's vertices
-        // array, setting attributes, and pushing it to GL.
 
         renderingContext.bindBuffer (
             WebGLRenderingContext.ARRAY_BUFFER,
@@ -446,25 +394,61 @@ define ([
             0
         );
 
-        // Set the colors attribute for the vertices.
-
         scene.graphicsManager.enableVertexAttribute (
-            vertexColorAttributeLocation
+            vertexTextureCoordinateAttributeLocation
         );
 
         renderingContext.bindBuffer (
             WebGLRenderingContext.ARRAY_BUFFER,
-            vertexColorBuffer
+            vertexTextureCoordinateBuffer
         );
 
         renderingContext.vertexAttribPointer (
-            vertexColorAttributeLocation,
-            4,
+            vertexTextureCoordinateAttributeLocation,
+            2,
             WebGLRenderingContext.FLOAT,
             false,
             0,
             0
         );
+
+        scene.graphicsManager.enableVertexAttribute (
+            vertexNormalAttributeLocation
+        );
+        
+        renderingContext.bindBuffer (
+            WebGLRenderingContext.ARRAY_BUFFER,
+            vertexNormalBuffer
+        );
+
+        renderingContext.vertexAttribPointer (
+            vertexNormalAttributeLocation,
+            3,
+            WebGLRenderingContext.FLOAT,
+            false,
+            0,
+            0
+        );
+        
+        renderingContext.activeTexture (
+            WebGLRenderingContext.TEXTURE0
+        );
+        
+        renderingContext.bindTexture (
+            WebGLRenderingContext.TEXTURE_2D,
+            mainTexture
+        );
+
+        scene.graphicsManager.setSamplerUniform (
+            samplerUniformLocation,
+            0
+        );
+        
+        // renderingContext.drawArrays (
+        //     WebGLRenderingContext.TRIANGLE_STRIP,
+        //     0,
+        //     4
+        // );
 
         renderingContext.bindBuffer (
             WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
@@ -499,6 +483,16 @@ define ([
             Matrix4x4.createTranslationMatrix(v),
             modelViewMatrix
         );
+
+        // *Test*
+        var normalMatrix = modelViewMatrix.inverse();
+        normalMatrix = normalMatrix.transpose();
+
+        scene.graphicsManager.setMatrix4x4Uniform (
+            normalMatrixUniformLocation,
+            normalMatrix
+        );
+        // *_Test*
 
         projectionMatrix = Matrix4x4.createProjectionMatrix (
             undefined,

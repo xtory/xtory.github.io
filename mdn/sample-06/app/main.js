@@ -33,12 +33,14 @@ define ([
     var transformUniformLocation;
     var samplerUniformLocation;
     var vertexPositionBuffer;
-    var vertexTextureCoordinateBuffer
+    var vertexTextureCoordinateBuffer;
+    var indexBuffer;
     var modelViewMatrix;
     var projectionMatrix;
-    var mainImage;
     var mainTexture;
-    var rotationY = 0;
+
+    var rotationX = 0; // in radians.
+    var rotationY = 0; // in radians.
 
     mainCanvas = document.getElementById("mainCanvas");
 
@@ -118,15 +120,44 @@ define ([
 
     function setUpBuffers() {
         //
-        // Create an array of vertex positions for the square. Note that the Z
-        // coordinate is always 0 here.
-
         var vertexPositions = [
-            50.0, -50.0,  0.0,
-            50.0,  50.0,  0.0,
-           -50.0, -50.0,  0.0,
-           -50.0,  50.0,  0.0
-        ];        
+            //
+            // Front face.
+            50, -50,  50,
+            50,  50,  50,
+           -50,  50,  50,
+           -50, -50,  50,
+            
+            // Back face.
+           -50, -50, -50,
+           -50,  50, -50,
+            50,  50, -50,
+            50, -50, -50,
+            
+            // Top face.
+            50,  50,  50,
+            50,  50, -50,
+           -50,  50, -50,
+           -50,  50,  50,
+            
+            // Bottom face.
+            50, -50, -50,
+            50, -50,  50,
+           -50, -50,  50,
+           -50, -50, -50,
+            
+            // Right face.
+            50, -50, -50,
+            50,  50, -50,
+            50,  50,  50,
+            50, -50,  50,
+            
+            // Left face.
+           -50, -50,  50,
+           -50,  50,  50,
+           -50,  50, -50,
+           -50, -50, -50
+        ];
 
         vertexPositionBuffer =
             renderingContext.createBuffer();
@@ -150,10 +181,42 @@ define ([
         );
 
         var textureCoordinates = [
-            1.0, 0.0,
-            1.0, 1.0,
-            0.0, 0.0,
-            0.0, 1.0
+            //
+            // Front face.
+            1.0,  0.0,
+            1.0,  1.0,
+            0.0,  1.0,
+            0.0,  0.0,
+
+            // Back face.
+            1.0,  0.0,
+            1.0,  1.0,
+            0.0,  1.0,
+            0.0,  0.0,
+
+            // Top face.
+            1.0,  0.0,
+            1.0,  1.0,
+            0.0,  1.0,
+            0.0,  0.0,
+
+            // Bottom face.
+            1.0,  0.0,
+            1.0,  1.0,
+            0.0,  1.0,
+            0.0,  0.0,
+
+            // Right face.
+            1.0,  0.0,
+            1.0,  1.0,
+            0.0,  1.0,
+            0.0,  0.0,
+
+            // Left face.
+            1.0,  0.0,
+            1.0,  1.0,
+            0.0,  1.0,
+            0.0,  0.0,
         ];        
 
         vertexTextureCoordinateBuffer =
@@ -169,10 +232,53 @@ define ([
             new Float32Array(textureCoordinates),
             WebGLRenderingContext.STATIC_DRAW
         );
+
+        var vertexIndices = [
+            //
+            // Front face.
+            0,  1,  2,
+            0,  2,  3,
+
+            // Back face.
+            4,  5,  6,
+            4,  6,  7,
+
+            // Top face.
+            8,  9,  10,
+            8,  10, 11,
+
+            // Bottom face.
+            12, 13, 14,
+            12, 14, 15,
+
+            // Right face.
+            16, 17, 18,
+            16, 18, 19,
+
+            // Left face.
+            20, 21, 22,
+            20, 22, 23
+        ]
+        
+        indexBuffer =
+            renderingContext.createBuffer();
+
+        renderingContext.bindBuffer (
+            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
+            indexBuffer
+        );
+
+        // Now send the element array to GL
+
+        renderingContext.bufferData (
+            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
+            new Uint16Array(vertexIndices),
+            WebGLRenderingContext.STATIC_DRAW
+        );
     }
 
     //
-    // initTextures
+    // setUpTextures
     //
     // Initialize the textures we'll be using, then initiate a load of
     // the texture images. The handleTextureLoaded() callback will finish
@@ -180,8 +286,9 @@ define ([
     //
     function setUpTextures() {
         //
-        //var url = "app/assets/images/market-street.jpg";
-        var url = "../assets/images/market-street.jpg";
+        var url = // which is relative to index.html, not main.js
+            "../assets/images/market-street.jpg";
+
         mainTexture = scene.assetManager.loadTexture2D(url);
     }
 
@@ -245,10 +352,22 @@ define ([
             0
         );
         
-        renderingContext.drawArrays (
-            WebGLRenderingContext.TRIANGLE_STRIP,
-            0,
-            4
+        // renderingContext.drawArrays (
+        //     WebGLRenderingContext.TRIANGLE_STRIP,
+        //     0,
+        //     4
+        // );
+
+        renderingContext.bindBuffer (
+            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
+            indexBuffer
+        );
+        
+        renderingContext.drawElements (
+            WebGLRenderingContext.TRIANGLES,
+            36,
+            WebGLRenderingContext.UNSIGNED_SHORT,
+            0
         );
     }
 
@@ -259,7 +378,14 @@ define ([
 
         rotationY += 0.05;
 
-        var v = new Vector3D(0, 0, -275);
+        modelViewMatrix = Matrix4x4.multiplyMatrices (
+            Matrix4x4.createRotationMatrix(CartesianAxis.X, rotationX),
+            modelViewMatrix
+        );
+
+        rotationX -= 0.025;
+
+        var v = new Vector3D(0, 0, -325);
 
         modelViewMatrix = Matrix4x4.multiplyMatrices (
             Matrix4x4.createTranslationMatrix(v),
@@ -272,7 +398,7 @@ define ([
             undefined,
             undefined
         );
-        
+
         var transform =
             projectionMatrix.multiply(modelViewMatrix);
 

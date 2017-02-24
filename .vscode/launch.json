@@ -75,6 +75,16 @@
             ]
         }, {
             //
+            "name": "mdn/sample-07",
+            "type": "chrome",
+            "request": "launch",
+            "file": "${workspaceRoot}/mdn/sample-07/index.html",
+            "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
+            "runtimeArgs": [
+                "-allow-file-access-from-files"
+            ]
+        }, {
+            //
             "name": "more/mdn/sample-01a",
             "type": "chrome",
             "request": "launch",
