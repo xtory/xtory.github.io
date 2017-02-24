@@ -22,8 +22,8 @@ function main() {
 
     renderingContext.clearColor(0.25, 0.25, 0.25, 1.0);   // Clear to black, fully opaque
     renderingContext.clearDepth(1.0);                     // Clear everything
-    renderingContext.enable(WebGLRenderingContext.DEPTH_TEST); // Enable depth testing
-    renderingContext.depthFunc(WebGLRenderingContext.LEQUAL);  // Near things obscure far things
+    renderingContext.enable(renderingContext.DEPTH_TEST); // Enable depth testing
+    renderingContext.depthFunc(renderingContext.LEQUAL);  // Near things obscure far things
 
     window.onresize = resize();
 
@@ -111,7 +111,7 @@ function main() {
 
         if (renderingContext.getProgramParameter (
                 shaderProgram,
-                WebGLRenderingContext.LINK_STATUS
+                renderingContext.LINK_STATUS
             ) === null)
         {
             alert (
@@ -167,17 +167,13 @@ function main() {
         var shader;
 
         if (shaderScript.type === "x-shader/x-fragment") {
-            //
             shader = renderingContext.createShader (
-                WebGLRenderingContext.FRAGMENT_SHADER
+                renderingContext.FRAGMENT_SHADER
             );
-
         } else if (shaderScript.type === "x-shader/x-vertex") {
-            //
             shader = renderingContext.createShader (
-                WebGLRenderingContext.VERTEX_SHADER
+                renderingContext.VERTEX_SHADER
             );
-            
         } else {
             return null;  // Unknown shader type
         }
@@ -194,7 +190,7 @@ function main() {
 
         if (renderingContext.getShaderParameter (
                 shader,
-                WebGLRenderingContext.COMPILE_STATUS
+                renderingContext.COMPILE_STATUS
             ) === null)
         {
             alert (
@@ -224,7 +220,7 @@ function main() {
         // operations to from here out.
 
         renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
+            renderingContext.ARRAY_BUFFER,
             squareVerticesBuffer
         );
         
@@ -243,9 +239,9 @@ function main() {
         // then use it to fill the current vertex buffer.
 
         renderingContext.bufferData (
-            WebGLRenderingContext.ARRAY_BUFFER,
+            renderingContext.ARRAY_BUFFER,
             new Float32Array(vertices),
-            WebGLRenderingContext.STATIC_DRAW
+            renderingContext.STATIC_DRAW
         );
     }
 
@@ -259,8 +255,8 @@ function main() {
         // Clear the mainCanvas before we start drawing on it.
 
         renderingContext.clear (
-            WebGLRenderingContext.COLOR_BUFFER_BIT |
-            WebGLRenderingContext.DEPTH_BUFFER_BIT
+            renderingContext.COLOR_BUFFER_BIT |
+            renderingContext.DEPTH_BUFFER_BIT
         );
 
         // Establish the perspective with which we want to view the
@@ -293,14 +289,14 @@ function main() {
         // array, setting attributes, and pushing it to GL.
 
         renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
+            renderingContext.ARRAY_BUFFER,
             squareVerticesBuffer
         );
         
         renderingContext.vertexAttribPointer (
             vertexPositionAttributeLocation,
             3,
-            WebGLRenderingContext.FLOAT,
+            renderingContext.FLOAT,
             false,
             0,
             0
@@ -315,10 +311,6 @@ function main() {
             new Float32Array(transform.flatten())
         );
         
-        renderingContext.drawArrays (
-            WebGLRenderingContext.TRIANGLE_STRIP,
-            0,
-            4
-        );
+        renderingContext.drawArrays(renderingContext.TRIANGLE_STRIP, 0, 4);
     }
 }
