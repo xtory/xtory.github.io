@@ -180,7 +180,8 @@ define ([
     //
     function setUpTextures() {
         //
-        var url = "app/assets/images/market-street.jpg";
+        //var url = "app/assets/images/market-street.jpg";
+        var url = "../assets/images/market-street.jpg";
         mainTexture = scene.assetManager.loadTexture2D(url);
     }
 
