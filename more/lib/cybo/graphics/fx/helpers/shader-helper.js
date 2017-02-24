@@ -2,11 +2,11 @@
 
 function ShaderHelper(_graphicsManager) {
     //
-    var _renderingContext =
+    var _webGLRenderingContext =
         _graphicsManager.renderingContext;
     
     Object.defineProperty(this, "renderingContext", {
-        get: function() { return _renderingContext; }
+        get: function() { return _webGLRenderingContext; }
     });
 }
 

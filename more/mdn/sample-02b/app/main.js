@@ -10,6 +10,7 @@ function main() {
     //
     var mainCanvas;
     var scene;
+    var renderingContext;
     var shaderHelper;
     var shaderProgram;
     var vertexPositionAttributeLocation;
@@ -21,6 +22,9 @@ function main() {
     mainCanvas = document.getElementById("mainCanvas");
 
     scene = new Xcene(mainCanvas);
+
+    renderingContext =
+        scene.graphicsManager.renderingContext;
 
     shaderHelper = new ShaderHelper(scene.graphicsManager);
 
@@ -58,12 +62,8 @@ function main() {
         shaderProgram =
             shaderHelper.setUpShaderProgram(vertexShader, fragmentShader);
 
-        scene.graphicsManager.shaderProgram = shaderProgram;
-
         vertexPositionAttributeLocation =
             scene.graphicsManager.getAttributeLocation(shaderProgram, "vertexPosition");
-
-        scene.graphicsManager.enableVertexAttribute(vertexPositionAttributeLocation);
 
         transformUniformLocation =
             scene.graphicsManager.getUniformLocation(shaderProgram, "transform");
@@ -79,15 +79,13 @@ function main() {
         //
         // Create a buffer for the square's vertices.
 
-        var renderingContext = scene.graphicsManager.renderingContext;
-
         squareVerticesBuffer = renderingContext.createBuffer();
 
         // Select the squareVerticesBuffer as the one to apply vertex
         // operations to from here out.
 
         renderingContext.bindBuffer (
-            renderingContext.ARRAY_BUFFER,
+            WebGLRenderingContext.ARRAY_BUFFER,
             squareVerticesBuffer
         );
 
@@ -106,9 +104,9 @@ function main() {
         // then use it to fill the current vertex buffer.
 
         renderingContext.bufferData (
-            renderingContext.ARRAY_BUFFER,
+            WebGLRenderingContext.ARRAY_BUFFER,
             new Float32Array(vertices),
-            renderingContext.STATIC_DRAW
+            WebGLRenderingContext.STATIC_DRAW
         );
     }
 
@@ -122,6 +120,54 @@ function main() {
         // Clear the mainCanvas before we start drawing on it.
         scene.graphicsManager.clear();
 
+        setUpTransform();
+
+        scene.graphicsManager.shaderProgram =
+            shaderProgram;
+
+        scene.graphicsManager.enableVertexAttribute (
+            vertexPositionAttributeLocation
+        );
+
+        // Draw the square by binding the array buffer to the square's vertices
+        // array, setting attributes, and pushing it to GL.
+
+        renderingContext.bindBuffer (
+            WebGLRenderingContext.ARRAY_BUFFER,
+            squareVerticesBuffer
+        );
+
+        renderingContext.vertexAttribPointer (
+            vertexPositionAttributeLocation,
+            3,
+            WebGLRenderingContext.FLOAT,
+            false,
+            0,
+            0
+        );
+
+        renderingContext.drawArrays (
+            WebGLRenderingContext.TRIANGLE_STRIP,
+            0,
+            4
+        );
+    }
+
+    function setUpTransform() {
+        //
+        // Set the drawing position to the "identity" point, which is
+        // the center of the scene.
+        modelViewMatrix = Matrix.I(4);
+
+        // Now move the drawing position a bit to where we want to start
+        // drawing the square.
+
+        var v = Vector.create([0.0, 0.0, -275.0]);
+
+        modelViewMatrix = modelViewMatrix.multiply (
+            Matrix.Translation(v).ensure4x4()
+        );
+
         // Establish the perspective with which we want to view the
         // scene. Our field of view is 45 degrees, with a width/height
         // ratio of 640:480, and we only want to see objects between 0.1 units
@@ -134,39 +180,6 @@ function main() {
             100000
         );
 
-        // Set the drawing position to the "identity" point, which is
-        // the center of the scene.
-
-        modelViewMatrix = Matrix.I(4);
-
-        // Now move the drawing position a bit to where we want to start
-        // drawing the square.
-
-        var v = Vector.create([0.0, 0.0, -275.0]);
-
-        modelViewMatrix = modelViewMatrix.multiply (
-            Matrix.Translation(v).ensure4x4()
-        );
-
-        var renderingContext = scene.graphicsManager.renderingContext;
-
-        // Draw the square by binding the array buffer to the square's vertices
-        // array, setting attributes, and pushing it to GL.
-
-        renderingContext.bindBuffer (
-            renderingContext.ARRAY_BUFFER,
-            squareVerticesBuffer
-        );
-
-        renderingContext.vertexAttribPointer (
-            vertexPositionAttributeLocation,
-            3,
-            renderingContext.FLOAT,
-            false,
-            0,
-            0
-        );
-
         var transform =
             projectionMatrix.multiply(modelViewMatrix);
 
@@ -175,7 +188,5 @@ function main() {
             false,
             new Float32Array(transform.flatten())
         );
-
-        renderingContext.drawArrays(renderingContext.TRIANGLE_STRIP, 0, 4);
     }
 }

@@ -13,7 +13,7 @@ function main() {
 
     mainCanvas = document.getElementById("mainCanvas");
     
-    setUpRenderingContext(); // Set up the GL context
+    setUpWebGLRenderingContext(); // Set up the GL context
 
     // Only continue if WebGL is available and working
     if (renderingContext === null) {
@@ -44,7 +44,7 @@ function main() {
     // Initialize WebGL, returning the GL context or null if
     // WebGL isn't available or could not be initialized.
     //
-    function setUpRenderingContext() {
+    function setUpWebGLRenderingContext() {
         //
         renderingContext = null;
 
@@ -94,11 +94,8 @@ function main() {
     //
     function setUpShaders() {
         //
-        var vertexShader =
-            getShader(renderingContext, "mainVertexShader");
-            
-        var fragmentShader =
-            getShader(renderingContext, "mainFragmentShader");
+        var vertexShader = getShader("mainVertexShader");
+        var fragmentShader = getShader("mainFragmentShader");
 
         // Create the shader program
 
@@ -120,12 +117,8 @@ function main() {
             );
         }
 
-        renderingContext.useProgram(shaderProgram);
-
         vertexPositionAttributeLocation =
             renderingContext.getAttribLocation(shaderProgram, "vertexPosition");
-        
-        renderingContext.enableVertexAttribArray(vertexPositionAttributeLocation);
         
         transformUniformLocation =
             renderingContext.getUniformLocation(shaderProgram, "transform");
@@ -137,7 +130,7 @@ function main() {
     // Loads a shader program by scouring the current document,
     // looking for a script with the specified ID.
     //
-    function getShader(renderingContext, id) {
+    function getShader(id) {
         //
         var shaderScript = document.getElementById(id);
 
@@ -263,18 +256,42 @@ function main() {
             WebGLRenderingContext.DEPTH_BUFFER_BIT
         );
 
-        // Establish the perspective with which we want to view the
-        // scene. Our field of view is 45 degrees, with a width/height
-        // ratio of 640:480, and we only want to see objects between 0.1 units
-        // and 100 units away from the camera.
+        setUpTransform();
 
-        projectionMatrix = makePerspective (
-            45,
-            mainCanvas.clientWidth / mainCanvas.clientHeight,
-            10,
-            100000
+        renderingContext.useProgram (
+            shaderProgram
         );
 
+        renderingContext.enableVertexAttribArray (
+            vertexPositionAttributeLocation
+        );
+
+        // Draw the square by binding the array buffer to the square's vertices
+        // array, setting attributes, and pushing it to GL.
+
+        renderingContext.bindBuffer (
+            WebGLRenderingContext.ARRAY_BUFFER,
+            squareVerticesBuffer
+        );
+
+        renderingContext.vertexAttribPointer (
+            vertexPositionAttributeLocation,
+            3,
+            WebGLRenderingContext.FLOAT,
+            false,
+            0,
+            0
+        );
+        
+        renderingContext.drawArrays (
+            WebGLRenderingContext.TRIANGLE_STRIP,
+            0,
+            4
+        );
+    }
+
+    function setUpTransform() {
+        //
         // Set the drawing position to the "identity" point, which is
         // the center of the scene.
 
@@ -289,23 +306,18 @@ function main() {
             Matrix.Translation(v).ensure4x4()
         );
 
-        // Draw the square by binding the array buffer to the square's vertices
-        // array, setting attributes, and pushing it to GL.
+        // Establish the perspective with which we want to view the
+        // scene. Our field of view is 45 degrees, with a width/height
+        // ratio of 640:480, and we only want to see objects between 0.1 units
+        // and 100 units away from the camera.
 
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            squareVerticesBuffer
+        projectionMatrix = makePerspective (
+            45,
+            mainCanvas.clientWidth / mainCanvas.clientHeight,
+            10,
+            100000
         );
-        
-        renderingContext.vertexAttribPointer (
-            vertexPositionAttributeLocation,
-            3,
-            WebGLRenderingContext.FLOAT,
-            false,
-            0,
-            0
-        );
-        
+
         var transform =
             projectionMatrix.multiply(modelViewMatrix);
 
@@ -313,12 +325,6 @@ function main() {
             transformUniformLocation,
             false,
             new Float32Array(transform.flatten())
-        );
-        
-        renderingContext.drawArrays (
-            WebGLRenderingContext.TRIANGLE_STRIP,
-            0,
-            4
         );
     }
 }

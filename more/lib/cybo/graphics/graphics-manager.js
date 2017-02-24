@@ -9,7 +9,7 @@ function GraphicsManager(_xcene) {
         get: function() { return _xcene; }
     });
     
-    (function setUpRenderingContext() {
+    (function setUpWebGLRenderingContext() {
         //
         // Try to grab the standard context.
         try {

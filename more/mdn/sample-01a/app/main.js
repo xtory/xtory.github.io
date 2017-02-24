@@ -8,11 +8,10 @@ function main() {
     mainCanvas = document.getElementById("mainCanvas");
 
     // Set up the GL context
-    setUpRenderingContext(mainCanvas);
+    setUpWebGLRenderingContext(mainCanvas);
 
     // Only continue if WebGL is available and working
-    if (renderingContext === null)
-    {
+    if (renderingContext === null) {
         return;
     }
 
@@ -34,14 +33,13 @@ function main() {
     //
     // Functions.
     //
-    function setUpRenderingContext(mainCanvas) {
+    function setUpWebGLRenderingContext(mainCanvas) {
         //
         // Try to grab the standard context.
         renderingContext = mainCanvas.getContext("webgl");
 
         // If we don't have a GL context, give up now
-        if (renderingContext == null)
-        {
+        if (renderingContext == null) {
             alert("Unable to initialize WebGL. Your browser may not support it.");
         }
     }
