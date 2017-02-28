@@ -23,10 +23,12 @@ function main() {
     //renderingContext.clearColor(0.25, 0.25, 0.25, 1.0);   // Clear to black, fully opaque
     renderingContext.clearColor(0/255, 114/255, 54/255, 1); // colors.PHOTOSHOP_DARK_GREEN
     renderingContext.clearDepth(1.0);                     // Clear everything
-    renderingContext.enable(WebGLRenderingContext.DEPTH_TEST); // Enable depth testing
-    renderingContext.depthFunc(WebGLRenderingContext.LEQUAL);  // Near things obscure far things
-    // renderingContext.enable(renderingContext.DEPTH_TEST); // Enable depth testing
-    // renderingContext.depthFunc(renderingContext.LEQUAL);  // Near things obscure far things
+
+    renderingContext.enable(renderingContext.DEPTH_TEST); // Enable depth testing
+    alert("WebGLRenderingContext.DEPTH_TEST = " + WebGLRenderingContext.DEPTH_TEST);
+
+    renderingContext.depthFunc(renderingContext.LEQUAL);  // Near things obscure far things
+    alert("WebGLRenderingContext.LEQUAL = " + WebGLRenderingContext.LEQUAL);
 
     window.onresize = resize();
 
@@ -120,6 +122,8 @@ function main() {
             );
         }
 
+        alert("WebGLRenderingContext.LINK_STATUS = " + WebGLRenderingContext.LINK_STATUS);
+
         vertexPositionAttributeLocation =
             renderingContext.getAttribLocation(shaderProgram, "vertexPosition");
         
@@ -178,6 +182,9 @@ function main() {
             return null;  // Unknown shader type
         }
 
+        alert("WebGLRenderingContext.FRAGMENT_SHADER = " + WebGLRenderingContext.FRAGMENT_SHADER);
+        alert("WebGLRenderingContext.VERTEX_SHADER = " + WebGLRenderingContext.VERTEX_SHADER);
+
         // Send the source to the shader object
 
         renderingContext.shaderSource(shader, shaderSource);
@@ -201,6 +208,8 @@ function main() {
             return null;
         }
 
+        alert("WebGLRenderingContext.COMPILE_STATUS = " + WebGLRenderingContext.COMPILE_STATUS);
+
         return shader;
     }
 
@@ -223,6 +232,8 @@ function main() {
             renderingContext.ARRAY_BUFFER, //WebGLRenderingContext.ARRAY_BUFFER,
             squareVerticesBuffer
         );
+
+        alert("WebGLRenderingContext.ARRAY_BUFFER = " + WebGLRenderingContext.ARRAY_BUFFER);
         
         // Now create an array of vertices for the square. Note that the Z
         // coordinate is always 0 here.
@@ -243,6 +254,10 @@ function main() {
             new Float32Array(vertices),
             renderingContext.STATIC_DRAW //WebGLRenderingContext.STATIC_DRAW
         );
+
+        alert("WebGLRenderingContext.ARRAY_BUFFER = " + WebGLRenderingContext.ARRAY_BUFFER);
+        alert("WebGLRenderingContext.STATIC_DRAW = " + WebGLRenderingContext.STATIC_DRAW);
+
     }
 
     //
@@ -258,6 +273,9 @@ function main() {
             renderingContext.COLOR_BUFFER_BIT | //WebGLRenderingContext.COLOR_BUFFER_BIT |
             renderingContext.DEPTH_BUFFER_BIT //WebGLRenderingContext.DEPTH_BUFFER_BIT
         );
+
+        alert("WebGLRenderingContext.COLOR_BUFFER_BIT = " + WebGLRenderingContext.COLOR_BUFFER_BIT);
+        alert("WebGLRenderingContext.DEPTH_BUFFER_BIT = " + WebGLRenderingContext.DEPTH_BUFFER_BIT);
 
         setUpTransform();
 
@@ -277,6 +295,8 @@ function main() {
             squareVerticesBuffer
         );
 
+        alert("WebGLRenderingContext.ARRAY_BUFFER = " + WebGLRenderingContext.ARRAY_BUFFER);
+
         renderingContext.vertexAttribPointer (
             vertexPositionAttributeLocation,
             3,
@@ -285,12 +305,16 @@ function main() {
             0,
             0
         );
+
+        alert("WebGLRenderingContext.FLOAT = " + WebGLRenderingContext.FLOAT);
         
         renderingContext.drawArrays (
             renderingContext.TRIANGLE_STRIP, //WebGLRenderingContext.TRIANGLE_STRIP,
             0,
             4
         );
+
+        alert("WebGLRenderingContext.TRIANGLE_STRIP = " + WebGLRenderingContext.TRIANGLE_STRIP);
     }
 
     function setUpTransform() {
