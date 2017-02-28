@@ -16,7 +16,8 @@ function main() {
     }
 
     // Set clear color to black, fully opaque
-    renderingContext.clearColor(0.25, 0.25, 0.25, 1.0);
+    //renderingContext.clearColor(0.25, 0.25, 0.25, 1.0);
+    renderingContext.clearColor(163/255, 97/255, 9/255, 1.0); // = colors.PHOTOSHOP_DARK_YELLOW_ORANGE
 
     // Enable depth testing
     renderingContext.enable(renderingContext.DEPTH_TEST);

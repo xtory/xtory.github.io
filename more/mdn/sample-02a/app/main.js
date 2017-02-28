@@ -20,7 +20,8 @@ function main() {
         return;
     }
 
-    renderingContext.clearColor(0.25, 0.25, 0.25, 1.0);   // Clear to black, fully opaque
+    //renderingContext.clearColor(0.25, 0.25, 0.25, 1.0);   // Clear to black, fully opaque
+    renderingContext.clearColor(0/255, 114/255, 54/255, 1); // colors.PHOTOSHOP_DARK_GREEN
     renderingContext.clearDepth(1.0);                     // Clear everything
     renderingContext.enable(WebGLRenderingContext.DEPTH_TEST); // Enable depth testing
     renderingContext.depthFunc(WebGLRenderingContext.LEQUAL);  // Near things obscure far things

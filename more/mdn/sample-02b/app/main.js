@@ -118,7 +118,16 @@ function main() {
     function drawScene() {
         //
         // Clear the mainCanvas before we start drawing on it.
-        scene.graphicsManager.clear();
+        //scene.graphicsManager.clear();
+        scene.graphicsManager.clear (
+            // Part 1.
+            WebGLRenderingContext.COLOR_BUFFER_BIT |
+            WebGLRenderingContext.DEPTH_BUFFER_BIT,
+            // Part 2.
+            new Color(0/255, 52/255, 113/255, 1), // colors.PHOTOSHOP_DARK_BLUE
+            undefined,
+            undefined
+        );
 
         setUpTransform();
 
