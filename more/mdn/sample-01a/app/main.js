@@ -5,6 +5,8 @@ function main() {
     var mainCanvas;
     var renderingContext;
 
+    alert("Alert test!");
+
     mainCanvas = document.getElementById("mainCanvas");
 
     // Set up the GL context

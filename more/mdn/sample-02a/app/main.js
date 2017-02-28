@@ -23,8 +23,10 @@ function main() {
     //renderingContext.clearColor(0.25, 0.25, 0.25, 1.0);   // Clear to black, fully opaque
     renderingContext.clearColor(0/255, 114/255, 54/255, 1); // colors.PHOTOSHOP_DARK_GREEN
     renderingContext.clearDepth(1.0);                     // Clear everything
-    renderingContext.enable(WebGLRenderingContext.DEPTH_TEST); // Enable depth testing
-    renderingContext.depthFunc(WebGLRenderingContext.LEQUAL);  // Near things obscure far things
+    // renderingContext.enable(WebGLRenderingContext.DEPTH_TEST); // Enable depth testing
+    // renderingContext.depthFunc(WebGLRenderingContext.LEQUAL);  // Near things obscure far things
+    renderingContext.enable(renderingContext.DEPTH_TEST); // Enable depth testing
+    renderingContext.depthFunc(renderingContext.LEQUAL);  // Near things obscure far things
 
     window.onresize = resize();
 
@@ -109,7 +111,7 @@ function main() {
 
         if (renderingContext.getProgramParameter (
                 shaderProgram,
-                WebGLRenderingContext.LINK_STATUS
+                renderingContext.LINK_STATUS //WebGLRenderingContext.LINK_STATUS
             ) === null)
         {
             alert (
@@ -163,13 +165,13 @@ function main() {
         if (shaderScript.type === "x-shader/x-fragment") {
             //
             shader = renderingContext.createShader (
-                WebGLRenderingContext.FRAGMENT_SHADER
+                renderingContext.FRAGMENT_SHADER //WebGLRenderingContext.FRAGMENT_SHADER
             );
 
         } else if (shaderScript.type === "x-shader/x-vertex") {
             //
             shader = renderingContext.createShader (
-                WebGLRenderingContext.VERTEX_SHADER
+                renderingContext.VERTEX_SHADER //WebGLRenderingContext.VERTEX_SHADER
             );
             
         } else {
@@ -188,7 +190,7 @@ function main() {
 
         if (renderingContext.getShaderParameter (
                 shader,
-                WebGLRenderingContext.COMPILE_STATUS
+                renderingContext.COMPILE_STATUS //WebGLRenderingContext.COMPILE_STATUS
             ) === null)
         {
             alert (
@@ -218,7 +220,7 @@ function main() {
         // operations to from here out.
 
         renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
+            renderingContext.ARRAY_BUFFER, //WebGLRenderingContext.ARRAY_BUFFER,
             squareVerticesBuffer
         );
         
@@ -237,9 +239,9 @@ function main() {
         // then use it to fill the current vertex buffer.
 
         renderingContext.bufferData (
-            WebGLRenderingContext.ARRAY_BUFFER,
+            renderingContext.ARRAY_BUFFER, //WebGLRenderingContext.ARRAY_BUFFER,
             new Float32Array(vertices),
-            WebGLRenderingContext.STATIC_DRAW
+            renderingContext.STATIC_DRAW //WebGLRenderingContext.STATIC_DRAW
         );
     }
 
@@ -253,8 +255,8 @@ function main() {
         // Clear the mainCanvas before we start drawing on it.
 
         renderingContext.clear (
-            WebGLRenderingContext.COLOR_BUFFER_BIT |
-            WebGLRenderingContext.DEPTH_BUFFER_BIT
+            renderingContext.COLOR_BUFFER_BIT | //WebGLRenderingContext.COLOR_BUFFER_BIT |
+            renderingContext.DEPTH_BUFFER_BIT //WebGLRenderingContext.DEPTH_BUFFER_BIT
         );
 
         setUpTransform();
@@ -271,21 +273,21 @@ function main() {
         // array, setting attributes, and pushing it to GL.
 
         renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
+            renderingContext.ARRAY_BUFFER, //WebGLRenderingContext.ARRAY_BUFFER,
             squareVerticesBuffer
         );
 
         renderingContext.vertexAttribPointer (
             vertexPositionAttributeLocation,
             3,
-            WebGLRenderingContext.FLOAT,
+            renderingContext.FLOAT, //WebGLRenderingContext.FLOAT,
             false,
             0,
             0
         );
         
         renderingContext.drawArrays (
-            WebGLRenderingContext.TRIANGLE_STRIP,
+            renderingContext.TRIANGLE_STRIP, //WebGLRenderingContext.TRIANGLE_STRIP,
             0,
             4
         );
