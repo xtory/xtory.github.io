@@ -27,11 +27,17 @@ function main() {
     // Near things obscure far things
     renderingContext.depthFunc(renderingContext.LEQUAL);
 
+    // // Clear the color as well as the depth buffer.
+    // renderingContext.clear (
+    //     WebGLRenderingContext.COLOR_BUFFER_BIT |
+    //     WebGLRenderingContext.DEPTH_BUFFER_BIT
+    // );
+
     // Clear the color as well as the depth buffer.
     renderingContext.clear (
-        WebGLRenderingContext.COLOR_BUFFER_BIT |
-        WebGLRenderingContext.DEPTH_BUFFER_BIT
-    );
+        renderingContext.COLOR_BUFFER_BIT |
+        renderingContext.DEPTH_BUFFER_BIT
+    );    
 
     //
     // Functions.
