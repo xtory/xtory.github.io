@@ -20,12 +20,16 @@ function main() {
         return;
     }
 
-    renderingContext.clearColor(83/255, 71/255, 65/255, 1); // = cybo.graphics.colors.PHOTOSHOP_DARK_COOL_BROWN
+    //renderingContext.clearColor(83/255, 71/255, 65/255, 1); // = cybo.graphics.colors.PHOTOSHOP_DARK_COOL_BROWN
+    renderingContext.clearColor(122/255, 204/255, 200/255, 1); // = cybo.graphics.colors.PHOTOSHOP_PASTEL_GREEN_CYAN
     renderingContext.clearDepth(1.0);                       // Clear everything
     renderingContext.enable(renderingContext.DEPTH_TEST);   // Enable depth testing
     renderingContext.depthFunc(renderingContext.LEQUAL);    // Near things obscure far things
 
-    window.onresize = resize();
+    //window.onresize = resize();
+
+    window.addEventListener("resize", resize);
+    resize();
 
     // Initialize the shaders; this is where all the lighting for the
     // vertices and so forth is established.
@@ -59,7 +63,7 @@ function main() {
             
             if (renderingContext !== null) {
                 //
-                alert (
+                console.log (
                     "Your browser supports WebGL. \n\n" +
                     "However, it indicates the support is experimental. " +
                     "That is, not all WebGL functionality may be supported, " +

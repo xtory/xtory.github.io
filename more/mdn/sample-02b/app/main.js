@@ -118,15 +118,14 @@ function main() {
     function drawScene() {
         //
         // Clear the mainCanvas before we start drawing on it.
-        //scene.graphicsManager.clear();
         scene.graphicsManager.clear (
-            // Part 1.
-            renderingContext.COLOR_BUFFER_BIT |
-            renderingContext.DEPTH_BUFFER_BIT,
-            // Part 2.
-            new Color(83/255, 71/255, 65/255, 1), // = cybo.graphics.colors.PHOTOSHOP_DARK_COOL_BROWN
-            undefined,
-            undefined
+           // Part 1.
+           renderingContext.COLOR_BUFFER_BIT |
+           renderingContext.DEPTH_BUFFER_BIT,
+           // Part 2.
+           new Color(122/255, 204/255, 200/255, 1), // = cybo.graphics.colors.PHOTOSHOP_PASTEL_GREEN_CYAN
+           undefined,
+           undefined
         );
 
         setUpTransform();

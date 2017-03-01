@@ -51,7 +51,7 @@ function GraphicsManager(_xcene) {
             
             if (_renderingContext !== null) {
                 //
-                alert (
+                console.log (
                     "Your browser supports WebGL. \n\n" +
                     "However, it indicates the support is experimental. " +
                     "That is, not all WebGL functionality may be supported, " +
@@ -86,7 +86,7 @@ Object.defineProperty(GraphicsManager, "DEFAULT_DEPTH_BUFFER_VALUE", {
 });
 
 Object.defineProperty(GraphicsManager, "DEFAULT_STENCIL_BUFFER_VALUE", {
-    get: function() { return 1; }
+    get: function() { return 0; }
 });
 
 GraphicsManager.prototype = {
@@ -97,21 +97,31 @@ GraphicsManager.prototype = {
         this.renderingContext.enableVertexAttribArray(vertexAttributeLocation);
     },    
     
-    clear: function (
-        mask = (
-            renderingContext.COLOR_BUFFER_BIT |
-            renderingContext.DEPTH_BUFFER_BIT
-        ),
-        color = GraphicsManager.DEFAULT_COLOR_BUFFER_VALUE,
-        depth = GraphicsManager.DEFAULT_DEPTH_BUFFER_VALUE,
-        s = GraphicsManager.DEFAULT_STENCIL_BUFFER_VALUE
-    ){
+    clear: function(mask, color, depth, s) {
+        //
+        if (mask === undefined) {
+            this.renderingContext.COLOR_BUFFER_BIT |
+            this.renderingContext.DEPTH_BUFFER_BIT
+        }
+
+        if (color === undefined) {
+            color = GraphicsManager.DEFAULT_COLOR_BUFFER_VALUE;
+        }
+        
+        if (depth === undefined) {
+            depth = GraphicsManager.DEFAULT_DEPTH_BUFFER_VALUE;
+        }
+        
+        if (s === undefined) {
+            s = GraphicsManager.DEFAULT_STENCIL_BUFFER_VALUE;
+        }
+
         this.renderingContext.clearColor(color.r, color.g, color.b, color.a);
         this.renderingContext.clearDepth(depth);
         this.renderingContext.clearStencil(s);
 
         this.renderingContext.clear(mask);
-    },
+    },    
     
     //
     // Accessors.

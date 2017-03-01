@@ -16,7 +16,8 @@ function main() {
     }
 
     // Set clear color to black, fully opaque
-    renderingContext.clearColor(83/255, 71/255, 65/255, 1); // = cybo.graphics.colors.PHOTOSHOP_DARK_COOL_BROWN
+    //renderingContext.clearColor(83/255, 71/255, 65/255, 1); // = cybo.graphics.colors.PHOTOSHOP_DARK_COOL_BROWN
+    renderingContext.clearColor(122/255, 204/255, 200/255, 1); // = cybo.graphics.colors.PHOTOSHOP_PASTEL_GREEN_CYAN
 
     // Enable depth testing
     renderingContext.enable(renderingContext.DEPTH_TEST);
@@ -48,7 +49,7 @@ function main() {
             
             if (renderingContext !== null) {
                 //
-                alert (
+                console.log (
                     "Your browser supports WebGL. \n\n" +
                     "However, it indicates the support is experimental. " +
                     "That is, not all WebGL functionality may be supported, " +

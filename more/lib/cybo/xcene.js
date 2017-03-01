@@ -19,33 +19,36 @@ function Xcene(_mainCanvas) {
         get: function() { return _assetManager; }
     });
     
-    this.resize();
+    window.addEventListener("resize", resize);
+    resize();
+
+    //
+    // Private methods.
+    //
+    function resize() {
+        //
+        // Lookup the size the browser is displaying the canvas.
+        var displayWidth  = _mainCanvas.clientWidth;
+        var displayHeight = _mainCanvas.clientHeight;
+
+        // Check if the canvas is not the same size.
+        if (_mainCanvas.width  != displayWidth ||
+            _mainCanvas.height != displayHeight) {
+            //
+            // Make the canvas the same size
+            _mainCanvas.width  = displayWidth;
+            _mainCanvas.height = displayHeight;
+            
+            _graphicsManager.renderingContext.viewport (
+                // Part 1.
+                0, 0,
+                // Part 2.
+                _mainCanvas.width, _mainCanvas.height
+            );
+        }
+    }
 }
 
 Xcene.prototype = {
     //
-    // Public methods.
-    //
-    resize: function() {
-        //
-        // Lookup the size the browser is displaying the canvas.
-        var displayWidth  = this.mainCanvas.clientWidth;
-        var displayHeight = this.mainCanvas.clientHeight;
-
-        // Check if the canvas is not the same size.
-        if (this.mainCanvas.width  != displayWidth ||
-            this.mainCanvas.height != displayHeight) {
-            //
-            // Make the canvas the same size
-            this.mainCanvas.width  = displayWidth;
-            this.mainCanvas.height = displayHeight;
-            
-            this.graphicsManager.renderingContext.viewport (
-                // Part 1.
-                0, 0,
-                // Part 2.
-                this.mainCanvas.width, this.mainCanvas.height
-            );
-        }
-    }
 };
