@@ -111,7 +111,7 @@ define ([
         // operations to from here out.
 
         renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
+            renderingContext.ARRAY_BUFFER,
             vertexPositionBuffer
         );
         
@@ -120,9 +120,9 @@ define ([
         // use it to fill the current vertex buffer.
 
         renderingContext.bufferData (
-            WebGLRenderingContext.ARRAY_BUFFER,
+            renderingContext.ARRAY_BUFFER,
             new Float32Array(vertexPositions),
-            WebGLRenderingContext.STATIC_DRAW
+            renderingContext.STATIC_DRAW
         );
     }
 
@@ -144,21 +144,21 @@ define ([
         // array, setting attributes, and pushing it to GL.
 
         renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
+            renderingContext.ARRAY_BUFFER,
             vertexPositionBuffer
         );
         
         renderingContext.vertexAttribPointer (
             vertexPositionAttributeLocation,
             3,
-            WebGLRenderingContext.FLOAT,
+            renderingContext.FLOAT,
             false,
             0,
             0
         );
 
         renderingContext.drawArrays (
-            WebGLRenderingContext.TRIANGLE_STRIP,
+            renderingContext.TRIANGLE_STRIP,
             0,
             4
         );

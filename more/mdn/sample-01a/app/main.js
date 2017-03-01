@@ -61,7 +61,7 @@ function main() {
                     "Unable to initialize WebGL. Your browser may not support it."
                 );
 
-                throw "WebGL-not-supported excpetion raised.";
+                throw "WebGL-not-supported exception raised.";
             }
         }
     }

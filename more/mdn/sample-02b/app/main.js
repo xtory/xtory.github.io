@@ -85,7 +85,7 @@ function main() {
         // operations to from here out.
 
         renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
+            renderingContext.ARRAY_BUFFER,
             squareVerticesBuffer
         );
 
@@ -104,9 +104,9 @@ function main() {
         // then use it to fill the current vertex buffer.
 
         renderingContext.bufferData (
-            WebGLRenderingContext.ARRAY_BUFFER,
+            renderingContext.ARRAY_BUFFER,
             new Float32Array(vertices),
-            WebGLRenderingContext.STATIC_DRAW
+            renderingContext.STATIC_DRAW
         );
     }
 
@@ -121,8 +121,8 @@ function main() {
         //scene.graphicsManager.clear();
         scene.graphicsManager.clear (
             // Part 1.
-            WebGLRenderingContext.COLOR_BUFFER_BIT |
-            WebGLRenderingContext.DEPTH_BUFFER_BIT,
+            renderingContext.COLOR_BUFFER_BIT |
+            renderingContext.DEPTH_BUFFER_BIT,
             // Part 2.
             new Color(83/255, 71/255, 65/255, 1), // = cybo.graphics.colors.PHOTOSHOP_DARK_COOL_BROWN
             undefined,
@@ -142,21 +142,21 @@ function main() {
         // array, setting attributes, and pushing it to GL.
 
         renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
+            renderingContext.ARRAY_BUFFER,
             squareVerticesBuffer
         );
 
         renderingContext.vertexAttribPointer (
             vertexPositionAttributeLocation,
             3,
-            WebGLRenderingContext.FLOAT,
+            renderingContext.FLOAT,
             false,
             0,
             0
         );
 
         renderingContext.drawArrays (
-            WebGLRenderingContext.TRIANGLE_STRIP,
+            renderingContext.TRIANGLE_STRIP,
             0,
             4
         );

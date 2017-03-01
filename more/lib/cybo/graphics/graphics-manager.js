@@ -64,15 +64,15 @@ function GraphicsManager(_xcene) {
                     "Unable to initialize WebGL. Your browser may not support it."
                 );
 
-                throw "WebGL-not-supported excpetion raised.";
+                throw "WebGL-not-supported exception raised.";
             }
         }
         
         // Enable depth testing
-        _renderingContext.enable(WebGLRenderingContext.DEPTH_TEST);
+        _renderingContext.enable(_renderingContext.DEPTH_TEST);
 
         // Near things obscure far things
-        _renderingContext.depthFunc(WebGLRenderingContext.LEQUAL);
+        _renderingContext.depthFunc(_renderingContext.LEQUAL);
         //
     }
 }
@@ -99,8 +99,8 @@ GraphicsManager.prototype = {
     
     clear: function (
         mask = (
-            WebGLRenderingContext.COLOR_BUFFER_BIT |
-            WebGLRenderingContext.DEPTH_BUFFER_BIT
+            renderingContext.COLOR_BUFFER_BIT |
+            renderingContext.DEPTH_BUFFER_BIT
         ),
         color = GraphicsManager.DEFAULT_COLOR_BUFFER_VALUE,
         depth = GraphicsManager.DEFAULT_DEPTH_BUFFER_VALUE,

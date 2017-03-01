@@ -28,7 +28,7 @@ ShaderHelper.prototype = {
         if (JSHelper.isUndefinedOrNull (
                 this.renderingContext.getProgramParameter (
                     shaderProgram,
-                    WebGLRenderingContext.LINK_STATUS
+                    this.renderingContext.LINK_STATUS
                 )
             ) === true)
         {

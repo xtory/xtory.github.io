@@ -25,13 +25,13 @@ AssetManager.prototype = {
         if (shaderType === ShaderType.VERTEX_SHADER) {
             //
             shader = this.renderingContext.createShader (
-                WebGLRenderingContext.VERTEX_SHADER
+                this.renderingContext.VERTEX_SHADER
             );
         } else if (
             shaderType === ShaderType.FRAGMENT_SHADER
         ){
             shader = this.renderingContext.createShader (
-                WebGLRenderingContext.FRAGMENT_SHADER
+                this.renderingContext.FRAGMENT_SHADER
             );
         } else {
             return null; // Unknown shader type
@@ -98,13 +98,13 @@ AssetManager.prototype = {
         if (shaderScript.type === "x-shader/x-vertex") {
             //
             shader = this.renderingContext.createShader (
-                WebGLRenderingContext.VERTEX_SHADER
+                this.renderingContext.VERTEX_SHADER
             );
         } else if (
             shaderScript.type === "x-shader/x-fragment"
         ){
             shader = this.renderingContext.createShader (
-                WebGLRenderingContext.FRAGMENT_SHADER
+                this.renderingContext.FRAGMENT_SHADER
             );
         } else {
             return null; // Unknown shader type

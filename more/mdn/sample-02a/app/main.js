@@ -44,22 +44,6 @@ function main() {
     // Initialize WebGL, returning the GL context or null if
     // WebGL isn't available or could not be initialized.
     //
-    // function setUpWebGLRenderingContext() {
-    //     //
-    //     renderingContext = null;
-
-    //     try {
-    //         renderingContext = mainCanvas.getContext("webgl");
-    //     }
-    //     catch(e) {
-    //     }
-
-    //     // If we don't have a GL context, give up now
-
-    //     if (renderingContext === null) {
-    //         alert("Unable to initialize WebGL. Your browser may not support it.");
-    //     }
-    // }
     function setUpWebGLRenderingContext() {
         //
         // Try to grab the standard context. If it fails, fallback to experimental.
@@ -88,7 +72,7 @@ function main() {
                     "Unable to initialize WebGL. Your browser may not support it."
                 );
 
-                throw "WebGL-not-supported excpetion raised.";
+                throw "WebGL-not-supported exception raised.";
             }
         }
     }
