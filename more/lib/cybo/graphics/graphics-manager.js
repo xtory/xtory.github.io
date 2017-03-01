@@ -9,31 +9,7 @@ function GraphicsManager(_xcene) {
         get: function() { return _xcene; }
     });
     
-    (function setUpWebGLRenderingContext() {
-        //
-        // Try to grab the standard context.
-        try {
-            _renderingContext = _xcene.mainCanvas.getContext("webgl");
-        }
-        catch(e) {
-        }
-
-        // If we don't have a GL context, give up now
-        //if (!this.renderingContext)
-        if (JSHelper.isUndefinedOrNull(_renderingContext) === true)
-        {
-            // alert("Unable to initialize WebGL. Your browser may not support it.");
-            // return;
-            throw "Unable to initialize WebGL. Your browser may not support it.";
-        }
-        
-        // Enable depth testing
-        _renderingContext.enable(WebGLRenderingContext.DEPTH_TEST);
-
-        // Near things obscure far things
-        _renderingContext.depthFunc(WebGLRenderingContext.LEQUAL);
-        //
-    }());
+    setUpWebGLRenderingContext();
     
     Object.defineProperty(this, "renderingContext", {
         get: function() { return _renderingContext; },
@@ -55,7 +31,50 @@ function GraphicsManager(_xcene) {
             _shaderProgram = value;
             _renderingContext.useProgram(_shaderProgram);
         },
-    });    
+    });
+
+    //
+    // Private methods.
+    //
+    function setUpWebGLRenderingContext() {
+        //
+        // Try to grab the standard context. If it fails, fallback to experimental.
+        //
+        // Note:
+        // IE11 only supports "experimental-webgl".
+        //
+        _renderingContext = _xcene.mainCanvas.getContext("webgl");
+        if (_renderingContext === null) {
+            //
+            _renderingContext =
+                _xcene.mainCanvas.getContext("experimental-webgl");
+            
+            if (_renderingContext !== null) {
+                //
+                alert (
+                    "Your browser supports WebGL. \n\n" +
+                    "However, it indicates the support is experimental. " +
+                    "That is, not all WebGL functionality may be supported, " +
+                    "and content may not run as expected."
+                );
+            }
+            else {
+                //
+                alert (
+                    "Unable to initialize WebGL. Your browser may not support it."
+                );
+
+                throw "WebGL-not-supported excpetion raised.";
+            }
+        }
+        
+        // Enable depth testing
+        _renderingContext.enable(WebGLRenderingContext.DEPTH_TEST);
+
+        // Near things obscure far things
+        _renderingContext.depthFunc(WebGLRenderingContext.LEQUAL);
+        //
+    }
 }
 
 Object.defineProperty(GraphicsManager, "DEFAULT_COLOR_BUFFER_VALUE", {

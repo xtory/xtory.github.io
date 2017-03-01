@@ -20,11 +20,10 @@ function main() {
         return;
     }
 
-    //renderingContext.clearColor(0.25, 0.25, 0.25, 1.0);   // Clear to black, fully opaque
-    renderingContext.clearColor(0/255, 114/255, 54/255, 1); // colors.PHOTOSHOP_DARK_GREEN
-    renderingContext.clearDepth(1.0);                     // Clear everything
-    renderingContext.enable(renderingContext.DEPTH_TEST); // Enable depth testing
-    renderingContext.depthFunc(renderingContext.LEQUAL);  // Near things obscure far things
+    renderingContext.clearColor(83/255, 71/255, 65/255, 1); // = cybo.graphics.colors.PHOTOSHOP_DARK_COOL_BROWN
+    renderingContext.clearDepth(1.0);                       // Clear everything
+    renderingContext.enable(renderingContext.DEPTH_TEST);   // Enable depth testing
+    renderingContext.depthFunc(renderingContext.LEQUAL);    // Near things obscure far things
 
     window.onresize = resize();
 
@@ -45,20 +44,52 @@ function main() {
     // Initialize WebGL, returning the GL context or null if
     // WebGL isn't available or could not be initialized.
     //
+    // function setUpWebGLRenderingContext() {
+    //     //
+    //     renderingContext = null;
+
+    //     try {
+    //         renderingContext = mainCanvas.getContext("webgl");
+    //     }
+    //     catch(e) {
+    //     }
+
+    //     // If we don't have a GL context, give up now
+
+    //     if (renderingContext === null) {
+    //         alert("Unable to initialize WebGL. Your browser may not support it.");
+    //     }
+    // }
     function setUpWebGLRenderingContext() {
         //
-        renderingContext = null;
-
-        try {
-            renderingContext = mainCanvas.getContext("webgl");
-        }
-        catch(e) {
-        }
-
-        // If we don't have a GL context, give up now
-
+        // Try to grab the standard context. If it fails, fallback to experimental.
+        //
+        // Note:
+        // IE11 only supports "experimental-webgl".
+        //
+        renderingContext = mainCanvas.getContext("webgl");
         if (renderingContext === null) {
-            alert("Unable to initialize WebGL. Your browser may not support it.");
+            //
+            renderingContext =
+                mainCanvas.getContext("experimental-webgl");
+            
+            if (renderingContext !== null) {
+                //
+                alert (
+                    "Your browser supports WebGL. \n\n" +
+                    "However, it indicates the support is experimental. " +
+                    "That is, not all WebGL functionality may be supported, " +
+                    "and content may not run as expected."
+                );
+            }
+            else {
+                //
+                alert (
+                    "Unable to initialize WebGL. Your browser may not support it."
+                );
+
+                throw "WebGL-not-supported excpetion raised.";
+            }
         }
     }
 

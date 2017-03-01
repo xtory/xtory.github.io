@@ -1,7 +1,6 @@
 body {
 	margin: 0;
-	/* background-color: #404040; = cybo.graphics.colors.DEFAULT_BACKGROUND */
-	background-color: #9D0A0E; /* = cybo.graphics.colors.PHOTOSHOP_DARK_RED */
+	background-color: #404040; /* = cybo.graphics.colors.DEFAULT_BACKGROUND */
 }
 
 canvas {

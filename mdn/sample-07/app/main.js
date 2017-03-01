@@ -484,7 +484,7 @@ define ([
             modelViewMatrix
         );
 
-        // *Test*
+        // Test_
         var normalMatrix = modelViewMatrix.inverse();
         normalMatrix = normalMatrix.transpose();
 
@@ -492,7 +492,7 @@ define ([
             normalMatrixUniformLocation,
             normalMatrix
         );
-        // *_Test*
+        // _test
 
         projectionMatrix = Matrix4x4.createProjectionMatrix (
             undefined,

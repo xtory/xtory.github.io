@@ -124,7 +124,7 @@ function main() {
             WebGLRenderingContext.COLOR_BUFFER_BIT |
             WebGLRenderingContext.DEPTH_BUFFER_BIT,
             // Part 2.
-            new Color(0/255, 52/255, 113/255, 1), // colors.PHOTOSHOP_DARK_BLUE
+            new Color(83/255, 71/255, 65/255, 1), // = cybo.graphics.colors.PHOTOSHOP_DARK_COOL_BROWN
             undefined,
             undefined
         );
