@@ -122,7 +122,7 @@ define ([
         );
 
         normalMatrixUniformLocation = (
-            scene.graphicsManagergl.getUniformLocation (
+            scene.graphicsManager.getUniformLocation (
                 shaderProgram,
                 "normalMatrix"
             )
@@ -360,8 +360,8 @@ define ([
     function setUpTextures() {
         //
         var url = // which is relative to index.html, not main.js
-            //"../assets/images/market-street.jpg";
-            "../assets/images/white.jpg";
+            "../assets/images/market-street.jpg";
+            //"../assets/images/white.jpg";
 
         mainTexture = scene.assetManager.loadTexture2D(url);
     }
@@ -443,12 +443,6 @@ define ([
             samplerUniformLocation,
             0
         );
-        
-        // renderingContext.drawArrays (
-        //     renderingContext.TRIANGLE_STRIP,
-        //     0,
-        //     4
-        // );
 
         renderingContext.bindBuffer (
             renderingContext.ELEMENT_ARRAY_BUFFER,
@@ -468,14 +462,15 @@ define ([
         modelViewMatrix =
             Matrix4x4.createRotationMatrix(CartesianAxis.Y, rotationY);
 
-        rotationY += 0.05;
+        rotationY += 0.01; //0.05;
 
         modelViewMatrix = Matrix4x4.multiplyMatrices (
             Matrix4x4.createRotationMatrix(CartesianAxis.X, rotationX),
             modelViewMatrix
         );
 
-        rotationX -= 0.025;
+        //rotationX -= 0.025;
+        rotationX -= 0.005;
 
         var v = new Vector3D(0, 0, -325);
 
@@ -485,9 +480,9 @@ define ([
         );
 
         // Test_
-        var normalMatrix = modelViewMatrix.inverse();
-        normalMatrix = normalMatrix.transpose();
-
+        var normalMatrix = Matrix4x4.invertMatrix(modelViewMatrix);
+        normalMatrix = Matrix4x4.transposeMatrix(normalMatrix);
+        
         scene.graphicsManager.setMatrix4x4Uniform (
             normalMatrixUniformLocation,
             normalMatrix

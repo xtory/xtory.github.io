@@ -35,9 +35,12 @@ define ([
         "       textureCoordinates = vertexTextureCoordinates;             \n" +
         "                                                                  \n" +
         "       // Apply lighting effect                                   \n" +
-        "       highp vec3 ambientLight = vec3(0.6, 0.6, 0.6);             \n" +
-        "       highp vec3 directionalLightColor = vec3(0.5, 0.5, 0.75);   \n" +
-        "       highp vec3 directionalVector = vec3(0.85, 0.8, 0.75);      \n" +
+        "       //highp vec3 ambientLight = vec3(0.6, 0.6, 0.6);           \n" +
+        "       highp vec3 ambientLight = vec3(0.25, 0.25, 0.25);             \n" +
+        "       //highp vec3 directionalLightColor = vec3(0.5, 0.5, 0.75); \n" +
+        "       highp vec3 directionalLightColor = vec3(1, 1, 1);          \n" +
+        "       //highp vec3 directionalVector = vec3(0.85, 0.8, 0.75);    \n" +
+        "       highp vec3 directionalVector = vec3(1, 1, 1);      \n" +
         "                                                                  \n" +
         "       highp vec4 transformedNormal =                             \n" +
         "           normalMatrix * vec4(vertexNormal, 1.0);                \n" +
@@ -66,10 +69,8 @@ define ([
         "                                                                  \n" +
         "   void main() {                                                  \n" +
         "       //                                                         \n" +
-        "       mediump vec4 texelColor = texture2D (                      \n" +
-        "           sampler,                                               \n" +
-        "           vec2(textureCoordinates.s, textureCoordinates.t)       \n" +
-        "       );                                                         \n" +
+        "       mediump vec4 texelColor =                                  \n" +
+        "           texture2D(sampler, textureCoordinates);                \n" +
         "                                                                  \n" +
         "       gl_FragColor =                                             \n" +
         "           vec4(texelColor.rgb * lighting, texelColor.a);         \n" +
