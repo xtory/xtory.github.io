@@ -41,7 +41,7 @@ define ([
 
     renderingContext =
         scene.graphicsManager.renderingContext;
-    
+
     shaderHelper = new ShaderHelper(scene.graphicsManager);
 
     // Set up the shaders; this is where all the lighting for the

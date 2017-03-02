@@ -2,24 +2,30 @@ define ([
     "../../../lib/cybo/3d-vector",
     "../../../lib/cybo/4x4-matrix",
     "../../../lib/cybo/cartesian-axis",
+    "../../../lib/cybo/ease-mode",
+    "../../../lib/cybo/sine-ease",
     "../../../lib/cybo/xcene",
     "../../../lib/cybo/assets/shaders/position-color",
     "../../../lib/cybo/graphics/color",
     "../../../lib/cybo/graphics/colors",
     "../../../lib/cybo/graphics/fx/helpers/shader-helper",
     "../../../lib/cybo/graphics/fx/shader-type",
-    "../../../lib/cybo/helpers/exception-helper"
+    "../../../lib/cybo/helpers/exception-helper",
+    "../../../lib/cybo/helpers/math-helper"
 ], function (
     Vector3D,
     Matrix4x4,
     CartesianAxis,
+    EaseMode,
+    SineEase,
     Scene,
     PositionColor,
     Color,
     Colors,
     ShaderHelper,
     ShaderType,
-    ExceptionHelper
+    ExceptionHelper,
+    MathHelper
 ){
     "use strict";
 
@@ -34,11 +40,10 @@ define ([
     var vertexPositionBuffer;
     var vertexColorBuffer;
     var indexBuffer;
+    var sineEase;
+    var sineEase2;
     var modelViewMatrix;
     var projectionMatrix;
-
-    var rotationX = 0; // in radians.
-    var rotationY = 0; // in radians.
 
     mainCanvas = document.getElementById("mainCanvas");
 
@@ -61,6 +66,12 @@ define ([
     // Here's where we call the routine that builds all the objects
     // we'll be drawing.
     setUpBuffers();
+
+    sineEase = new SineEase(EaseMode.EASE_IN_OUT, 1500, true);
+    sineEase.start();
+
+    sineEase2 = new SineEase(EaseMode.EASE_IN_OUT, 3000, true);
+    sineEase2.start();
 
     // Set up to draw the scene periodically.
     setInterval(drawScene, 15);
@@ -106,161 +117,7 @@ define ([
             )
         );
     }
-
-    // function setUpBuffers() {
-    //     //
-    //     // Create an array of vertex positions for the square. Note that the Z
-    //     // coordinate is always 0 here.
-
-    //     var vertexPositions = [
-    //         //
-    //         // Front face.
-    //        -50, -50,  50,
-    //         50, -50,  50,
-    //         50,  50,  50,
-    //        -50,  50,  50,
-            
-    //         // Back face.
-    //        -50, -50, -50,
-    //        -50,  50, -50,
-    //         50,  50, -50,
-    //         50, -50, -50,
-            
-    //         // Top face.
-    //        -50,  50, -50,
-    //        -50,  50,  50,
-    //         50,  50,  50,
-    //         50,  50, -50,
-            
-    //         // Bottom face.
-    //        -50, -50, -50,
-    //         50, -50, -50,
-    //         50, -50,  50,
-    //        -50, -50,  50,
-            
-    //         // Right face.
-    //         50, -50, -50,
-    //         50,  50, -50,
-    //         50,  50,  50,
-    //         50, -50,  50,
-            
-    //         // Left face.
-    //        -50, -50, -50,
-    //        -50, -50,  50,
-    //        -50,  50,  50,
-    //        -50,  50, -50
-    //     ];
-
-    //     vertexPositionBuffer =
-    //         renderingContext.createBuffer();
-
-    //     // Select the vertexPositionBuffer as the one to apply vertex
-    //     // operations to from here out.
-
-    //     renderingContext.bindBuffer (
-    //         renderingContext.ARRAY_BUFFER,
-    //         vertexPositionBuffer
-    //     );
-        
-    //     // Now pass the list of vertex positions into WebGL to build the shape.
-    //     // We do this by creating a Float32Array from the JavaScript array, then
-    //     // use it to fill the current vertex buffer.
-
-    //     renderingContext.bufferData (
-    //         renderingContext.ARRAY_BUFFER,
-    //         new Float32Array(vertexPositions),
-    //         renderingContext.STATIC_DRAW
-    //     );
-
-    //     // Now set up the colors for the vertices
-
-    //     var faceColors = [
-    //         Colors.PHOTOSHOP_DARK_RED.toArray(),
-    //         Colors.PHOTOSHOP_DARK_YELLOW_ORANGE.toArray(),
-    //         Colors.PHOTOSHOP_DARK_GREEN.toArray(),
-    //         Colors.PHOTOSHOP_DARK_GREEN_CYAN.toArray(),
-    //         Colors.PHOTOSHOP_DARK_BLUE.toArray(),
-    //         Colors.PHOTOSHOP_DARK_VIOLET.toArray(),
-    //     ];
-
-    //     var vertexColors = [];
-
-    //     for (var i=0; i<6; i++) {
-    //         //
-    //         var item = faceColors[i];
-
-    //         // Repeat each color four times for the four vertices of the face
-
-    //         for (var j=0; j<4; j++) {
-    //             vertexColors = vertexColors.concat(item);
-    //         }
-    //     }
-
-    //     vertexColorBuffer =
-    //         renderingContext.createBuffer();
-
-    //     renderingContext.bindBuffer (
-    //         renderingContext.ARRAY_BUFFER,
-    //         vertexColorBuffer
-    //     );
-
-    //     renderingContext.bufferData (
-    //         renderingContext.ARRAY_BUFFER,
-    //         new Float32Array(vertexColors),
-    //         renderingContext.STATIC_DRAW
-    //     );
-
-    //     // Build the element array buffer; this specifies the indices
-    //     // into the vertex array for each face's vertices.
-
-    //     // This array defines each face as two triangles, using the
-    //     // indices into the vertex array to specify each triangle's
-    //     // position.
-
-    //     var vertexIndices = [
-    //         //
-    //         // Front face.
-    //         0,  1,  2,
-    //         0,  2,  3,
-
-    //         // Back face.
-    //         4,  5,  6,
-    //         4,  6,  7,
-
-    //         // Top face.
-    //         8,  9,  10,
-    //         8,  10, 11,
-
-    //         // Bottom face.
-    //         12, 13, 14,
-    //         12, 14, 15,
-
-    //         // Right face.
-    //         16, 17, 18,
-    //         16, 18, 19,
-
-    //         // Left face.
-    //         20, 21, 22,
-    //         20, 22, 23
-    //     ]
-        
-    //     indexBuffer =
-    //         renderingContext.createBuffer();
-
-    //     renderingContext.bindBuffer (
-    //         renderingContext.ELEMENT_ARRAY_BUFFER,
-    //         indexBuffer
-    //     );
-
-    //     // Now send the element array to GL
-
-    //     renderingContext.bufferData (
-    //         renderingContext.ELEMENT_ARRAY_BUFFER,
-    //         new Uint16Array(vertexIndices),
-    //         renderingContext.STATIC_DRAW
-    //     );
-    // }
-
+   
     function setUpBuffers() {
         //
         // Create an array of vertex positions for the square. Note that the Z
@@ -481,17 +338,24 @@ define ([
 
     function setUpTransform() {
         //
-        modelViewMatrix =
-            Matrix4x4.createRotationMatrix(CartesianAxis.Y, rotationY);
-
-        rotationY += 0.05;
-
-        modelViewMatrix = Matrix4x4.multiplyMatrices (
-            Matrix4x4.createRotationMatrix(CartesianAxis.X, rotationX),
-            modelViewMatrix
+        modelViewMatrix = Matrix4x4.createRotationMatrix (
+            // Part 1.
+            CartesianAxis.Y,
+            // Part 2.
+            MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES *
+            sineEase.ratioOfCurrentToTotalTimeOffset
         );
 
-        rotationX -= 0.025;
+        modelViewMatrix = Matrix4x4.multiplyMatrices (
+            Matrix4x4.createRotationMatrix (
+                // Part 1.
+                CartesianAxis.X,
+                // Part 2.
+               -MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES *
+                sineEase2.ratioOfCurrentToTotalTimeOffset
+            ),
+            modelViewMatrix
+        );
 
         var v = new Vector3D(0, 0, -325);
 

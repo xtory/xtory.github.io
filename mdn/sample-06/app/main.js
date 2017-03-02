@@ -2,24 +2,30 @@ define ([
     "../../../lib/cybo/3d-vector",
     "../../../lib/cybo/4x4-matrix",
     "../../../lib/cybo/cartesian-axis",
+    "../../../lib/cybo/ease-mode",
+    "../../../lib/cybo/sine-ease",
     "../../../lib/cybo/xcene",
     "../../../lib/cybo/assets/shaders/position-texture-coordinates",
     "../../../lib/cybo/graphics/color",
     "../../../lib/cybo/graphics/colors",
     "../../../lib/cybo/graphics/fx/helpers/shader-helper",
     "../../../lib/cybo/graphics/fx/shader-type",
-    "../../../lib/cybo/helpers/exception-helper"
+    "../../../lib/cybo/helpers/exception-helper",
+    "../../../lib/cybo/helpers/math-helper"
 ], function (
     Vector3D,
     Matrix4x4,
     CartesianAxis,
+    EaseMode,
+    SineEase,
     Scene,
     PositionTextureCoordinates,
     Color,
     Colors,
     ShaderHelper,
     ShaderType,
-    ExceptionHelper
+    ExceptionHelper,
+    MathHelper
 ){
     "use strict";
 
@@ -35,12 +41,11 @@ define ([
     var vertexPositionBuffer;
     var vertexTextureCoordinateBuffer;
     var indexBuffer;
+    var sineEase;
+    var sineEase2;
     var modelViewMatrix;
     var projectionMatrix;
     var mainTexture;
-
-    var rotationX = 0; // in radians.
-    var rotationY = 0; // in radians.
 
     mainCanvas = document.getElementById("mainCanvas");
 
@@ -65,6 +70,12 @@ define ([
     setUpBuffers();
 
     setUpTextures();
+
+    sineEase = new SineEase(EaseMode.EASE_IN_OUT, 1500, true);
+    sineEase.start();
+
+    sineEase2 = new SineEase(EaseMode.EASE_IN_OUT, 3000, true);
+    sineEase2.start();
 
     // Set up to draw the scene periodically.
     setInterval(drawScene, 15);
@@ -373,17 +384,24 @@ define ([
 
     function setUpTransform() {
         //
-        modelViewMatrix =
-            Matrix4x4.createRotationMatrix(CartesianAxis.Y, rotationY);
-
-        rotationY += 0.05;
-
-        modelViewMatrix = Matrix4x4.multiplyMatrices (
-            Matrix4x4.createRotationMatrix(CartesianAxis.X, rotationX),
-            modelViewMatrix
+        modelViewMatrix = Matrix4x4.createRotationMatrix (
+            // Part 1.
+            CartesianAxis.Y,
+            // Part 2.
+            MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES *
+            sineEase.ratioOfCurrentToTotalTimeOffset
         );
 
-        rotationX -= 0.025;
+        modelViewMatrix = Matrix4x4.multiplyMatrices (
+            Matrix4x4.createRotationMatrix (
+                // Part 1.
+                CartesianAxis.X,
+                // Part 2.
+               -MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES *
+                sineEase2.ratioOfCurrentToTotalTimeOffset
+            ),
+            modelViewMatrix
+        );
 
         var v = new Vector3D(0, 0, -325);
 

@@ -2,24 +2,30 @@ define ([
     "../../../lib/cybo/3d-vector",
     "../../../lib/cybo/4x4-matrix",
     "../../../lib/cybo/cartesian-axis",
+    "../../../lib/cybo/ease-mode",
+    "../../../lib/cybo/sine-ease",
     "../../../lib/cybo/xcene",
     "../../../lib/cybo/assets/shaders/position-color",
     "../../../lib/cybo/graphics/color",
     "../../../lib/cybo/graphics/colors",
     "../../../lib/cybo/graphics/fx/helpers/shader-helper",
     "../../../lib/cybo/graphics/fx/shader-type",
-    "../../../lib/cybo/helpers/exception-helper"
+    "../../../lib/cybo/helpers/exception-helper",
+    "../../../lib/cybo/helpers/math-helper"
 ], function (
     Vector3D,
     Matrix4x4,
     CartesianAxis,
+    EaseMode,
+    SineEase,
     Scene,
     PositionColor,
     Color,
     Colors,
     ShaderHelper,
     ShaderType,
-    ExceptionHelper
+    ExceptionHelper,
+    MathHelper
 ){
     "use strict";
 
@@ -34,9 +40,10 @@ define ([
     var vertexPositionBuffer;
     var vertexColorBuffer;
     var vertexColorBuffer2;
+    var sineEase;
     var modelViewMatrix;
     var projectionMatrix;
-    var rotationY = 0; // in radians.
+    var rotationY;
 
     mainCanvas = document.getElementById("mainCanvas");
 
@@ -59,6 +66,9 @@ define ([
     // Here's where we call the routine that builds all the objects
     // we'll be drawing.
     setUpBuffers();
+
+    sineEase = new SineEase(EaseMode.EASE_IN_OUT, 2000, true);
+    sineEase.start();
 
     // Set up to draw the scene periodically.
     setInterval(drawScene, 15);
@@ -232,6 +242,11 @@ define ([
             0
         );
 
+        rotationY = (
+            MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES *
+            sineEase.ratioOfCurrentToTotalTimeOffset
+        );
+
         setUpTransform(-100);
         
         renderingContext.drawArrays (
@@ -261,8 +276,6 @@ define ([
             0,
             4
         );
-
-        rotationY += 0.05;
     }
 
     function setUpTransform(offsetX) {
