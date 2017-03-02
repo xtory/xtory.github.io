@@ -33,7 +33,7 @@ define ([
     var vertexNormalAttributeLocation;
     var vertexTextureCoordinateAttributeLocation;
     var transformUniformLocation;
-    var normalMatrixUniformLocation;
+    var transposeOfInverseOfModelViewMatrixUniformLocation;
     var samplerUniformLocation;
     var vertexPositionBuffer;
     var vertexNormalBuffer;
@@ -121,10 +121,10 @@ define ([
             )
         );
 
-        normalMatrixUniformLocation = (
+        transposeOfInverseOfModelViewMatrixUniformLocation = (
             scene.graphicsManager.getUniformLocation (
                 shaderProgram,
-                "normalMatrix"
+                "transposeOfInverseOfModelViewMatrix"
             )
         );
 
@@ -361,7 +361,6 @@ define ([
         //
         var url = // which is relative to index.html, not main.js
             "../assets/images/market-street.jpg";
-            //"../assets/images/white.jpg";
 
         mainTexture = scene.assetManager.loadTexture2D(url);
     }
@@ -462,7 +461,7 @@ define ([
         modelViewMatrix =
             Matrix4x4.createRotationMatrix(CartesianAxis.Y, rotationY);
 
-        rotationY += 0.01; //0.05;
+        rotationY += 0.02; //0.05;
 
         modelViewMatrix = Matrix4x4.multiplyMatrices (
             Matrix4x4.createRotationMatrix(CartesianAxis.X, rotationX),
@@ -470,7 +469,7 @@ define ([
         );
 
         //rotationX -= 0.025;
-        rotationX -= 0.005;
+        rotationX -= 0.01;
 
         var v = new Vector3D(0, 0, -325);
 
@@ -479,15 +478,16 @@ define ([
             modelViewMatrix
         );
 
-        // Test_
-        var normalMatrix = Matrix4x4.invertMatrix(modelViewMatrix);
-        normalMatrix = Matrix4x4.transposeMatrix(normalMatrix);
+        var transposeOfInverseOfModelViewMatrix =
+            Matrix4x4.invertMatrix(modelViewMatrix);
+
+        transposeOfInverseOfModelViewMatrix =
+            Matrix4x4.transposeMatrix(transposeOfInverseOfModelViewMatrix);
         
         scene.graphicsManager.setMatrix4x4Uniform (
-            normalMatrixUniformLocation,
-            normalMatrix
+            transposeOfInverseOfModelViewMatrixUniformLocation,
+            transposeOfInverseOfModelViewMatrix
         );
-        // _test
 
         projectionMatrix = Matrix4x4.createProjectionMatrix (
             undefined,

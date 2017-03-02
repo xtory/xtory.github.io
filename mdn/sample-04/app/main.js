@@ -33,6 +33,7 @@ define ([
     var transformUniformLocation;
     var vertexPositionBuffer;
     var vertexColorBuffer;
+    var vertexColorBuffer2;
     var modelViewMatrix;
     var projectionMatrix;
     var rotationY = 0; // in radians.
@@ -159,14 +160,33 @@ define ([
             new Float32Array(vertexColors),
             renderingContext.STATIC_DRAW
         );
+
+        var vertexColors2 = [].concat (
+            Colors.PINK.toArray(),
+            Colors.PHOTOSHOP_PASTEL_YELLOW_ORANGE.toArray(),
+            Colors.PHOTOSHOP_PASTEL_BLUE.toArray(),
+            Colors.PHOTOSHOP_PASTEL_GREEN.toArray()
+        );
+
+        vertexColorBuffer2 =
+            renderingContext.createBuffer();
+
+        renderingContext.bindBuffer (
+            renderingContext.ARRAY_BUFFER,
+            vertexColorBuffer2
+        );
+
+        renderingContext.bufferData (
+            renderingContext.ARRAY_BUFFER,
+            new Float32Array(vertexColors2),
+            renderingContext.STATIC_DRAW
+        );
     }
 
     function drawScene() {
         //
         // Clear the mainCanvas before we start drawing on it.
         scene.graphicsManager.clear();
-
-        setUpTransform();
 
         scene.graphicsManager.shaderProgram =
             shaderProgram;
@@ -211,22 +231,46 @@ define ([
             0,
             0
         );
+
+        setUpTransform(-100);
         
         renderingContext.drawArrays (
             renderingContext.TRIANGLE_STRIP,
             0,
             4
         );
+
+        renderingContext.bindBuffer (
+            renderingContext.ARRAY_BUFFER,
+            vertexColorBuffer2
+        );
+
+        renderingContext.vertexAttribPointer (
+            vertexColorAttributeLocation,
+            4,
+            renderingContext.FLOAT,
+            false,
+            0,
+            0
+        );
+
+        setUpTransform(100);
+        
+        renderingContext.drawArrays (
+            renderingContext.TRIANGLE_STRIP,
+            0,
+            4
+        );
+
+        rotationY += 0.05;
     }
 
-    function setUpTransform() {
+    function setUpTransform(offsetX) {
         //
         modelViewMatrix =
             Matrix4x4.createRotationMatrix(CartesianAxis.Y, rotationY);
 
-        rotationY += 0.05;
-
-        var v = new Vector3D(0, 0, -275);
+        var v = new Vector3D(offsetX, 0, -300);
 
         modelViewMatrix = Matrix4x4.multiplyMatrices (
             Matrix4x4.createTranslationMatrix(v),

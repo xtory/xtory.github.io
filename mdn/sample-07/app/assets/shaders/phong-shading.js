@@ -23,7 +23,7 @@ define ([
         "   attribute highp vec3 vertexNormal;                             \n" +
         "   attribute highp vec2 vertexTextureCoordinates;                 \n" +
         "                                                                  \n" +
-        "   uniform highp mat4 normalMatrix;                               \n" +
+        "   uniform highp mat4 transposeOfInverseOfModelViewMatrix;        \n" +
         "   uniform highp mat4 transform;                                  \n" +
         "                                                                  \n" +
         "   varying highp vec2 textureCoordinates;                         \n" +
@@ -35,15 +35,14 @@ define ([
         "       textureCoordinates = vertexTextureCoordinates;             \n" +
         "                                                                  \n" +
         "       // Apply lighting effect                                   \n" +
-        "       //highp vec3 ambientLight = vec3(0.6, 0.6, 0.6);           \n" +
-        "       highp vec3 ambientLight = vec3(0.25, 0.25, 0.25);             \n" +
-        "       //highp vec3 directionalLightColor = vec3(0.5, 0.5, 0.75); \n" +
+        "       highp vec3 ambientLight = vec3(0.25, 0.25, 0.25);          \n" +
         "       highp vec3 directionalLightColor = vec3(1, 1, 1);          \n" +
-        "       //highp vec3 directionalVector = vec3(0.85, 0.8, 0.75);    \n" +
-        "       highp vec3 directionalVector = vec3(1, 1, 1);      \n" +
+        "       highp vec3 directionalVector = vec3(1, 1, 1);              \n" +
         "                                                                  \n" +
-        "       highp vec4 transformedNormal =                             \n" +
-        "           normalMatrix * vec4(vertexNormal, 1.0);                \n" +
+        "       highp vec4 transformedNormal = (                           \n" +
+        "           transposeOfInverseOfModelViewMatrix *                  \n" +
+        "           vec4(vertexNormal, 1.0)                                \n" +
+        "       );                                                         \n" +
         "                                                                  \n" +
         "       highp float directional = max (                            \n" +
         "           dot(transformedNormal.xyz, directionalVector),         \n" +
