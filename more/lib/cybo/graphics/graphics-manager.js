@@ -12,7 +12,7 @@ function GraphicsManager(_xcene) {
     setUpWebGLRenderingContext();
     
     Object.defineProperty(this, "renderingContext", {
-        get: function() { return _renderingContext; },
+        get: function() { return _renderingContext; }
     });
     
     Object.defineProperty(this, "shaderProgram", {
@@ -78,7 +78,7 @@ function GraphicsManager(_xcene) {
 }
 
 Object.defineProperty(GraphicsManager, "DEFAULT_COLOR_BUFFER_VALUE", {
-    get: function() { return new Color(0.25, 0.25, 0.25, 1.0); },
+    get: function() { return new Color(0.25, 0.25, 0.25, 1.0); }
 })
 
 Object.defineProperty(GraphicsManager, "DEFAULT_DEPTH_BUFFER_VALUE", {
