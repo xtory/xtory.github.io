@@ -58,7 +58,7 @@ define ([
 
     renderingContext =
         scene.graphicsManager.renderingContext;
-    
+
     shaderHelper = new ShaderHelper(scene.graphicsManager);
 
     // Set up the shaders; this is where all the lighting for the
@@ -89,7 +89,7 @@ define ([
             ShaderType.VERTEX_SHADER,
             PositionTextureCoordinates.VERTEX_SHADER_SOURCE
         );
-            
+
         var fragmentShader = scene.assetManager.loadShader (
             ShaderType.FRAGMENT_SHADER,
             PositionTextureCoordinates.FRAGMENT_SHADER_SOURCE
@@ -106,14 +106,14 @@ define ([
                 "vertexPosition"
             )
         );
-        
+
         vertexTextureCoordinateAttributeLocation = (
             scene.graphicsManager.getAttributeLocation (
                 shaderProgram,
                 "vertexTextureCoordinates"
             )
         );
-        
+
         transformUniformLocation = (
             scene.graphicsManager.getUniformLocation (
                 shaderProgram,
@@ -138,31 +138,31 @@ define ([
             50,  50,  50,
            -50,  50,  50,
            -50, -50,  50,
-            
+
             // Back face.
            -50, -50, -50,
            -50,  50, -50,
             50,  50, -50,
             50, -50, -50,
-            
+
             // Top face.
             50,  50,  50,
             50,  50, -50,
            -50,  50, -50,
            -50,  50,  50,
-            
+
             // Bottom face.
             50, -50, -50,
             50, -50,  50,
            -50, -50,  50,
            -50, -50, -50,
-            
+
             // Right face.
             50, -50, -50,
             50,  50, -50,
             50,  50,  50,
             50, -50,  50,
-            
+
             // Left face.
            -50, -50,  50,
            -50,  50,  50,
@@ -180,7 +180,7 @@ define ([
             renderingContext.ARRAY_BUFFER,
             vertexPositionBuffer
         );
-        
+
         // Now pass the list of vertex positions into WebGL to build the shape.
         // We do this by creating a Float32Array from the JavaScript array, then
         // use it to fill the current vertex buffer.
@@ -228,7 +228,7 @@ define ([
             1.0,  1.0,
             0.0,  1.0,
             0.0,  0.0,
-        ];        
+        ];
 
         vertexTextureCoordinateBuffer =
             renderingContext.createBuffer();
@@ -270,7 +270,7 @@ define ([
             20, 21, 22,
             20, 22, 23
         ]
-        
+
         indexBuffer =
             renderingContext.createBuffer();
 
@@ -321,7 +321,7 @@ define ([
             renderingContext.ARRAY_BUFFER,
             vertexPositionBuffer
         );
-        
+
         renderingContext.vertexAttribPointer (
             vertexPositionAttributeLocation,
             3,
@@ -347,12 +347,12 @@ define ([
             false,
             0,
             0
-        );        
-        
+        );
+
         renderingContext.activeTexture (
             renderingContext.TEXTURE0
         );
-        
+
         renderingContext.bindTexture (
             renderingContext.TEXTURE_2D,
             mainTexture
@@ -362,7 +362,7 @@ define ([
             samplerUniformLocation,
             0
         );
-        
+
         // renderingContext.drawArrays (
         //     renderingContext.TRIANGLE_STRIP,
         //     0,
@@ -373,7 +373,7 @@ define ([
             renderingContext.ELEMENT_ARRAY_BUFFER,
             indexBuffer
         );
-        
+
         renderingContext.drawElements (
             renderingContext.TRIANGLES,
             36,
