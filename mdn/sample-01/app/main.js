@@ -25,7 +25,7 @@ define ([
     renderingContext = scene.graphicsManager.renderingContext;
     
     scene.graphicsManager.clear (
-        renderingContext.COLOR_BUFFER_BIT,
+        WebGLRenderingContext.COLOR_BUFFER_BIT,
         undefined,
         undefined,
         undefined

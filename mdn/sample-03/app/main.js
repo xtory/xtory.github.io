@@ -122,7 +122,7 @@ define ([
         // operations to from here out.
 
         renderingContext.bindBuffer (
-            renderingContext.ARRAY_BUFFER,
+            WebGLRenderingContext.ARRAY_BUFFER,
             vertexPositionBuffer
         );
         
@@ -131,9 +131,9 @@ define ([
         // use it to fill the current vertex buffer.
 
         renderingContext.bufferData (
-            renderingContext.ARRAY_BUFFER,
+            WebGLRenderingContext.ARRAY_BUFFER,
             new Float32Array(vertexPositions),
-            renderingContext.STATIC_DRAW
+            WebGLRenderingContext.STATIC_DRAW
         );
 
         // Now set up the colors for the vertices
@@ -149,14 +149,14 @@ define ([
             renderingContext.createBuffer();
 
         renderingContext.bindBuffer (
-            renderingContext.ARRAY_BUFFER,
+            WebGLRenderingContext.ARRAY_BUFFER,
             vertexColorBuffer
         );
 
         renderingContext.bufferData (
-            renderingContext.ARRAY_BUFFER,
+            WebGLRenderingContext.ARRAY_BUFFER,
             new Float32Array(vertexColors),
-            renderingContext.STATIC_DRAW
+            WebGLRenderingContext.STATIC_DRAW
         );
     }
 
@@ -175,14 +175,14 @@ define ([
         );
         
         renderingContext.bindBuffer (
-            renderingContext.ARRAY_BUFFER,
+            WebGLRenderingContext.ARRAY_BUFFER,
             vertexPositionBuffer
         );
 
         renderingContext.vertexAttribPointer (
             vertexPositionAttributeLocation,
             3,
-            renderingContext.FLOAT,
+            WebGLRenderingContext.FLOAT,
             false,
             0,
             0
@@ -193,21 +193,21 @@ define ([
         );
 
         renderingContext.bindBuffer (
-            renderingContext.ARRAY_BUFFER,
+            WebGLRenderingContext.ARRAY_BUFFER,
             vertexColorBuffer
         );
 
         renderingContext.vertexAttribPointer (
             vertexColorAttributeLocation,
             4,
-            renderingContext.FLOAT,
+            WebGLRenderingContext.FLOAT,
             false,
             0,
             0
         );
         
         renderingContext.drawArrays (
-            renderingContext.TRIANGLE_STRIP,
+            WebGLRenderingContext.TRIANGLE_STRIP,
             0,
             4
         );

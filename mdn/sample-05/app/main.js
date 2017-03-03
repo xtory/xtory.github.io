@@ -169,7 +169,7 @@ define ([
         // operations to from here out.
 
         renderingContext.bindBuffer (
-            renderingContext.ARRAY_BUFFER,
+            WebGLRenderingContext.ARRAY_BUFFER,
             vertexPositionBuffer
         );
         
@@ -178,9 +178,9 @@ define ([
         // use it to fill the current vertex buffer.
 
         renderingContext.bufferData (
-            renderingContext.ARRAY_BUFFER,
+            WebGLRenderingContext.ARRAY_BUFFER,
             new Float32Array(vertexPositions),
-            renderingContext.STATIC_DRAW
+            WebGLRenderingContext.STATIC_DRAW
         );
 
         // Now set up the colors for the vertices
@@ -211,14 +211,14 @@ define ([
             renderingContext.createBuffer();
 
         renderingContext.bindBuffer (
-            renderingContext.ARRAY_BUFFER,
+            WebGLRenderingContext.ARRAY_BUFFER,
             vertexColorBuffer
         );
 
         renderingContext.bufferData (
-            renderingContext.ARRAY_BUFFER,
+            WebGLRenderingContext.ARRAY_BUFFER,
             new Float32Array(vertexColors),
-            renderingContext.STATIC_DRAW
+            WebGLRenderingContext.STATIC_DRAW
         );
 
         // Build the element array buffer; this specifies the indices
@@ -259,16 +259,16 @@ define ([
             renderingContext.createBuffer();
 
         renderingContext.bindBuffer (
-            renderingContext.ELEMENT_ARRAY_BUFFER,
+            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
             indexBuffer
         );
 
         // Now send the element array to GL
 
         renderingContext.bufferData (
-            renderingContext.ELEMENT_ARRAY_BUFFER,
+            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
             new Uint16Array(vertexIndices),
-            renderingContext.STATIC_DRAW
+            WebGLRenderingContext.STATIC_DRAW
         );
     }
 
@@ -290,14 +290,14 @@ define ([
         // array, setting attributes, and pushing it to GL.
 
         renderingContext.bindBuffer (
-            renderingContext.ARRAY_BUFFER,
+            WebGLRenderingContext.ARRAY_BUFFER,
             vertexPositionBuffer
         );
         
         renderingContext.vertexAttribPointer (
             vertexPositionAttributeLocation,
             3,
-            renderingContext.FLOAT,
+            WebGLRenderingContext.FLOAT,
             false,
             0,
             0
@@ -310,28 +310,28 @@ define ([
         );
 
         renderingContext.bindBuffer (
-            renderingContext.ARRAY_BUFFER,
+            WebGLRenderingContext.ARRAY_BUFFER,
             vertexColorBuffer
         );
 
         renderingContext.vertexAttribPointer (
             vertexColorAttributeLocation,
             4,
-            renderingContext.FLOAT,
+            WebGLRenderingContext.FLOAT,
             false,
             0,
             0
         );
 
         renderingContext.bindBuffer (
-            renderingContext.ELEMENT_ARRAY_BUFFER,
+            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
             indexBuffer
         );
         
         renderingContext.drawElements (
-            renderingContext.TRIANGLES,
+            WebGLRenderingContext.TRIANGLES,
             36,
-            renderingContext.UNSIGNED_SHORT,
+            WebGLRenderingContext.UNSIGNED_SHORT,
             0
         );
     }

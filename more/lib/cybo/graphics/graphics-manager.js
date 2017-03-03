@@ -73,7 +73,6 @@ function GraphicsManager(_xcene) {
 
         // Near things obscure far things
         _renderingContext.depthFunc(_renderingContext.LEQUAL);
-        //
     }
 }
 

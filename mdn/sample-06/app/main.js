@@ -177,7 +177,7 @@ define ([
         // operations to from here out.
 
         renderingContext.bindBuffer (
-            renderingContext.ARRAY_BUFFER,
+            WebGLRenderingContext.ARRAY_BUFFER,
             vertexPositionBuffer
         );
 
@@ -186,9 +186,9 @@ define ([
         // use it to fill the current vertex buffer.
 
         renderingContext.bufferData (
-            renderingContext.ARRAY_BUFFER,
+            WebGLRenderingContext.ARRAY_BUFFER,
             new Float32Array(vertexPositions),
-            renderingContext.STATIC_DRAW
+            WebGLRenderingContext.STATIC_DRAW
         );
 
         var textureCoordinates = [
@@ -234,14 +234,14 @@ define ([
             renderingContext.createBuffer();
 
         renderingContext.bindBuffer (
-            renderingContext.ARRAY_BUFFER,
+            WebGLRenderingContext.ARRAY_BUFFER,
             vertexTextureCoordinateBuffer
         );
 
         renderingContext.bufferData (
-            renderingContext.ARRAY_BUFFER,
+            WebGLRenderingContext.ARRAY_BUFFER,
             new Float32Array(textureCoordinates),
-            renderingContext.STATIC_DRAW
+            WebGLRenderingContext.STATIC_DRAW
         );
 
         var vertexIndices = [
@@ -275,16 +275,16 @@ define ([
             renderingContext.createBuffer();
 
         renderingContext.bindBuffer (
-            renderingContext.ELEMENT_ARRAY_BUFFER,
+            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
             indexBuffer
         );
 
         // Now send the element array to GL
 
         renderingContext.bufferData (
-            renderingContext.ELEMENT_ARRAY_BUFFER,
+            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
             new Uint16Array(vertexIndices),
-            renderingContext.STATIC_DRAW
+            WebGLRenderingContext.STATIC_DRAW
         );
     }
 
@@ -318,14 +318,14 @@ define ([
         );
 
         renderingContext.bindBuffer (
-            renderingContext.ARRAY_BUFFER,
+            WebGLRenderingContext.ARRAY_BUFFER,
             vertexPositionBuffer
         );
 
         renderingContext.vertexAttribPointer (
             vertexPositionAttributeLocation,
             3,
-            renderingContext.FLOAT,
+            WebGLRenderingContext.FLOAT,
             false,
             0,
             0
@@ -336,25 +336,25 @@ define ([
         );
 
         renderingContext.bindBuffer (
-            renderingContext.ARRAY_BUFFER,
+            WebGLRenderingContext.ARRAY_BUFFER,
             vertexTextureCoordinateBuffer
         );
 
         renderingContext.vertexAttribPointer (
             vertexTextureCoordinateAttributeLocation,
             2,
-            renderingContext.FLOAT,
+            WebGLRenderingContext.FLOAT,
             false,
             0,
             0
         );
 
         renderingContext.activeTexture (
-            renderingContext.TEXTURE0
+            WebGLRenderingContext.TEXTURE0
         );
 
         renderingContext.bindTexture (
-            renderingContext.TEXTURE_2D,
+            WebGLRenderingContext.TEXTURE_2D,
             mainTexture
         );
 
@@ -363,21 +363,15 @@ define ([
             0
         );
 
-        // renderingContext.drawArrays (
-        //     renderingContext.TRIANGLE_STRIP,
-        //     0,
-        //     4
-        // );
-
         renderingContext.bindBuffer (
-            renderingContext.ELEMENT_ARRAY_BUFFER,
+            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
             indexBuffer
         );
 
         renderingContext.drawElements (
-            renderingContext.TRIANGLES,
+            WebGLRenderingContext.TRIANGLES,
             36,
-            renderingContext.UNSIGNED_SHORT,
+            WebGLRenderingContext.UNSIGNED_SHORT,
             0
         );
     }
