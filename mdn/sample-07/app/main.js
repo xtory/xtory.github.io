@@ -80,8 +80,7 @@ define ([
     sineEase2 = new SineEase(EaseMode.EASE_IN_OUT, 7500, true);
     sineEase2.start();
 
-    // Set up to draw the scene periodically.
-    setInterval(drawScene, 15);
+    scene.render(updateScene, drawScene);
 
     //
     // Functions.
@@ -373,6 +372,9 @@ define ([
             "../assets/images/market-street.jpg";
 
         mainTexture = scene.assetManager.loadTexture2D(url);
+    }
+
+    function updateScene() {
     }
 
     function drawScene() {
