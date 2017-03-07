@@ -1,12 +1,5 @@
-define ([
-    "../../../lib/cybo/scenes/xcene",
-    "../../../lib/cybo/graphics/color",
-    "../../../lib/cybo/helpers/exception-helper"
-], function (
-    Scene,
-    Color,
-    ExceptionHelper
-){
+function main() {
+    //
     "use strict";
 
     var mainCanvas;
@@ -16,9 +9,9 @@ define ([
     mainCanvas = document.getElementById("mainCanvas");
 
     try {
-        scene = new Scene(mainCanvas);
+        scene = new Cybo.Xcene(mainCanvas);
     } catch (e) {
-        ExceptionHelper.displayMessageOf(e);
+        Cybo.ExceptionHelper.displayMessageOf(e);
         return;
     }
     
@@ -30,4 +23,4 @@ define ([
         undefined,
         undefined
     );
-});
+}

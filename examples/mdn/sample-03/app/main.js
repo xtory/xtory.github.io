@@ -1,24 +1,5 @@
-define ([
-    "../../../lib/cybo/assets/shaders/position-color",
-    "../../../lib/cybo/graphics/color",
-    "../../../lib/cybo/graphics/colors",
-    "../../../lib/cybo/graphics/fx/helpers/shader-helper",
-    "../../../lib/cybo/graphics/fx/shader-type",
-    "../../../lib/cybo/helpers/exception-helper",
-    "../../../lib/cybo/math/3d-vector",
-    "../../../lib/cybo/math/4x4-matrix",
-    "../../../lib/cybo/scenes/xcene"
-], function (
-    PositionColor,
-    Color,
-    Colors,
-    ShaderHelper,
-    ShaderType,
-    ExceptionHelper,
-    Vector3D,
-    Matrix4x4,
-    Scene
-){
+function main() {
+    //
     "use strict";
 
     var mainCanvas;
@@ -37,16 +18,16 @@ define ([
     mainCanvas = document.getElementById("mainCanvas");
 
     try {
-        scene = new Scene(mainCanvas);
+        scene = new Cybo.Xcene(mainCanvas);
     } catch (e) {
-        ExceptionHelper.displayMessageOf(e);
+        Cybo.ExceptionHelper.displayMessageOf(e);
         return;
     }
 
     renderingContext =
         scene.graphicsManager.renderingContext;
     
-    shaderHelper = new ShaderHelper(scene.graphicsManager);
+    shaderHelper = new Cybo.ShaderHelper(scene.graphicsManager);
 
     // Set up the shaders; this is where all the lighting for the
     // vertices and so forth is established.
@@ -65,13 +46,13 @@ define ([
     function setUpShaders() {
         //
         var vertexShader = scene.assetManager.loadShader (
-            ShaderType.VERTEX_SHADER,
-            PositionColor.VERTEX_SHADER_SOURCE
+            Cybo.ShaderType.VERTEX_SHADER,
+            Cybo.PositionColor.VERTEX_SHADER_SOURCE
         );
             
         var fragmentShader = scene.assetManager.loadShader (
-            ShaderType.FRAGMENT_SHADER,
-            PositionColor.FRAGMENT_SHADER_SOURCE
+            Cybo.ShaderType.FRAGMENT_SHADER,
+            Cybo.PositionColor.FRAGMENT_SHADER_SOURCE
         );
 
         shaderProgram = shaderHelper.setUpShaderProgram (
@@ -139,10 +120,10 @@ define ([
         // Now set up the colors for the vertices
 
         var vertexColors = [].concat (
-            Colors.PHOTOSHOP_DARK_RED.toArray(),
-            Colors.PHOTOSHOP_DARK_YELLOW_ORANGE.toArray(),
-            Colors.PHOTOSHOP_DARK_BLUE.toArray(),
-            Colors.PHOTOSHOP_DARK_GREEN.toArray()
+            Cybo.Colors.PHOTOSHOP_DARK_RED.toArray(),
+            Cybo.Colors.PHOTOSHOP_DARK_YELLOW_ORANGE.toArray(),
+            Cybo.Colors.PHOTOSHOP_DARK_BLUE.toArray(),
+            Cybo.Colors.PHOTOSHOP_DARK_GREEN.toArray()
         );
 
         vertexColorBuffer =
@@ -215,10 +196,10 @@ define ([
 
     function setUpTransform() {
         //
-        var v = new Vector3D(0, 0, -275);
-        modelViewMatrix = Matrix4x4.createTranslationMatrix(v);
+        var v = new Cybo.Vector3D(0, 0, -275);
+        modelViewMatrix = Cybo.Matrix4x4.createTranslationMatrix(v);
 
-        projectionMatrix = Matrix4x4.createProjectionMatrix (
+        projectionMatrix = Cybo.Matrix4x4.createProjectionMatrix (
             undefined,
             mainCanvas.clientWidth / mainCanvas.clientHeight,
             undefined,
@@ -233,4 +214,4 @@ define ([
             transform
         );
     }
-});
+}

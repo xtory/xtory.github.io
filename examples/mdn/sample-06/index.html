@@ -3,13 +3,11 @@
     <head>
         <title>Sample</title>
         <meta charset="utf-8">
-        <link rel="stylesheet" href="../../lib/cybo/styles/basic.css">
-        <script src="../../lib/require.js"></script>
-        <script>
-            require(["app/main"]);
-        </script>
+        <link rel="stylesheet" href="../../../dist/basic.css">
+        <script src="../../../dist/cybo.js"></script>
+        <script src="./app/main.js"></script>
     </head>
-    <body>
+    <body onload="main()">
         <canvas id="mainCanvas"></canvas>
     </body>
 </html>

@@ -8,7 +8,7 @@
             "name": "mdn/sample-01",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/mdn/sample-01/index.html",
+            "file": "${workspaceRoot}/examples/mdn/sample-01/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
@@ -18,7 +18,7 @@
             "name": "mdn/sample-02",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/mdn/sample-02/index.html",
+            "file": "${workspaceRoot}/examples/mdn/sample-02/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
@@ -28,7 +28,7 @@
             "name": "mdn/sample-03",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/mdn/sample-03/index.html",
+            "file": "${workspaceRoot}/examples/mdn/sample-03/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
@@ -38,7 +38,7 @@
             "name": "mdn/sample-04",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/mdn/sample-04/index.html",
+            "file": "${workspaceRoot}/examples/mdn/sample-04/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
@@ -48,7 +48,7 @@
             "name": "mdn/sample-05",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/mdn/sample-05/index.html",
+            "file": "${workspaceRoot}/examples/mdn/sample-05/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
@@ -58,7 +58,7 @@
             "name": "mdn/sample-06",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/mdn/sample-06/index.html",
+            "file": "${workspaceRoot}/examples/mdn/sample-06/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
@@ -68,7 +68,7 @@
             "name": "mdn/sample-07",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/mdn/sample-07/index.html",
+            "file": "${workspaceRoot}/examples/mdn/sample-07/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
@@ -78,7 +78,7 @@
             "name": "more/mdn/sample-01a",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/more/mdn/sample-01a/index.html",
+            "file": "${workspaceRoot}/examples/more/mdn/sample-01a/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
@@ -88,7 +88,7 @@
             "name": "more/mdn/sample-02a",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/more/mdn/sample-02a/index.html",
+            "file": "${workspaceRoot}/examples/more/mdn/sample-02a/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
@@ -98,7 +98,7 @@
             "name": "more/mdn/sample-02b",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/more/mdn/sample-02b/index.html",
+            "file": "${workspaceRoot}/examples/more/mdn/sample-02b/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"

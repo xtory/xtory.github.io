@@ -1,32 +1,5 @@
-define ([
-    "../../../lib/cybo/assets/shaders/position-color",
-    "../../../lib/cybo/graphics/color",
-    "../../../lib/cybo/graphics/colors",
-    "../../../lib/cybo/graphics/fx/helpers/shader-helper",
-    "../../../lib/cybo/graphics/fx/shader-type",
-    "../../../lib/cybo/helpers/exception-helper",
-    "../../../lib/cybo/math/3d-vector",
-    "../../../lib/cybo/math/4x4-matrix",
-    "../../../lib/cybo/math/cartesian-axis",
-    "../../../lib/cybo/math/helpers/math-helper",
-    "../../../lib/cybo/scenes/xcene",
-    "../../../lib/cybo/time/ease-mode",
-    "../../../lib/cybo/time/sine-ease"
-], function (
-    PositionColor,
-    Color,
-    Colors,
-    ShaderHelper,
-    ShaderType,
-    ExceptionHelper,
-    Vector3D,
-    Matrix4x4,
-    CartesianAxis,
-    MathHelper,
-    Scene,
-    EaseMode,
-    SineEase
-){
+function main() {
+    //
     "use strict";
 
     var mainCanvas;
@@ -48,16 +21,16 @@ define ([
     mainCanvas = document.getElementById("mainCanvas");
 
     try {
-        scene = new Scene(mainCanvas);
+        scene = new Cybo.Xcene(mainCanvas);
     } catch (e) {
-        ExceptionHelper.displayMessageOf(e);
+        Cybo.ExceptionHelper.displayMessageOf(e);
         return;
     }
 
     renderingContext =
         scene.graphicsManager.renderingContext; 
     
-    shaderHelper = new ShaderHelper(scene.graphicsManager);
+    shaderHelper = new Cybo.ShaderHelper(scene.graphicsManager);
 
     // Set up the shaders; this is where all the lighting for the
     // vertices and so forth is established.
@@ -67,7 +40,7 @@ define ([
     // we'll be drawing.
     setUpBuffers();
 
-    sineEase = new SineEase(EaseMode.EASE_IN_OUT, 2000, true);
+    sineEase = new Cybo.SineEase(Cybo.EaseMode.EASE_IN_OUT, 2000, true);
     sineEase.start();
 
     // Set up to draw the scene periodically.
@@ -79,13 +52,13 @@ define ([
     function setUpShaders() {
         //
         var vertexShader = scene.assetManager.loadShader (
-            ShaderType.VERTEX_SHADER,
-            PositionColor.VERTEX_SHADER_SOURCE
+            Cybo.ShaderType.VERTEX_SHADER,
+            Cybo.PositionColor.VERTEX_SHADER_SOURCE
         );
             
         var fragmentShader = scene.assetManager.loadShader (
-            ShaderType.FRAGMENT_SHADER,
-            PositionColor.FRAGMENT_SHADER_SOURCE
+            Cybo.ShaderType.FRAGMENT_SHADER,
+            Cybo.PositionColor.FRAGMENT_SHADER_SOURCE
         );
 
         shaderProgram = shaderHelper.setUpShaderProgram (
@@ -151,10 +124,10 @@ define ([
         // Now set up the colors for the vertices
 
         var vertexColors = [].concat (
-            Colors.PHOTOSHOP_DARK_RED.toArray(),
-            Colors.PHOTOSHOP_DARK_YELLOW_ORANGE.toArray(),
-            Colors.PHOTOSHOP_DARK_BLUE.toArray(),
-            Colors.PHOTOSHOP_DARK_GREEN.toArray()
+            Cybo.Colors.PHOTOSHOP_DARK_RED.toArray(),
+            Cybo.Colors.PHOTOSHOP_DARK_YELLOW_ORANGE.toArray(),
+            Cybo.Colors.PHOTOSHOP_DARK_BLUE.toArray(),
+            Cybo.Colors.PHOTOSHOP_DARK_GREEN.toArray()
         );
 
         vertexColorBuffer =
@@ -172,10 +145,10 @@ define ([
         );
 
         var vertexColors2 = [].concat (
-            Colors.PINK.toArray(),
-            Colors.PHOTOSHOP_PASTEL_YELLOW_ORANGE.toArray(),
-            Colors.PHOTOSHOP_PASTEL_BLUE.toArray(),
-            Colors.PHOTOSHOP_PASTEL_GREEN.toArray()
+            Cybo.Colors.PINK.toArray(),
+            Cybo.Colors.PHOTOSHOP_PASTEL_YELLOW_ORANGE.toArray(),
+            Cybo.Colors.PHOTOSHOP_PASTEL_BLUE.toArray(),
+            Cybo.Colors.PHOTOSHOP_PASTEL_GREEN.toArray()
         );
 
         vertexColorBuffer2 =
@@ -243,7 +216,7 @@ define ([
         );
 
         rotationY = (
-            MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES *
+            Cybo.MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES *
             sineEase.ratioOfCurrentToTotalTimeOffset
         );
 
@@ -281,16 +254,16 @@ define ([
     function setUpTransform(offsetX) {
         //
         modelViewMatrix =
-            Matrix4x4.createRotationMatrix(CartesianAxis.Y, rotationY);
+            Cybo.Matrix4x4.createRotationMatrix(Cybo.CartesianAxis.Y, rotationY);
 
-        var v = new Vector3D(offsetX, 0, -300);
+        var v = new Cybo.Vector3D(offsetX, 0, -300);
 
-        modelViewMatrix = Matrix4x4.multiplyMatrices (
-            Matrix4x4.createTranslationMatrix(v),
+        modelViewMatrix = Cybo.Matrix4x4.multiplyMatrices (
+            Cybo.Matrix4x4.createTranslationMatrix(v),
             modelViewMatrix
         );
 
-        projectionMatrix = Matrix4x4.createProjectionMatrix (
+        projectionMatrix = Cybo.Matrix4x4.createProjectionMatrix (
             undefined,
             mainCanvas.clientWidth / mainCanvas.clientHeight,
             undefined,
@@ -305,4 +278,4 @@ define ([
             transform
         );  
     }
-});
+}

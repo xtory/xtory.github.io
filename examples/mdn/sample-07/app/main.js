@@ -1,32 +1,5 @@
-define ([
-    "../../../lib/cybo/graphics/color",
-    "../../../lib/cybo/graphics/colors",
-    "../../../lib/cybo/graphics/fx/helpers/shader-helper",
-    "../../../lib/cybo/graphics/fx/shader-type",
-    "../../../lib/cybo/helpers/exception-helper",
-    "../../../lib/cybo/math/3d-vector",
-    "../../../lib/cybo/math/4x4-matrix",
-    "../../../lib/cybo/math/cartesian-axis",
-    "../../../lib/cybo/math/helpers/math-helper",
-    "../../../lib/cybo/scenes/xcene",
-    "../../../lib/cybo/time/ease-mode",
-    "../../../lib/cybo/time/sine-ease",
-    "./assets/shaders/phong-shading",
-], function (
-    Color,
-    Colors,
-    ShaderHelper,
-    ShaderType,
-    ExceptionHelper,
-    Vector3D,
-    Matrix4x4,
-    CartesianAxis,
-    MathHelper,
-    Scene,
-    EaseMode,
-    SineEase,
-    PhongShading
-){
+function main() {
+    //
     "use strict";
 
     var mainCanvas;
@@ -53,16 +26,16 @@ define ([
     mainCanvas = document.getElementById("mainCanvas");
 
     try {
-        scene = new Scene(mainCanvas);
+        scene = new Cybo.Xcene(mainCanvas);
     } catch (e) {
-        ExceptionHelper.displayMessageOf(e);
+        Cybo.ExceptionHelper.displayMessageOf(e);
         return;
     }
 
     renderingContext =
         scene.graphicsManager.renderingContext;
     
-    shaderHelper = new ShaderHelper(scene.graphicsManager);
+    shaderHelper = new Cybo.ShaderHelper(scene.graphicsManager);
 
     // Set up the shaders; this is where all the lighting for the
     // vertices and so forth is established.
@@ -74,10 +47,10 @@ define ([
 
     setUpTextures();
 
-    sineEase = new SineEase(EaseMode.EASE_IN_OUT, 3750, true);
+    sineEase = new Cybo.SineEase(Cybo.EaseMode.EASE_IN_OUT, 3750, true);
     sineEase.start();
 
-    sineEase2 = new SineEase(EaseMode.EASE_IN_OUT, 7500, true);
+    sineEase2 = new Cybo.SineEase(Cybo.EaseMode.EASE_IN_OUT, 7500, true);
     sineEase2.start();
 
     scene.render(updateScene, drawScene);
@@ -88,12 +61,12 @@ define ([
     function setUpShaders() {
         //
         var vertexShader = scene.assetManager.loadShader (
-            ShaderType.VERTEX_SHADER,
+            Cybo.ShaderType.VERTEX_SHADER,
             PhongShading.VERTEX_SHADER_SOURCE
         );
             
         var fragmentShader = scene.assetManager.loadShader (
-            ShaderType.FRAGMENT_SHADER,
+            Cybo.ShaderType.FRAGMENT_SHADER,
             PhongShading.FRAGMENT_SHADER_SOURCE
         );
 
@@ -470,44 +443,44 @@ define ([
 
     function setUpTransform() {
         //
-        modelViewMatrix = Matrix4x4.createRotationMatrix (
+        modelViewMatrix = Cybo.Matrix4x4.createRotationMatrix (
             // Part 1.
-            CartesianAxis.Y,
+            Cybo.CartesianAxis.Y,
             // Part 2.
-            MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES *
+            Cybo.MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES *
             sineEase.ratioOfCurrentToTotalTimeOffset
         );
 
-        modelViewMatrix = Matrix4x4.multiplyMatrices (
-            Matrix4x4.createRotationMatrix (
+        modelViewMatrix = Cybo.Matrix4x4.multiplyMatrices (
+            Cybo.Matrix4x4.createRotationMatrix (
                 // Part 1.
-                CartesianAxis.X,
+                Cybo.CartesianAxis.X,
                 // Part 2.
-               -MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES *
+               -Cybo.MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES *
                 sineEase2.ratioOfCurrentToTotalTimeOffset
             ),
             modelViewMatrix
         );
 
-        var v = new Vector3D(0, 0, -325);
+        var v = new Cybo.Vector3D(0, 0, -325);
 
-        modelViewMatrix = Matrix4x4.multiplyMatrices (
-            Matrix4x4.createTranslationMatrix(v),
+        modelViewMatrix = Cybo.Matrix4x4.multiplyMatrices (
+            Cybo.Matrix4x4.createTranslationMatrix(v),
             modelViewMatrix
         );
 
         var transposeOfInverseOfModelViewMatrix =
-            Matrix4x4.invertMatrix(modelViewMatrix);
+            Cybo.Matrix4x4.invertMatrix(modelViewMatrix);
 
         transposeOfInverseOfModelViewMatrix =
-            Matrix4x4.transposeMatrix(transposeOfInverseOfModelViewMatrix);
+            Cybo.Matrix4x4.transposeMatrix(transposeOfInverseOfModelViewMatrix);
         
         scene.graphicsManager.setMatrix4x4Uniform (
             transposeOfInverseOfModelViewMatrixUniformLocation,
             transposeOfInverseOfModelViewMatrix
         );
 
-        projectionMatrix = Matrix4x4.createProjectionMatrix (
+        projectionMatrix = Cybo.Matrix4x4.createProjectionMatrix (
             undefined,
             mainCanvas.clientWidth / mainCanvas.clientHeight,
             undefined,
@@ -522,4 +495,4 @@ define ([
             transform
         );
     }
-});
+}
