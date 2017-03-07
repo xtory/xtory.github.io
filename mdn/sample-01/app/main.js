@@ -1,5 +1,5 @@
 define ([
-    "../../../lib/cybo/xcene",
+    "../../../lib/cybo/scenes/xcene",
     "../../../lib/cybo/graphics/color",
     "../../../lib/cybo/helpers/exception-helper"
 ], function (

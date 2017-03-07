@@ -1,23 +1,23 @@
 define ([
-    "../../../lib/cybo/3d-vector",
-    "../../../lib/cybo/4x4-matrix",
-    "../../../lib/cybo/xcene",
     "../../../lib/cybo/assets/shaders/position-color",
     "../../../lib/cybo/graphics/color",
     "../../../lib/cybo/graphics/colors",
     "../../../lib/cybo/graphics/fx/helpers/shader-helper",
     "../../../lib/cybo/graphics/fx/shader-type",
-    "../../../lib/cybo/helpers/exception-helper"
+    "../../../lib/cybo/helpers/exception-helper",
+    "../../../lib/cybo/math/3d-vector",
+    "../../../lib/cybo/math/4x4-matrix",
+    "../../../lib/cybo/scenes/xcene"
 ], function (
-    Vector3D,
-    Matrix4x4,
-    Scene,
     PositionColor,
     Color,
     Colors,
     ShaderHelper,
     ShaderType,
-    ExceptionHelper
+    ExceptionHelper,
+    Vector3D,
+    Matrix4x4,
+    Scene
 ){
     "use strict";
 

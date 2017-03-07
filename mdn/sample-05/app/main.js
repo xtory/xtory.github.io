@@ -1,31 +1,31 @@
 define ([
-    "../../../lib/cybo/3d-vector",
-    "../../../lib/cybo/4x4-matrix",
-    "../../../lib/cybo/cartesian-axis",
-    "../../../lib/cybo/ease-mode",
-    "../../../lib/cybo/sine-ease",
-    "../../../lib/cybo/xcene",
     "../../../lib/cybo/assets/shaders/position-color",
     "../../../lib/cybo/graphics/color",
     "../../../lib/cybo/graphics/colors",
     "../../../lib/cybo/graphics/fx/helpers/shader-helper",
     "../../../lib/cybo/graphics/fx/shader-type",
     "../../../lib/cybo/helpers/exception-helper",
-    "../../../lib/cybo/helpers/math-helper"
+    "../../../lib/cybo/math/3d-vector",
+    "../../../lib/cybo/math/4x4-matrix",
+    "../../../lib/cybo/math/cartesian-axis",
+    "../../../lib/cybo/math/helpers/math-helper",
+    "../../../lib/cybo/scenes/xcene",
+    "../../../lib/cybo/time/ease-mode",
+    "../../../lib/cybo/time/sine-ease"
 ], function (
-    Vector3D,
-    Matrix4x4,
-    CartesianAxis,
-    EaseMode,
-    SineEase,
-    Scene,
     PositionColor,
     Color,
     Colors,
     ShaderHelper,
     ShaderType,
     ExceptionHelper,
-    MathHelper
+    Vector3D,
+    Matrix4x4,
+    CartesianAxis,
+    MathHelper,
+    Scene,
+    EaseMode,
+    SineEase
 ){
     "use strict";
 
