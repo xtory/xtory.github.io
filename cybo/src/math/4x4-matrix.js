@@ -2,15 +2,6 @@ import { Camera }        from "../cameras/camera";
 import { CartesianAxis } from "./cartesian-axis";
 import { Vector3D }      from "./3d-vector";
 
-// define ([
-//     "./cartesian-axis",
-//     "../cameras/camera"
-// ], function (
-//     CartesianAxis,
-//     Camera
-// ){
-//     "use strict";
-
 //
 // Constructor.
 //
@@ -425,8 +416,5 @@ Matrix4x4.invertMatrix = function(m) {
 }
 
 Object.freeze(Matrix4x4);
-
-//     return Matrix4x4;
-// });
 
 export { Matrix4x4 };

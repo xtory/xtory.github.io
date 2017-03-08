@@ -1,13 +1,16 @@
-// define ([
-//     // No parameters.
-// ], function (
-//     // No parameters.
-// ){
-//     "use strict";
-    
+//
+// Constructor.
+//
 function PositionOnly() {
     // No contents.
 }
+
+//
+// Prototype.
+//
+PositionOnly.prototype = {
+    // No contents.
+};
 
 //
 // Static constants (after Object.freeze()).
@@ -32,8 +35,5 @@ PositionOnly.FRAGMENT_SHADER_SOURCE = [
 ].join("\n");
 
 Object.freeze(PositionOnly);
-
-//     return PositionOnly;
-// });
 
 export { PositionOnly };

@@ -1,16 +1,16 @@
-// define ([
-//     // No parameters.
-// ], function (
-//     // No parameters.
-// ){
-//     "use strict";
-    
 //
 // Constructor.
 //
 function WebGLRenderingContextHelper() {
     // No contents.
 }
+
+//
+// Prototype.
+//
+WebGLRenderingContextHelper.prototype = {
+    // No contents.
+};
 
 //
 // Static methods.
@@ -453,8 +453,5 @@ WebGLRenderingContextHelper.syncConstants = function(renderingContext) {
 }
 
 Object.freeze(WebGLRenderingContextHelper);
-
-//     return WebGLRenderingContextHelper;
-// });
 
 export { WebGLRenderingContextHelper };

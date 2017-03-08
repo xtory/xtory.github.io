@@ -1,13 +1,6 @@
 import { MathHelper } from "./helpers/math-helper";
 import { Vector4D } from "./4d-vector";
 
-// define ([
-//     // No parameters.
-// ], function (
-//     // No parameters.
-// ){
-//     "use strict";
-    
 //
 // Constructor.
 //
@@ -113,8 +106,5 @@ Vector3D.transformVector = function(m, v) {
 }
 
 Object.freeze(Vector3D);
-
-//     return Vector3D;
-// });
 
 export { Vector3D };

@@ -3,19 +3,6 @@ import { Colors }                      from "./colors";
 import { WebGLRenderingContextHelper } from "./helpers/webgl-rendering-context-helper";
 import { JSHelper }                    from "../helpers/js-helper";
 
-// define ([
-//     "./color",
-//     "./colors",
-//     "./helpers/webgl-rendering-context-helper",
-//     "../helpers/js-helper"
-// ], function (
-//     Color,
-//     Colors,
-//     WebGLRenderingContextHelper,
-//     JSHelper
-// ){
-//     "use strict";
-    
 //
 // Constructor.
 //
@@ -192,8 +179,5 @@ GraphicsManager.DEFAULT_DEPTH_BUFFER_VALUE   = 1;
 GraphicsManager.DEFAULT_STENCIL_BUFFER_VALUE = 0;
 
 Object.freeze(GraphicsManager);
-
-//     return GraphicsManager;
-// });
 
 export { GraphicsManager };

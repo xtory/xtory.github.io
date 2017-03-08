@@ -1,16 +1,16 @@
-// define ([
-//     // No parameters.
-// ], function (
-//     // No parameters.
-// ){
-//     "use strict";
-    
 //
 // Constructor.
 //
 function PositionColor() {
     // No contents.
 }
+
+//
+// Prototype.
+//
+PositionColor.prototype = {
+    // No contents.
+};
 
 //
 // Static constants (after Object.freeze()).
@@ -41,8 +41,5 @@ PositionColor.FRAGMENT_SHADER_SOURCE = [
 ].join("\n");
 
 Object.freeze(PositionColor);
-
-//     return PositionColor;
-// });
 
 export { PositionColor };

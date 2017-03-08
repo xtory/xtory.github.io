@@ -2,13 +2,6 @@
 // Photoshop CS2 Swatches.
 
 import { Color  } from "./color";
-
-// define ([
-//     "./color"
-// ], function (
-//     Color
-// ){
-//     "use strict";
     
 //
 // Constructor.
@@ -142,8 +135,5 @@ Colors.PHOTOSHOP_PALE_WARM_BROWN = new Color(198/255, 156/255, 109/255, 1);
 Colors.PHOTOSHOP_DARK_WARM_BROWN = new Color(117/255, 76/255, 36/255, 1);
 
 Object.freeze(Colors);
-
-//     return Colors;
-// });
 
 export { Colors };

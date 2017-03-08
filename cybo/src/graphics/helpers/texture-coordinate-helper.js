@@ -20,19 +20,19 @@
 // => T = 1 - V
 // => V = 1 - T
 
-// define ([
-//     // No parameters.
-// ], function (
-//     // No parameters.
-// ){
-//     "use strict";
-    
 //
 // Constructor.
 //
 function TextureCoordinateHelper() {
     // No contents.
 }
+
+//
+// Prototype.
+//
+TextureCoordinateHelper.prototype = {
+    // No contents.
+};
 
 //
 // Static methods.
@@ -54,8 +54,5 @@ TextureCoordinateHelper.toST = function(u, v) {
 }    
 
 Object.freeze(TextureCoordinateHelper);
-
-//     return TextureCoordinateHelper;
-// });
 
 export { TextureCoordinateHelper };

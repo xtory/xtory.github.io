@@ -2271,7 +2271,9 @@ function Xcene(_mainCanvas, _usesDefaultStyles) {
         onResize();
     }
     catch (error) {
+        //
         console.error('Cybo.Xcene: ' + error);
+        
         throw error;
     }
 
@@ -2280,6 +2282,20 @@ function Xcene(_mainCanvas, _usesDefaultStyles) {
     //
     function setUpStyles() {
         //
+        // Note:
+        // This function is used to replace CSS below...
+        //
+        // body {
+        //     margin: 0;
+        //     background-color: #202020; /* = cybo.graphics.colors.DEFAULT_BACKGROUND*/
+        // }
+        //
+        // canvas {
+        //     width:   100vw;
+        //     height:  100vh;
+        //     display: block; /* prevents scrollbar */
+        // }
+
         var style;
 
         style = document.body.style;

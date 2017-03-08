@@ -2,15 +2,6 @@ import { AssetManager }    from "../assets/asset-manager";
 import { GraphicsManager } from "../graphics/graphics-manager";
 import { JSHelper }        from "../helpers/js-helper";
 
-// define ([
-//     "../graphics/graphics-manager",
-//     "../assets/asset-manager"
-// ], function (
-//     GraphicsManager,
-//     AssetManager
-// ){
-//     "use strict";
-    
 //
 // Constructor.
 //
@@ -201,8 +192,5 @@ Xcene.prototype = {
 };
 
 Object.freeze(Xcene);
-
-//     return Xcene;
-// });
 
 export { Xcene };

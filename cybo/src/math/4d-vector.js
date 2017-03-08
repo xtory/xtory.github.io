@@ -1,11 +1,4 @@
 import { MathHelper } from "./helpers/math-helper";
-
-// define ([
-//     // No parameters.
-// ], function (
-//     // No parameters.
-// ){
-//     "use strict";
     
 //
 // Constructor.
@@ -93,8 +86,5 @@ Vector4D.transform = function(m, v) {
 }
 
 Object.freeze(Vector4D);
-
-//     return Vector4D;
-// });
 
 export { Vector4D };

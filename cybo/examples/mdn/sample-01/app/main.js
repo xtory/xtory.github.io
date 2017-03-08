@@ -2,14 +2,11 @@ function main() {
     //
     "use strict";
 
-    var mainCanvas;
     var scene;
     var renderingContext;
 
-    mainCanvas = document.getElementById("mainCanvas");
-
     try {
-        scene = new Cybo.Xcene(mainCanvas);
+        scene = new Cybo.Xcene();
     } catch (e) {
         Cybo.ExceptionHelper.displayMessageOf(e);
         return;

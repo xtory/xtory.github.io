@@ -2,13 +2,6 @@
 // Adapted from
 // https://gist.github.com/electricg/4372563
 
-// define ([
-//     // No parameters.
-// ], function (
-//     // No parameters.
-// ){
-//     "use strict";
-    
 //
 // Constructor.
 //
@@ -91,8 +84,5 @@ Stopwatch.prototype = {
 };
 
 Object.freeze(Stopwatch);
-
-//     return Stopwatch;
-// });
 
 export { Stopwatch };

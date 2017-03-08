@@ -1,10 +1,3 @@
-// define ([
-//     // No parameters.
-// ], function (
-//     // No parameters.
-// ){
-//     "use strict";
-    
 //
 // Constructor.
 //
@@ -29,8 +22,5 @@ Color.prototype = {
 };
 
 Object.freeze(Color);
-
-//     return Color;
-// });
 
 export { Color };

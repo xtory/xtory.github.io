@@ -2,17 +2,6 @@ import { JSHelper }   from "../helpers/js-helper";
 import { MathHelper } from "../math/helpers/math-helper";
 import { ShaderType } from "../graphics/fx/shader-type";
 
-// define ([
-//     "../graphics/fx/shader-type",
-//     "../helpers/js-helper",
-//     "../math/helpers/math-helper"
-// ], function (
-//     ShaderType,
-//     JSHelper,
-//     MathHelper
-// ){
-//     "use strict";
-    
 //
 // Constructor.
 //
@@ -239,8 +228,5 @@ AssetManager.prototype = {
 };
 
 Object.freeze(AssetManager);
-
-//     return AssetManager;
-// });
 
 export { AssetManager };

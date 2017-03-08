@@ -2,7 +2,6 @@ function main() {
     //
     "use strict";
 
-    var mainCanvas;
     var scene;
     var renderingContext;
     var shaderHelper;
@@ -23,10 +22,8 @@ function main() {
     var projectionMatrix;
     var mainTexture;
 
-    mainCanvas = document.getElementById("mainCanvas");
-
     try {
-        scene = new Cybo.Xcene(mainCanvas);
+        scene = new Cybo.Xcene();
     } catch (e) {
         Cybo.ExceptionHelper.displayMessageOf(e);
         return;
@@ -352,7 +349,6 @@ function main() {
 
     function drawScene() {
         //
-        // Clear the mainCanvas before we start drawing on it.
         scene.graphicsManager.clear();
 
         setUpTransform();
@@ -482,7 +478,7 @@ function main() {
 
         projectionMatrix = Cybo.Matrix4x4.createProjectionMatrix (
             undefined,
-            window.innerWidth / window.innerHeight, //mainCanvas.clientWidth / mainCanvas.clientHeight,
+            window.innerWidth / window.innerHeight,
             undefined,
             undefined
         );

@@ -1,16 +1,16 @@
-// define ([
-//     // No parameters.
-// ], function (
-//     // No parameters.
-// ){
-//     "use strict";
-    
 //
 // Constructor.
 //
 function PositionTextureCoordinates() {
     // No contents.
 }
+
+//
+// Prototype.
+//
+PositionTextureCoordinates.prototype = {
+    // No contents.
+};
 
 //
 // Static constants (after Object.freeze()).
@@ -42,8 +42,5 @@ PositionTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
 ].join("\n");
 
 Object.freeze(PositionTextureCoordinates);
-
-//     return PositionTextureCoordinates;
-// });
 
 export { PositionTextureCoordinates };

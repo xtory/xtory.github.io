@@ -27,19 +27,19 @@
 // Note:
 // The equivelant in Fly3D of this value is "FY_EPS".
     
-// define ([
-//     // No parameters.
-// ], function (
-//     // No parameters.
-// ){
-//     "use strict";
-    
 //
 // Constructor.
 //
 function MathHelper() {
     // No contents.
 }
+
+//
+// Prototype.
+//
+MathHelper.prototype = {
+    // No contents.
+};
 
 //
 // Static constants (after Object.freeze()).
@@ -117,8 +117,5 @@ MathHelper.isPowerOfTwo = function(value) {
 }
 
 Object.freeze(MathHelper);
-
-//     return MathHelper;
-// });
 
 export { MathHelper };

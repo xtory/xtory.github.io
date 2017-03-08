@@ -1,10 +1,3 @@
-// define ([
-//     // No parameters.
-// ], function (
-//     // No parameters.
-// ){
-//     "use strict";
-    
 //
 // Constructor.
 //
@@ -27,8 +20,5 @@ EaseMode.EASE_OUT    = 1;
 EaseMode.EASE_IN_OUT = 2;
 
 Object.freeze(EaseMode);
-
-//     return EaseMode;
-// });
 
 export { EaseMode };

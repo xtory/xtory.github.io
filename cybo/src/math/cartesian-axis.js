@@ -1,10 +1,3 @@
-// define ([
-//     // No parameters.
-// ], function (
-//     // No parameters.
-// ){
-//     "use strict";
-    
 //
 // Constructor.
 //
@@ -27,8 +20,5 @@ CartesianAxis.Y = 1;
 CartesianAxis.Z = 2;
 
 Object.freeze(CartesianAxis);
-
-//     return CartesianAxis;
-// });
 
 export { CartesianAxis };

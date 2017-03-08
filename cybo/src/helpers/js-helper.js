@@ -1,16 +1,16 @@
-// define ([
-//     // No parameters.
-// ], function (
-//     // No parameters.
-// ){
-//     "use strict";
-    
 //
 // Constructor.
 //
 function JSHelper() {
     // No contents.
 }
+
+//
+// Prototype.
+//
+JSHelper.prototype = {
+    // No contents.
+};
 
 //
 // Static methods.
@@ -26,8 +26,5 @@ JSHelper.isUndefinedOrNull = function(value) {
 }
 
 Object.freeze(JSHelper);
-
-//     return JSHelper;
-// });
 
 export { JSHelper };

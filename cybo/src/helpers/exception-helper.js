@@ -1,16 +1,16 @@
-// define ([
-//     // No parameters.
-// ], function (
-//     // No parameters.
-// ){
-//     "use strict";
-    
 //
 // Constructor.
 //
 function ExceptionHelper() {
     // No contents.
 }
+
+//
+// Prototype.
+//
+ExceptionHelper.prototype = {
+    // No contents.
+};
 
 //
 // Static methods.
@@ -33,8 +33,5 @@ ExceptionHelper.displayMessageOf = function(e) {
 }
 
 Object.freeze(ExceptionHelper);
-
-//     return ExceptionHelper;
-// });
 
 export { ExceptionHelper };

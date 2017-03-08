@@ -2,17 +2,6 @@ import { EaseMode }   from "./ease-mode";
 import { Stopwatch }  from "./stopwatch";
 import { MathHelper } from "../math/helpers/math-helper";
 
-// define ([
-//     "./stopwatch",
-//     "./ease-mode",
-//     "../math/helpers/math-helper"
-// ], function (
-//     Stopwatch,
-//     EaseMode,
-//     MathHelper
-// ){
-//     "use strict";
-    
 //
 // Constructor.
 //
@@ -212,8 +201,5 @@ SineEase.prototype = {
 };
 
 Object.freeze(SineEase);
-
-//     return SineEase;
-// });
 
 export { SineEase };

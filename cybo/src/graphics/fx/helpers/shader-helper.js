@@ -1,14 +1,5 @@
 import { JSHelper } from "../../../helpers/js-helper";
 import { ShaderType } from "../shader-type";
-
-// define ([
-//     "../../../helpers/js-helper",
-//     "../shader-type"
-// ], function (
-//     JSHelper,
-//     ShaderType
-// ){
-//     "use strict";
     
 //
 // Constructor.
@@ -60,8 +51,5 @@ ShaderHelper.prototype = {
 };
 
 Object.freeze(ShaderHelper);
-
-//     return ShaderHelper;
-// });
 
 export { ShaderHelper };

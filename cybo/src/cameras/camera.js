@@ -1,12 +1,5 @@
 import { MathHelper } from "../math/helpers/math-helper";
 
-// define ([
-//     "../math/helpers/math-helper"
-// ], function (
-//     MathHelper
-// ){
-//     "use strict";
-    
 //
 // Constructor.
 //
@@ -35,8 +28,5 @@ Camera.DEFAULT_DISTANCE_TO_NEAR_PLANE = Camera.MIN_DISTANCE_TO_NEAR_PLANE; // = 
 Camera.DEFAULT_DISTANCE_TO_FAR_PLANE  = 100000;                            // = 10^5
 
 Object.freeze(Camera);
-
-//     return Camera;
-// });
 
 export { Camera };
