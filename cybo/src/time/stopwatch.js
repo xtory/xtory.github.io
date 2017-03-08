@@ -13,11 +13,11 @@ function Stopwatch() {
     //
     // Properties.
     //
-    Object.defineProperty(this, "isRunning", {
+    Object.defineProperty(this, 'isRunning', {
         get: function() { return (_startTime !== 0) ? true: false; }
     });
 
-    Object.defineProperty(this, "elapsedMilliseconds", {
+    Object.defineProperty(this, 'elapsedMilliseconds', {
         //
         get: function() {
             //

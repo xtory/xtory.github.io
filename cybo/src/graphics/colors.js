@@ -1,7 +1,7 @@
 // Reference:
 // Photoshop CS2 Swatches.
 
-import { Color  } from "./color";
+import { Color  } from './color';
     
 //
 // Constructor.

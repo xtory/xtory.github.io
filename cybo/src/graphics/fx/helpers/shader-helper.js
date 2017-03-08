@@ -1,5 +1,5 @@
-import { JSHelper } from "../../../helpers/js-helper";
-import { ShaderType } from "../shader-type";
+import { JSHelper } from '../../../helpers/js-helper';
+import { ShaderType } from '../shader-type';
     
 //
 // Constructor.
@@ -9,7 +9,7 @@ function ShaderHelper(_graphicsManager) {
     var _renderingContext =
         _graphicsManager.renderingContext;
     
-    Object.defineProperty(this, "renderingContext", {
+    Object.defineProperty(this, 'renderingContext', {
         get: function() { return _renderingContext; }
     });
 }
@@ -41,7 +41,7 @@ ShaderHelper.prototype = {
             ) === true)
         {
             throw (
-                "Unable to initialize the shader program: " +
+                'Unable to initialize the shader program: ' +
                 this.renderingContext.getProgramInfoLog(shader)
             );
         }

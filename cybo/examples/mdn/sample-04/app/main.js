@@ -1,6 +1,6 @@
 function main() {
     //
-    "use strict";
+    'use strict';
 
     var scene;
     var renderingContext;
@@ -18,30 +18,34 @@ function main() {
     var rotationY;
 
     try {
+        //
         scene = new Cybo.Xcene();
+
+        renderingContext =
+            scene.graphicsManager.renderingContext;
+        
+        shaderHelper = new Cybo.ShaderHelper(scene.graphicsManager);
+
+        // Set up the shaders; this is where all the lighting for the
+        // vertices and so forth is established.
+        setUpShaders();
+
+        // Here's where we call the routine that builds all the objects
+        // we'll be drawing.
+        setUpBuffers();
+
+        sineEase = new Cybo.SineEase(Cybo.EaseMode.EASE_IN_OUT, 2000, true);
+        sineEase.start();
+
+        // Set up to draw the scene periodically.
+        setInterval(drawScene, 15);
+
     } catch (e) {
+        //
         Cybo.ExceptionHelper.displayMessageOf(e);
+
         return;
     }
-
-    renderingContext =
-        scene.graphicsManager.renderingContext; 
-    
-    shaderHelper = new Cybo.ShaderHelper(scene.graphicsManager);
-
-    // Set up the shaders; this is where all the lighting for the
-    // vertices and so forth is established.
-    setUpShaders();
-
-    // Here's where we call the routine that builds all the objects
-    // we'll be drawing.
-    setUpBuffers();
-
-    sineEase = new Cybo.SineEase(Cybo.EaseMode.EASE_IN_OUT, 2000, true);
-    sineEase.start();
-
-    // Set up to draw the scene periodically.
-    setInterval(drawScene, 15);
 
     //
     // Functions.
@@ -66,21 +70,21 @@ function main() {
         vertexPositionAttributeLocation = (
             scene.graphicsManager.getAttributeLocation (
                 shaderProgram,
-                "vertexPosition"
+                'vertexPosition'
             )
         );
         
         vertexColorAttributeLocation = (
             scene.graphicsManager.getAttributeLocation (
                 shaderProgram,
-                "vertexColor"
+                'vertexColor'
             )
         );
         
         transformUniformLocation = (
             scene.graphicsManager.getUniformLocation (
                 shaderProgram,
-                "transform"
+                'transform'
             )
         );
     }

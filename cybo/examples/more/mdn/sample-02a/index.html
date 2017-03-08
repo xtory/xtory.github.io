@@ -2,16 +2,16 @@
 <html>
     <head>
         <title>Sample</title>
-        <meta charset="utf-8">
-        <link rel="stylesheet" href="../../src/styles/basic.css">
-        <script src="../../lib/sylvester.js"></script>
-        <script src="../../lib/utils.js"></script>
-        <script src="app/main.js"></script> 
+        <meta charset='utf-8'>
+        <link rel='stylesheet' href='../../src/styles/basic.css'>
+        <script src='../../lib/sylvester.js'></script>
+        <script src='../../lib/utils.js'></script>
+        <script src='app/main.js'></script> 
 
         <!--
         Vertex shader program
         -->
-        <script id="mainVertexShader" type="x-shader/x-vertex">
+        <script id='mainVertexShader' type='x-shader/x-vertex'>
             attribute vec3 vertexPosition;
             uniform mat4 transform;
             
@@ -23,14 +23,14 @@
         <!--
         Fragment shader program
         -->
-        <script id="mainFragmentShader" type="x-shader/x-fragment">
+        <script id='mainFragmentShader' type='x-shader/x-fragment'>
             void main(void) {
                 gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
             }
         </script>
     </head>
     
-    <body onload="main()">
-        <canvas id="mainCanvas"></canvas>
+    <body onload='main()'>
+        <canvas id='mainCanvas'></canvas>
     </body>
 </html>

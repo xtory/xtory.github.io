@@ -1,5 +1,5 @@
 // Note:
-// The equivelant of this value in C is "FLT_EPSILON", and in the GNU C Library,
+// The equivelant of this value in C is 'FLT_EPSILON', and in the GNU C Library,
 // http://www.gnu.org/software/libc/manual/html_node/Floating-Point-Parameters.html
 // FLT_EPSILON is the difference between 1 and the smallest floating point number
 // of type float that is greater than 1. It's not supposed to be greater than 1E-5.
@@ -25,7 +25,7 @@
 // BoundingBox.Intersects() directly uses 1e-06f as epsilon, etc.
 
 // Note:
-// The equivelant in Fly3D of this value is "FY_EPS".
+// The equivelant in Fly3D of this value is 'FY_EPS'.
     
 //
 // Constructor.
@@ -88,8 +88,8 @@ MathHelper.toDegrees = function(radians) {
 
 MathHelper.isPowerOfTwo = function(value) {
     //
-    if (typeof(value) !== "number") {
-        throw "A not-a-number exception raised.";
+    if (typeof(value) !== 'number') {
+        throw 'A not-a-number exception raised.';
     }
     
     // Note:

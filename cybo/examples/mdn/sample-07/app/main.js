@@ -1,6 +1,6 @@
 function main() {
     //
-    "use strict";
+    'use strict';
 
     var scene;
     var renderingContext;
@@ -75,42 +75,42 @@ function main() {
         vertexPositionAttributeLocation = (
             scene.graphicsManager.getAttributeLocation (
                 shaderProgram,
-                "vertexPosition"
+                'vertexPosition'
             )
         );
 
         vertexNormalAttributeLocation = (
             scene.graphicsManager.getAttributeLocation (
                 shaderProgram,
-                "vertexNormal"
+                'vertexNormal'
             )
         );
         
         vertexTextureCoordinateAttributeLocation = (
             scene.graphicsManager.getAttributeLocation (
                 shaderProgram,
-                "vertexTextureCoordinates"
+                'vertexTextureCoordinates'
             )
         );
         
         transformUniformLocation = (
             scene.graphicsManager.getUniformLocation (
                 shaderProgram,
-                "transform"
+                'transform'
             )
         );
 
         transposeOfInverseOfModelViewMatrixUniformLocation = (
             scene.graphicsManager.getUniformLocation (
                 shaderProgram,
-                "transposeOfInverseOfModelViewMatrix"
+                'transposeOfInverseOfModelViewMatrix'
             )
         );
 
         samplerUniformLocation = (
             scene.graphicsManager.getUniformLocation (
                 shaderProgram,
-                "sampler"
+                'sampler'
             )
         );
     }
@@ -339,7 +339,7 @@ function main() {
     function setUpTextures() {
         //
         var url = // which is relative to index.html, not main.js
-            "../assets/images/market-street.jpg";
+            '../assets/images/market-street.jpg';
 
         mainTexture = scene.assetManager.loadTexture2D(url);
     }

@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 //
 // main
@@ -19,7 +19,7 @@ function main() {
     var modelViewMatrix;
     var projectionMatrix;
 
-    mainCanvas = document.getElementById("mainCanvas");
+    mainCanvas = document.getElementById('mainCanvas');
 
     scene = new Xcene(mainCanvas);
 
@@ -63,10 +63,10 @@ function main() {
             shaderHelper.setUpShaderProgram(vertexShader, fragmentShader);
 
         vertexPositionAttributeLocation =
-            scene.graphicsManager.getAttributeLocation(shaderProgram, "vertexPosition");
+            scene.graphicsManager.getAttributeLocation(shaderProgram, 'vertexPosition');
 
         transformUniformLocation =
-            scene.graphicsManager.getUniformLocation(shaderProgram, "transform");
+            scene.graphicsManager.getUniformLocation(shaderProgram, 'transform');
     }
 
     //
@@ -163,7 +163,7 @@ function main() {
 
     function setUpTransform() {
         //
-        // Set the drawing position to the "identity" point, which is
+        // Set the drawing position to the 'identity' point, which is
         // the center of the scene.
         modelViewMatrix = Matrix.I(4);
 

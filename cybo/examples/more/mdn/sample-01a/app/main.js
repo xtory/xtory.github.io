@@ -1,11 +1,11 @@
-"use strict";
+'use strict';
 
 function main() {
     //
     var mainCanvas;
     var renderingContext;
 
-    mainCanvas = document.getElementById("mainCanvas");
+    mainCanvas = document.getElementById('mainCanvas');
 
     // Set up the GL context
     setUpWebGLRenderingContext(mainCanvas);
@@ -39,30 +39,30 @@ function main() {
         // Try to grab the standard context. If it fails, fallback to experimental.
         //
         // Note:
-        // IE11 only supports "experimental-webgl".
+        // IE11 only supports 'experimental-webgl'.
         //
-        renderingContext = mainCanvas.getContext("webgl");
+        renderingContext = mainCanvas.getContext('webgl');
         if (renderingContext === null) {
             //
             renderingContext =
-                mainCanvas.getContext("experimental-webgl");
+                mainCanvas.getContext('experimental-webgl');
             
             if (renderingContext !== null) {
                 //
                 console.log (
-                    "Your browser supports WebGL. \n\n" +
-                    "However, it indicates the support is experimental. " +
-                    "That is, not all WebGL functionality may be supported, " +
-                    "and content may not run as expected."
+                    'Your browser supports WebGL. \n\n' +
+                    'However, it indicates the support is experimental. ' +
+                    'That is, not all WebGL functionality may be supported, ' +
+                    'and content may not run as expected.'
                 );
             }
             else {
                 //
                 alert (
-                    "Unable to initialize WebGL. Your browser may not support it."
+                    'Unable to initialize WebGL. Your browser may not support it.'
                 );
 
-                throw "WebGL-not-supported exception raised.";
+                throw 'WebGL-not-supported exception raised.';
             }
         }
     }

@@ -1,6 +1,6 @@
-import { EaseMode }   from "./ease-mode";
-import { Stopwatch }  from "./stopwatch";
-import { MathHelper } from "../math/helpers/math-helper";
+import { EaseMode }   from './ease-mode';
+import { Stopwatch }  from './stopwatch';
+import { MathHelper } from '../math/helpers/math-helper';
 
 //
 // Constructor.
@@ -46,19 +46,19 @@ function SineEase(_easeMode, _duration, _isLooped) {
     //
     // Properties.
     //
-    Object.defineProperty(this, "easeMode", {
+    Object.defineProperty(this, 'easeMode', {
         get: function() { return _easeMode; }
     });
 
-    Object.defineProperty(this, "duration", {
+    Object.defineProperty(this, 'duration', {
         get: function() { return _duration; }
     });
 
-    Object.defineProperty(this, "sineOfStartAngle", {
+    Object.defineProperty(this, 'sineOfStartAngle', {
         get: function() { return Math.sin(_startAngle); }
     });
 
-    Object.defineProperty(this, "sineOfCurrentAngle", {
+    Object.defineProperty(this, 'sineOfCurrentAngle', {
         //
         get: function() {
             //
@@ -71,17 +71,17 @@ function SineEase(_easeMode, _duration, _isLooped) {
         }
     });
 
-    Object.defineProperty(this, "sineOfFinishAngle", {
+    Object.defineProperty(this, 'sineOfFinishAngle', {
         get: function() { return Math.sin(_finishAngle); }
     });
 
     /// <summary>
-    /// Ratio of "current time offset" to "total time offset (that is, the
-    /// duration)". For instance, the current time offset = 500 (in milli-
+    /// Ratio of 'current time offset' to 'total time offset (that is, the
+    /// duration)'. For instance, the current time offset = 500 (in milli-
     /// seconds), the duration = 2000 (in milliseconds) => Ratio = 500 / 2000
     /// = 0.25
     /// </summary>
-    Object.defineProperty(this, "ratioOfCurrentToTotalTimeOffset", {
+    Object.defineProperty(this, 'ratioOfCurrentToTotalTimeOffset', {
         //
         get: function() {
             //
@@ -104,11 +104,11 @@ function SineEase(_easeMode, _duration, _isLooped) {
     });
 
     /// <summary>
-    /// Ratio of "current sine-of-angle offset" to "total sine-of-angle offset".
+    /// Ratio of 'current sine-of-angle offset' to 'total sine-of-angle offset'.
     /// For instance, the current sine-of-angle offset = 0.125, the total sine-
     /// of-angle offset = 1 => Ratio = 0.125 / 1 = 0.125
     /// </summary>
-    Object.defineProperty(this, "ratioOfCurrentToTotalSineOfAngleOffset", {
+    Object.defineProperty(this, 'ratioOfCurrentToTotalSineOfAngleOffset', {
         //
         get: function() {
             //
@@ -122,11 +122,11 @@ function SineEase(_easeMode, _duration, _isLooped) {
         }
     });
 
-    Object.defineProperty(this, "isRunning", {
+    Object.defineProperty(this, 'isRunning', {
         get: function() { return _stopwatch.isRunning; }
     });
 
-    Object.defineProperty(this, "isFinished", {
+    Object.defineProperty(this, 'isFinished', {
         //
         get: function() {
             //

@@ -1,11 +1,11 @@
-"use strict";
+'use strict';
 
 function ShaderHelper(_graphicsManager) {
     //
     var _webGLRenderingContext =
         _graphicsManager.renderingContext;
     
-    Object.defineProperty(this, "renderingContext", {
+    Object.defineProperty(this, 'renderingContext', {
         get: function() { return _webGLRenderingContext; }
     });
 }
@@ -33,7 +33,7 @@ ShaderHelper.prototype = {
             ) === true)
         {
             throw (
-                "Unable to initialize the shader program: " +
+                'Unable to initialize the shader program: ' +
                 this.renderingContext.getProgramInfoLog(shader)
             );
         }

@@ -1,17 +1,17 @@
-"use strict";
+'use strict';
 
 function AssetManager(_xcene) {
     //
     var _renderingContext;
     
-    Object.defineProperty(this, "xcene", {
+    Object.defineProperty(this, 'xcene', {
         get: function() { return _xcene; }
     });
     
     _renderingContext =
         _xcene.graphicsManager.renderingContext;
 
-    Object.defineProperty(this, "renderingContext", {
+    Object.defineProperty(this, 'renderingContext', {
         get: function() { return _renderingContext; }
     });
 }
@@ -52,7 +52,7 @@ AssetManager.prototype = {
             ) === true)
         {
             throw (
-                "An error occurred compiling the shaders: " +
+                'An error occurred compiling the shaders: ' +
                 this.renderingContext.getShaderInfoLog(shader)
             );
         }
@@ -78,7 +78,7 @@ AssetManager.prototype = {
         // Walk through the source element's children, building the
         // shader source string.
 
-        var shaderSource = "";
+        var shaderSource = '';
         var currentChild = shaderScript.firstChild;
 
         while (currentChild !== null) {
@@ -95,13 +95,13 @@ AssetManager.prototype = {
 
         var shader;
 
-        if (shaderScript.type === "x-shader/x-vertex") {
+        if (shaderScript.type === 'x-shader/x-vertex') {
             //
             shader = this.renderingContext.createShader (
                 this.renderingContext.VERTEX_SHADER
             );
         } else if (
-            shaderScript.type === "x-shader/x-fragment"
+            shaderScript.type === 'x-shader/x-fragment'
         ){
             shader = this.renderingContext.createShader (
                 this.renderingContext.FRAGMENT_SHADER
@@ -125,7 +125,7 @@ AssetManager.prototype = {
             ) === true)
         {
             throw (
-                "An error occurred compiling the shaders: " +
+                'An error occurred compiling the shaders: ' +
                 this.renderingContext.getShaderInfoLog(shader)
             );
         }

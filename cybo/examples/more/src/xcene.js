@@ -1,25 +1,25 @@
-"use strict";
+'use strict';
 
 function Xcene(_mainCanvas) {
     //
     var _graphicsManager;
     var _assetManager;
 
-    Object.defineProperty(this, "mainCanvas", {
+    Object.defineProperty(this, 'mainCanvas', {
         get: function() { return _mainCanvas; }
     });
 
     _graphicsManager = new GraphicsManager(this);
-    Object.defineProperty(this, "graphicsManager", {
+    Object.defineProperty(this, 'graphicsManager', {
         get: function() { return _graphicsManager; }
     });
 
     _assetManager = new AssetManager(this);
-    Object.defineProperty(this, "assetManager", {
+    Object.defineProperty(this, 'assetManager', {
         get: function() { return _assetManager; }
     });
     
-    window.addEventListener("resize", resize);
+    window.addEventListener('resize', resize);
     resize();
 
     //

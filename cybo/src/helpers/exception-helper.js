@@ -19,7 +19,7 @@ ExceptionHelper.displayMessageOf = function(e) {
     //
     // Test:
     /*
-    if (typeof(e) === "string") {
+    if (typeof(e) === 'string') {
         alert(e);
     } else if (
         e !== undefine &&

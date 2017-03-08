@@ -1,7 +1,7 @@
-import { Color  }                      from "./color";
-import { Colors }                      from "./colors";
-import { WebGLRenderingContextHelper } from "./helpers/webgl-rendering-context-helper";
-import { JSHelper }                    from "../helpers/js-helper";
+import { Color  }                      from './color';
+import { Colors }                      from './colors';
+import { WebGLRenderingContextHelper } from './helpers/webgl-rendering-context-helper';
+import { JSHelper }                    from '../helpers/js-helper';
 
 //
 // Constructor.
@@ -11,17 +11,17 @@ function GraphicsManager(_xcene) {
     var _renderingContext;
     var _shaderProgram;
 
-    Object.defineProperty(this, "xcene", {
-        "get": function() { return _xcene; }
+    Object.defineProperty(this, 'xcene', {
+        'get': function() { return _xcene; }
     });
 
     setUpWebGLRenderingContext();
 
-    Object.defineProperty(this, "renderingContext", {
+    Object.defineProperty(this, 'renderingContext', {
         get: function() { return _renderingContext; }
     });
     
-    Object.defineProperty(this, "shaderProgram", {
+    Object.defineProperty(this, 'shaderProgram', {
         //
         get: function() {
             return _shaderProgram;
@@ -48,32 +48,32 @@ function GraphicsManager(_xcene) {
         // mental.
         //
         // Note:
-        // IE11 only supports "experimental-webgl".
+        // IE11 only supports 'experimental-webgl'.
         //
         _renderingContext =
-            _xcene.mainCanvas.getContext("webgl");
+            _xcene.mainCanvas.getContext('webgl');
 
         if (_renderingContext === null) {
             //
             _renderingContext =
-                _xcene.mainCanvas.getContext("experimental-webgl");
+                _xcene.mainCanvas.getContext('experimental-webgl');
             
             if (_renderingContext !== null) {
                 //
                 console.log (
-                    "Your browser supports WebGL. \n\n" +
-                    "However, it indicates the support is experimental. " +
-                    "That is, not all WebGL functionality may be supported, " +
-                    "and content may not run as expected."
+                    'Your browser supports WebGL. \n\n' +
+                    'However, it indicates the support is experimental. ' +
+                    'That is, not all WebGL functionality may be supported, ' +
+                    'and content may not run as expected.'
                 );
             }
             else {
                 //
                 alert (
-                    "Unable to initialize WebGL. Your browser may not support it."
+                    'Unable to initialize WebGL. Your browser may not support it.'
                 );
 
-                throw "WebGL-not-supported exception raised.";
+                throw 'WebGL-not-supported exception raised.';
             }
         }
 

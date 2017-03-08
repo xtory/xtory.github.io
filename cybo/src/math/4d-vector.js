@@ -1,4 +1,4 @@
-import { MathHelper } from "./helpers/math-helper";
+import { MathHelper } from './helpers/math-helper';
     
 //
 // Constructor.
@@ -44,10 +44,10 @@ Vector4D.calculateUnitVectorOf = function(v) {
     // Note:
     // All XNA, SlimDX, and WPF don't react to the situation when sqrt =
     // 0, such as zero vector's normalization. But finally I decide to
-    // code in the way as the book "Essential Mathematics for Games and
-    // Interactive Applications" does.
+    // code in the way as the book 'Essential Mathematics for Games and
+    // Interactive Applications' does.
 
-    var sqrt = Math.Sqrt(v.x*v.x + v.y*v.y + v.z*v.z + v.w*v.w);
+    var sqrt = Math.sqrt(v.x*v.x + v.y*v.y + v.z*v.z + v.w*v.w);
 
     if (sqrt < MathHelper.EPSILON) {
         //
@@ -55,7 +55,7 @@ Vector4D.calculateUnitVectorOf = function(v) {
         // Cybo doesn't throw a divide-by-zero exception when normalizing
         // Vector2D, Vector4D, Vector4D, Quaternion.
         /*
-        console.log("A divide-by-zero exception raised.");
+        console.log('A divide-by-zero exception raised.');
         */
 
         return new Vector4D(0, 0, 0, 0);

@@ -17,29 +17,29 @@ PositionTextureCoordinates.prototype = {
 //
 PositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
     //
-   "attribute vec3 vertexPosition;",
-   "attribute vec2 vertexTextureCoordinates;",
-   "uniform mat4 transform;",
+   'attribute vec3 vertexPosition;',
+   'attribute vec2 vertexTextureCoordinates;',
+   'uniform mat4 transform;',
     //
-   "varying highp vec2 textureCoordinates;",
+   'varying highp vec2 textureCoordinates;',
     //
-   "void main() {",
-       "gl_Position = transform * vec4(vertexPosition, 1.0);",
-       "textureCoordinates = vertexTextureCoordinates;",
-   "}"
+   'void main() {',
+       'gl_Position = transform * vec4(vertexPosition, 1.0);',
+       'textureCoordinates = vertexTextureCoordinates;',
+   '}'
 
-].join("\n");
+].join('\n');
 
 PositionTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
     //
-   "varying highp vec2 textureCoordinates;",
-   "uniform sampler2D sampler;",
+   'varying highp vec2 textureCoordinates;',
+   'uniform sampler2D sampler;',
     //
-   "void main() {",
-       "gl_FragColor = texture2D(sampler, textureCoordinates);",
-   "}"
+   'void main() {',
+       'gl_FragColor = texture2D(sampler, textureCoordinates);',
+   '}'
    
-].join("\n");
+].join('\n');
 
 Object.freeze(PositionTextureCoordinates);
 

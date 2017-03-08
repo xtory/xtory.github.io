@@ -1,9 +1,10 @@
 function main() {
     //
-    "use strict";
+    'use strict';
 
     var scene;
     var renderingContext;
+    var camera;
     var shaderHelper;
     var shaderProgram;
     var vertexPositionAttributeLocation;
@@ -15,27 +16,37 @@ function main() {
     var projectionMatrix;
 
     try {
+        //
         scene = new Cybo.Xcene();
+
+        renderingContext =
+            scene.graphicsManager.renderingContext;
+        
+        camera = new Cybo.Camera (
+            scene,
+            new Cybo.Vector3D(0, 0, 275)
+        );
+
+        shaderHelper = new Cybo.ShaderHelper(scene.graphicsManager);
+
+        // Set up the shaders; this is where all the lighting for the
+        // vertices and so forth is established.
+        setUpShaders();
+
+        // Here's where we call the routine that builds all the objects
+        // we'll be drawing.
+        setUpBuffers();
+
+        // Set up to draw the scene periodically.
+        setInterval(drawScene, 15);
+
     } catch (e) {
+        //
         Cybo.ExceptionHelper.displayMessageOf(e);
+
         return;
     }
 
-    renderingContext =
-        scene.graphicsManager.renderingContext;
-    
-    shaderHelper = new Cybo.ShaderHelper(scene.graphicsManager);
-
-    // Set up the shaders; this is where all the lighting for the
-    // vertices and so forth is established.
-    setUpShaders();
-
-    // Here's where we call the routine that builds all the objects
-    // we'll be drawing.
-    setUpBuffers();
-
-    // Set up to draw the scene periodically.
-    setInterval(drawScene, 15);
 
     //
     // Functions.
@@ -60,21 +71,21 @@ function main() {
         vertexPositionAttributeLocation = (
             scene.graphicsManager.getAttributeLocation (
                 shaderProgram,
-                "vertexPosition"
+                'vertexPosition'
             )
         );
         
         vertexColorAttributeLocation = (
             scene.graphicsManager.getAttributeLocation (
                 shaderProgram,
-                "vertexColor"
+                'vertexColor'
             )
         );
         
         transformUniformLocation = (
             scene.graphicsManager.getUniformLocation (
                 shaderProgram,
-                "transform"
+                'transform'
             )
         );
     }
@@ -190,24 +201,48 @@ function main() {
         );
     }
 
+    // function setUpTransform() {
+    //     //
+    //     var v = new Cybo.Vector3D(0, 0, -275);
+    //     modelViewMatrix = Cybo.Matrix4x4.createTranslationMatrix(v);
+
+    //     projectionMatrix = Cybo.Matrix4x4.createProjectionMatrix (
+    //         undefined,
+    //         window.innerWidth / window.innerHeight,
+    //         undefined,
+    //         undefined
+    //     );
+        
+    //     var transform =
+    //         projectionMatrix.multiply(modelViewMatrix);
+
+    //     scene.graphicsManager.setMatrix4x4Uniform (
+    //         transformUniformLocation,
+    //         transform
+    //     );
+    // }
     function setUpTransform() {
         //
-        var v = new Cybo.Vector3D(0, 0, -275);
-        modelViewMatrix = Cybo.Matrix4x4.createTranslationMatrix(v);
+        //var v = new Cybo.Vector3D(0, 0, -275);
+        //modelViewMatrix = Cybo.Matrix4x4.createTranslationMatrix(v);
 
-        projectionMatrix = Cybo.Matrix4x4.createProjectionMatrix (
-            undefined,
-            window.innerWidth / window.innerHeight,
-            undefined,
-            undefined
-        );
+        // projectionMatrix = Cybo.Matrix4x4.createProjectionMatrix (
+        //     undefined,
+        //     window.innerWidth / window.innerHeight,
+        //     undefined,
+        //     undefined
+        // );
         
-        var transform =
-            projectionMatrix.multiply(modelViewMatrix);
+        // var transform =
+        //     projectionMatrix.multiply(modelViewMatrix);
+
+        var transform = Cybo.Matrix4x4.createIdentityMatrix();
+
+        camera.getTransform(transform);
 
         scene.graphicsManager.setMatrix4x4Uniform (
             transformUniformLocation,
             transform
         );
-    }
+    }    
 }

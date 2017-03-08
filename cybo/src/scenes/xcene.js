@@ -1,6 +1,6 @@
-import { AssetManager }    from "../assets/asset-manager";
-import { GraphicsManager } from "../graphics/graphics-manager";
-import { JSHelper }        from "../helpers/js-helper";
+import { AssetManager }    from '../assets/asset-manager';
+import { GraphicsManager } from '../graphics/graphics-manager';
+import { JSHelper }        from '../helpers/js-helper';
 
 //
 // Constructor.
@@ -10,7 +10,7 @@ function Xcene(_mainCanvas, _usesDefaultStyles) {
     try {
         //
         if (document.body === undefined) {
-            throw "document.body === undefined";
+            throw 'document.body === undefined';
         }
 
         if (JSHelper.isUndefinedOrNull(_mainCanvas) === true) {
@@ -57,12 +57,12 @@ function Xcene(_mainCanvas, _usesDefaultStyles) {
 
         // Calls onResize() immediately at the end of Xcene's constructor.
         onResize();
-    }
-    catch (error) {
-        //
-        console.error('Cybo.Xcene: ' + error);
         
-        throw error;
+    } catch (e) {
+        //
+        console.error('Cybo.Xcene: ' + e);
+        
+        throw e;
     }
 
     //
@@ -88,12 +88,12 @@ function Xcene(_mainCanvas, _usesDefaultStyles) {
 
         style = document.body.style;
         style.margin = 0;
-        style.backgroundColor = "#202020"; // = cybo.graphics.colors.DEFAULT_BACKGROUND
+        style.backgroundColor = '#202020'; // = cybo.graphics.colors.DEFAULT_BACKGROUND
 
         style = _mainCanvas.style;
-        style.width = "100vw";
-        style.height = "100vh";
-        style.display = "block";
+        style.width = '100vw';
+        style.height = '100vh';
+        style.display = 'block';
     }
 
     function setUpTimers() {
@@ -124,10 +124,10 @@ function Xcene(_mainCanvas, _usesDefaultStyles) {
 
     function hookEvents() {
         //
-        window.addEventListener("resize", onResize);
+        window.addEventListener('resize', onResize);
 
-        // window.addEventListener("error", onError)
-        // window.addEventListener("beforeunload", onBeforeUnload);
+        // window.addEventListener('error', onError)
+        // window.addEventListener('beforeunload', onBeforeUnload);
     }
 
     //
@@ -159,9 +159,9 @@ function Xcene(_mainCanvas, _usesDefaultStyles) {
     // function onError(errorMsg, url, lineNumber) {
     //     //
     //     alert (
-    //         "Error: " + errorMsg +
-    //         ", Script: " + url +
-    //         ", Line: " + lineNumber
+    //         'Error: ' + errorMsg +
+    //         ', Script: ' + url +
+    //         ', Line: ' + lineNumber
     //     );
     // }
 

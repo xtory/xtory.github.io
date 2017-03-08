@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 function main() {
     //
@@ -11,7 +11,7 @@ function main() {
     var modelViewMatrix;
     var projectionMatrix;
 
-    mainCanvas = document.getElementById("mainCanvas");
+    mainCanvas = document.getElementById('mainCanvas');
     
     setUpWebGLRenderingContext(); // Set up the GL context
 
@@ -28,7 +28,7 @@ function main() {
 
     //window.onresize = resize();
 
-    window.addEventListener("resize", resize);
+    window.addEventListener('resize', resize);
     resize();
 
     // Initialize the shaders; this is where all the lighting for the
@@ -53,30 +53,30 @@ function main() {
         // Try to grab the standard context. If it fails, fallback to experimental.
         //
         // Note:
-        // IE11 only supports "experimental-webgl".
+        // IE11 only supports 'experimental-webgl'.
         //
-        renderingContext = mainCanvas.getContext("webgl");
+        renderingContext = mainCanvas.getContext('webgl');
         if (renderingContext === null) {
             //
             renderingContext =
-                mainCanvas.getContext("experimental-webgl");
+                mainCanvas.getContext('experimental-webgl');
             
             if (renderingContext !== null) {
                 //
                 console.log (
-                    "Your browser supports WebGL. \n\n" +
-                    "However, it indicates the support is experimental. " +
-                    "That is, not all WebGL functionality may be supported, " +
-                    "and content may not run as expected."
+                    'Your browser supports WebGL. \n\n' +
+                    'However, it indicates the support is experimental. ' +
+                    'That is, not all WebGL functionality may be supported, ' +
+                    'and content may not run as expected.'
                 );
             }
             else {
                 //
                 alert (
-                    "Unable to initialize WebGL. Your browser may not support it."
+                    'Unable to initialize WebGL. Your browser may not support it.'
                 );
 
-                throw "WebGL-not-supported exception raised.";
+                throw 'WebGL-not-supported exception raised.';
             }
         }
     }
@@ -114,8 +114,8 @@ function main() {
     //
     function setUpShaders() {
         //
-        var vertexShader = getShader("mainVertexShader");
-        var fragmentShader = getShader("mainFragmentShader");
+        var vertexShader = getShader('mainVertexShader');
+        var fragmentShader = getShader('mainFragmentShader');
 
         // Create the shader program
 
@@ -132,16 +132,16 @@ function main() {
             ) === null)
         {
             alert (
-                "Unable to initialize the shader program: " +
+                'Unable to initialize the shader program: ' +
                 renderingContext.getProgramInfoLog(shader)
             );
         }
 
         vertexPositionAttributeLocation =
-            renderingContext.getAttribLocation(shaderProgram, "vertexPosition");
+            renderingContext.getAttribLocation(shaderProgram, 'vertexPosition');
         
         transformUniformLocation =
-            renderingContext.getUniformLocation(shaderProgram, "transform");
+            renderingContext.getUniformLocation(shaderProgram, 'transform');
     }
 
     //
@@ -163,7 +163,7 @@ function main() {
         // Walk through the source element's children, building the
         // shader source string.
 
-        var shaderSource = "";
+        var shaderSource = '';
         var currentChild = shaderScript.firstChild;
 
         while (currentChild !== null) {
@@ -179,13 +179,13 @@ function main() {
 
         var shader;
 
-        if (shaderScript.type === "x-shader/x-fragment") {
+        if (shaderScript.type === 'x-shader/x-fragment') {
             //
             shader = renderingContext.createShader (
                 renderingContext.FRAGMENT_SHADER
             );
 
-        } else if (shaderScript.type === "x-shader/x-vertex") {
+        } else if (shaderScript.type === 'x-shader/x-vertex') {
             //
             shader = renderingContext.createShader (
                 renderingContext.VERTEX_SHADER
@@ -211,7 +211,7 @@ function main() {
             ) === null)
         {
             alert (
-                "An error occurred compiling the shaders: " +
+                'An error occurred compiling the shaders: ' +
                 renderingContext.getShaderInfoLog(shader)
             );
             
@@ -312,7 +312,7 @@ function main() {
 
     function setUpTransform() {
         //
-        // Set the drawing position to the "identity" point, which is
+        // Set the drawing position to the 'identity' point, which is
         // the center of the scene.
 
         modelViewMatrix = Matrix.I(4);

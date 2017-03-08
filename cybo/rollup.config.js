@@ -1,7 +1,7 @@
-//import babel from "rollup-plugin-babel";
+//import babel from 'rollup-plugin-babel';
 
 export default {
-    entry: "./src/cybo.js",
+    entry: './src/cybo.js',
     targets: [
 		{
 			format: 'iife',
@@ -28,7 +28,7 @@ export default {
 	],
     // plugins: [
     //     babel ({
-    //         exclude: "node_modules/**"
+    //         exclude: 'node_modules/**'
     //     })
     // ]
 };

@@ -1,6 +1,6 @@
 function main() {
     //
-    "use strict";
+    'use strict';
 
     var scene;
     var renderingContext;
@@ -69,21 +69,21 @@ function main() {
         vertexPositionAttributeLocation = (
             scene.graphicsManager.getAttributeLocation (
                 shaderProgram,
-                "vertexPosition"
+                'vertexPosition'
             )
         );
 
         vertexColorAttributeLocation = (
             scene.graphicsManager.getAttributeLocation (
                 shaderProgram,
-                "vertexColor"
+                'vertexColor'
             )
         );
 
         transformUniformLocation = (
             scene.graphicsManager.getUniformLocation (
                 shaderProgram,
-                "transform"
+                'transform'
             )
         );
     }

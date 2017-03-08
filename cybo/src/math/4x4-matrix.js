@@ -1,6 +1,6 @@
-import { Camera }        from "../cameras/camera";
-import { CartesianAxis } from "./cartesian-axis";
-import { Vector3D }      from "./3d-vector";
+import { Camera }        from '../cameras/camera';
+import { CartesianAxis } from './cartesian-axis';
+import { Vector3D }      from './3d-vector';
 
 //
 // Constructor.
@@ -15,12 +15,12 @@ function Matrix4x4 (
     // When storing matrices in memory, there are two ways of storing their
     // elements:
     // 1. Stored in the order s11, s12, s13, ..., s43, s44
-    // => called "row major" (used by DirectX), or
+    // => called 'row major' (used by DirectX), or
     // 2. Stored in the order s11, s21, s31, ..., s34, s44
-    // => called "column major" (used by OpenGL, WebGL)
+    // => called 'column major' (used by OpenGL, WebGL)
 
     // Note:
-    // "m x n" matrix always means "m rows, n columns" whether it's row or
+    // 'm x n' matrix always means 'm rows, n columns' whether it's row or
     // column major.
 
     this.elements = [
@@ -33,67 +33,67 @@ function Matrix4x4 (
     //
     // Properties.
     //
-    Object.defineProperty(this, "s11", {
+    Object.defineProperty(this, 's11', {
         get: function() { return this.elements[0]; }
     });
 
-    Object.defineProperty(this, "s12", {
+    Object.defineProperty(this, 's12', {
         get: function() { return this.elements[4]; }
     });
 
-    Object.defineProperty(this, "s13", {
+    Object.defineProperty(this, 's13', {
         get: function() { return this.elements[8]; }
     });
 
-    Object.defineProperty(this, "s14", {
+    Object.defineProperty(this, 's14', {
         get: function() { return this.elements[12]; }
     });
 
-    Object.defineProperty(this, "s21", {
+    Object.defineProperty(this, 's21', {
         get: function() { return this.elements[1]; }
     });
 
-    Object.defineProperty(this, "s22", {
+    Object.defineProperty(this, 's22', {
         get: function() { return this.elements[5]; }
     });
 
-    Object.defineProperty(this, "s23", {
+    Object.defineProperty(this, 's23', {
         get: function() { return this.elements[9]; }
     });
 
-    Object.defineProperty(this, "s24", {
+    Object.defineProperty(this, 's24', {
         get: function() { return this.elements[13]; }
     });
 
-    Object.defineProperty(this, "s31", {
+    Object.defineProperty(this, 's31', {
         get: function() { return this.elements[2]; }
     });
 
-    Object.defineProperty(this, "s32", {
+    Object.defineProperty(this, 's32', {
         get: function() { return this.elements[6]; }
     });
 
-    Object.defineProperty(this, "s33", {
+    Object.defineProperty(this, 's33', {
         get: function() { return this.elements[10]; }
     });
 
-    Object.defineProperty(this, "s34", {
+    Object.defineProperty(this, 's34', {
         get: function() { return this.elements[14]; }
     });
 
-    Object.defineProperty(this, "s41", {
+    Object.defineProperty(this, 's41', {
         get: function() { return this.elements[3]; }
     });
 
-    Object.defineProperty(this, "s42", {
+    Object.defineProperty(this, 's42', {
         get: function() { return this.elements[7]; }
     });
 
-    Object.defineProperty(this, "s43", {
+    Object.defineProperty(this, 's43', {
         get: function() { return this.elements[11]; }
     });
 
-    Object.defineProperty(this, "s44", {
+    Object.defineProperty(this, 's44', {
         get: function() { return this.elements[15]; }
     });
 }
@@ -198,12 +198,12 @@ Matrix4x4.createViewMatrix = function (
 
 Matrix4x4.createProjectionMatrix = function (
     fovY,        // fieldOfViewY
-    aspectRatio, // Aspect ratio of "viewport", not "back buffer"!
+    aspectRatio, // Aspect ratio of 'viewport', not 'back buffer'!
     near,        // distanceToNearPlane
     far          // distanceToFarPlane
 ){
     if (fovY === undefined) {
-        fovY = Camera.DEFAULT_FIELD_OF_VIEW_Y;
+        fovY = Camera.FIELD_OF_VIEW_Y;
     }
 
     if (near === undefined) {
@@ -306,7 +306,7 @@ Matrix4x4.createRotationMatrix = function (
         }
 
         default: {
-            console.log("A not-supported exception raised.");
+            console.log('A not-supported exception raised.');
             break;
         }
     }
@@ -390,7 +390,7 @@ Matrix4x4.invertMatrix = function(m) {
     var s = s11*d11 + s21*d12 + s31*d13 + s41*d14;
 
     if (s === 0) {
-        throw "Can't invert matrix cuz determinant is 0";
+        throw 'Can\'t invert matrix cuz determinant is 0';
     }
 
     s = 1 / s;
