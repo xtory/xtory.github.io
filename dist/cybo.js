@@ -2217,36 +2217,81 @@ Object.freeze(Matrix4x4);
 //
 // Constructor.
 //
-function Xcene(_mainCanvas) {
+function Xcene(_mainCanvas, _usesDefaultStyles) {
     //
-    var _graphicsManager;
-    var _assetManager;
+    try {
+        //
+        if (document.body === undefined) {
+            throw "document.body === undefined";
+        }
 
-    Object.defineProperty(this, "mainCanvas", {
-        get: function() { return _mainCanvas; }
-    });
+        if (JSHelper.isUndefinedOrNull(_mainCanvas) === true) {
+            //
+            _mainCanvas = document.createElementNS (
+                'http://www.w3.org/1999/xhtml',
+                'canvas'
+            );
 
-    _graphicsManager = new GraphicsManager(this);
-    Object.defineProperty(this, "graphicsManager", {
-        get: function() { return _graphicsManager; }
-    });
+            document.body.appendChild(_mainCanvas);
+        }
 
-    _assetManager = new AssetManager(this);
-    Object.defineProperty(this, "assetManager", {
-        get: function() { return _assetManager; }
-    });
+        if (_usesDefaultStyles === undefined) {
+            _usesDefaultStyles = true;
+        }
+        
+        var _graphicsManager;
+        var _assetManager;
 
-    setUpTimers();
+        Object.defineProperty(this, 'mainCanvas', {
+            get: function() { return _mainCanvas; }
+        });
 
-    // Hooks the events.        
-    hookEvents();
+        _graphicsManager = new GraphicsManager(this);
+        Object.defineProperty(this, 'graphicsManager', {
+            get: function() { return _graphicsManager; }
+        });
 
-    // Calls onResize() immediately at the end of Xcene's constructor.
-    onResize();
+        _assetManager = new AssetManager(this);
+        Object.defineProperty(this, 'assetManager', {
+            get: function() { return _assetManager; }
+        });
+
+        // Sets up the styles (if necessary).
+        if (_usesDefaultStyles === true) {
+            setUpStyles();
+        }
+
+        // Sets up the timers.
+        setUpTimers();
+
+        // Hooks the events.        
+        hookEvents();
+
+        // Calls onResize() immediately at the end of Xcene's constructor.
+        onResize();
+    }
+    catch (error) {
+        console.error('Cybo.Xcene: ' + error);
+        throw error;
+    }
 
     //
     // Private methods.
     //
+    function setUpStyles() {
+        //
+        var style;
+
+        style = document.body.style;
+        style.margin = 0;
+        style.backgroundColor = "#202020"; // = cybo.graphics.colors.DEFAULT_BACKGROUND
+
+        style = _mainCanvas.style;
+        style.width = "100vw";
+        style.height = "100vh";
+        style.display = "block";
+    }
+
     function setUpTimers() {
         //
         // Note:

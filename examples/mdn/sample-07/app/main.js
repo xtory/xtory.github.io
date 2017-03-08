@@ -482,7 +482,7 @@ function main() {
 
         projectionMatrix = Cybo.Matrix4x4.createProjectionMatrix (
             undefined,
-            mainCanvas.clientWidth / mainCanvas.clientHeight,
+            window.innerWidth / window.innerHeight, //mainCanvas.clientWidth / mainCanvas.clientHeight,
             undefined,
             undefined
         );

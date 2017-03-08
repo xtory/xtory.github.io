@@ -13,10 +13,10 @@ function main() {
     var modelViewMatrix;
     var projectionMatrix;
 
-    mainCanvas = document.getElementById("mainCanvas");
+    //mainCanvas = document.getElementById("mainCanvas");
 
     try {
-        scene = new Cybo.Xcene(mainCanvas);
+        scene = new Cybo.Xcene();
     } catch (e) {
         Cybo.ExceptionHelper.displayMessageOf(e);
         return;
@@ -112,7 +112,7 @@ function main() {
     function drawScene() {
         //
         // Clear the mainCanvas before we start drawing on it.
-        scene.graphicsManager.clear();
+        //scene.graphicsManager.clear();
 
         setUpTransform();
 
@@ -154,7 +154,7 @@ function main() {
 
         projectionMatrix = Cybo.Matrix4x4.createProjectionMatrix (
             undefined,
-            mainCanvas.clientWidth / mainCanvas.clientHeight,
+            window.innerWidth / window.innerHeight, //mainCanvas.clientWidth / mainCanvas.clientHeight,
             undefined,
             undefined
         );

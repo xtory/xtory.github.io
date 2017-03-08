@@ -1,6 +1,6 @@
 body {
 	margin: 0;
-	background-color: #202020; /* = cybo.graphics.colors.DEFAULT_BACKGROUND */
+	background-color: #202020; /* = cybo.graphics.colors.DEFAULT_BACKGROUND*/
 }
 
 canvas {
@@ -8,3 +8,4 @@ canvas {
 	height:  100vh;
 	display: block; /* prevents scrollbar */
 }
+
