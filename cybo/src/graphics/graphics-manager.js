@@ -9,6 +9,7 @@ import { JSHelper }                    from '../helpers/js-helper';
 function GraphicsManager(_xcene) {
     //
     var _renderingContext;
+    var _viewport;
     var _shaderProgram;
 
     Object.defineProperty(this, 'xcene', {
@@ -19,6 +20,35 @@ function GraphicsManager(_xcene) {
 
     Object.defineProperty(this, 'renderingContext', {
         get: function() { return _renderingContext; }
+    });
+
+    Object.defineProperty(this, 'viewport', {
+        //
+        'get': function() {
+            return _viewport;
+        },
+
+        'set': function(value) {
+            //
+            if (value !== undefined &&
+                _viewport !== undefined &&
+                value.left   === _viewport.left &&
+                value.bottom === _viewport.bottom &&
+                value.width  === _viewport.width &&
+                value.height === _viewport.height) {
+                return;
+            }
+
+            _viewport = value;
+
+            // Resets the WebGLRenderingContext's viewport as well.
+            _renderingContext.viewport (
+                // Part 1.
+                _viewport.left, _viewport.bottom,
+                // Part 2.
+                _viewport.width, _viewport.height
+            );
+        }
     });
     
     Object.defineProperty(this, 'shaderProgram', {

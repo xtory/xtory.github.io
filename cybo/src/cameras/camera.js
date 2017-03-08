@@ -96,12 +96,10 @@ function Camera (
         // Calculates the aspect ratio of "viewport", not "back buffer".
 
         // Temp: Change back to viewport later.
-        /*
         var viewportAspectRatio =
-            _scene.graphicsManager.Viewport.AspectRatio;
-        */
-        var viewportAspectRatio =
-            window.innerWidth / window.innerHeight;
+            _scene.graphicsManager.viewport.aspectRatio;
+        // var viewportAspectRatio =
+        //     window.innerWidth / window.innerHeight;
         // :Temp
 
         // Note:

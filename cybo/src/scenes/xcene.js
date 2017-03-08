@@ -1,6 +1,7 @@
 import { AssetManager }    from '../assets/asset-manager';
 import { GraphicsManager } from '../graphics/graphics-manager';
 import { JSHelper }        from '../helpers/js-helper';
+import { Viewport }        from '../graphics/viewport';
 
 //
 // Constructor.
@@ -147,7 +148,14 @@ function Xcene(_mainCanvas, _usesDefaultStyles) {
             _mainCanvas.width  = displayWidth;
             _mainCanvas.height = displayHeight;
             
-            _graphicsManager.renderingContext.viewport (
+            // _graphicsManager.renderingContext.viewport (
+            //     // Part 1.
+            //     0, 0,
+            //     // Part 2.
+            //     _mainCanvas.width, _mainCanvas.height
+            // );
+
+            _graphicsManager.viewport = new Viewport (
                 // Part 1.
                 0, 0,
                 // Part 2.

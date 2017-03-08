@@ -12,8 +12,7 @@ function main() {
     var transformUniformLocation;
     var vertexPositionBuffer;
     var vertexColorBuffer;
-    var modelViewMatrix;
-    var projectionMatrix;
+    var transform;
 
     try {
         //
@@ -28,6 +27,8 @@ function main() {
         );
 
         shaderHelper = new Cybo.ShaderHelper(scene.graphicsManager);
+
+        transform = Cybo.Matrix4x4.createIdentityMatrix();        
 
         // Set up the shaders; this is where all the lighting for the
         // vertices and so forth is established.
@@ -46,7 +47,6 @@ function main() {
 
         return;
     }
-
 
     //
     // Functions.
@@ -201,43 +201,8 @@ function main() {
         );
     }
 
-    // function setUpTransform() {
-    //     //
-    //     var v = new Cybo.Vector3D(0, 0, -275);
-    //     modelViewMatrix = Cybo.Matrix4x4.createTranslationMatrix(v);
-
-    //     projectionMatrix = Cybo.Matrix4x4.createProjectionMatrix (
-    //         undefined,
-    //         window.innerWidth / window.innerHeight,
-    //         undefined,
-    //         undefined
-    //     );
-        
-    //     var transform =
-    //         projectionMatrix.multiply(modelViewMatrix);
-
-    //     scene.graphicsManager.setMatrix4x4Uniform (
-    //         transformUniformLocation,
-    //         transform
-    //     );
-    // }
     function setUpTransform() {
         //
-        //var v = new Cybo.Vector3D(0, 0, -275);
-        //modelViewMatrix = Cybo.Matrix4x4.createTranslationMatrix(v);
-
-        // projectionMatrix = Cybo.Matrix4x4.createProjectionMatrix (
-        //     undefined,
-        //     window.innerWidth / window.innerHeight,
-        //     undefined,
-        //     undefined
-        // );
-        
-        // var transform =
-        //     projectionMatrix.multiply(modelViewMatrix);
-
-        var transform = Cybo.Matrix4x4.createIdentityMatrix();
-
         camera.getTransform(transform);
 
         scene.graphicsManager.setMatrix4x4Uniform (

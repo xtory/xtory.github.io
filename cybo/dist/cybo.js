@@ -1292,12 +1292,10 @@ function Camera (
         // Calculates the aspect ratio of "viewport", not "back buffer".
 
         // Temp: Change back to viewport later.
-        /*
         var viewportAspectRatio =
-            _scene.graphicsManager.Viewport.AspectRatio;
-        */
-        var viewportAspectRatio =
-            window.innerWidth / window.innerHeight;
+            _scene.graphicsManager.viewport.aspectRatio;
+        // var viewportAspectRatio =
+        //     window.innerWidth / window.innerHeight;
         // :Temp
 
         // Note:
@@ -2141,6 +2139,7 @@ Object.freeze(Colors);
 function GraphicsManager(_xcene) {
     //
     var _renderingContext;
+    var _viewport;
     var _shaderProgram;
 
     Object.defineProperty(this, 'xcene', {
@@ -2151,6 +2150,35 @@ function GraphicsManager(_xcene) {
 
     Object.defineProperty(this, 'renderingContext', {
         get: function() { return _renderingContext; }
+    });
+
+    Object.defineProperty(this, 'viewport', {
+        //
+        'get': function() {
+            return _viewport;
+        },
+
+        'set': function(value) {
+            //
+            if (value !== undefined &&
+                _viewport !== undefined &&
+                value.left   === _viewport.left &&
+                value.bottom === _viewport.bottom &&
+                value.width  === _viewport.width &&
+                value.height === _viewport.height) {
+                return;
+            }
+
+            _viewport = value;
+
+            // Resets the WebGLRenderingContext's viewport as well.
+            _renderingContext.viewport (
+                // Part 1.
+                _viewport.left, _viewport.bottom,
+                // Part 2.
+                _viewport.width, _viewport.height
+            );
+        }
     });
     
     Object.defineProperty(this, 'shaderProgram', {
@@ -2351,6 +2379,62 @@ Object.freeze(ExceptionHelper);
 //
 // Constructor.
 //
+function DepthBufferValues() {
+    // No contents.
+}
+
+//
+// Prototype.
+//
+DepthBufferValues.prototype = {
+    // No contents.
+};
+
+//
+// Static constants (after Object.freeze()).
+//
+DepthBufferValues.NEAR_CLIP_PLANE = 0.0; // = Viewport.MIN_DEPTH
+DepthBufferValues.FAR_CLIP_PLANE = 1.0; // = Viewport.MAX_DEPTH
+
+Object.freeze(DepthBufferValues);
+
+// Note:
+// WebGL viewport's (X, Y) means the lower-left corner.
+// DirectX viewport's (X, Y) means the upper-left corner.
+
+//
+// Constructor.
+//
+function Viewport(_left, _bottom, _width, _height) {
+    //
+    this.left = _left;
+    this.bottom = _bottom;
+    this.width = _width;
+    this.height = _height;
+
+    Object.defineProperty(this, 'aspectRatio', {
+        get: function() { return _width / _height; }
+    });
+}
+
+//
+// Prototype.
+//
+Viewport.prototype = {
+    // No contents.
+};
+
+//
+// Static constants (after Object.freeze()).
+//
+Viewport.MIN_DEPTH = DepthBufferValues.NEAR_CLIP_PLANE;
+Viewport.MAX_DEPTH = DepthBufferValues.FAR_CLIP_PLANE;
+
+Object.freeze(Viewport);
+
+//
+// Constructor.
+//
 function Xcene(_mainCanvas, _usesDefaultStyles) {
     //
     try {
@@ -2493,7 +2577,14 @@ function Xcene(_mainCanvas, _usesDefaultStyles) {
             _mainCanvas.width  = displayWidth;
             _mainCanvas.height = displayHeight;
             
-            _graphicsManager.renderingContext.viewport (
+            // _graphicsManager.renderingContext.viewport (
+            //     // Part 1.
+            //     0, 0,
+            //     // Part 2.
+            //     _mainCanvas.width, _mainCanvas.height
+            // );
+
+            _graphicsManager.viewport = new Viewport (
                 // Part 1.
                 0, 0,
                 // Part 2.
