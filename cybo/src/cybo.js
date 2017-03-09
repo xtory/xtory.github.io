@@ -18,10 +18,13 @@ export { ExceptionHelper }             from './helpers/exception-helper';
 export { JSHelper }                    from './helpers/js-helper';
 
 export { MathHelper }                  from './math/helpers/math-helper';
+export { Vector2D }                    from './math/2d-vector';
 export { Vector3D }                    from './math/3d-vector';
 export { Vector4D }                    from './math/4d-vector';
 export { Matrix4x4 }                   from './math/4x4-matrix';
 export { CartesianAxis }               from './math/cartesian-axis';
+export { Plane }                       from './math/plane';
+export { ViewFrustum }                 from './math/view-frustum';
 
 export { Xcene }                       from './scenes/xcene';
 

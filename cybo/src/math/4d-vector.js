@@ -42,10 +42,9 @@ Vector4D.fromArray = function(a) {
 Vector4D.calculateUnitVectorOf = function(v) {
     //
     // Note:
-    // All XNA, SlimDX, and WPF don't react to the situation when sqrt =
-    // 0, such as zero vector's normalization. But finally I decide to
-    // code in the way as the book 'Essential Mathematics for Games and
-    // Interactive Applications' does.
+    // All XNA, SlimDX, and WPF don't react to the situation when sqrt = 0, such
+    // as zero vector's normalization. But finally I decide to code in the way as
+    // the book 'Essential Mathematics for Games and Interactive Applications' does.
 
     var sqrt = Math.sqrt(v.x*v.x + v.y*v.y + v.z*v.z + v.w*v.w);
 

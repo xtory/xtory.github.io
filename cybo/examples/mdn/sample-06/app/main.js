@@ -60,8 +60,7 @@ function main() {
         
         sineEase2.start();
 
-        transform =
-            Cybo.Matrix4x4.createIdentityMatrix();
+        transform = Cybo.Matrix4x4.createIdentityMatrix();
             
         scene.run(undefined, drawScene);
 
@@ -290,7 +289,7 @@ function main() {
     function setUpTextures() {
         //
         var url = // which is relative to index.html, not main.js
-            '../assets/images/market-street.jpg';
+            '../../assets/images/market-street.jpg';
 
         mainTexture = scene.assetManager.loadTexture2D(url);
     }

@@ -56,8 +56,7 @@ function main() {
         
         sineEase2.start();
 
-        transform =
-            Cybo.Matrix4x4.createIdentityMatrix();
+        transform = Cybo.Matrix4x4.createIdentityMatrix();
 
         // Set up to draw the scene periodically.
         scene.run(undefined, drawScene);

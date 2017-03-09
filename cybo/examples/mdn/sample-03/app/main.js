@@ -37,8 +37,7 @@ function main() {
         // we'll be drawing.
         setUpBuffers();
 
-        transform =
-            Cybo.Matrix4x4.createIdentityMatrix();
+        transform = Cybo.Matrix4x4.createIdentityMatrix();
         
         scene.run(undefined, drawScene);
 

@@ -5,6 +5,16 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "tutorials/inputs",
+            "type": "chrome",
+            "request": "launch",
+            "file": "${workspaceRoot}/cybo/examples/tutorials/inputs/index.html",
+            "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
+            "runtimeArgs": [
+                "-allow-file-access-from-files"
+            ]
+        }, {
+            //
             "name": "mdn/sample-01",
             "type": "chrome",
             "request": "launch",

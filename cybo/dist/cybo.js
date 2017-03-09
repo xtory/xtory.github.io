@@ -241,8 +241,8 @@ MathHelper.toRadians = function(degrees) {
         throw 'typeof(degrees) !== \'number\'';
     }
 
-    return MathHelper.PiOverOneEighty * degrees;
-},
+    return MathHelper.PI_OVER_ONE_EIGHTY * degrees;
+};
 
 MathHelper.toDegrees = function(radians) {
     //
@@ -254,8 +254,8 @@ MathHelper.toDegrees = function(radians) {
         throw 'typeof(degrees) !== \'number\'';
     }
 
-    return MathHelper.OneEightyOverPi * radians;
-},
+    return MathHelper.ONE_EIGHTY_OVER_PI * radians;
+};
 
 //
 // Epsilon.
@@ -297,10 +297,10 @@ MathHelper.areEqual = function(s1, s2) {
 
 //#else // RELEASE
 
-    if (s <= -MathHelper.Epsilon ||
-        MathHelper.Epsilon <= s) {
+    if (s <= -MathHelper.EPSILON ||
+        MathHelper.EPSILON <= s) {
         return false;
-    } else { // -MathHelper.Epsilon < s < MathHelper.Epsilon
+    } else { // -MathHelper.EPSILON < s < MathHelper.EPSILON
         return true;
     }
 
@@ -317,7 +317,7 @@ MathHelper.isScalar1LessThanScalar2 = function(s1, s2) {
         throw 'typeof(s2) !== \'number\'';
     }
 
-    if (s1 - s2 <= -MathHelper.Epsilon) {
+    if (s1 - s2 <= -MathHelper.EPSILON) {
         //
         // which equals to "s1 - s2 < 0",
         // that is, "s1 < s2"
@@ -326,9 +326,9 @@ MathHelper.isScalar1LessThanScalar2 = function(s1, s2) {
 
     } else {
         //
-        // -MathHelper.Epsilon < s1 - s2, which includes
-        // A. -MathHelper.Epsilon < s1 - s2 < MathHelper.Epsilon
-        // B. MathHelper.Epsilon <= s1 - s2, and
+        // -MathHelper.EPSILON < s1 - s2, which includes
+        // A. -MathHelper.EPSILON < s1 - s2 < MathHelper.EPSILON
+        // B. MathHelper.EPSILON <= s1 - s2, and
         // A means "s1 - s2 = 0", B means "0 < s1 - s2",
         // so "0 <= s1 - s2", that is, "s2 <= s1"
 
@@ -346,11 +346,11 @@ MathHelper.isScalar1LessThanOrEqualToScalar2 = function(s1, s2) {
         throw 'typeof(s2) !== \'number\'';
     }
 
-    if (s1 - s2 < MathHelper.Epsilon) {
+    if (s1 - s2 < MathHelper.EPSILON) {
         //
         // which includes
-        // A. s1 - s2 <= -MathHelper.Epsilon, and
-        // B. -MathHelper.Epsilon < s1 - s2 < MathHelper.Epsilon
+        // A. s1 - s2 <= -MathHelper.EPSILON, and
+        // B. -MathHelper.EPSILON < s1 - s2 < MathHelper.EPSILON
         // A means "s1 - s2 < 0", B means "s1 - s2 = 0",
         // so "s1 - s2 <= 0", that is, "s1 <= s2"
 
@@ -358,7 +358,7 @@ MathHelper.isScalar1LessThanOrEqualToScalar2 = function(s1, s2) {
 
     } else {
         //
-        // MathHelper.Epsilon <= s1 - s2, which equals to "0 < s1 - s2",
+        // MathHelper.EPSILON <= s1 - s2, which equals to "0 < s1 - s2",
         // that is, "s2 < s1"
 
         return false;
@@ -375,7 +375,7 @@ MathHelper.isScalar1GreaterThanScalar2 = function(s1, s2) {
         throw 'typeof(s2) !== \'number\'';
     }
 
-    if (MathHelper.Epsilon <= s1 - s2) {
+    if (MathHelper.EPSILON <= s1 - s2) {
         //
         // which equals to "0 < s1 - s2",
         // that is, "s2 < s1"
@@ -384,9 +384,9 @@ MathHelper.isScalar1GreaterThanScalar2 = function(s1, s2) {
 
     } else {
         //
-        // s1 - s2 < MathHelper.Epsilon, which includes
-        // A. s1 - s2 <= -MathHelper.Epsilon, and
-        // B. -MathHelper.Epsilon < s1 - s2 < MathHelper.Epsilon
+        // s1 - s2 < MathHelper.EPSILON, which includes
+        // A. s1 - s2 <= -MathHelper.EPSILON, and
+        // B. -MathHelper.EPSILON < s1 - s2 < MathHelper.EPSILON
         // A means "s1 - s2 < 0", B means "s1 - s2 = 0",
         // so "s1 - s2 <= 0", that is, "s1 <= s2"
 
@@ -404,11 +404,11 @@ MathHelper.isScalar1GreaterThanOrEqualToScalar2 = function(s1, s2) {
         throw 'typeof(s2) !== \'number\'';
     }
     
-    if (-MathHelper.Epsilon < s1 - s2) {
+    if (-MathHelper.EPSILON < s1 - s2) {
         //
         // which includes
-        // A. -MathHelper.Epsilon < s1 - s2 < MathHelper.Epsilon, and
-        // B. MathHelper.Epsilon <= s1 - s2
+        // A. -MathHelper.EPSILON < s1 - s2 < MathHelper.EPSILON, and
+        // B. MathHelper.EPSILON <= s1 - s2
         // A means "s1 - s2 = 0", B means "0 < s1 - s2",
         // so "0 <= s1 - s2", that is, "s2 <= s1"
 
@@ -416,7 +416,7 @@ MathHelper.isScalar1GreaterThanOrEqualToScalar2 = function(s1, s2) {
 
     } else {
         //
-        // s1 - s2 <= -MathHelper.Epsilon, which equals to "s1 - s2 < 0",
+        // s1 - s2 <= -MathHelper.EPSILON, which equals to "s1 - s2 < 0",
         // that is, "s1 < s2"
 
         return false;
@@ -749,10 +749,9 @@ Vector4D.fromArray = function(a) {
 Vector4D.calculateUnitVectorOf = function(v) {
     //
     // Note:
-    // All XNA, SlimDX, and WPF don't react to the situation when sqrt =
-    // 0, such as zero vector's normalization. But finally I decide to
-    // code in the way as the book 'Essential Mathematics for Games and
-    // Interactive Applications' does.
+    // All XNA, SlimDX, and WPF don't react to the situation when sqrt = 0, such
+    // as zero vector's normalization. But finally I decide to code in the way as
+    // the book 'Essential Mathematics for Games and Interactive Applications' does.
 
     var sqrt = Math.sqrt(v.x*v.x + v.y*v.y + v.z*v.z + v.w*v.w);
 
@@ -852,10 +851,9 @@ Vector3D.fromArray = function(a) {
 Vector3D.calculateUnitVectorOf = function(v) {
     //
     // Note:
-    // All XNA, SlimDX, and WPF don't react to the situation when sqrt =
-    // 0, such as zero vector's normalization. But finally I decide to
-    // code in the way as the book 'Essential Mathematics for Games and
-    // Interactive Applications' does.
+    // All XNA, SlimDX, and WPF don't react to the situation when sqrt = 0, such
+    // as zero vector's normalization. But finally I decide to code in the way as
+    // the book 'Essential Mathematics for Games and Interactive Applications' does.
 
     var sqrt = Math.sqrt(v.x*v.x + v.y*v.y + v.z*v.z);
 
@@ -2702,6 +2700,115 @@ Object.freeze(ExceptionHelper);
 //
 // Constructor.
 //
+function Vector2D(_x, _y) {
+    //
+    this.x = _x;
+    this.y = _y;
+}
+
+//
+// Prototype.
+//
+Vector2D.prototype = {
+    //
+    // Public methods.
+    //
+    add: function(v) {
+        return Vector2D.addVectors(this, v);
+    },
+
+    subtract: function(v) {
+        return Vector2D.subtractVectors(this, v);
+    }
+};
+
+//
+// Static constants (after Object.freeze()).
+//
+Vector2D.ELEMENT_COUNT = 2;
+
+//
+// Static methods.
+//
+Vector2D.fromArray = function(a) {
+    return new Vector2D(a[0], a[1]);
+};
+
+Vector2D.calculateUnitVectorOf = function(v) {
+    //
+    // Note:
+    // All XNA, SlimDX, and WPF don't react to the situation when sqrt = 0, such
+    // as zero vector's normalization. But finally I decide to code in the way as
+    // the book 'Essential Mathematics for Games and Interactive Applications' does.
+
+    var sqrt = Math.sqrt(v.x*v.x + v.y*v.y);
+
+    if (sqrt < MathHelper.EPSILON) {
+        //
+        // Note:
+        // Cybo doesn't throw a divide-by-zero exception when normalizing
+        // Vector2D, Vector2D, Vector4D, Quaternion.
+        /*
+        console.log('A divide-by-zero exception raised.');
+        */
+
+        return new Vector2D(0, 0);
+
+    } else {
+        //
+        var s = 1.0 / sqrt;
+        return new Vector2D(v.x*s, v.y*s);
+    }
+};
+
+Vector2D.negateVector = function (v) {
+    return new Vector2D(-v.x, -v.y);
+};
+
+Vector2D.addVectors = function(v1, v2) {
+    return new Vector2D(v1.x+v2.x, v1.y+v2.y);
+};
+
+Vector2D.subtractVectors = function(v1, v2) {
+    return new Vector2D(v1.x-v2.x, v1.y-v2.y);
+};
+
+Vector2D.areEqual = function(v1, v2) {
+    //
+    if ((v1 instanceof Vector2D) === false ||
+        (v2 instanceof Vector2D) === false) {
+        return false;
+    }
+
+    if (v1.x !== v2.x ||
+        v1.y !== v2.y) {
+        return false;
+    } else {
+        return true;
+    }
+};
+
+Object.freeze(Vector2D);
+
+//
+// Constructor.
+//
+function Plane() {
+    // No contents.
+}
+
+//
+// Prototype.
+//
+Plane.prototype = {
+    // No contents.
+};
+
+Object.freeze(Plane);
+
+//
+// Constructor.
+//
 function DepthBufferValues() {
     // No contents.
 }
@@ -3284,10 +3391,13 @@ exports.GraphicsManager = GraphicsManager;
 exports.ExceptionHelper = ExceptionHelper;
 exports.JSHelper = JSHelper;
 exports.MathHelper = MathHelper;
+exports.Vector2D = Vector2D;
 exports.Vector3D = Vector3D;
 exports.Vector4D = Vector4D;
 exports.Matrix4x4 = Matrix4x4;
 exports.CartesianAxis = CartesianAxis;
+exports.Plane = Plane;
+exports.ViewFrustum = ViewFrustum;
 exports.Xcene = Xcene;
 exports.EaseMode = EaseMode;
 exports.SineEase = SineEase;

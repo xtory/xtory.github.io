@@ -35,9 +35,8 @@ function main() {
         // we'll be drawing.
         setUpBuffers();
 
-        transform =
-            Cybo.Matrix4x4.createIdentityMatrix();
-                    // Set up to draw the scene periodically.
+        transform = Cybo.Matrix4x4.createIdentityMatrix();
+        
         scene.run(undefined, drawScene);
 
     } catch (e) {

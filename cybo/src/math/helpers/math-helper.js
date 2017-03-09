@@ -82,8 +82,8 @@ MathHelper.toRadians = function(degrees) {
         throw 'typeof(degrees) !== \'number\'';
     }
 
-    return MathHelper.PiOverOneEighty * degrees;
-},
+    return MathHelper.PI_OVER_ONE_EIGHTY * degrees;
+}
 
 MathHelper.toDegrees = function(radians) {
     //
@@ -95,8 +95,8 @@ MathHelper.toDegrees = function(radians) {
         throw 'typeof(degrees) !== \'number\'';
     }
 
-    return MathHelper.OneEightyOverPi * radians;
-},
+    return MathHelper.ONE_EIGHTY_OVER_PI * radians;
+}
 
 //
 // Epsilon.
@@ -138,10 +138,10 @@ MathHelper.areEqual = function(s1, s2) {
 
 //#else // RELEASE
 
-    if (s <= -MathHelper.Epsilon ||
-        MathHelper.Epsilon <= s) {
+    if (s <= -MathHelper.EPSILON ||
+        MathHelper.EPSILON <= s) {
         return false;
-    } else { // -MathHelper.Epsilon < s < MathHelper.Epsilon
+    } else { // -MathHelper.EPSILON < s < MathHelper.EPSILON
         return true;
     }
 
@@ -158,7 +158,7 @@ MathHelper.isScalar1LessThanScalar2 = function(s1, s2) {
         throw 'typeof(s2) !== \'number\'';
     }
 
-    if (s1 - s2 <= -MathHelper.Epsilon) {
+    if (s1 - s2 <= -MathHelper.EPSILON) {
         //
         // which equals to "s1 - s2 < 0",
         // that is, "s1 < s2"
@@ -167,9 +167,9 @@ MathHelper.isScalar1LessThanScalar2 = function(s1, s2) {
 
     } else {
         //
-        // -MathHelper.Epsilon < s1 - s2, which includes
-        // A. -MathHelper.Epsilon < s1 - s2 < MathHelper.Epsilon
-        // B. MathHelper.Epsilon <= s1 - s2, and
+        // -MathHelper.EPSILON < s1 - s2, which includes
+        // A. -MathHelper.EPSILON < s1 - s2 < MathHelper.EPSILON
+        // B. MathHelper.EPSILON <= s1 - s2, and
         // A means "s1 - s2 = 0", B means "0 < s1 - s2",
         // so "0 <= s1 - s2", that is, "s2 <= s1"
 
@@ -187,11 +187,11 @@ MathHelper.isScalar1LessThanOrEqualToScalar2 = function(s1, s2) {
         throw 'typeof(s2) !== \'number\'';
     }
 
-    if (s1 - s2 < MathHelper.Epsilon) {
+    if (s1 - s2 < MathHelper.EPSILON) {
         //
         // which includes
-        // A. s1 - s2 <= -MathHelper.Epsilon, and
-        // B. -MathHelper.Epsilon < s1 - s2 < MathHelper.Epsilon
+        // A. s1 - s2 <= -MathHelper.EPSILON, and
+        // B. -MathHelper.EPSILON < s1 - s2 < MathHelper.EPSILON
         // A means "s1 - s2 < 0", B means "s1 - s2 = 0",
         // so "s1 - s2 <= 0", that is, "s1 <= s2"
 
@@ -199,7 +199,7 @@ MathHelper.isScalar1LessThanOrEqualToScalar2 = function(s1, s2) {
 
     } else {
         //
-        // MathHelper.Epsilon <= s1 - s2, which equals to "0 < s1 - s2",
+        // MathHelper.EPSILON <= s1 - s2, which equals to "0 < s1 - s2",
         // that is, "s2 < s1"
 
         return false;
@@ -216,7 +216,7 @@ MathHelper.isScalar1GreaterThanScalar2 = function(s1, s2) {
         throw 'typeof(s2) !== \'number\'';
     }
 
-    if (MathHelper.Epsilon <= s1 - s2) {
+    if (MathHelper.EPSILON <= s1 - s2) {
         //
         // which equals to "0 < s1 - s2",
         // that is, "s2 < s1"
@@ -225,9 +225,9 @@ MathHelper.isScalar1GreaterThanScalar2 = function(s1, s2) {
 
     } else {
         //
-        // s1 - s2 < MathHelper.Epsilon, which includes
-        // A. s1 - s2 <= -MathHelper.Epsilon, and
-        // B. -MathHelper.Epsilon < s1 - s2 < MathHelper.Epsilon
+        // s1 - s2 < MathHelper.EPSILON, which includes
+        // A. s1 - s2 <= -MathHelper.EPSILON, and
+        // B. -MathHelper.EPSILON < s1 - s2 < MathHelper.EPSILON
         // A means "s1 - s2 < 0", B means "s1 - s2 = 0",
         // so "s1 - s2 <= 0", that is, "s1 <= s2"
 
@@ -245,11 +245,11 @@ MathHelper.isScalar1GreaterThanOrEqualToScalar2 = function(s1, s2) {
         throw 'typeof(s2) !== \'number\'';
     }
     
-    if (-MathHelper.Epsilon < s1 - s2) {
+    if (-MathHelper.EPSILON < s1 - s2) {
         //
         // which includes
-        // A. -MathHelper.Epsilon < s1 - s2 < MathHelper.Epsilon, and
-        // B. MathHelper.Epsilon <= s1 - s2
+        // A. -MathHelper.EPSILON < s1 - s2 < MathHelper.EPSILON, and
+        // B. MathHelper.EPSILON <= s1 - s2
         // A means "s1 - s2 = 0", B means "0 < s1 - s2",
         // so "0 <= s1 - s2", that is, "s2 <= s1"
 
@@ -257,7 +257,7 @@ MathHelper.isScalar1GreaterThanOrEqualToScalar2 = function(s1, s2) {
 
     } else {
         //
-        // s1 - s2 <= -MathHelper.Epsilon, which equals to "s1 - s2 < 0",
+        // s1 - s2 <= -MathHelper.EPSILON, which equals to "s1 - s2 < 0",
         // that is, "s1 < s2"
 
         return false;
