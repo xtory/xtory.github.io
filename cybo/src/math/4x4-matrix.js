@@ -415,6 +415,26 @@ Matrix4x4.invertMatrix = function(m) {
     ]);
 }
 
+Matrix4x4.areEqual = function(m1, m2) {
+    //
+    if ((m1 instanceof Matrix4x4) === false ||
+        (m2 instanceof Matrix4x4) === false) {
+        return false;
+    }
+
+    var a1 = m1.elements;
+    var a2 = m2.elements;
+
+    for (var i=0; i<Matrix4x4.ELEMENT_COUNT; i++)
+    {
+        if (a1[i] !== a2[i]) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 Object.freeze(Matrix4x4);
 
 export { Matrix4x4 };

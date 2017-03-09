@@ -109,6 +109,22 @@ Vector3D.transformVector = function(m, v) {
     return new Vector3D(v.x, v.y, v.z);
 }
 
+Vector3D.areEqual = function(v1, v2) {
+    //
+    if ((v1 instanceof Vector3D) === false ||
+        (v2 instanceof Vector3D) === false) {
+        return false;
+    }
+
+    if (v1.x !== v2.x ||
+        v1.y !== v2.y ||
+        v1.z !== v2.z) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
 Object.freeze(Vector3D);
 
 export { Vector3D };

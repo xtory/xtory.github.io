@@ -1,3 +1,4 @@
+import { ClearOptions  }               from './clear-options';
 import { Color  }                      from './color';
 import { Colors }                      from './colors';
 import { WebGLRenderingContextHelper } from './helpers/webgl-rendering-context-helper';
@@ -152,15 +153,17 @@ function GraphicsManager(_xcene) {
     //
     // Privileged methods.
     //
-    this.clear = function(mask, color, depth, stencil) {
+    this.clear = function(clearOptions, color, depth, stencil) {
         //
-        if (// Part 1.
-            color !== undefined && (
-            // Part 2.
-            color.r !== _clearColor.r ||
-            color.g !== _clearColor.g ||
-            color.b !== _clearColor.b ||
-            color.a !== _clearColor.a)) {
+        // if (// Part 1.
+        //     color !== undefined && (
+        //     // Part 2.
+        //     color.r !== _clearColor.r ||
+        //     color.g !== _clearColor.g ||
+        //     color.b !== _clearColor.b ||
+        //     color.a !== _clearColor.a)) {
+        if (color !== undefined &&
+            Color.areEqual(color, _clearColor) === false) {
             //
             _clearColor = color;
             
@@ -185,13 +188,13 @@ function GraphicsManager(_xcene) {
         }
 
         // Note:
-        // There's no _clearMask.
+        // There's no _clearOptions.
 
-        if (mask === undefined) {
-            mask = GraphicsManager.DEFAULT_CLEAR_MASK;
+        if (clearOptions === undefined) {
+            clearOptions = GraphicsManager.DEFAULT_CLEAR_OPTIONS;
         }
 
-        this.renderingContext.clear(mask);
+        this.renderingContext.clear(clearOptions);
     }
 }
 
@@ -246,10 +249,8 @@ GraphicsManager.prototype = {
 //
 // Static constants (after Object.freeze()).
 //
-GraphicsManager.DEFAULT_CLEAR_MASK = (
-    0x00004000 | // = WebGLRenderingContext.COLOR_BUFFER_BIT |
-    0x00000100   // = WebGLRenderingContext.DEPTH_BUFFER_BIT
-);
+GraphicsManager.DEFAULT_CLEAR_OPTIONS =
+    ClearOptions.COLOR_BUFFER | ClearOptions.DEPTH_BUFFER;
 
 GraphicsManager.DEFAULT_CLEAR_COLOR   = Colors.DEFAULT_BACKGROUND;
 GraphicsManager.DEFAULT_CLEAR_DEPTH   = 1;

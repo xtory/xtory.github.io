@@ -9,6 +9,7 @@ export { ShaderHelper }                from './graphics/fx/helpers/shader-helper
 export { ShaderType }                  from './graphics/fx/shader-type';
 export { TextureCoordinateHelper }     from './graphics/helpers/texture-coordinate-helper';
 export { WebGLRenderingContextHelper } from './graphics/helpers/webgl-rendering-context-helper';
+export { ClearOptions }                from './graphics/clear-options';
 export { Color }                       from './graphics/color';
 export { Colors }                      from './graphics/colors';
 export { GraphicsManager }             from './graphics/graphics-manager';

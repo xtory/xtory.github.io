@@ -85,6 +85,23 @@ Vector4D.transform = function(m, v) {
     );
 }
 
+Vector4D.areEqual = function(v1, v2) {
+    //
+    if ((v1 instanceof Vector4D) === false ||
+        (v2 instanceof Vector4D) === false) {
+        return false;
+    }
+
+    if (v1.x !== v2.x ||
+        v1.y !== v2.y ||
+        v1.z !== v2.z ||
+        v1.w !== v2.w) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
 Object.freeze(Vector4D);
 
 export { Vector4D };

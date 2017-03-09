@@ -20,11 +20,10 @@ function main() {
         return;
     }
 
-    //renderingContext.clearColor(83/255, 71/255, 65/255, 1); // = cybo.graphics.colors.PHOTOSHOP_DARK_COOL_BROWN
     renderingContext.clearColor(122/255, 204/255, 200/255, 1); // = cybo.graphics.colors.PHOTOSHOP_PASTEL_GREEN_CYAN
-    renderingContext.clearDepth(1.0);                       // Clear everything
-    renderingContext.enable(renderingContext.DEPTH_TEST);   // Enable depth testing
-    renderingContext.depthFunc(renderingContext.LEQUAL);    // Near things obscure far things
+    renderingContext.clearDepth(1.0);                          // Clear everything
+    renderingContext.enable(renderingContext.DEPTH_TEST);      // Enable depth testing
+    renderingContext.depthFunc(renderingContext.LEQUAL);       // Near things obscure far things
 
     //window.onresize = resize();
 

@@ -611,6 +611,23 @@ Vector4D.transform = function(m, v) {
     );
 };
 
+Vector4D.areEqual = function(v1, v2) {
+    //
+    if ((v1 instanceof Vector4D) === false ||
+        (v2 instanceof Vector4D) === false) {
+        return false;
+    }
+
+    if (v1.x !== v2.x ||
+        v1.y !== v2.y ||
+        v1.z !== v2.z ||
+        v1.w !== v2.w) {
+        return false;
+    } else {
+        return true;
+    }
+};
+
 Object.freeze(Vector4D);
 
 //
@@ -719,6 +736,22 @@ Vector3D.transformVector = function(m, v) {
     v = Vector4D.Transform(m, v2);
 
     return new Vector3D(v.x, v.y, v.z);
+};
+
+Vector3D.areEqual = function(v1, v2) {
+    //
+    if ((v1 instanceof Vector3D) === false ||
+        (v2 instanceof Vector3D) === false) {
+        return false;
+    }
+
+    if (v1.x !== v2.x ||
+        v1.y !== v2.y ||
+        v1.z !== v2.z) {
+        return false;
+    } else {
+        return true;
+    }
 };
 
 Object.freeze(Vector3D);
@@ -1196,6 +1229,26 @@ Matrix4x4.invertMatrix = function(m) {
         (s14*s22*s31 - s12*s24*s31 - s14*s21*s32 + s11*s24*s32 + s12*s21*s34 - s11*s22*s34) * s,
         (s12*s23*s31 - s13*s22*s31 + s13*s21*s32 - s11*s23*s32 - s12*s21*s33 + s11*s22*s33) * s
     ]);
+};
+
+Matrix4x4.areEqual = function(m1, m2) {
+    //
+    if ((m1 instanceof Matrix4x4) === false ||
+        (m2 instanceof Matrix4x4) === false) {
+        return false;
+    }
+
+    var a1 = m1.elements;
+    var a2 = m2.elements;
+
+    for (var i=0; i<Matrix4x4.ELEMENT_COUNT; i++)
+    {
+        if (a1[i] !== a2[i]) {
+            return false;
+        }
+    }
+
+    return true;
 };
 
 Object.freeze(Matrix4x4);
@@ -1975,8 +2028,39 @@ Object.freeze(WebGLRenderingContextHelper);
 //
 // Constructor.
 //
+function ClearOptions() {
+    // No contents.
+}
+
+//
+// Prototype.
+//
+ClearOptions.prototype = {
+    // No contents.
+};
+
+//
+// Static constants (after Object.freeze()).
+//
+ClearOptions.COLOR_BUFFER   = 0x00004000; // = WebGLRenderingContext.COLOR_BUFFER_BIT
+ClearOptions.DEPTH_BUFFER   = 0x00000100; // = WebGLRenderingContext.DEPTH_BUFFER_BIT
+ClearOptions.STENCIL_BUFFER = 0x00000400; // = WebGLRenderingContext.STENCIL_BUFFER_BIT
+
+Object.freeze(ClearOptions);
+
+// Note:
+// WebGL's color is composed of (r, g, b, a) channels.
+// DirectX's color is composed of (a, r, g, b) channels.
+
+//
+// Constructor.
+//
 function Color(r, g, b, a) {
     //
+    if (a === undefined) {
+        a = 1.0;
+    }
+
     this.r = r;
     this.g = g;
     this.b = b;
@@ -1992,6 +2076,26 @@ Color.prototype = {
     //
     toArray: function() {
         return [ this.r, this.g, this.b, this.a ];
+    }
+};
+
+//
+// Static methods.
+//
+Color.areEqual = function(value1, value2) {
+    //
+    if ((value1 instanceof Color) === false ||
+        (value2 instanceof Color) === false) {
+        return false;
+    }
+
+    if (value1.r !== value2.r ||
+        value1.g !== value2.g ||
+        value1.b !== value2.b ||
+        value1.a !== value2.a) {
+        return false;
+    } else {
+        return true;
     }
 };
 
@@ -2282,15 +2386,17 @@ function GraphicsManager(_xcene) {
     //
     // Privileged methods.
     //
-    this.clear = function(mask, color, depth, stencil) {
+    this.clear = function(clearOptions, color, depth, stencil) {
         //
-        if (// Part 1.
-            color !== undefined && (
-            // Part 2.
-            color.r !== _clearColor.r ||
-            color.g !== _clearColor.g ||
-            color.b !== _clearColor.b ||
-            color.a !== _clearColor.a)) {
+        // if (// Part 1.
+        //     color !== undefined && (
+        //     // Part 2.
+        //     color.r !== _clearColor.r ||
+        //     color.g !== _clearColor.g ||
+        //     color.b !== _clearColor.b ||
+        //     color.a !== _clearColor.a)) {
+        if (color !== undefined &&
+            Color.areEqual(color, _clearColor) === false) {
             //
             _clearColor = color;
             
@@ -2315,13 +2421,13 @@ function GraphicsManager(_xcene) {
         }
 
         // Note:
-        // There's no _clearMask.
+        // There's no _clearOptions.
 
-        if (mask === undefined) {
-            mask = GraphicsManager.DEFAULT_CLEAR_MASK;
+        if (clearOptions === undefined) {
+            clearOptions = GraphicsManager.DEFAULT_CLEAR_OPTIONS;
         }
 
-        this.renderingContext.clear(mask);
+        this.renderingContext.clear(clearOptions);
     };
 }
 
@@ -2376,10 +2482,8 @@ GraphicsManager.prototype = {
 //
 // Static constants (after Object.freeze()).
 //
-GraphicsManager.DEFAULT_CLEAR_MASK = (
-    0x00004000 | // = WebGLRenderingContext.COLOR_BUFFER_BIT |
-    0x00000100   // = WebGLRenderingContext.DEPTH_BUFFER_BIT
-);
+GraphicsManager.DEFAULT_CLEAR_OPTIONS =
+    ClearOptions.COLOR_BUFFER | ClearOptions.DEPTH_BUFFER;
 
 GraphicsManager.DEFAULT_CLEAR_COLOR   = Colors.DEFAULT_BACKGROUND;
 GraphicsManager.DEFAULT_CLEAR_DEPTH   = 1;
@@ -3001,6 +3105,7 @@ exports.ShaderHelper = ShaderHelper;
 exports.ShaderType = ShaderType;
 exports.TextureCoordinateHelper = TextureCoordinateHelper;
 exports.WebGLRenderingContextHelper = WebGLRenderingContextHelper;
+exports.ClearOptions = ClearOptions;
 exports.Color = Color;
 exports.Colors = Colors;
 exports.GraphicsManager = GraphicsManager;
