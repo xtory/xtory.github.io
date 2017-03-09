@@ -185,16 +185,21 @@ Xcene.prototype = {
     //
     // Public methods.
     //
-    render: function(update, draw) {
+    run: function(update, draw) {
         //
-        tick();
+        render();
 
-        function tick() {
+        function render() {
             //
-            requestAnimationFrame(tick);
+            requestAnimationFrame(render);
 
-            update();
-            draw();
+            if (update !== undefined) {
+                update();
+            }
+
+            if (draw !== undefined) {
+                draw();
+            }
         }
     },
 };

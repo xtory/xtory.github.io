@@ -4,13 +4,14 @@ function main() {
 
     var scene;
     var renderingContext;
+    var camera;
     var shaderHelper;
     var shaderProgram;
     var vertexPositionAttributeLocation;
     var vertexNormalAttributeLocation;
     var vertexTextureCoordinateAttributeLocation;
     var transformUniformLocation;
-    var transposeOfInverseOfModelViewMatrixUniformLocation;
+    var transposeOfInverseOfModelMatrixUniformLocation;
     var samplerUniformLocation;
     var vertexPositionBuffer;
     var vertexNormalBuffer;
@@ -18,39 +19,61 @@ function main() {
     var indexBuffer;
     var sineEase;
     var sineEase2;
-    var modelViewMatrix;
-    var projectionMatrix;
+    var transform;
     var mainTexture;
 
     try {
+        //
         scene = new Cybo.Xcene();
+
+        renderingContext =
+            scene.graphicsManager.renderingContext;
+
+        camera = new Cybo.Camera (
+            scene,
+            new Cybo.Vector3D(0, 0, 325)
+        );
+        
+        shaderHelper =
+            new Cybo.ShaderHelper(scene.graphicsManager);
+
+        // Set up the shaders; this is where all the lighting for the
+        // vertices and so forth is established.
+        setUpShaders();
+
+        // Here's where we call the routine that builds all the objects
+        // we'll be drawing.
+        setUpBuffers();
+
+        setUpTextures();
+
+        sineEase = new Cybo.SineEase (
+            Cybo.EaseMode.EASE_IN_OUT,
+            3750,
+            true
+        );
+
+        sineEase.start();
+
+        sineEase2 = new Cybo.SineEase (
+            Cybo.EaseMode.EASE_IN_OUT,
+            7500,
+            true
+        );
+
+        sineEase2.start();
+
+        transform =
+            Cybo.Matrix4x4.createIdentityMatrix();
+
+        scene.run(updateScene, drawScene);
+
     } catch (e) {
+        //
         Cybo.ExceptionHelper.displayMessageOf(e);
+        
         return;
     }
-
-    renderingContext =
-        scene.graphicsManager.renderingContext;
-    
-    shaderHelper = new Cybo.ShaderHelper(scene.graphicsManager);
-
-    // Set up the shaders; this is where all the lighting for the
-    // vertices and so forth is established.
-    setUpShaders();
-
-    // Here's where we call the routine that builds all the objects
-    // we'll be drawing.
-    setUpBuffers();
-
-    setUpTextures();
-
-    sineEase = new Cybo.SineEase(Cybo.EaseMode.EASE_IN_OUT, 3750, true);
-    sineEase.start();
-
-    sineEase2 = new Cybo.SineEase(Cybo.EaseMode.EASE_IN_OUT, 7500, true);
-    sineEase2.start();
-
-    scene.render(updateScene, drawScene);
 
     //
     // Functions.
@@ -100,10 +123,10 @@ function main() {
             )
         );
 
-        transposeOfInverseOfModelViewMatrixUniformLocation = (
+        transposeOfInverseOfModelMatrixUniformLocation = (
             scene.graphicsManager.getUniformLocation (
                 shaderProgram,
-                'transposeOfInverseOfModelViewMatrix'
+                'transposeOfInverseOfModelMatrix'
             )
         );
 
@@ -439,7 +462,7 @@ function main() {
 
     function setUpTransform() {
         //
-        modelViewMatrix = Cybo.Matrix4x4.createRotationMatrix (
+        var modelMatrix = Cybo.Matrix4x4.createRotationMatrix (
             // Part 1.
             Cybo.CartesianAxis.Y,
             // Part 2.
@@ -447,7 +470,7 @@ function main() {
             sineEase.ratioOfCurrentToTotalTimeOffset
         );
 
-        modelViewMatrix = Cybo.Matrix4x4.multiplyMatrices (
+        modelMatrix = Cybo.Matrix4x4.multiplyMatrices (
             Cybo.Matrix4x4.createRotationMatrix (
                 // Part 1.
                 Cybo.CartesianAxis.X,
@@ -455,36 +478,26 @@ function main() {
                -Cybo.MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES *
                 sineEase2.ratioOfCurrentToTotalTimeOffset
             ),
-            modelViewMatrix
+            modelMatrix
         );
 
-        var v = new Cybo.Vector3D(0, 0, -325);
+        var transposeOfInverseOfModelMatrix =
+            Cybo.Matrix4x4.invertMatrix(modelMatrix);
 
-        modelViewMatrix = Cybo.Matrix4x4.multiplyMatrices (
-            Cybo.Matrix4x4.createTranslationMatrix(v),
-            modelViewMatrix
-        );
-
-        var transposeOfInverseOfModelViewMatrix =
-            Cybo.Matrix4x4.invertMatrix(modelViewMatrix);
-
-        transposeOfInverseOfModelViewMatrix =
-            Cybo.Matrix4x4.transposeMatrix(transposeOfInverseOfModelViewMatrix);
+        transposeOfInverseOfModelMatrix =
+            Cybo.Matrix4x4.transposeMatrix(transposeOfInverseOfModelMatrix);
         
         scene.graphicsManager.setMatrix4x4Uniform (
-            transposeOfInverseOfModelViewMatrixUniformLocation,
-            transposeOfInverseOfModelViewMatrix
+            transposeOfInverseOfModelMatrixUniformLocation,
+            transposeOfInverseOfModelMatrix
         );
 
-        projectionMatrix = Cybo.Matrix4x4.createProjectionMatrix (
-            undefined,
-            window.innerWidth / window.innerHeight,
-            undefined,
-            undefined
-        );
+        camera.getTransform(transform);
 
-        var transform =
-            projectionMatrix.multiply(modelViewMatrix);
+        transform = Cybo.Matrix4x4.multiplyMatrices (
+            transform,
+            modelMatrix
+        );
 
         scene.graphicsManager.setMatrix4x4Uniform (
             transformUniformLocation,

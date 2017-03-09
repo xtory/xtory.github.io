@@ -21,7 +21,7 @@ PhongShading.VERTEX_SHADER_SOURCE = [
    'attribute highp vec3 vertexNormal;',
    'attribute highp vec2 vertexTextureCoordinates;',
     //
-   'uniform highp mat4 transposeOfInverseOfModelViewMatrix;',
+   'uniform highp mat4 transposeOfInverseOfModelMatrix;',
    'uniform highp mat4 transform;',
     //
    'varying highp vec2 textureCoordinates;',
@@ -38,7 +38,7 @@ PhongShading.VERTEX_SHADER_SOURCE = [
        'highp vec3 directionalVector = vec3(1, 1, 1);',
         //
        'highp vec4 transformedNormal = (',
-           'transposeOfInverseOfModelViewMatrix *',
+           'transposeOfInverseOfModelMatrix *',
            'vec4(vertexNormal, 1.0)',
        ');',
         //

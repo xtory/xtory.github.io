@@ -1,39 +1,51 @@
 function main() {
     //
     'use strict';
-    
+
     var scene;
     var renderingContext;
+    var camera;
     var shaderHelper;
     var shaderProgram;
     var vertexPositionAttributeLocation;
     var transformUniformLocation;
     var vertexPositionBuffer;
-    var modelViewMatrix;
-    var projectionMatrix;
-
+    var transform;
+    
     try {
+        //
         scene = new Cybo.Xcene();
+    
+        renderingContext =
+            scene.graphicsManager.renderingContext;
+
+        camera = new Cybo.Camera (
+            scene,
+            new Cybo.Vector3D(0, 0, 275)
+        );
+
+        shaderHelper =
+            new Cybo.ShaderHelper(scene.graphicsManager);
+
+        // Set up the shaders; this is where all the lighting for the
+        // vertices and so forth is established.
+        setUpShaders();
+
+        // Here's where we call the routine that builds all the objects
+        // we'll be drawing.
+        setUpBuffers();
+
+        transform =
+            Cybo.Matrix4x4.createIdentityMatrix();
+                    // Set up to draw the scene periodically.
+        scene.run(undefined, drawScene);
+
     } catch (e) {
+        //
         Cybo.ExceptionHelper.displayMessageOf(e);
+
         return;
     }
-
-    renderingContext =
-        scene.graphicsManager.renderingContext;
-
-    shaderHelper = new Cybo.ShaderHelper(scene.graphicsManager);
-
-    // Set up the shaders; this is where all the lighting for the
-    // vertices and so forth is established.
-    setUpShaders();
-
-    // Here's where we call the routine that builds all the objects
-    // we'll be drawing.
-    setUpBuffers();
-
-    // Set up to draw the scene periodically.
-    setInterval(drawScene, 15);
 
     //
     // Functions.
@@ -145,18 +157,7 @@ function main() {
 
     function setUpTransform() {
         //
-        var v = new Cybo.Vector3D(0, 0, -275);
-        modelViewMatrix = Cybo.Matrix4x4.createTranslationMatrix(v);
-
-        projectionMatrix = Cybo.Matrix4x4.createProjectionMatrix (
-            undefined,
-            window.innerWidth / window.innerHeight,
-            undefined,
-            undefined
-        );
-
-        var transform =
-            projectionMatrix.multiply(modelViewMatrix);
+        camera.getTransform(transform);
 
         scene.graphicsManager.setMatrix4x4Uniform (
             transformUniformLocation,

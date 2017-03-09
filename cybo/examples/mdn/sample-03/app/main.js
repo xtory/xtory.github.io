@@ -26,9 +26,8 @@ function main() {
             new Cybo.Vector3D(0, 0, 275)
         );
 
-        shaderHelper = new Cybo.ShaderHelper(scene.graphicsManager);
-
-        transform = Cybo.Matrix4x4.createIdentityMatrix();        
+        shaderHelper =
+            new Cybo.ShaderHelper(scene.graphicsManager);
 
         // Set up the shaders; this is where all the lighting for the
         // vertices and so forth is established.
@@ -38,8 +37,10 @@ function main() {
         // we'll be drawing.
         setUpBuffers();
 
-        // Set up to draw the scene periodically.
-        setInterval(drawScene, 15);
+        transform =
+            Cybo.Matrix4x4.createIdentityMatrix();
+        
+        scene.run(undefined, drawScene);
 
     } catch (e) {
         //

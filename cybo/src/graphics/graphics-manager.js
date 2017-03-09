@@ -11,63 +11,75 @@ function GraphicsManager(_xcene) {
     var _renderingContext;
     var _viewport;
     var _shaderProgram;
+    var _clearColor;
+    var _clearDepth;
+    var _clearStencil;
 
-    Object.defineProperty(this, 'xcene', {
-        'get': function() { return _xcene; }
-    });
-
-    setUpWebGLRenderingContext();
-
-    Object.defineProperty(this, 'renderingContext', {
-        get: function() { return _renderingContext; }
-    });
-
-    Object.defineProperty(this, 'viewport', {
+    try {
         //
-        'get': function() {
-            return _viewport;
-        },
+        Object.defineProperty(this, 'xcene', {
+            'get': function() { return _xcene; }
+        });
 
-        'set': function(value) {
+        setUpWebGLRenderingContext();
+
+        Object.defineProperty(this, 'renderingContext', {
+            get: function() { return _renderingContext; }
+        });
+
+        Object.defineProperty(this, 'viewport', {
             //
-            if (value !== undefined &&
-                _viewport !== undefined &&
-                value.left   === _viewport.left &&
-                value.bottom === _viewport.bottom &&
-                value.width  === _viewport.width &&
-                value.height === _viewport.height) {
-                return;
+            'get': function() {
+                return _viewport;
+            },
+
+            'set': function(value) {
+                //
+                if (value !== undefined &&
+                    _viewport !== undefined &&
+                    value.left   === _viewport.left &&
+                    value.bottom === _viewport.bottom &&
+                    value.width  === _viewport.width &&
+                    value.height === _viewport.height) {
+                    return;
+                }
+
+                _viewport = value;
+
+                // Resets the WebGLRenderingContext's viewport as well.
+                _renderingContext.viewport (
+                    // Part 1.
+                    _viewport.left, _viewport.bottom,
+                    // Part 2.
+                    _viewport.width, _viewport.height
+                );
             }
-
-            _viewport = value;
-
-            // Resets the WebGLRenderingContext's viewport as well.
-            _renderingContext.viewport (
-                // Part 1.
-                _viewport.left, _viewport.bottom,
-                // Part 2.
-                _viewport.width, _viewport.height
-            );
-        }
-    });
-    
-    Object.defineProperty(this, 'shaderProgram', {
-        //
-        get: function() {
-            return _shaderProgram;
-        },
+        });
         
-        set: function(value) {
+        Object.defineProperty(this, 'shaderProgram', {
             //
-            if (value === _shaderProgram)
-            {
-                return;                
-            }
+            get: function() {
+                return _shaderProgram;
+            },
             
-            _shaderProgram = value;
-            _renderingContext.useProgram(_shaderProgram);
-        },
-    });
+            set: function(value) {
+                //
+                if (value === _shaderProgram)
+                {
+                    return;                
+                }
+                
+                _shaderProgram = value;
+                _renderingContext.useProgram(_shaderProgram);
+            },
+        });
+
+    } catch (e) {
+        //
+        console.log("GraphicsManager: " + e);
+
+        throw e;
+    }
 
     //
     // Private methods.
@@ -108,6 +120,20 @@ function GraphicsManager(_xcene) {
         }
 
         WebGLRenderingContextHelper.syncConstants(_renderingContext);
+
+        _clearColor   = GraphicsManager.DEFAULT_CLEAR_COLOR;
+        _clearDepth   = GraphicsManager.DEFAULT_CLEAR_DEPTH;;
+        _clearStencil = GraphicsManager.DEFAULT_CLEAR_STENCIL;
+
+        _renderingContext.clearColor (
+            // Part 1.
+            _clearColor.r, _clearColor.g, _clearColor.b,
+            // Part 2.
+            _clearColor.a
+        );
+
+        _renderingContext.clearDepth(_clearDepth);
+        _renderingContext.clearStencil(_clearStencil);
         
         // Enable depth testing
         _renderingContext.enable(WebGLRenderingContext.DEPTH_TEST);
@@ -122,6 +148,51 @@ function GraphicsManager(_xcene) {
             true
         );
     }
+
+    //
+    // Privileged methods.
+    //
+    this.clear = function(mask, color, depth, stencil) {
+        //
+        if (// Part 1.
+            color !== undefined && (
+            // Part 2.
+            color.r !== _clearColor.r ||
+            color.g !== _clearColor.g ||
+            color.b !== _clearColor.b ||
+            color.a !== _clearColor.a)) {
+            //
+            _clearColor = color;
+            
+            this.renderingContext.clearColor (
+                // Part 1.
+                _clearColor.r, _clearColor.g, _clearColor.b,
+                // Part 2.
+                _clearColor.a
+            );
+        }
+        
+        if (depth !== undefined &&
+            depth !== _clearDepth) {
+            _clearDepth = depth;
+            this.renderingContext.clearDepth(_clearDepth);
+        }
+
+        if (stencil !== undefined &&
+            stencil !== _clearStencil) {
+            _clearStencil = stencil;
+            this.renderingContext.clearStencil(_clearStencil);
+        }
+
+        // Note:
+        // There's no _clearMask.
+
+        if (mask === undefined) {
+            mask = GraphicsManager.DEFAULT_CLEAR_MASK;
+        }
+
+        this.renderingContext.clear(mask);
+    }
 }
 
 //
@@ -134,35 +205,6 @@ GraphicsManager.prototype = {
     enableVertexAttribute: function(vertexAttributeLocation) {
         this.renderingContext.enableVertexAttribArray(vertexAttributeLocation);
     },
-    
-    clear: function(mask, color, depth, s) {
-        //
-        if (mask === undefined) {
-            //
-            mask = (
-                WebGLRenderingContext.COLOR_BUFFER_BIT |
-                WebGLRenderingContext.DEPTH_BUFFER_BIT
-            );
-        }
-
-        if (color === undefined) {
-            color = GraphicsManager.DEFAULT_COLOR_BUFFER_VALUE;
-        }
-        
-        if (depth === undefined) {
-            depth = GraphicsManager.DEFAULT_DEPTH_BUFFER_VALUE;
-        }
-        
-        if (s === undefined) {
-            s = GraphicsManager.DEFAULT_STENCIL_BUFFER_VALUE;
-        }
-
-        this.renderingContext.clearColor(color.r, color.g, color.b, color.a);
-        this.renderingContext.clearDepth(depth);
-        this.renderingContext.clearStencil(s);
-
-        this.renderingContext.clear(mask);
-    },    
     
     //
     // Accessors.
@@ -204,9 +246,14 @@ GraphicsManager.prototype = {
 //
 // Static constants (after Object.freeze()).
 //
-GraphicsManager.DEFAULT_COLOR_BUFFER_VALUE   = Colors.DEFAULT_BACKGROUND;
-GraphicsManager.DEFAULT_DEPTH_BUFFER_VALUE   = 1;
-GraphicsManager.DEFAULT_STENCIL_BUFFER_VALUE = 0;
+GraphicsManager.DEFAULT_CLEAR_MASK = (
+    0x00004000 | // = WebGLRenderingContext.COLOR_BUFFER_BIT |
+    0x00000100   // = WebGLRenderingContext.DEPTH_BUFFER_BIT
+);
+
+GraphicsManager.DEFAULT_CLEAR_COLOR   = Colors.DEFAULT_BACKGROUND;
+GraphicsManager.DEFAULT_CLEAR_DEPTH   = 1;
+GraphicsManager.DEFAULT_CLEAR_STENCIL = 0;
 
 Object.freeze(GraphicsManager);
 

@@ -4,6 +4,7 @@ function main() {
 
     var scene;
     var renderingContext;
+    var camera;
     var shaderHelper;
     var shaderProgram;
     var vertexPositionAttributeLocation;
@@ -13,8 +14,7 @@ function main() {
     var vertexColorBuffer;
     var vertexColorBuffer2;
     var sineEase;
-    var modelViewMatrix;
-    var projectionMatrix;
+    var transform;
     var rotationY;
 
     try {
@@ -23,8 +23,14 @@ function main() {
 
         renderingContext =
             scene.graphicsManager.renderingContext;
+
+        camera = new Cybo.Camera (
+            scene,
+            new Cybo.Vector3D(0, 0, 300)
+        );
         
-        shaderHelper = new Cybo.ShaderHelper(scene.graphicsManager);
+        shaderHelper =
+            new Cybo.ShaderHelper(scene.graphicsManager);
 
         // Set up the shaders; this is where all the lighting for the
         // vertices and so forth is established.
@@ -37,8 +43,10 @@ function main() {
         sineEase = new Cybo.SineEase(Cybo.EaseMode.EASE_IN_OUT, 2000, true);
         sineEase.start();
 
-        // Set up to draw the scene periodically.
-        setInterval(drawScene, 15);
+        transform =
+            Cybo.Matrix4x4.createIdentityMatrix();
+            
+        scene.run(undefined, drawScene);
 
     } catch (e) {
         //
@@ -253,29 +261,28 @@ function main() {
 
     function setUpTransform(offsetX) {
         //
-        modelViewMatrix =
-            Cybo.Matrix4x4.createRotationMatrix(Cybo.CartesianAxis.Y, rotationY);
+        var modelMatrix = Cybo.Matrix4x4.createRotationMatrix (
+            Cybo.CartesianAxis.Y,
+            rotationY
+        );
 
-        var v = new Cybo.Vector3D(offsetX, 0, -300);
+        var v = new Cybo.Vector3D(offsetX, 0, 0);
 
-        modelViewMatrix = Cybo.Matrix4x4.multiplyMatrices (
+        modelMatrix = Cybo.Matrix4x4.multiplyMatrices (
             Cybo.Matrix4x4.createTranslationMatrix(v),
-            modelViewMatrix
+            modelMatrix
         );
 
-        projectionMatrix = Cybo.Matrix4x4.createProjectionMatrix (
-            undefined,
-            window.innerWidth / window.innerHeight,
-            undefined,
-            undefined
+        camera.getTransform(transform);
+
+        transform = Cybo.Matrix4x4.multiplyMatrices (
+            transform,
+            modelMatrix
         );
-        
-        var transform =
-            projectionMatrix.multiply(modelViewMatrix);
 
         scene.graphicsManager.setMatrix4x4Uniform (
             transformUniformLocation,
             transform
         );  
-    }
+    }    
 }

@@ -140,7 +140,7 @@ function Camera (
     }
 
     //
-    // Priviledged methods.
+    // Privileged methods.
     //
     this.getViewMatrix = function(m) {
         //
