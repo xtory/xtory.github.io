@@ -12,14 +12,14 @@
 // FLT_EPSILON is 1.192092896e-07F in <float.h>
 
 // Note:
-// SlimDX, Fly3D both define this value as 1e-6f and XNA uses 1e-4f, 1e-5f, or 1e-6f
-// (in difference places) as epsilons. Cybo selects 1e-5f.
+// SlimDX, Fly3D both define this value as 1e-06f and XNA uses 1e-04f, 1e-05f, or
+// 1e-06f (in difference places) as epsilons. Cybo selects 1e-05f.
 
 // Note:
 // SlimDX uses the term ZeroTolerance to represent Epsilon.
 
 // Note:
-// In XNA, there is no such term called Epsilon. XNA directly uses 1e-4f, 1e-05f,
+// In XNA, there is no such term called Epsilon. XNA directly uses 1e-04f, 1e-05f,
 // 1e-06f or as epsilon. For instance...
 // Ray.Intersects() directly uses 1e-05f as epsilon
 // BoundingBox.Intersects() directly uses 1e-06f as epsilon, etc.
@@ -67,12 +67,20 @@ MathHelper.EPSILON = 0.00001; // = 1e-5;
 //
 // Static methods.
 //
+
+//
+// Angles.
+//
 MathHelper.toRadians = function(degrees) {
     //
     // Note:
     // 1 radian = (180 / pi) degrees.
     // => 1 degree = (pi / 180) radians.
     // => n degrees = (pi / 180) * n radians.
+
+    if (typeof(degrees) !== 'number') {
+        throw 'typeof(degrees) !== \'number\'';
+    }
 
     return MathHelper.PiOverOneEighty * degrees;
 },
@@ -83,13 +91,186 @@ MathHelper.toDegrees = function(radians) {
     // 1 radian = (180 / pi) degrees.
     // => n radians = (180 / pi) * n degrees.
 
+    if (typeof(radians) !== 'number') {
+        throw 'typeof(degrees) !== \'number\'';
+    }
+
     return MathHelper.OneEightyOverPi * radians;
 },
 
-MathHelper.isPowerOfTwo = function(value) {
+//
+// Epsilon.
+//
+MathHelper.isZero = function(s) {
     //
-    if (typeof(value) !== 'number') {
-        throw 'A not-a-number exception raised.';
+    if (typeof(s) !== 'number') {
+        throw 'typeof(s) !== \'number\'';
+    }
+
+    if (s <= -MathHelper.EPSILON ||
+        MathHelper.EPSILON <= s) {
+        return false;
+    } else { // -MathHelper.EPSILON < s < MathHelper.EPSILON
+        return true;
+    }
+}
+
+MathHelper.areEqual = function(s1, s2) {
+    //
+    if (typeof(s1) !== 'number') {
+        throw 'typeof(s1) !== \'number\'';
+    }
+
+    if (typeof(s2) !== 'number') {
+        throw 'typeof(s2) !== \'number\'';
+    }
+
+    var s = s1 - s2;
+
+//#if DEBUG
+    /*
+    if (MathHelper.IsZero(s) == false) {
+        return false;
+    } else { // MathHelper.IsZero(s) == true
+        return true;
+    }
+    */
+
+//#else // RELEASE
+
+    if (s <= -MathHelper.Epsilon ||
+        MathHelper.Epsilon <= s) {
+        return false;
+    } else { // -MathHelper.Epsilon < s < MathHelper.Epsilon
+        return true;
+    }
+
+//#endif // DEBUG
+}
+
+MathHelper.isScalar1LessThanScalar2 = function(s1, s2) {
+    //
+    if (typeof(s1) !== 'number') {
+        throw 'typeof(s1) !== \'number\'';
+    }
+
+    if (typeof(s2) !== 'number') {
+        throw 'typeof(s2) !== \'number\'';
+    }
+
+    if (s1 - s2 <= -MathHelper.Epsilon) {
+        //
+        // which equals to "s1 - s2 < 0",
+        // that is, "s1 < s2"
+
+        return true;
+
+    } else {
+        //
+        // -MathHelper.Epsilon < s1 - s2, which includes
+        // A. -MathHelper.Epsilon < s1 - s2 < MathHelper.Epsilon
+        // B. MathHelper.Epsilon <= s1 - s2, and
+        // A means "s1 - s2 = 0", B means "0 < s1 - s2",
+        // so "0 <= s1 - s2", that is, "s2 <= s1"
+
+        return false;
+    }
+}
+
+MathHelper.isScalar1LessThanOrEqualToScalar2 = function(s1, s2) {
+    //
+    if (typeof(s1) !== 'number') {
+        throw 'typeof(s1) !== \'number\'';
+    }
+
+    if (typeof(s2) !== 'number') {
+        throw 'typeof(s2) !== \'number\'';
+    }
+
+    if (s1 - s2 < MathHelper.Epsilon) {
+        //
+        // which includes
+        // A. s1 - s2 <= -MathHelper.Epsilon, and
+        // B. -MathHelper.Epsilon < s1 - s2 < MathHelper.Epsilon
+        // A means "s1 - s2 < 0", B means "s1 - s2 = 0",
+        // so "s1 - s2 <= 0", that is, "s1 <= s2"
+
+        return true;
+
+    } else {
+        //
+        // MathHelper.Epsilon <= s1 - s2, which equals to "0 < s1 - s2",
+        // that is, "s2 < s1"
+
+        return false;
+    }
+}
+
+MathHelper.isScalar1GreaterThanScalar2 = function(s1, s2) {
+    //
+    if (typeof(s1) !== 'number') {
+        throw 'typeof(s1) !== \'number\'';
+    }
+
+    if (typeof(s2) !== 'number') {
+        throw 'typeof(s2) !== \'number\'';
+    }
+
+    if (MathHelper.Epsilon <= s1 - s2) {
+        //
+        // which equals to "0 < s1 - s2",
+        // that is, "s2 < s1"
+
+        return true;
+
+    } else {
+        //
+        // s1 - s2 < MathHelper.Epsilon, which includes
+        // A. s1 - s2 <= -MathHelper.Epsilon, and
+        // B. -MathHelper.Epsilon < s1 - s2 < MathHelper.Epsilon
+        // A means "s1 - s2 < 0", B means "s1 - s2 = 0",
+        // so "s1 - s2 <= 0", that is, "s1 <= s2"
+
+        return false;
+    }
+}
+
+MathHelper.isScalar1GreaterThanOrEqualToScalar2 = function(s1, s2) {
+    //
+    if (typeof(s1) !== 'number') {
+        throw 'typeof(s1) !== \'number\'';
+    }
+
+    if (typeof(s2) !== 'number') {
+        throw 'typeof(s2) !== \'number\'';
+    }
+    
+    if (-MathHelper.Epsilon < s1 - s2) {
+        //
+        // which includes
+        // A. -MathHelper.Epsilon < s1 - s2 < MathHelper.Epsilon, and
+        // B. MathHelper.Epsilon <= s1 - s2
+        // A means "s1 - s2 = 0", B means "0 < s1 - s2",
+        // so "0 <= s1 - s2", that is, "s2 <= s1"
+
+        return true;
+
+    } else {
+        //
+        // s1 - s2 <= -MathHelper.Epsilon, which equals to "s1 - s2 < 0",
+        // that is, "s1 < s2"
+
+        return false;
+    }
+}
+
+//
+// Textures.
+//
+MathHelper.isPowerOfTwo = function(s) {
+    //
+    if (typeof(s) !== 'number') {
+        throw 'typeof(s) !== \'number\'';
     }
     
     // Note:
@@ -108,8 +289,8 @@ MathHelper.isPowerOfTwo = function(value) {
     // 2 & 1 = 00000010 & 00000001 = 0 
     // 8 & 7 = 00001000 & 00000111 = 0
 
-    if (value !== 0 &&
-        (value & (value - 1)) === 0) {
+    if (s !== 0 &&
+       (s & (s - 1)) === 0) {
         return true;
     } else {
         return false;

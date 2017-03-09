@@ -95,12 +95,8 @@ function Camera (
         // Note:
         // Calculates the aspect ratio of "viewport", not "back buffer".
 
-        // Temp: Change back to viewport later.
         var viewportAspectRatio =
             _scene.graphicsManager.viewport.aspectRatio;
-        // var viewportAspectRatio =
-        //     window.innerWidth / window.innerHeight;
-        // :Temp
 
         // Note:
         // The values we want to compare are ratios, we can't just compare if
@@ -112,18 +108,13 @@ function Camera (
         }
         */
 
-        // Temp:
-        /*
-        if (_hasToUpdateProjectionMatrix === false &&
-            MathHelper.areEqual(viewportAspectRatio, _lastViewportAspectRatio) === true) {
+        if (// Part 1.
+            _hasToUpdateProjectionMatrix === false &&
+            // Part 2.
+            MathHelper.areEqual(viewportAspectRatio, _lastViewportAspectRatio) ===
+            true) {
             return;
         }
-        */
-        if (_hasToUpdateProjectionMatrix === false &&
-            viewportAspectRatio === _lastViewportAspectRatio) {
-            return;
-        }
-        // :Temp
         // :Note
 
         _lastViewportAspectRatio = viewportAspectRatio;
