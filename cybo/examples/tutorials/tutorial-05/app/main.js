@@ -511,13 +511,15 @@ function main() {
         //     return;
         // }
 
+        event.preventDefault() 
+
         switch (event.touches.length) {
             //
             case 1: {
                 //
-                var touch = event.touches[0];
+                alert('case 1!');
 
-                event.preventDefault() 
+                var touch = event.touches[0];
 
                 var offset = new Cybo.Vector2D (
                     event.pageX - lastTouchPosition.x,
@@ -532,6 +534,8 @@ function main() {
 
             case 2: {
                 //
+                alert('case 2!');
+
                 var touch1 = event.touches[0];
                 var touch2 = event.touches[1];
 
