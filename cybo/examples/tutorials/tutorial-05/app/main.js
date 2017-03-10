@@ -547,6 +547,8 @@ function main() {
                     touchDistanceSqured - lastTouchDistanceSqured
                 );
 
+                lastTouchDistanceSqured = touchDistanceSqured;
+
                 break;
             }
 
@@ -557,11 +559,11 @@ function main() {
     }    
 
     function onTouchCancel(event) {
-        alert("touchcancel!");
+        //alert("touchcancel!");
     }    
 
     function onTouchEnd(event) {
-        alert("touchend!");
+        //alert("touchend!");
     }
 
     function rotateModel(offset) {
