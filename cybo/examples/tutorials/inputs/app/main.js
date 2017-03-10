@@ -430,8 +430,19 @@ function main() {
     }
 
     function onTouchStart(event) {
-        changeBackground();
         lastTouchPosition = new Cybo.Vector2D(event.pageX, event.pageY);
+
+        var touch = event.touches[0];
+
+        alert (
+            '{ screenX: ' + event.screenX + ', screenY: ' + event.screenY + '}\n' +
+            '{ clientX: ' + event.clientX + ', clientY: ' + event.clientY + '}\n' +
+            '{ pageX: ' + event.pageX + ', pageY: ' + event.pageY + '}\n' +
+            'event.touches.length = ' + event.touches.length + '\n' +
+            '{ touch.screenX: ' + touch.screenX + ', touch.screenY: ' + touch.screenY + '}\n' +
+            '{ touch.clientX: ' + touch.clientX + ', touch.clientY: ' + touch.clientY + '}\n' +
+            '{ touch.pageX: ' + touch.pageX + ', touch.pageY: ' + touch.pageY
+        );
     }
 
     function onTouchMove(event) {
@@ -457,11 +468,11 @@ function main() {
     }
 
     function onTouchCancel(event) {
-        concole.log("touchcancel!");
+        alert("touchcancel!");
     }    
 
     function onTouchEnd(event) {
-        concole.log("touchend!");
+        alert("touchend!");
     }
 
     function rotateModel(offset) {
