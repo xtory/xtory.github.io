@@ -547,9 +547,14 @@ function main() {
                 var touchDistanceSqured =
                     Cybo.Vector2D.calculateLengthSquaredOf(v);
 
-                camera.zoom (
-                    touchDistanceSqured - lastTouchDistanceSqured
-                );
+                // camera.zoom (
+                //     touchDistanceSqured - lastTouchDistanceSqured
+                // );
+                if (touchDistanceSqured < lastTouchDistanceSqured) {
+                    camera.zoom(-1);
+                } else {
+                    camera.zoom(1);
+                }
 
                 lastTouchDistanceSqured = touchDistanceSqured;
 
