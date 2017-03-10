@@ -550,7 +550,7 @@ function main() {
                 // camera.zoom (
                 //     touchDistanceSqured - lastTouchDistanceSqured
                 // );
-                var s = 30;
+                var s = 12;
                 if (touchDistanceSqured < lastTouchDistanceSqured) {
                     camera.zoom(-s);
                 } else {
