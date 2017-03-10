@@ -476,7 +476,7 @@ function main() {
                 var v = Cybo.Vector2D.subtractVectors(v1, v2);
 
                 lastTouchDistanceSqured =
-                    Cybo.Vector2D.calculateLengthSquareOf(v);
+                    Cybo.Vector2D.calculateLengthSquaredOf(v);
 
                 break;
             }
@@ -545,7 +545,7 @@ function main() {
                 var v = Cybo.Vector2D.subtractVectors(v1, v2);
 
                 var touchDistanceSqured =
-                    Cybo.Vector2D.calculateLengthSquareOf(v);
+                    Cybo.Vector2D.calculateLengthSquaredOf(v);
 
                 camera.zoom (
                     touchDistanceSqured - lastTouchDistanceSqured
