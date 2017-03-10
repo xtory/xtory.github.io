@@ -520,8 +520,8 @@ function main() {
                 var touch = event.touches[0];
 
                 var offset = new Cybo.Vector2D (
-                    event.pageX - lastTouchPosition.x,
-                    event.pageY - lastTouchPosition.y
+                    touch.pageX - lastTouchPosition.x,
+                    touch.pageY - lastTouchPosition.y
                 );
 
                 rotateModel(offset);
@@ -546,7 +546,7 @@ function main() {
                     Cybo.Vector3D.calculateLengthSquareOf(v);
 
                 camera.zoom (
-                    50 * (touchDistanceSqured - lastTouchDistanceSqured)
+                    touchDistanceSqured - lastTouchDistanceSqured
                 );
 
                 lastTouchDistanceSqured = touchDistanceSqured;
