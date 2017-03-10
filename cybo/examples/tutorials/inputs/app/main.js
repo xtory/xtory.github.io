@@ -453,7 +453,7 @@ function main() {
         );
 
         lastTouchPosition =
-            new Cybo.Vector2D(event.clientX, event.clientY);
+            new Cybo.Vector2D(event.pageX, event.pageY);
     }
 
     function onTouchCancel(event) {
