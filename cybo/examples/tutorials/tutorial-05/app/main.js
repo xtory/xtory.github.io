@@ -470,13 +470,13 @@ function main() {
                 var touch1 = event.touches[0];
                 var touch2 = event.touches[1];
 
-                var v1 = new Cybo.Vector3D(touch1.clientX, touch1.clientY);
-                var v2 = new Cybo.Vector3D(touch2.clientX, touch2.clientY);
+                var v1 = new Cybo.Vector2D(touch1.clientX, touch1.clientY);
+                var v2 = new Cybo.Vector2D(touch2.clientX, touch2.clientY);
 
-                var v = Cybo.Vector3D.subtract(v1, v2);
+                var v = Cybo.Vector2D.subtract(v1, v2);
 
                 lastTouchDistanceSqured =
-                    Cybo.Vector3D.calculateLengthSquareOf(v);
+                    Cybo.Vector2D.calculateLengthSquareOf(v);
 
                 break;
             }
@@ -539,13 +539,13 @@ function main() {
                 var touch1 = event.touches[0];
                 var touch2 = event.touches[1];
 
-                var v1 = new Cybo.Vector3D(touch1.clientX, touch1.clientY);
-                var v2 = new Cybo.Vector3D(touch2.clientX, touch2.clientY);
+                var v1 = new Cybo.Vector2D(touch1.clientX, touch1.clientY);
+                var v2 = new Cybo.Vector2D(touch2.clientX, touch2.clientY);
 
-                var v = Cybo.Vector3D.subtract(v1, v2);
+                var v = Cybo.Vector2D.subtract(v1, v2);
 
                 var touchDistanceSqured =
-                    Cybo.Vector3D.calculateLengthSquareOf(v);
+                    Cybo.Vector2D.calculateLengthSquareOf(v);
 
                 camera.zoom (
                     touchDistanceSqured - lastTouchDistanceSqured
