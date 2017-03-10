@@ -18,6 +18,7 @@ function main() {
     var isMouseLeftButtonPressed = false;
     var lastMousePosition;
     var lastTouchPosition;
+    var lastTouchDistanceSqured;
     var backgroundColor;
 
     try {
@@ -27,9 +28,13 @@ function main() {
         renderingContext =
             scene.graphicsManager.renderingContext;
 
+        var p = new Cybo.Vector3D(200, 200, 325);
+        var origin = new Cybo.Vector3D(0, 0, 0);
+
         camera = new Cybo.Camera (
             scene,
-            new Cybo.Vector3D(200, 200, 325)
+            p,
+            Cybo.Vector3D.subtractVectors(origin, p)
         );
         
         shaderHelper =
@@ -409,6 +414,7 @@ function main() {
     
     function onMouseWheel(event) {
         //
+        camera.zoom(event.wheelDelta);
     }
 
     function onKeyDown(event) {
@@ -429,43 +435,126 @@ function main() {
         changeBackground();
     }
 
+    // function onTouchStart(event) {
+    //     //
+    //     if (event.touches.length < 1) {
+    //         return;
+    //     }
+
+    //     var touch = event.touches[0];
+
+    //     lastTouchPosition =
+    //         new Cybo.Vector2D(touch.clientX, touch.clientY);
+    // }
+
     function onTouchStart(event) {
-        lastTouchPosition = new Cybo.Vector2D(event.pageX, event.pageY);
+        //
+        // if (event.touches.length < 1) {
+        //     return;
+        // }
 
-        var touch = event.touches[0];
+        switch (event.touches.length) {
+            //
+            case 1: {
+                //
+                var touch = event.touches[0];
 
-        alert (
-            '{ screenX: ' + event.screenX + ', screenY: ' + event.screenY + '}\n' +
-            '{ clientX: ' + event.clientX + ', clientY: ' + event.clientY + '}\n' +
-            '{ pageX: ' + event.pageX + ', pageY: ' + event.pageY + '}\n' +
-            'event.touches.length = ' + event.touches.length + '\n' +
-            '{ touch.screenX: ' + touch.screenX + ', touch.screenY: ' + touch.screenY + '}\n' +
-            '{ touch.clientX: ' + touch.clientX + ', touch.clientY: ' + touch.clientY + '}\n' +
-            '{ touch.pageX: ' + touch.pageX + ', touch.pageY: ' + touch.pageY
-        );
-    }
+                lastTouchPosition =
+                    new Cybo.Vector2D(touch.clientX, touch.clientY);
+
+                break;
+            }
+
+            case 2: {
+                //
+                var touch1 = event.touches[0];
+                var touch2 = event.touches[1];
+
+                var v1 = new Cybo.Vector3D(touch1.clientX, touch1.clientY);
+                var v2 = new Cybo.Vector3D(touch2.clientX, touch2.clientY);
+
+                var v = Cybo.Vector3D.subtract(v1, v2);
+
+                lastTouchDistanceSqured =
+                    Cybo.Vector3D.calculateLengthSquareOf(v);
+
+                break;
+            }
+
+            default: {
+                break;
+            }
+        }
+    }    
+
+    // function onTouchMove(event) {
+    //     //
+    //     if (event.touches.length < 1) {
+    //         return;
+    //     }
+
+    //     var touch = event.touches[0];
+
+    //     event.preventDefault() 
+
+    //     var offset = new Cybo.Vector2D (
+    //         event.pageX - lastTouchPosition.x,
+    //         event.pageY - lastTouchPosition.y
+    //     );
+
+    //     lastTouchPosition = new Cybo.Vector2D(touch.clientX, touch.clientY);
+    // }
 
     function onTouchMove(event) {
-        event.preventDefault() 
-        
-        // var offset;
-        // if (lastTouchPosition == undefined) {
-        //     offset = new Cybo.Vector2D(0, 0);
-        // } else {
-        //     //
-        //     offset = new Cybo.Vector2D (
-        //         event.clientX - lastTouchPosition.x,
-        //         event.clientY - lastTouchPosition.y
-        //     );
+        //
+        // if (event.touches.length < 1) {
+        //     return;
         // }
-        var offset = new Cybo.Vector2D (
-            event.pageX - lastTouchPosition.x,
-            event.pageY - lastTouchPosition.y
-        );
 
-        lastTouchPosition =
-            new Cybo.Vector2D(event.pageX, event.pageY);
-    }
+        switch (event.touches.length) {
+            //
+            case 1: {
+                //
+                var touch = event.touches[0];
+
+                event.preventDefault() 
+
+                var offset = new Cybo.Vector2D (
+                    event.pageX - lastTouchPosition.x,
+                    event.pageY - lastTouchPosition.y
+                );
+
+                lastTouchPosition =
+                    new Cybo.Vector2D(touch.clientX, touch.clientY);
+
+                break;
+            }
+
+            case 2: {
+                //
+                var touch1 = event.touches[0];
+                var touch2 = event.touches[1];
+
+                var v1 = new Cybo.Vector3D(touch1.clientX, touch1.clientY);
+                var v2 = new Cybo.Vector3D(touch2.clientX, touch2.clientY);
+
+                var v = Cybo.Vector3D.subtract(v1, v2);
+
+                var touchDistanceSqured =
+                    Cybo.Vector3D.calculateLengthSquareOf(v);
+
+                camera.zoom (
+                    touchDistanceSqured - lastTouchDistanceSqured
+                );
+
+                break;
+            }
+
+            default: {
+                break;
+            }
+        }
+    }    
 
     function onTouchCancel(event) {
         alert("touchcancel!");

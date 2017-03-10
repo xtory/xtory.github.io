@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "tutorials/inputs",
+            "name": "tutorials/tutorial-05",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/cybo/examples/tutorials/inputs/index.html",
+            "file": "${workspaceRoot}/cybo/examples/tutorials/tutorial-05/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"

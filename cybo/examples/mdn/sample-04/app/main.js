@@ -24,9 +24,13 @@ function main() {
         renderingContext =
             scene.graphicsManager.renderingContext;
 
+        var p = new Cybo.Vector3D(0, 0, 300);
+        var origin = new Cybo.Vector3D(0, 0, 0);
+
         camera = new Cybo.Camera (
             scene,
-            new Cybo.Vector3D(0, 0, 300)
+            p,
+            Cybo.Vector3D.subtractVectors(origin, p)
         );
         
         shaderHelper =
@@ -227,7 +231,7 @@ function main() {
             sineEase.ratioOfCurrentToTotalTimeOffset
         );
 
-        setUpTransform(-100);
+        setUpTransform(-75);
         
         renderingContext.drawArrays (
             WebGLRenderingContext.TRIANGLE_STRIP,
@@ -249,7 +253,7 @@ function main() {
             0
         );
 
-        setUpTransform(100);
+        setUpTransform(75);
         
         renderingContext.drawArrays (
             WebGLRenderingContext.TRIANGLE_STRIP,

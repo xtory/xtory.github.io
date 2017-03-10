@@ -70,6 +70,18 @@ Vector3D.subtractVectors = function(v1, v2) {
     return new Vector3D(v1.x-v2.x, v1.y-v2.y, v1.z-v2.z);
 }
 
+Vector3D.multiplyVectorByScalar = function(v, s) {
+    return new Vector3D(v.x*s, v.y*s, v.z*s);
+}
+
+Vector3D.calculateLengthOf = function(v) {
+    return Math.sqrt(v.x*v.x + v.y*v.y + v.z*v.z);
+}
+
+Vector3D.calculateLengthSquaredOf = function(v) {
+    return v.x*v.x + v.y*v.y + v.z*v.z;
+}
+
 Vector3D.calculateDotProductOf = function(v1, v2) {
     return v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
 }

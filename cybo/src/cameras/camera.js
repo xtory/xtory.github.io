@@ -133,6 +133,24 @@ function Camera (
     //
     // Privileged methods.
     //
+    this.zoom = function(distance) {
+        //
+        // _position +=
+        //     Vector3D.calculateUnitVectorOf(_facingDirection) * distance;
+
+        var v = Vector3D.multiplyVectorByScalar (
+            Vector3D.calculateUnitVectorOf(_facingDirection),
+            distance
+        );
+
+        _position = Vector3D.addVectors(_position, v);
+
+        _hasToUpdateViewMatrix = true;
+    }
+
+    //
+    // Privileged methods (accessors).
+    //
     this.getViewMatrix = function(m) {
         //
         checkViewMatrix();

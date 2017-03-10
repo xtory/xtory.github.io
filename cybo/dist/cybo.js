@@ -947,6 +947,18 @@ Vector3D.subtractVectors = function(v1, v2) {
     return new Vector3D(v1.x-v2.x, v1.y-v2.y, v1.z-v2.z);
 };
 
+Vector3D.multiplyVectorByScalar = function(v, s) {
+    return new Vector3D(v.x*s, v.y*s, v.z*s);
+};
+
+Vector3D.calculateLengthOf = function(v) {
+    return Math.sqrt(v.x*v.x + v.y*v.y + v.z*v.z);
+};
+
+Vector3D.calculateLengthSquaredOf = function(v) {
+    return v.x*v.x + v.y*v.y + v.z*v.z;
+};
+
 Vector3D.calculateDotProductOf = function(v1, v2) {
     return v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
 };
@@ -1222,11 +1234,11 @@ Matrix4x4.createIdentityMatrix = function() {
 
 Matrix4x4.createViewMatrix = function (
     cameraPosition,
-    cameraTargetPosition,
+    cameraFacingDirection, // not cameraTargetPosition, be careful!
     cameraUpDirection
 ){
     // Note:
-    // Formula of the Direct3D Matrix.LookAtRH method:
+    // Formula of Direct3D Matrix.LookAtRH():
     //
     // [ axisX.x                      axisY.x                      axisZ.x                     0
     //   axisX.y                      axisY.y                      axisZ.y                     0
@@ -1234,17 +1246,24 @@ Matrix4x4.createViewMatrix = function (
     //  -dot(axisX, cameraPosition)  -dot(axisY, cameraPosition)  -dot(axisZ, cameraPosition)  1 ]
     //
     // where
-    // axisZ = normal(cameraPosition - cameraTargetPosition)
-    // axisX = normal(cross(cameraUpVector, axisZ))
+    // axisZ = normalize(cameraPosition - cameraTargetPosition)
+    //       = normalize(-cameraFacingDirection)
+    // axisX = normalize(cross(cameraUpVector, axisZ))
     // axisY = cross(axisZ, axisX)
     //
+
+    // Note:
+    // In the formula of Direct3D Matrix.LookAtLH():
+    //
+    // [ ... ]
+    //
+    // where
+    // axisZ = normalize(cameraTargetPosition - cameraPosition)
+    //       = normalize(cameraFacingDirection)
+
     var axisX, axisY, axisZ, v;
     
-    v = Vector3D.subtractVectors (
-        cameraPosition,
-        cameraTargetPosition
-    );
-
+    v = Vector3D.negateVector(cameraFacingDirection);
     axisZ = Vector3D.calculateUnitVectorOf(v);
     v = Vector3D.calculateCrossProductOf(cameraUpDirection, axisZ);
     axisX = Vector3D.calculateUnitVectorOf(v);
@@ -1647,6 +1666,24 @@ function Camera (
 
     //
     // Privileged methods.
+    //
+    this.zoom = function(distance) {
+        //
+        // _position +=
+        //     Vector3D.calculateUnitVectorOf(_facingDirection) * distance;
+
+        var v = Vector3D.multiplyVectorByScalar (
+            Vector3D.calculateUnitVectorOf(_facingDirection),
+            distance
+        );
+
+        _position = Vector3D.addVectors(_position, v);
+
+        _hasToUpdateViewMatrix = true;
+    };
+
+    //
+    // Privileged methods (accessors).
     //
     this.getViewMatrix = function(m) {
         //

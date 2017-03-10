@@ -24,9 +24,13 @@ function main() {
         renderingContext =
             scene.graphicsManager.renderingContext;
 
+        var p = new Cybo.Vector3D(0, 0, 325);
+        var origin = new Cybo.Vector3D(0, 0, 0);
+
         camera = new Cybo.Camera (
             scene,
-            new Cybo.Vector3D(0, 0, 325)
+            p,
+            Cybo.Vector3D.subtractVectors(origin, p)
         );
         
         shaderHelper =
