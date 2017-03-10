@@ -710,6 +710,84 @@ Object.freeze(AssetManager);
 //
 // Constructor.
 //
+function Quaternion(_x, _y, _z, _w) {
+    //
+    // The vector part.
+    this.x = _x;
+    this.y = _y;
+    this.z = _z;
+
+    // The scalar part.
+    this.w = _w; // W isn't the rotation angle (in radians).
+}
+
+//
+// Prototype.
+//
+Quaternion.prototype = {
+    // No contents.
+};
+
+//
+// Static constants (after Object.freeze()).
+//
+Quaternion.ELEMENT_COUNT = 4;
+
+//
+// Static methods.
+//
+Quaternion.fromArray = function(a) {
+    return new Quaternion(a[0], a[1], a[2], a[3]);
+};
+
+Quaternion.createIdentityQuaternion = function() {
+    return new Quaternion(0, 0, 0, 1);
+};
+
+Quaternion.calculateUnitQuaternionOf = function(q) {
+    //
+    var sqrt = Math.sqrt(q.x*q.x + q.y*q.y + q.z*q.z +q.w*q.w);
+    if (sqrt < MathHelper.EPSILON) {
+        //
+        // Note:
+        // This engine doesn't throw a divide-by-zero exception when normalizing
+        // Vector2D, Vector3D, Vector4D, Quaternion.
+        /*
+        console.log('A divide-by-zero exception raised.');
+        */
+
+        return new Quaternion(0, 0, 0, 0);
+
+    } else {
+        //
+        var s = 1.0 / sqrt;
+
+        return new Quaternion(q.x*s, q.y*s, q.z*s, q.w*s);
+    }
+};
+
+Quaternion.areEqual = function(q1, q2) {
+    //
+    if ((q1 instanceof Quaternion) === false ||
+        (q2 instanceof Quaternion) === false) {
+        return false;
+    }
+
+    if (q1.x !== q2.x ||
+        q1.y !== q2.y ||
+        q1.z !== q2.z ||
+        q1.w !== q2.w) {
+        return false;
+    } else {
+        return true;
+    }
+};
+
+Object.freeze(Quaternion);
+
+//
+// Constructor.
+//
 function Vector4D(_x, _y, _z, _w) {
     //
     this.x = _x;
@@ -897,6 +975,38 @@ Vector3D.transformVector = function(m, v) {
     v = Vector4D.Transform(m, v2);
 
     return new Vector3D(v.x, v.y, v.z);
+};
+
+Vector3D.transform = function(v1, q) {
+    //
+    var x = q.X + q.X;
+    var y = q.Y + q.Y;
+    var z = q.Z + q.Z;
+    var wx = q.W * x;
+    var wy = q.W * y;
+    var wz = q.W * z;
+    var xx = q.X * x;
+    var xy = q.X * y;
+    var xz = q.X * z;
+    var yy = q.Y * y;
+    var yz = q.Y * z;
+    var zz = q.Z * z;
+
+    var s1 = (1.0 - yy) - zz;
+    var s2 = xy - wz;
+    var s3 = xz + wy;
+    var s4 = xy + wz;
+    var s5 = (1.0 - xx) - zz;
+    var s6 = yz - wx;
+    var s7 = xz - wy;
+    var s8 = yz + wx;
+    var s9 = (1.0 - xx) - yy;
+
+    return new Vector3D (
+        (v1.X*s1 + v1.Y*s2) + v1.Z*s3,
+        (v1.X*s4 + v1.Y*s5) + v1.Z*s6,
+        (v1.X*s7 + v1.Y*s8) + v1.Z*s9
+    );
 };
 
 Vector3D.areEqual = function(v1, v2) {
@@ -2677,6 +2787,29 @@ Object.freeze(ExceptionHelper);
 //
 // Constructor.
 //
+function MouseButton() {
+    // No contents.
+}
+
+//
+// Prototype.
+//
+MouseButton.prototype = {
+    // No contents.
+};
+
+//
+// Static constants (after Object.freeze()).
+//
+MouseButton.LEFT   = 0;
+MouseButton.MIDDLE = 1;
+MouseButton.RIGHT  = 2;
+ 
+Object.freeze(MouseButton);
+
+//
+// Constructor.
+//
 function Vector2D(_x, _y) {
     //
     this.x = _x;
@@ -2773,84 +2906,6 @@ Plane.prototype = {
 };
 
 Object.freeze(Plane);
-
-//
-// Constructor.
-//
-function Quaternion(_x, _y, _z, _w) {
-    //
-    // The vector part.
-    this.x = _x;
-    this.y = _y;
-    this.z = _z;
-
-    // The scalar part.
-    this.w = _w; // W isn't the rotation angle (in radians).
-}
-
-//
-// Prototype.
-//
-Quaternion.prototype = {
-    // No contents.
-};
-
-//
-// Static constants (after Object.freeze()).
-//
-Quaternion.ELEMENT_COUNT = 4;
-
-//
-// Static methods.
-//
-Quaternion.fromArray = function(a) {
-    return new Quaternion(a[0], a[1], a[2], a[3]);
-};
-
-Quaternion.createIdentityQuaternion = function() {
-    return new Quaternion(0, 0, 0, 1);
-};
-
-Quaternion.calculateUnitQuaternionOf = function(q) {
-    //
-    var sqrt = Math.sqrt(q.x*q.x + q.y*q.y + q.z*q.z +q.w*q.w);
-    if (sqrt < MathHelper.EPSILON) {
-        //
-        // Note:
-        // This engine doesn't throw a divide-by-zero exception when normalizing
-        // Vector2D, Vector3D, Vector4D, Quaternion.
-        /*
-        console.log('A divide-by-zero exception raised.');
-        */
-
-        return new Quaternion(0, 0, 0, 0);
-
-    } else {
-        //
-        var s = 1.0 / sqrt;
-
-        return new Quaternion(q.x*s, q.y*s, q.z*s, q.w*s);
-    }
-};
-
-Quaternion.areEqual = function(q1, q2) {
-    //
-    if ((q1 instanceof Quaternion) === false ||
-        (q2 instanceof Quaternion) === false) {
-        return false;
-    }
-
-    if (q1.x !== q2.x ||
-        q1.y !== q2.y ||
-        q1.z !== q2.z ||
-        q1.w !== q2.w) {
-        return false;
-    } else {
-        return true;
-    }
-};
-
-Object.freeze(Quaternion);
 
 //
 // Constructor.
@@ -3434,8 +3489,10 @@ exports.ClearOptions = ClearOptions;
 exports.Color = Color;
 exports.Colors = Colors;
 exports.GraphicsManager = GraphicsManager;
+exports.AxisGroup = AxisGroup;
 exports.ExceptionHelper = ExceptionHelper;
 exports.JSHelper = JSHelper;
+exports.MouseButton = MouseButton;
 exports.MathHelper = MathHelper;
 exports.Vector2D = Vector2D;
 exports.Vector3D = Vector3D;

@@ -15,7 +15,9 @@ function main() {
     var indexBuffer;
     var modelMatrix;
     var transform;
+    var isMouseLeftButtonPressed = false;
     var lastMousePosition;
+    var lastTouchPosition;
     var backgroundColor;
 
     try {
@@ -264,9 +266,10 @@ function main() {
         mainCanvas.addEventListener('keydown',    onKeyDown);
         mainCanvas.addEventListener('keyup',      onKeyUp);
 
-        mainCanvas.addEventListener('touchstart', onTouchStart);
-        mainCanvas.addEventListener('touchmove',  onTouchMove);
-        mainCanvas.addEventListener('touchend',   onTouchEnd);
+        mainCanvas.addEventListener('touchstart',  onTouchStart);
+        mainCanvas.addEventListener('touchmove',   onTouchMove);
+        mainCanvas.addEventListener('touchcancel', onTouchCancel);
+        mainCanvas.addEventListener('touchend',    onTouchEnd);
     }
 
     function drawScene() {
@@ -355,26 +358,114 @@ function main() {
     //
     function onMouseDown(event) {
         //
+        switch (event.button) {
+            //
+            case Cybo.MouseButton.LEFT: {
+                //
+                isMouseLeftButtonPressed = true;
+
+                lastMousePosition =
+                    new Cybo.Vector2D(event.clientX, event.clientY);
+
+                break;
+            }
+
+            default: {
+                break;
+            }
+        }
     }
 
     function onMouseMove(event) {
         //
-        var mainCanvas = scene.mainCanvas;
-
-        var offset;
-        if (lastMousePosition == undefined) {
-            offset = new Cybo.Vector2D(0, 0);
-        } else {
+        if (isMouseLeftButtonPressed === true) {
             //
-            offset = new Cybo.Vector2D (
+            var offset = new Cybo.Vector2D (
                 event.clientX - lastMousePosition.x,
                 event.clientY - lastMousePosition.y
-            );
+            );       
+
+            lastMousePosition =
+                new Cybo.Vector2D(event.clientX, event.clientY);
+
+            rotateModel(offset);
         }
+    }
 
-        lastMousePosition =
+    function onMouseUp(event) {
+        //
+        switch (event.button) {
+            //
+            case Cybo.MouseButton.LEFT: {
+                isMouseLeftButtonPressed = false;
+                break;
+            }
+
+            default: {
+                break;
+            }
+        }
+    }
+    
+    function onMouseWheel(event) {
+        //
+    }
+
+    function onKeyDown(event) {
+        changeBackground();
+    }
+
+    function onKeyUp(event) {
+        //
+        // switch (event.key) {
+        //     case 'space': {
+        //         break;
+        //     }
+
+        //     default: {
+        //         break;
+        //     }
+        // }
+        changeBackground();
+    }
+
+    function onTouchStart(event) {
+        changeBackground();
+        lastTouchPosition = new Cybo.Vector2D(event.pageX, event.pageY);
+    }
+
+    function onTouchMove(event) {
+        event.preventDefault() 
+        
+        // var offset;
+        // if (lastTouchPosition == undefined) {
+        //     offset = new Cybo.Vector2D(0, 0);
+        // } else {
+        //     //
+        //     offset = new Cybo.Vector2D (
+        //         event.clientX - lastTouchPosition.x,
+        //         event.clientY - lastTouchPosition.y
+        //     );
+        // }
+        var offset = new Cybo.Vector2D (
+            event.pageX - lastTouchPosition.x,
+            event.pageY - lastTouchPosition.y
+        );
+
+        lastTouchPosition =
             new Cybo.Vector2D(event.clientX, event.clientY);
+    }
 
+    function onTouchCancel(event) {
+        concole.log("touchcancel!");
+    }    
+
+    function onTouchEnd(event) {
+        concole.log("touchend!");
+    }
+
+    function rotateModel(offset) {
+        //
         modelMatrix = Cybo.Matrix4x4.multiplyMatrices (
             Cybo.Matrix4x4.createRotationMatrix (
                 Cybo.CartesianAxis.Y,
@@ -392,53 +483,12 @@ function main() {
         );
     }
 
-    function onMouseUp(event) {
-        //
-    }
-    
-    function onMouseWheel(event) {
-        //
-    }
-
-    function onKeyDown(event) {
-        //
-    }
-
-    function onKeyUp(event) {
-        //
-        switch (event.key) {
-            case 'space': {
-                break;
-            }
-
-            default: {
-                break;
-            }
-        }
-    }
-
-    function onTouchStart(event) {
-        //
+    function changeBackground() {
         backgroundColor = new Cybo.Color (
             Math.random(),
             Math.random(),
             Math.random(),
             1
         )
-    }
-
-    function onTouchMove(event) {
-        //
-        backgroundColor = new Cybo.Color (
-            Math.random(),
-            Math.random(),
-            Math.random(),
-            1
-        )
-    }
-
-    function onTouchEnd(event) {
-        //
-        alert("touchend!");
     }
 }
