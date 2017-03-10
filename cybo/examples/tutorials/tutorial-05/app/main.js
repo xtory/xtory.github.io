@@ -519,15 +519,17 @@ function main() {
                 //
                 var touch = event.touches[0];
 
-                var offset = new Cybo.Vector2D (
-                    touch.pageX - lastTouchPosition.x,
-                    touch.pageY - lastTouchPosition.y
+                var touchPosition =
+                    new Cybo.Vector2D(touch.clientX, touch.clientY);
+
+                var offset = Cybo.Vector2D.subtractVectors (
+                    touchPosition,
+                    lastTouchPosition
                 );
 
                 rotateModel(offset);
 
-                lastTouchPosition =
-                    new Cybo.Vector2D(touch.clientX, touch.clientY);
+                lastTouchPosition = touchPosition;
 
                 break;
             }
