@@ -20,8 +20,8 @@ function main() {
     var lastTouchPosition;
     var lastTouchDistanceSqured;
     var backgroundColor;
-    var isTouch1ing;
-    var isTouch2ing;
+    // var isTouch1ing;
+    // var isTouch2ing;
 
     try {
         //
@@ -454,16 +454,16 @@ function main() {
         // if (event.touches.length < 1) {
         //     return;
         // }
-        if (isTouch1ing === true ||
-            isTouch2ing === true) {
-            return;
-        }
+        // if (isTouch1ing === true ||
+        //     isTouch2ing === true) {
+        //     return;
+        // }
 
         switch (event.touches.length) {
             //
             case 1: {
                 //
-                isTouch1ing = true;
+                //isTouch1ing = true;
 
                 var touch = event.touches[0];
 
@@ -475,7 +475,7 @@ function main() {
 
             case 2: {
                 //
-                isTouch2ing = true;
+                //isTouch2ing = true;
 
                 var touch1 = event.touches[0];
                 var touch2 = event.touches[1];
@@ -527,9 +527,9 @@ function main() {
             //
             case 1: {
                 //
-                if (isTouch1ing === false) {
-                    break;
-                }
+                // if (isTouch1ing === false) {
+                //     break;
+                // }
 
                 var touch = event.touches[0];
 
@@ -550,9 +550,9 @@ function main() {
 
             case 2: {
                 //
-                if (isTouch2ing === false) {
-                    break;
-                }
+                // if (isTouch2ing === false) {
+                //     break;
+                // }
 
                 var touch1 = event.touches[0];
                 var touch2 = event.touches[1];
@@ -592,8 +592,8 @@ function main() {
 
     function onTouchEnd(event) {
         //alert("touchend!");
-        isTouch1ing = false;
-        isTouch2ing = false;
+        // isTouch1ing = false;
+        // isTouch2ing = false;
     }
 
     function rotateModel(offset) {
