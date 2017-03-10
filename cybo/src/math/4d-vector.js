@@ -65,6 +65,14 @@ Vector4D.subtractVectors = function(v1, v2) {
     return new Vector4D(v1.x-v2.x, v1.y-v2.y, v1.z-v2.z, v1.w-v2.w);
 }
 
+Vector4D.calculateLengthOf = function(v) {
+    return Math.sqrt(v.x*v.x + v.y*v.y + v.z*v.z + v.w*v.w);
+}
+
+Vector4D.calculateLengthSquaredOf = function(v) {
+    return v.x*v.x + v.y*v.y + v.z*v.z + v.w*v.w;
+}
+
 Vector4D.transform = function(m, v) {
     //
     return new Vector4D (

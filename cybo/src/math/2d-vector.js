@@ -67,6 +67,14 @@ Vector2D.subtractVectors = function(v1, v2) {
     return new Vector2D(v1.x-v2.x, v1.y-v2.y);
 }
 
+Vector2D.calculateLengthOf = function(v) {
+    return Math.sqrt(v.x*v.x + v.y*v.y);
+}
+
+Vector2D.calculateLengthSquaredOf = function(v) {
+    return v.x*v.x + v.y*v.y;
+}
+
 Vector2D.areEqual = function(v1, v2) {
     //
     if ((v1 instanceof Vector2D) === false ||
