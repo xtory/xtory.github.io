@@ -102,12 +102,7 @@ function Matrix4x4 (
 // Prototype.
 //
 Matrix4x4.prototype = {
-    //
-    // Public methods.
-    //
-    multiply: function(m) {
-        return Matrix4x4.multiplyMatrices(this, m);
-    }
+    // No contents.
 };
 
 //

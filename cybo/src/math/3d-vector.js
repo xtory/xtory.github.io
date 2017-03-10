@@ -1,5 +1,6 @@
 import { MathHelper } from './helpers/math-helper';
-import { Vector4D } from './4d-vector';
+import { Quaternion } from './quaternion';
+import { Vector4D }   from './4d-vector';
 
 //
 // Constructor.
@@ -15,16 +16,7 @@ function Vector3D(_x, _y, _z) {
 // Prototype.
 //
 Vector3D.prototype = {
-    //
-    // Public methods.
-    //
-    add: function(v) {
-        return Vector3D.addVectors(this, v);
-    },
-
-    subtract: function(v) {
-        return Vector3D.subtractVectors(this, v);
-    }
+    // No contents.
 };
 
 //
@@ -106,6 +98,38 @@ Vector3D.transformVector = function(m, v) {
     v = Vector4D.Transform(m, v2);
 
     return new Vector3D(v.x, v.y, v.z);
+}
+
+Vector3D.transform = function(v1, q) {
+    //
+    var x = q.X + q.X;
+    var y = q.Y + q.Y;
+    var z = q.Z + q.Z;
+    var wx = q.W * x;
+    var wy = q.W * y;
+    var wz = q.W * z;
+    var xx = q.X * x;
+    var xy = q.X * y;
+    var xz = q.X * z;
+    var yy = q.Y * y;
+    var yz = q.Y * z;
+    var zz = q.Z * z;
+
+    var s1 = (1.0 - yy) - zz;
+    var s2 = xy - wz;
+    var s3 = xz + wy;
+    var s4 = xy + wz;
+    var s5 = (1.0 - xx) - zz;
+    var s6 = yz - wx;
+    var s7 = xz - wy;
+    var s8 = yz + wx;
+    var s9 = (1.0 - xx) - yy;
+
+    return new Vector3D (
+        (v1.X*s1 + v1.Y*s2) + v1.Z*s3,
+        (v1.X*s4 + v1.Y*s5) + v1.Z*s6,
+        (v1.X*s7 + v1.Y*s8) + v1.Z*s9
+    );
 }
 
 Vector3D.areEqual = function(v1, v2) {

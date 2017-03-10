@@ -24,6 +24,7 @@ export { Vector4D }                    from './math/4d-vector';
 export { Matrix4x4 }                   from './math/4x4-matrix';
 export { CartesianAxis }               from './math/cartesian-axis';
 export { Plane }                       from './math/plane';
+export { Quaternion }                  from './math/quaternion';
 export { ViewFrustum }                 from './math/view-frustum';
 
 export { Xcene }                       from './scenes/xcene';

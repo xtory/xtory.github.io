@@ -13,16 +13,7 @@ function Vector2D(_x, _y) {
 // Prototype.
 //
 Vector2D.prototype = {
-    //
-    // Public methods.
-    //
-    add: function(v) {
-        return Vector2D.addVectors(this, v);
-    },
-
-    subtract: function(v) {
-        return Vector2D.subtractVectors(this, v);
-    }
+    // No contents.
 };
 
 //

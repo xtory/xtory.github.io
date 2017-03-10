@@ -16,6 +16,7 @@ function main() {
     var modelMatrix;
     var transform;
     var lastMousePosition;
+    var backgroundColor;
 
     try {
         //
@@ -44,6 +45,7 @@ function main() {
 
         modelMatrix = Cybo.Matrix4x4.createIdentityMatrix();
         transform = Cybo.Matrix4x4.createIdentityMatrix();
+        backgroundColor = Cybo.Colors.DEFAULT_BACKGROUND;
 
         // Runs the scene.
         scene.run(undefined, drawScene);
@@ -261,11 +263,18 @@ function main() {
         mainCanvas.addEventListener('mousewheel', onMouseWheel);
         mainCanvas.addEventListener('keydown',    onKeyDown);
         mainCanvas.addEventListener('keyup',      onKeyUp);
+
+        mainCanvas.addEventListener('touchstart', onTouchStart);
+        mainCanvas.addEventListener('touchmove',  onTouchMove);
+        mainCanvas.addEventListener('touchend',   onTouchEnd);
     }
 
     function drawScene() {
         //
-        scene.graphicsManager.clear();
+        scene.graphicsManager.clear (
+            undefined,
+            backgroundColor
+        );
 
         setUpTransform();
 
@@ -406,5 +415,30 @@ function main() {
                 break;
             }
         }
+    }
+
+    function onTouchStart(event) {
+        //
+        backgroundColor = new Cybo.Color (
+            Math.random(),
+            Math.random(),
+            Math.random(),
+            1
+        )
+    }
+
+    function onTouchMove(event) {
+        //
+        backgroundColor = new Cybo.Color (
+            Math.random(),
+            Math.random(),
+            Math.random(),
+            1
+        )
+    }
+
+    function onTouchEnd(event) {
+        //
+        alert("touchend!");
     }
 }

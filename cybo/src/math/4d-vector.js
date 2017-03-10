@@ -15,16 +15,7 @@ function Vector4D(_x, _y, _z, _w) {
 // Prototype.
 //
 Vector4D.prototype = {
-    //
-    // Public methods.
-    //
-    add: function(v) {
-        return Vector4D.addVectors(this, v);
-    },
-
-    subtract: function(v) {
-        return Vector4D.subtractVectors(this, v);
-    }
+    // No contents.
 };
 
 //
