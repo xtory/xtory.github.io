@@ -13,13 +13,6 @@ function Vector3D(_x, _y, _z) {
 }
 
 //
-// Prototype.
-//
-Vector3D.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 Vector3D.ELEMENT_COUNT = 3;

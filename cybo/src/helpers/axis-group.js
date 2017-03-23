@@ -8,13 +8,6 @@ function AxisGroup() {
 }
 
 //
-// Prototype.
-//
-AxisGroup.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 AxisGroup.X_AXIS = new Vector3D(1, 0, 0);

@@ -6,13 +6,6 @@ function EaseMode() {
 }
 
 //
-// Prototype.
-//
-EaseMode.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 EaseMode.EASE_IN     = 0;

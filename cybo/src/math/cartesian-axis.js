@@ -6,13 +6,6 @@ function CartesianAxis() {
 }
 
 //
-// Prototype.
-//
-CartesianAxis.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 CartesianAxis.X = 0;

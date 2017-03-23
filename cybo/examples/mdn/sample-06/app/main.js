@@ -300,7 +300,10 @@ function main() {
 
     function drawScene() {
         //
-        scene.graphicsManager.clear();
+        scene.graphicsManager.clear (
+            undefined,
+            new Cybo.Color(0.75, 0.5, 0.5, 1)
+        );
 
         setUpTransform();
 

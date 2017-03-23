@@ -6,13 +6,6 @@ function PositionColor() {
 }
 
 //
-// Prototype.
-//
-PositionColor.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 PositionColor.VERTEX_SHADER_SOURCE = [

@@ -6,13 +6,6 @@ function PositionTextureCoordinates() {
 }
 
 //
-// Prototype.
-//
-PositionTextureCoordinates.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 PositionTextureCoordinates.VERTEX_SHADER_SOURCE = [

@@ -20,13 +20,6 @@ function Viewport(_left, _bottom, _width, _height) {
 }
 
 //
-// Prototype.
-//
-Viewport.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 Viewport.MIN_DEPTH = DepthBufferValues.NEAR_CLIP_PLANE;

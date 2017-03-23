@@ -6,13 +6,6 @@ function ClearOptions() {
 }
 
 //
-// Prototype.
-//
-ClearOptions.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 ClearOptions.COLOR_BUFFER   = 0x00004000; // = WebGLRenderingContext.COLOR_BUFFER_BIT

@@ -12,7 +12,8 @@ function main() {
         renderingContext = scene.graphicsManager.renderingContext;
         
         scene.graphicsManager.clear (
-            Cybo.ClearOptions.COLOR_BUFFER
+            Cybo.ClearOptions.COLOR_BUFFER,
+            new Cybo.Color(0.75, 0.5, 0.5, 1)
         );
 
     } catch (e) {

@@ -15,13 +15,6 @@ function Quaternion(_x, _y, _z, _w) {
 }
 
 //
-// Prototype.
-//
-Quaternion.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 Quaternion.ELEMENT_COUNT = 4;

@@ -76,13 +76,6 @@ function Stopwatch() {
     // }
 }
 
-//
-// Prototype.
-//
-Stopwatch.prototype = {
-    // No contents.
-};
-
 Object.freeze(Stopwatch);
 
 export { Stopwatch };

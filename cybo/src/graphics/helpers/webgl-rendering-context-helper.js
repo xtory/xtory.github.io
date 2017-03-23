@@ -6,13 +6,6 @@ function WebGLRenderingContextHelper() {
 }
 
 //
-// Prototype.
-//
-WebGLRenderingContextHelper.prototype = {
-    // No contents.
-};
-
-//
 // Static methods.
 //
 WebGLRenderingContextHelper.syncConstants = function(renderingContext) {

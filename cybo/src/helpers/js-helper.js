@@ -6,13 +6,6 @@ function JSHelper() {
 }
 
 //
-// Prototype.
-//
-JSHelper.prototype = {
-    // No contents.
-};
-
-//
 // Static methods.
 //
 JSHelper.isUndefinedOrNull = function(value) {

@@ -12,13 +12,6 @@ function Vector4D(_x, _y, _z, _w) {
 }
 
 //
-// Prototype.
-//
-Vector4D.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 Vector4D.ELEMENT_COUNT = 4;

@@ -6,13 +6,6 @@ function MouseButton() {
 }
 
 //
-// Prototype.
-//
-MouseButton.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 MouseButton.LEFT   = 0;

@@ -9,13 +9,6 @@ function PositionColor() {
 }
 
 //
-// Prototype.
-//
-PositionColor.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 PositionColor.VERTEX_SHADER_SOURCE = [
@@ -53,13 +46,6 @@ function PositionOnly() {
 }
 
 //
-// Prototype.
-//
-PositionOnly.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 PositionOnly.VERTEX_SHADER_SOURCE = [
@@ -89,13 +75,6 @@ Object.freeze(PositionOnly);
 function PositionTextureCoordinates() {
     // No contents.
 }
-
-//
-// Prototype.
-//
-PositionTextureCoordinates.prototype = {
-    // No contents.
-};
 
 //
 // Static constants (after Object.freeze()).
@@ -134,13 +113,6 @@ Object.freeze(PositionTextureCoordinates);
 function JSHelper() {
     // No contents.
 }
-
-//
-// Prototype.
-//
-JSHelper.prototype = {
-    // No contents.
-};
 
 //
 // Static methods.
@@ -192,13 +164,6 @@ Object.freeze(JSHelper);
 function MathHelper() {
     // No contents.
 }
-
-//
-// Prototype.
-//
-MathHelper.prototype = {
-    // No contents.
-};
 
 //
 // Static constants (after Object.freeze()).
@@ -466,13 +431,6 @@ function ShaderType() {
 }
 
 //
-// Prototype.
-//
-ShaderType.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 ShaderType.VERTEX_SHADER = 0;
@@ -722,13 +680,6 @@ function Quaternion(_x, _y, _z, _w) {
 }
 
 //
-// Prototype.
-//
-Quaternion.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 Quaternion.ELEMENT_COUNT = 4;
@@ -795,13 +746,6 @@ function Vector4D(_x, _y, _z, _w) {
     this.z = _z;
     this.w = _w;
 }
-
-//
-// Prototype.
-//
-Vector4D.prototype = {
-    // No contents.
-};
 
 //
 // Static constants (after Object.freeze()).
@@ -896,13 +840,6 @@ function Vector3D(_x, _y, _z) {
     this.y = _y;
     this.z = _z;
 }
-
-//
-// Prototype.
-//
-Vector3D.prototype = {
-    // No contents.
-};
 
 //
 // Static constants (after Object.freeze()).
@@ -1055,13 +992,6 @@ function AxisGroup() {
 }
 
 //
-// Prototype.
-//
-AxisGroup.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 AxisGroup.X_AXIS = new Vector3D(1, 0, 0);
@@ -1077,13 +1007,6 @@ function ViewFrustum() {
     // No contents.
 }
 
-//
-// Prototype.
-//
-ViewFrustum.prototype = {
-    // No contents.
-};
-
 Object.freeze(ViewFrustum);
 
 //
@@ -1092,13 +1015,6 @@ Object.freeze(ViewFrustum);
 function CartesianAxis() {
     // No contents.
 }
-
-//
-// Prototype.
-//
-CartesianAxis.prototype = {
-    // No contents.
-};
 
 //
 // Static constants (after Object.freeze()).
@@ -1204,13 +1120,6 @@ function Matrix4x4 (
         get: function() { return this.elements[15]; }
     });
 }
-
-//
-// Prototype.
-//
-Matrix4x4.prototype = {
-    // No contents.
-};
 
 //
 // Static constants (after Object.freeze()).
@@ -1744,13 +1653,6 @@ function Camera (
 }   
 
 //
-// Prototype.
-//
-Camera.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 Camera.DEFAULT_FACING_DIRECTION       = Vector3D.negateVector(AxisGroup.Z_AXIS);
@@ -1844,13 +1746,6 @@ function TextureCoordinateHelper() {
 }
 
 //
-// Prototype.
-//
-TextureCoordinateHelper.prototype = {
-    // No contents.
-};
-
-//
 // Static methods.
 //
 TextureCoordinateHelper.toUV = function(s, t) {
@@ -1877,13 +1772,6 @@ Object.freeze(TextureCoordinateHelper);
 function WebGLRenderingContextHelper() {
     // No contents.
 }
-
-//
-// Prototype.
-//
-WebGLRenderingContextHelper.prototype = {
-    // No contents.
-};
 
 //
 // Static methods.
@@ -2335,13 +2223,6 @@ function ClearOptions() {
 }
 
 //
-// Prototype.
-//
-ClearOptions.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 ClearOptions.COLOR_BUFFER   = 0x00004000; // = WebGLRenderingContext.COLOR_BUFFER_BIT
@@ -2412,13 +2293,6 @@ Object.freeze(Color);
 function Colors() {
     // No contents.
 }
-
-//
-// Prototype.
-//
-Colors.prototype = {
-    // No contents.
-};
 
 //
 // Static constants (after Object.freeze()).
@@ -2801,13 +2675,6 @@ function ExceptionHelper() {
 }
 
 //
-// Prototype.
-//
-ExceptionHelper.prototype = {
-    // No contents.
-};
-
-//
 // Static methods.
 //
 ExceptionHelper.displayMessageOf = function(e) {
@@ -2837,13 +2704,6 @@ function MouseButton() {
 }
 
 //
-// Prototype.
-//
-MouseButton.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 MouseButton.LEFT   = 0;
@@ -2860,13 +2720,6 @@ function Vector2D(_x, _y) {
     this.x = _x;
     this.y = _y;
 }
-
-//
-// Prototype.
-//
-Vector2D.prototype = {
-    // No contents.
-};
 
 //
 // Static constants (after Object.freeze()).
@@ -2951,13 +2804,6 @@ function Plane() {
     // No contents.
 }
 
-//
-// Prototype.
-//
-Plane.prototype = {
-    // No contents.
-};
-
 Object.freeze(Plane);
 
 //
@@ -2966,13 +2812,6 @@ Object.freeze(Plane);
 function DepthBufferValues() {
     // No contents.
 }
-
-//
-// Prototype.
-//
-DepthBufferValues.prototype = {
-    // No contents.
-};
 
 //
 // Static constants (after Object.freeze()).
@@ -3000,13 +2839,6 @@ function Viewport(_left, _bottom, _width, _height) {
         get: function() { return _width / _height; }
     });
 }
-
-//
-// Prototype.
-//
-Viewport.prototype = {
-    // No contents.
-};
 
 //
 // Static constants (after Object.freeze()).
@@ -3227,13 +3059,6 @@ function EaseMode() {
 }
 
 //
-// Prototype.
-//
-EaseMode.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 EaseMode.EASE_IN     = 0;
@@ -3319,13 +3144,6 @@ function Stopwatch() {
     //     ); 
     // }
 }
-
-//
-// Prototype.
-//
-Stopwatch.prototype = {
-    // No contents.
-};
 
 Object.freeze(Stopwatch);
 
@@ -3519,13 +3337,6 @@ function SineEase(_easeMode, _duration, _isLooped) {
         _stopwatch.reset();
     };
 }
-
-//
-// Prototype.
-//
-SineEase.prototype = {
-    // No contents.
-};
 
 Object.freeze(SineEase);
 

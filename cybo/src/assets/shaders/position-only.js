@@ -6,13 +6,6 @@ function PositionOnly() {
 }
 
 //
-// Prototype.
-//
-PositionOnly.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 PositionOnly.VERTEX_SHADER_SOURCE = [

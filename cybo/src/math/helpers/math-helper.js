@@ -35,13 +35,6 @@ function MathHelper() {
 }
 
 //
-// Prototype.
-//
-MathHelper.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 

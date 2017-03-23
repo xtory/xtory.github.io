@@ -10,13 +10,6 @@ function Vector2D(_x, _y) {
 }
 
 //
-// Prototype.
-//
-Vector2D.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 Vector2D.ELEMENT_COUNT = 2;

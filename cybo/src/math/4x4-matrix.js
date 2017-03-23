@@ -99,13 +99,6 @@ function Matrix4x4 (
 }
 
 //
-// Prototype.
-//
-Matrix4x4.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 Matrix4x4.ELEMENT_COUNT = 16;

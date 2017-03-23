@@ -6,13 +6,6 @@ function ExceptionHelper() {
 }
 
 //
-// Prototype.
-//
-ExceptionHelper.prototype = {
-    // No contents.
-};
-
-//
 // Static methods.
 //
 ExceptionHelper.displayMessageOf = function(e) {

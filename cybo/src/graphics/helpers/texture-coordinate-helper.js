@@ -28,13 +28,6 @@ function TextureCoordinateHelper() {
 }
 
 //
-// Prototype.
-//
-TextureCoordinateHelper.prototype = {
-    // No contents.
-};
-
-//
 // Static methods.
 //
 TextureCoordinateHelper.toUV = function(s, t) {

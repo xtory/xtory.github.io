@@ -6,13 +6,6 @@ function ShaderType() {
 }
 
 //
-// Prototype.
-//
-ShaderType.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 ShaderType.VERTEX_SHADER = 0;

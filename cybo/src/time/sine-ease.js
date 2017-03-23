@@ -193,13 +193,6 @@ function SineEase(_easeMode, _duration, _isLooped) {
     }
 }
 
-//
-// Prototype.
-//
-SineEase.prototype = {
-    // No contents.
-};
-
 Object.freeze(SineEase);
 
 export { SineEase };

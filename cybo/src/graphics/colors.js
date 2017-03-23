@@ -11,13 +11,6 @@ function Colors() {
 }
 
 //
-// Prototype.
-//
-Colors.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 

@@ -6,13 +6,6 @@ function DepthBufferValues() {
 }
 
 //
-// Prototype.
-//
-DepthBufferValues.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 DepthBufferValues.NEAR_CLIP_PLANE = 0.0; // = Viewport.MIN_DEPTH

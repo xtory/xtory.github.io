@@ -202,13 +202,6 @@ function Camera (
 }   
 
 //
-// Prototype.
-//
-Camera.prototype = {
-    // No contents.
-};
-
-//
 // Static constants (after Object.freeze()).
 //
 Camera.DEFAULT_FACING_DIRECTION       = Vector3D.negateVector(AxisGroup.Z_AXIS);
