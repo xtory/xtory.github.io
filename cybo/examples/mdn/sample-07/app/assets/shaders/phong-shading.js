@@ -58,10 +58,10 @@ PhongShading.FRAGMENT_SHADER_SOURCE = [
    'void main() {',
         //
        'mediump vec4 texelColor =',
-       'texture2D(sampler, textureCoordinates);',
+           'texture2D(sampler, textureCoordinates);',
         //
        'gl_FragColor =',
-       'vec4(texelColor.rgb * lighting, texelColor.a);',
+           'vec4(texelColor.rgb * lighting, texelColor.a);',
    '}'
 
 ].join('\n');

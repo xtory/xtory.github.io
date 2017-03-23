@@ -1,3 +1,3 @@
-sample-01: Empty Scene (with no Cybo and AMD)
-sample-02: Square (with no Cybo and AMD)
-sample-03: Square (with Cybo, but no AMD)
+sample-01: Empty scene (with no modules and Cybo)
+sample-02: Square (with no modules and Cybo)
+sample-03: Square (with Cybo but no modules)

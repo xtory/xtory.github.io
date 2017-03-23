@@ -365,7 +365,7 @@ function main() {
     function setUpTextures() {
         //
         var url = // which is relative to index.html, not main.js
-            '../../assets/images/market-street.jpg';
+            '../../assets/images/jeremy-mann/market-street.jpg';
 
         mainTexture = scene.assetManager.loadTexture2D(url);
     }
