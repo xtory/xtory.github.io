@@ -5,19 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "tutorials/tutorial-04",
+            "name": "tutorials/tutorial-a04",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/cybo/examples/tutorials/tutorial-04/index.html",
+            "file": "${workspaceRoot}/cybo/examples/tutorials/tutorial-a04/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
             ]
         }, {
-            "name": "tutorials/tutorial-05",
+            "name": "tutorials/tutorial-a06",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/cybo/examples/tutorials/tutorial-05/index.html",
+            "file": "${workspaceRoot}/cybo/examples/tutorials/tutorial-a06/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
@@ -94,30 +94,30 @@
             ]
         }, {
             //
-            "name": "more/mdn/sample-01a",
+            "name": "more/mdn/sample-01",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/cybo/examples/more/mdn/sample-01a/index.html",
+            "file": "${workspaceRoot}/cybo/examples/more/mdn/sample-01/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
             ]
         }, {
             //
-            "name": "more/mdn/sample-02a",
+            "name": "more/mdn/sample-02",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/cybo/examples/more/mdn/sample-02a/index.html",
+            "file": "${workspaceRoot}/cybo/examples/more/mdn/sample-02/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
             ]
         }, {
             //
-            "name": "more/mdn/sample-02b",
+            "name": "more/mdn/sample-03",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/cybo/examples/more/mdn/sample-02b/index.html",
+            "file": "${workspaceRoot}/cybo/examples/more/mdn/sample-03/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
