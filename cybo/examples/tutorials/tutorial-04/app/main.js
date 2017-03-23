@@ -8,14 +8,14 @@ function main() {
     var shaderHelper;
     var shaderProgram;
     var vertexPositionAttributeLocation;
-    var vertexColorAttributeLocation;
+    var vertexTextureCoordinateAttributeLocation;
     var transformUniformLocation;
+    var samplerUniformLocation;
     var vertexPositionBuffer;
-    var vertexColorBuffer;
-    var vertexColorBuffer2;
-    var sineEase;
+    var vertexTextureCoordinateBuffer;
+    var indexBuffer;
     var transform;
-    var rotationY = 0;
+    var mainTexture;
 
     try {
         //
@@ -24,7 +24,7 @@ function main() {
         renderingContext =
             scene.graphicsManager.renderingContext;
 
-        var p = new Cybo.Vector3D(0, 0, 300);
+        var p = new Cybo.Vector3D(0, 0, 1250);
         var origin = new Cybo.Vector3D(0, 0, 0);
 
         camera = new Cybo.Camera (
@@ -32,7 +32,7 @@ function main() {
             p,
             Cybo.Vector3D.subtractVectors(origin, p)
         );
-        
+
         shaderHelper =
             new Cybo.ShaderHelper(scene.graphicsManager);
 
@@ -42,12 +42,17 @@ function main() {
 
         // Here's where we call the routine that builds all the objects
         // we'll be drawing.
-        setUpBuffers();
+        setUpBuffers(-30, 30, 640, 560);
 
-        sineEase = new Cybo.SineEase(Cybo.EaseMode.EASE_IN_OUT, 2000, true);
-        sineEase.start();
+        // Sets up the textures.
+        setUpTextures();
 
-        renderingContext.disable(WebGLRenderingContext.CULL_FACE);
+        renderingContext.enable(WebGLRenderingContext.BLEND);
+
+        renderingContext.blendFunc (
+            WebGLRenderingContext.SRC_ALPHA,
+            WebGLRenderingContext.ONE_MINUS_SRC_ALPHA
+        );
 
         transform = Cybo.Matrix4x4.createIdentityMatrix();
             
@@ -67,12 +72,12 @@ function main() {
         //
         var vertexShader = scene.assetManager.loadShader (
             Cybo.ShaderType.VERTEX_SHADER,
-            Cybo.PositionColor.VERTEX_SHADER_SOURCE
+            Cybo.PositionTextureCoordinates.VERTEX_SHADER_SOURCE
         );
-            
+
         var fragmentShader = scene.assetManager.loadShader (
             Cybo.ShaderType.FRAGMENT_SHADER,
-            Cybo.PositionColor.FRAGMENT_SHADER_SOURCE
+            Cybo.PositionTextureCoordinates.FRAGMENT_SHADER_SOURCE
         );
 
         shaderProgram = shaderHelper.setUpShaderProgram (
@@ -86,33 +91,40 @@ function main() {
                 'vertexPosition'
             )
         );
-        
-        vertexColorAttributeLocation = (
+
+        vertexTextureCoordinateAttributeLocation = (
             scene.graphicsManager.getAttributeLocation (
                 shaderProgram,
-                'vertexColor'
+                'vertexTextureCoordinates'
             )
         );
-        
+
         transformUniformLocation = (
             scene.graphicsManager.getUniformLocation (
                 shaderProgram,
                 'transform'
             )
         );
+
+        samplerUniformLocation = (
+            scene.graphicsManager.getUniformLocation (
+                shaderProgram,
+                'sampler'
+            )
+        );
     }
 
-    function setUpBuffers() {
+    function setUpBuffers(x, y, w, h) {
         //
-        // Create an array of vertex positions for the square. Note that the Z
-        // coordinate is always 0 here.
+        var halfWidth = w / 2;
+        var halfHeight = h / 2;
 
         var vertexPositions = [
-            50.0, -50.0,  0.0,
-            50.0,  50.0,  0.0,
-           -50.0, -50.0,  0.0,
-           -50.0,  50.0,  0.0
-        ];
+            x+halfWidth, y-halfHeight, 0,
+            x+halfWidth, y+halfHeight, 0,
+            x-halfWidth, y-halfHeight, 0,
+            x-halfWidth, y+halfHeight, 0
+        ];        
 
         vertexPositionBuffer =
             renderingContext.createBuffer();
@@ -124,7 +136,7 @@ function main() {
             WebGLRenderingContext.ARRAY_BUFFER,
             vertexPositionBuffer
         );
-        
+
         // Now pass the list of vertex positions into WebGL to build the shape.
         // We do this by creating a Float32Array from the JavaScript array, then
         // use it to fill the current vertex buffer.
@@ -135,57 +147,51 @@ function main() {
             WebGLRenderingContext.STATIC_DRAW
         );
 
-        // Now set up the colors for the vertices
+        var textureCoordinates = [
+            1.0, 0.0,
+            1.0, 1.0,
+            0.0, 0.0,
+            0.0, 1.0
+        ];
 
-        var vertexColors = [].concat (
-            Cybo.Colors.PHOTOSHOP_DARK_RED.toArray(),
-            Cybo.Colors.PHOTOSHOP_DARK_YELLOW_ORANGE.toArray(),
-            Cybo.Colors.PHOTOSHOP_DARK_BLUE.toArray(),
-            Cybo.Colors.PHOTOSHOP_DARK_GREEN.toArray()
-        );
-
-        vertexColorBuffer =
+        vertexTextureCoordinateBuffer =
             renderingContext.createBuffer();
 
         renderingContext.bindBuffer (
             WebGLRenderingContext.ARRAY_BUFFER,
-            vertexColorBuffer
+            vertexTextureCoordinateBuffer
         );
 
         renderingContext.bufferData (
             WebGLRenderingContext.ARRAY_BUFFER,
-            new Float32Array(vertexColors),
+            new Float32Array(textureCoordinates),
             WebGLRenderingContext.STATIC_DRAW
         );
+    }
 
-        var vertexColors2 = [].concat (
-            Cybo.Colors.PINK.toArray(),
-            Cybo.Colors.PHOTOSHOP_PASTEL_YELLOW_ORANGE.toArray(),
-            Cybo.Colors.PHOTOSHOP_PASTEL_BLUE.toArray(),
-            Cybo.Colors.PHOTOSHOP_PASTEL_GREEN.toArray()
-        );
+    //
+    // setUpTextures
+    //
+    // Initialize the textures we'll be using, then initiate a load of
+    // the texture images. The handleTextureLoaded() callback will finish
+    // the job; it gets called each time a texture finishes loading.
+    //
+    function setUpTextures() {
+        //
+        var url = // which is relative to index.html, not main.js
+            '../../assets/images/tree.png';
 
-        vertexColorBuffer2 =
-            renderingContext.createBuffer();
-
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            vertexColorBuffer2
-        );
-
-        renderingContext.bufferData (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            new Float32Array(vertexColors2),
-            WebGLRenderingContext.STATIC_DRAW
-        );
+        mainTexture = scene.assetManager.loadTexture2D(url);
     }
 
     function drawScene() {
         //
         scene.graphicsManager.clear (
             undefined,
-            new Cybo.Color(0.75, 0.5, 0.5, 1)
+            Cybo.Colors.PHOTOSHOP_PASTEL_GREEN_CYAN
         );
+
+        setUpTransform();
 
         scene.graphicsManager.shaderProgram =
             shaderProgram;
@@ -194,23 +200,11 @@ function main() {
             vertexPositionAttributeLocation
         );
 
-        // Draw the square by binding the array buffer to the square's vertices
-        // array, setting attributes, and pushing it to GL.
-
-        scene.graphicsManager.enableVertexAttribute (
-            vertexColorAttributeLocation
-        );
-
-        rotationY = (
-            Cybo.MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES *
-            sineEase.ratioOfCurrentToTotalTimeOffset
-        );
-
         renderingContext.bindBuffer (
             WebGLRenderingContext.ARRAY_BUFFER,
             vertexPositionBuffer
         );
-        
+
         renderingContext.vertexAttribPointer (
             vertexPositionAttributeLocation,
             3,
@@ -220,48 +214,38 @@ function main() {
             0
         );
 
-        // Set the colors attribute for the vertices.
+        scene.graphicsManager.enableVertexAttribute (
+            vertexTextureCoordinateAttributeLocation
+        );
 
-        // Left square.
         renderingContext.bindBuffer (
             WebGLRenderingContext.ARRAY_BUFFER,
-            vertexColorBuffer
+            vertexTextureCoordinateBuffer
         );
 
         renderingContext.vertexAttribPointer (
-            vertexColorAttributeLocation,
-            4,
+            vertexTextureCoordinateAttributeLocation,
+            2,
             WebGLRenderingContext.FLOAT,
             false,
             0,
             0
         );
 
-        setUpTransform(-75, true);
-        
-        renderingContext.drawArrays (
-            WebGLRenderingContext.TRIANGLE_STRIP,
-            0,
-            4
+        renderingContext.activeTexture (
+            WebGLRenderingContext.TEXTURE0
         );
 
-        // Right square.
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            vertexColorBuffer2
+        renderingContext.bindTexture (
+            WebGLRenderingContext.TEXTURE_2D,
+            mainTexture
         );
 
-        renderingContext.vertexAttribPointer (
-            vertexColorAttributeLocation,
-            4,
-            WebGLRenderingContext.FLOAT,
-            false,
-            0,
+        scene.graphicsManager.setSamplerUniform (
+            samplerUniformLocation,
             0
         );
 
-        setUpTransform(75, false);
-        
         renderingContext.drawArrays (
             WebGLRenderingContext.TRIANGLE_STRIP,
             0,
@@ -269,26 +253,9 @@ function main() {
         );
     }
 
-    function setUpTransform(offsetX) {
+    function setUpTransform() {
         //
-        var modelMatrix = Cybo.Matrix4x4.createRotationMatrix (
-            Cybo.CartesianAxis.Y,
-            rotationY
-        );
-
-        var v = new Cybo.Vector3D(offsetX, 0, 0);
-
-        modelMatrix = Cybo.Matrix4x4.multiplyMatrices (
-            Cybo.Matrix4x4.createTranslationMatrix(v),
-            modelMatrix
-        );
-
         camera.getTransform(transform);
-
-        transform = Cybo.Matrix4x4.multiplyMatrices (
-            transform,
-            modelMatrix
-        );
 
         scene.graphicsManager.setMatrix4x4Uniform (
             transformUniformLocation,

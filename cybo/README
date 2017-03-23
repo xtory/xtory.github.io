@@ -22,11 +22,11 @@ If Cybo uses ES6 in the future, the steps below are how to use babel:
 
 7. add some code to rollup.config.js...
 
-import babel from "rollup-plugin-babel";
+import babel from 'rollup-plugin-babel';
 &
 plugins: [
     babel ({
-        exclude: "node_modules/**"
+        exclude: 'node_modules/**'
     })
 ]
 

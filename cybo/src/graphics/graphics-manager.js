@@ -1,6 +1,7 @@
 import { ClearOptions  }               from './clear-options';
 import { Color  }                      from './color';
 import { Colors }                      from './colors';
+import { MathHelper }                  from '../math/helpers/math-helper';
 import { WebGLRenderingContextHelper } from './helpers/webgl-rendering-context-helper';
 import { JSHelper }                    from '../helpers/js-helper';
 
@@ -22,7 +23,7 @@ function GraphicsManager(_xcene) {
             'get': function() { return _xcene; }
         });
 
-        setUpWebGLRenderingContext();
+        setUpRenderingContext();
 
         Object.defineProperty(this, 'renderingContext', {
             get: function() { return _renderingContext; }
@@ -77,7 +78,7 @@ function GraphicsManager(_xcene) {
 
     } catch (e) {
         //
-        console.log("GraphicsManager: " + e);
+        console.log('GraphicsManager: '+ e);
 
         throw e;
     }
@@ -85,7 +86,7 @@ function GraphicsManager(_xcene) {
     //
     // Private methods.
     //
-    function setUpWebGLRenderingContext() {
+    function setUpRenderingContext() {
         //
         // Try to grab the standard context. If it fails, fallback to experi-
         // mental.
@@ -136,11 +137,8 @@ function GraphicsManager(_xcene) {
         _renderingContext.clearDepth(_clearDepth);
         _renderingContext.clearStencil(_clearStencil);
         
-        // Enable depth testing
-        _renderingContext.enable(WebGLRenderingContext.DEPTH_TEST);
-
-        // Near things obscure far things
-        _renderingContext.depthFunc(WebGLRenderingContext.LEQUAL);
+        // Sets up the states.
+        setUpStates();
         
         // Flips the source data along its vertical axis to make WebGL's texture
         // coordinates (S, T) work correctly.
@@ -148,6 +146,44 @@ function GraphicsManager(_xcene) {
             WebGLRenderingContext.UNPACK_FLIP_Y_WEBGL,
             true
         );
+    };
+
+    function setUpStates() {
+        //
+        setUpAlphaBlendState();
+
+        setUpDepthStencilState();
+
+        setUpSamplerState();
+
+        setUpRasterizerState();
+    }
+
+    function setUpAlphaBlendState() {
+        //
+        _renderingContext.disable(WebGLRenderingContext.BLEND); // default: disable.
+    }
+
+    function setUpDepthStencilState() {
+        //
+        // Depth.
+        _renderingContext.enable(WebGLRenderingContext.DEPTH_TEST); // default: disable.
+        _renderingContext.depthFunc(WebGLRenderingContext.LEQUAL); // default: LESS.
+
+        // Stencil.
+        _renderingContext.disable(WebGLRenderingContext.STENCIL_TEST); // default: disable.
+    }
+
+    function setUpSamplerState() {
+        //
+        // Note:
+        // The way of setting WebGL's sampler states is different from DirectX.
+    }
+
+    function setUpRasterizerState() {
+        //
+        _renderingContext.enable(WebGLRenderingContext.CULL_FACE); // default: disable.
+        _renderingContext.cullFace(WebGLRenderingContext.BACK); // default: BACK.
     }
 
     //

@@ -20,8 +20,6 @@ function main() {
     var lastTouchPosition;
     var lastTouchDistanceSqured;
     var backgroundColor;
-    // var isTouch1ing;
-    // var isTouch2ing;
 
     try {
         //
@@ -587,11 +585,11 @@ function main() {
     }    
 
     function onTouchCancel(event) {
-        //alert("touchcancel!");
+        //alert('touchcancel!');
     }    
 
     function onTouchEnd(event) {
-        //alert("touchend!");
+        //alert('touchend!');
         // isTouch1ing = false;
         // isTouch2ing = false;
     }

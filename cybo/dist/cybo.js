@@ -284,8 +284,8 @@ MathHelper.isScalar1LessThanScalar2 = function(s1, s2) {
 
     if (s1 - s2 <= -MathHelper.EPSILON) {
         //
-        // which equals to "s1 - s2 < 0",
-        // that is, "s1 < s2"
+        // which equals to 's1 - s2 < 0',
+        // that is, 's1 < s2'
 
         return true;
 
@@ -294,8 +294,8 @@ MathHelper.isScalar1LessThanScalar2 = function(s1, s2) {
         // -MathHelper.EPSILON < s1 - s2, which includes
         // A. -MathHelper.EPSILON < s1 - s2 < MathHelper.EPSILON
         // B. MathHelper.EPSILON <= s1 - s2, and
-        // A means "s1 - s2 = 0", B means "0 < s1 - s2",
-        // so "0 <= s1 - s2", that is, "s2 <= s1"
+        // A means 's1 - s2 = 0', B means '0 < s1 - s2',
+        // so '0 <= s1 - s2', that is, 's2 <= s1'
 
         return false;
     }
@@ -316,15 +316,15 @@ MathHelper.isScalar1LessThanOrEqualToScalar2 = function(s1, s2) {
         // which includes
         // A. s1 - s2 <= -MathHelper.EPSILON, and
         // B. -MathHelper.EPSILON < s1 - s2 < MathHelper.EPSILON
-        // A means "s1 - s2 < 0", B means "s1 - s2 = 0",
-        // so "s1 - s2 <= 0", that is, "s1 <= s2"
+        // A means 's1 - s2 < 0', B means 's1 - s2 = 0',
+        // so 's1 - s2 <= 0', that is, 's1 <= s2'
 
         return true;
 
     } else {
         //
-        // MathHelper.EPSILON <= s1 - s2, which equals to "0 < s1 - s2",
-        // that is, "s2 < s1"
+        // MathHelper.EPSILON <= s1 - s2, which equals to '0 < s1 - s2',
+        // that is, 's2 < s1'
 
         return false;
     }
@@ -342,8 +342,8 @@ MathHelper.isScalar1GreaterThanScalar2 = function(s1, s2) {
 
     if (MathHelper.EPSILON <= s1 - s2) {
         //
-        // which equals to "0 < s1 - s2",
-        // that is, "s2 < s1"
+        // which equals to '0 < s1 - s2',
+        // that is, 's2 < s1'
 
         return true;
 
@@ -352,8 +352,8 @@ MathHelper.isScalar1GreaterThanScalar2 = function(s1, s2) {
         // s1 - s2 < MathHelper.EPSILON, which includes
         // A. s1 - s2 <= -MathHelper.EPSILON, and
         // B. -MathHelper.EPSILON < s1 - s2 < MathHelper.EPSILON
-        // A means "s1 - s2 < 0", B means "s1 - s2 = 0",
-        // so "s1 - s2 <= 0", that is, "s1 <= s2"
+        // A means 's1 - s2 < 0', B means 's1 - s2 = 0',
+        // so 's1 - s2 <= 0', that is, 's1 <= s2'
 
         return false;
     }
@@ -374,15 +374,15 @@ MathHelper.isScalar1GreaterThanOrEqualToScalar2 = function(s1, s2) {
         // which includes
         // A. -MathHelper.EPSILON < s1 - s2 < MathHelper.EPSILON, and
         // B. MathHelper.EPSILON <= s1 - s2
-        // A means "s1 - s2 = 0", B means "0 < s1 - s2",
-        // so "0 <= s1 - s2", that is, "s2 <= s1"
+        // A means 's1 - s2 = 0', B means '0 < s1 - s2',
+        // so '0 <= s1 - s2', that is, 's2 <= s1'
 
         return true;
 
     } else {
         //
-        // s1 - s2 <= -MathHelper.EPSILON, which equals to "s1 - s2 < 0",
-        // that is, "s1 < s2"
+        // s1 - s2 <= -MathHelper.EPSILON, which equals to 's1 - s2 < 0',
+        // that is, 's1 < s2'
 
         return false;
     }
@@ -1507,6 +1507,26 @@ function Camera (
 
         _viewFrustum = new ViewFrustum();
 
+        Object.defineProperty(this, 'position', {
+            'get': function() { return _position; }
+        });
+
+        Object.defineProperty(this, 'facingDirection', {
+            'get': function() { return _facingDirection; }
+        });
+
+        Object.defineProperty(this, 'upDirection', {
+            'get': function() { return _upDirection; }
+        });
+
+        Object.defineProperty(this, 'distanceToNearPlane', {
+            'get': function() { return _distanceToNearPlane; }
+        });
+
+        Object.defineProperty(this, 'distanceToFarPlane', {
+            'get': function() { return _distanceToFarPlane; }
+        });
+
         Object.defineProperty(this, 'viewFrustum', {
             'get': function() { return _viewFrustum; }
         });
@@ -1544,7 +1564,7 @@ function Camera (
     function checkProjectionMatrix() {
         //
         // Note:
-        // Calculates the aspect ratio of "viewport", not "back buffer".
+        // Calculates the aspect ratio of 'viewport', not 'back buffer'.
 
         var viewportAspectRatio =
             _scene.graphicsManager.viewport.aspectRatio;
@@ -1613,6 +1633,43 @@ function Camera (
         checkProjectionMatrix();
         m.elements = _projectionMatrix.elements.slice();
     };
+
+    // this.getTransform = function(m) {
+    //     //
+    //     // Checks the view matrix.
+    //     checkViewMatrix();
+
+    //     // Checks the projection matrix.
+    //     checkProjectionMatrix();
+
+    //     if (_hasToRaiseTransformUpdatedEvent === true) {
+    //         //
+    //         // Note:
+    //         // _hasToRaiseTransformUpdatedEvent == true means _viewMatrix or
+    //         // _projectionMatrix (or both) is recreated. So, _transform has
+    //         // to be recalculated.
+
+    //         // Recalculates the transform.
+    //         _transform = Matrix4x4.multiplyMatrices (
+    //             _projectionMatrix,
+    //             _viewMatrix
+    //         );
+    //     }
+
+    //     m.elements = _transform.elements.slice();
+
+    //     // Raises the transform-updated event (if necessary).
+    //     if (_hasToRaiseTransformUpdatedEvent === true) {
+    //         // Temp:
+    //         /*
+    //         if (this.TransformUpdated != null) {
+    //             this.TransformUpdated(this, EventArgs.Empty);
+    //         }
+    //         */
+
+    //         _hasToRaiseTransformUpdatedEvent = false;
+    //     }
+    // }
 
     this.getTransform = function(m) {
         //
@@ -2431,7 +2488,7 @@ function GraphicsManager(_xcene) {
             'get': function() { return _xcene; }
         });
 
-        setUpWebGLRenderingContext();
+        setUpRenderingContext();
 
         Object.defineProperty(this, 'renderingContext', {
             get: function() { return _renderingContext; }
@@ -2486,7 +2543,7 @@ function GraphicsManager(_xcene) {
 
     } catch (e) {
         //
-        console.log("GraphicsManager: " + e);
+        console.log('GraphicsManager: '+ e);
 
         throw e;
     }
@@ -2494,7 +2551,7 @@ function GraphicsManager(_xcene) {
     //
     // Private methods.
     //
-    function setUpWebGLRenderingContext() {
+    function setUpRenderingContext() {
         //
         // Try to grab the standard context. If it fails, fallback to experi-
         // mental.
@@ -2545,11 +2602,8 @@ function GraphicsManager(_xcene) {
         _renderingContext.clearDepth(_clearDepth);
         _renderingContext.clearStencil(_clearStencil);
         
-        // Enable depth testing
-        _renderingContext.enable(WebGLRenderingContext.DEPTH_TEST);
-
-        // Near things obscure far things
-        _renderingContext.depthFunc(WebGLRenderingContext.LEQUAL);
+        // Sets up the states.
+        setUpStates();
         
         // Flips the source data along its vertical axis to make WebGL's texture
         // coordinates (S, T) work correctly.
@@ -2557,6 +2611,44 @@ function GraphicsManager(_xcene) {
             WebGLRenderingContext.UNPACK_FLIP_Y_WEBGL,
             true
         );
+    }
+
+    function setUpStates() {
+        //
+        setUpAlphaBlendState();
+
+        setUpDepthStencilState();
+
+        setUpSamplerState();
+
+        setUpRasterizerState();
+    }
+
+    function setUpAlphaBlendState() {
+        //
+        _renderingContext.disable(WebGLRenderingContext.BLEND); // default: disable.
+    }
+
+    function setUpDepthStencilState() {
+        //
+        // Depth.
+        _renderingContext.enable(WebGLRenderingContext.DEPTH_TEST); // default: disable.
+        _renderingContext.depthFunc(WebGLRenderingContext.LEQUAL); // default: LESS.
+
+        // Stencil.
+        _renderingContext.disable(WebGLRenderingContext.STENCIL_TEST); // default: disable.
+    }
+
+    function setUpSamplerState() {
+        //
+        // Note:
+        // The way of setting WebGL's sampler states is different from DirectX.
+    }
+
+    function setUpRasterizerState() {
+        //
+        _renderingContext.enable(WebGLRenderingContext.CULL_FACE); // default: disable.
+        _renderingContext.cullFace(WebGLRenderingContext.BACK); // default: BACK.
     }
 
     //
