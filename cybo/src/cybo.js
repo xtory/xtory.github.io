@@ -14,11 +14,11 @@ export { Color }                       from './graphics/color';
 export { Colors }                      from './graphics/colors';
 export { GraphicsManager }             from './graphics/graphics-manager';
 
-export { AxisGroup }                   from './helpers/axis-group';
 export { ExceptionHelper }             from './helpers/exception-helper';
 export { JSHelper }                    from './helpers/js-helper';
 export { MouseButton }                 from './helpers/mouse-button';
 
+export { AxisGroup }                   from './math/axis-group';
 export { MathHelper }                  from './math/helpers/math-helper';
 export { Vector2D }                    from './math/2d-vector';
 export { Vector3D }                    from './math/3d-vector';

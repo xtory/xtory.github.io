@@ -13,30 +13,29 @@ function SineEase(_easeMode, _duration, _isLooped) {
 
     switch (_easeMode)
     {
-        case EaseMode.EASE_IN:
-        {
+        case EaseMode.EASE_IN: {
+            //
             _startAngle  = -MathHelper.PI_OVER_TWO;
             _finishAngle =  0;
             break;
         }
 
-        case EaseMode.EASE_OUT:
-        {
+        case EaseMode.EASE_OUT: {
+            //
             _startAngle  = 0;
             _finishAngle = MathHelper.PI_OVER_TWO;
             break;
         }
 
-        case EaseMode.EASE_IN_OUT:
-        {
+        case EaseMode.EASE_IN_OUT: {
+            //
             _startAngle  = -MathHelper.PI_OVER_TWO;
             _finishAngle =  MathHelper.PI_OVER_TWO;
             break;
         }
 
-        default:
-        {
-            throw new NotSupportedException();
+        default: {
+            throw 'A not-supported exception raised.';
         }
     }
 

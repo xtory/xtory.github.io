@@ -265,38 +265,74 @@ Matrix4x4.createRotationMatrix = function (
     cartesianAxis,
     angle // in radians.
 ){
-    var cosine = Math.cos(angle);
-    var sine   = Math.sin(angle);
+    var cos = Math.cos(angle);
+    var sin = Math.sin(angle);
 
     switch (cartesianAxis) {
         //
         case CartesianAxis.X: {
             //
+            // Note:
+            // In DirectX,
+            //
+            // return new Matrix4x4 (
+            //     1,    0,      0,      0,
+            //     0,    cos,    sin,    0,
+            //     0,   -sin,    cos,    0,
+            //     0,    0,      0,      1
+            // );
+            //
+            // But in WebGL,
+            //
             return new Matrix4x4 (
-                1,    0,         0,         0,
-                0,    cosine,    sine,      0,
-                0,   -sine,      cosine,    0,
-                0,    0,         0,         1
-            );
+                1,    0,      0,      0,
+                0,    cos,   -sin,    0,
+                0,    sin,    cos,    0,
+                0,    0,      0,      1
+            );            
         }
 
         case CartesianAxis.Y: {
             //
+            // Note:
+            // In DirectX,
+            //
+            // return new Matrix4x4 (
+            //     cos,    0,   -sin,    0,
+            //     0,      1,    0,      0,
+            //     sin,    0,    cos,    0,
+            //     0,      0,    0,      1
+            // );
+            //
+            // But in WebGL,
+            //
             return new Matrix4x4 (
-                cosine,    0,   -sine,      0,
-                0,         1,    0,         0,
-                sine,      0,    cosine,    0,
-                0,         0,    0,         1
-            );
+                cos,    0,    sin,    0,
+                0,      1,    0,      0,
+               -sin,    0,    cos,    0,
+                0,      0,    0,      1
+            );            
         }
 
         case CartesianAxis.Z: {
             //
+            // Note:
+            // In DirectX,
+            //
+            // return new Matrix4x4 (
+            //     cos,    sin,    0,    0,
+            //    -sin,    cos,    0,    0,
+            //     0,      0,      1,    0,
+            //     0,      0,      0,    1
+            // );
+            //
+            // But in WebGL,
+            //
             return new Matrix4x4 (
-                cosine,    sine,      0,    0,
-                -sine,      cosine,    0,    0,
-                0,         0,         1,    0,
-                0,         0,         0,    1
+                cos,   -sin,    0,    0,
+                sin,    cos,    0,    0,
+                0,      0,      1,    0,
+                0,      0,      0,    1
             );
         }
 

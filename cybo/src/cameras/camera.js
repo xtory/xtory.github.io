@@ -1,8 +1,8 @@
-import { AxisGroup }   from '../helpers/axis-group';
+import { AxisGroup }   from '../math/axis-group';
 import { MathHelper }  from '../math/helpers/math-helper';
+import { Matrix4x4 }   from '../math/4x4-matrix';
 import { Vector3D }    from '../math/3d-vector';
 import { ViewFrustum } from '../math/view-frustum';
-import { Matrix4x4 }   from '../math/4x4-matrix';
 
 //
 // Constructor.
