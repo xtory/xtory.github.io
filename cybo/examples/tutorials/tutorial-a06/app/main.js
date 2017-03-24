@@ -385,15 +385,17 @@ function main() {
         //
         if (isMouseLeftButtonPressed === true) {
             //
-            var offset = new Cybo.Vector2D (
-                event.clientX - lastMousePosition.x,
-                event.clientY - lastMousePosition.y
-            );       
-
-            lastMousePosition =
+            var mousePosition =
                 new Cybo.Vector2D(event.clientX, event.clientY);
 
-            rotateModel(offset);
+            var offset = Cybo.Vector2D.subtractVectors (
+                mousePosition,
+                lastMousePosition
+            );
+
+            lastMousePosition = mousePosition;
+
+            rotateModel(Cybo.Vector2D.negateVector(offset));
         }
     }
 
@@ -525,10 +527,6 @@ function main() {
             //
             case 1: {
                 //
-                // if (isTouch1ing === false) {
-                //     break;
-                // }
-
                 var touch = event.touches[0];
 
                 var touchPosition =
@@ -539,19 +537,15 @@ function main() {
                     lastTouchPosition
                 );
 
-                rotateModel(offset);
-
                 lastTouchPosition = touchPosition;
+                
+                rotateModel(offset);
 
                 break;
             }
 
             case 2: {
                 //
-                // if (isTouch2ing === false) {
-                //     break;
-                // }
-
                 var touch1 = event.touches[0];
                 var touch2 = event.touches[1];
 
@@ -563,9 +557,6 @@ function main() {
                 var touchDistanceSqured =
                     Cybo.Vector2D.calculateLengthSquaredOf(v);
 
-                // camera.zoom (
-                //     touchDistanceSqured - lastTouchDistanceSqured
-                // );
                 var s = 12;
                 if (touchDistanceSqured < lastTouchDistanceSqured) {
                     camera.zoom(-s);
@@ -599,7 +590,7 @@ function main() {
         modelMatrix = Cybo.Matrix4x4.multiplyMatrices (
             Cybo.Matrix4x4.createRotationMatrix (
                 Cybo.CartesianAxis.Y,
-                Cybo.MathHelper.toRadians(-offset.x * 0.5)
+                Cybo.MathHelper.toRadians(offset.x * 0.5)
             ),
             modelMatrix
         );
@@ -607,7 +598,7 @@ function main() {
         modelMatrix = Cybo.Matrix4x4.multiplyMatrices (
             Cybo.Matrix4x4.createRotationMatrix (
                 Cybo.CartesianAxis.X,
-                Cybo.MathHelper.toRadians(-offset.y * 0.5)
+                Cybo.MathHelper.toRadians(offset.y * 0.5)
             ),
             modelMatrix
         );
