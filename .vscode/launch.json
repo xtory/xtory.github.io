@@ -137,36 +137,6 @@
             "runtimeArgs": [
                 "-allow-file-access-from-files"
             ]
-        }, {
-            //
-            "name": "more/mdn/sample-01",
-            "type": "chrome",
-            "request": "launch",
-            "file": "${workspaceRoot}/cybo/examples/more/mdn/sample-01/index.html",
-            "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
-            "runtimeArgs": [
-                "-allow-file-access-from-files"
-            ]
-        }, {
-            //
-            "name": "more/mdn/sample-02",
-            "type": "chrome",
-            "request": "launch",
-            "file": "${workspaceRoot}/cybo/examples/more/mdn/sample-02/index.html",
-            "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
-            "runtimeArgs": [
-                "-allow-file-access-from-files"
-            ]
-        }, {
-            //
-            "name": "more/mdn/sample-03",
-            "type": "chrome",
-            "request": "launch",
-            "file": "${workspaceRoot}/cybo/examples/more/mdn/sample-03/index.html",
-            "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
-            "runtimeArgs": [
-                "-allow-file-access-from-files"
-            ]
         }
     ]
 }
