@@ -539,7 +539,8 @@ function main() {
 
                 lastTouchPosition = touchPosition;
                 
-                rotateModel(Cybo.Vector2D.negateVector(offset));
+                //rotateModel(Cybo.Vector2D.negateVector(offset));
+                rotateModel(offset);
 
                 break;
             }
