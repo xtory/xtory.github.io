@@ -2354,6 +2354,7 @@ function Colors() {
 //
 // Static constants (after Object.freeze()).
 //
+Colors.DEFAULT_BACKGROUND = new Color(32/255, 32/255, 32/255, 1);
 
 //
 // System.
@@ -2361,8 +2362,11 @@ function Colors() {
 Colors.BLACK              = new Color(0, 0, 0, 1);
 Colors.WHITE              = new Color(1, 1, 1, 1);
 Colors.TRANSPARENT        = new Color(1, 1, 1, 0);
-Colors.DEFAULT_BACKGROUND = new Color(32/255, 32/255, 32/255, 1);
+Colors.SKY_BLUE           = new Color(135/255, 206/255, 235/255, 1);
+Colors.CADET_BLUE         = new Color(95/255, 158/255, 160/255, 1);
 
+//
+// Photoshop
 //
 // Red.
 // (PS, There's no PHOTOSHOP_PASTEL_RED (cuz it's ugly), use PINK instead.)
@@ -2467,6 +2471,11 @@ Colors.PHOTOSHOP_PALE_COOL_BROWN = new Color(199/255, 178/255, 153/255, 1);
 Colors.PHOTOSHOP_DARK_COOL_BROWN = new Color(83/255, 71/255, 65/255, 1);
 Colors.PHOTOSHOP_PALE_WARM_BROWN = new Color(198/255, 156/255, 109/255, 1);
 Colors.PHOTOSHOP_DARK_WARM_BROWN = new Color(117/255, 76/255, 36/255, 1);
+
+//
+// OSX
+//
+Colors.OSX_SOLID_KELP = new Color(89/255, 136/255, 123/255, 1);
 
 Object.freeze(Colors);
 

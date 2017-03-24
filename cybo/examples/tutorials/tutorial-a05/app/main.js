@@ -14,7 +14,6 @@ function main() {
     var sampler2UniformLocation;
     var vertexPositionBuffer;
     var vertexTextureCoordinateBuffer;
-    var indexBuffer;
     var transform;
     var mainTexture;
     var starburstTexture;
@@ -181,7 +180,7 @@ function main() {
     function setUpTextures() {
         //
         var url = // which is relative to index.html, not main.js
-            //'../../assets/images/market-street.jpg';
+            //'../../assets/images/mier.jpg';
             '../../assets/images/jeremy-mann/cat.jpg';
 
         mainTexture = scene.assetManager.loadTexture2D(url);
@@ -195,7 +194,7 @@ function main() {
         //
         scene.graphicsManager.clear (
             undefined,
-            Cybo.Colors.PHOTOSHOP_PASTEL_GREEN_CYAN
+            Cybo.Colors.CADET_BLUE
         );
 
         setUpTransform();

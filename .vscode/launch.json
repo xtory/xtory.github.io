@@ -5,6 +5,33 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "tutorials/tutorial-a01",
+            "type": "chrome",
+            "request": "launch",
+            "file": "${workspaceRoot}/cybo/examples/tutorials/tutorial-a01/index.html",
+            "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
+            "runtimeArgs": [
+                "-allow-file-access-from-files"
+            ]
+        }, {
+            "name": "tutorials/tutorial-a02",
+            "type": "chrome",
+            "request": "launch",
+            "file": "${workspaceRoot}/cybo/examples/tutorials/tutorial-a02/index.html",
+            "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
+            "runtimeArgs": [
+                "-allow-file-access-from-files"
+            ]
+        }, {
+            "name": "tutorials/tutorial-a03",
+            "type": "chrome",
+            "request": "launch",
+            "file": "${workspaceRoot}/cybo/examples/tutorials/tutorial-a03/index.html",
+            "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
+            "runtimeArgs": [
+                "-allow-file-access-from-files"
+            ]
+        }, {
             "name": "tutorials/tutorial-a04",
             "type": "chrome",
             "request": "launch",
@@ -27,6 +54,15 @@
             "type": "chrome",
             "request": "launch",
             "file": "${workspaceRoot}/cybo/examples/tutorials/tutorial-a06/index.html",
+            "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
+            "runtimeArgs": [
+                "-allow-file-access-from-files"
+            ]
+        }, {
+            "name": "tutorials/tutorial-b01",
+            "type": "chrome",
+            "request": "launch",
+            "file": "${workspaceRoot}/cybo/examples/tutorials/tutorial-b01/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"

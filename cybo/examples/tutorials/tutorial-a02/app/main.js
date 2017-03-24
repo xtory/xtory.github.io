@@ -41,17 +41,10 @@ function main() {
 
         // Here's where we call the routine that builds all the objects
         // we'll be drawing.
-        setUpBuffers(-30, 30, 640, 560);
+        setUpBuffers(0, 0, 500, 500);
 
         // Sets up the textures.
         setUpTextures();
-
-        renderingContext.enable(WebGLRenderingContext.BLEND);
-
-        renderingContext.blendFunc (
-            WebGLRenderingContext.SRC_ALPHA,
-            WebGLRenderingContext.ONE_MINUS_SRC_ALPHA
-        );
 
         transform = Cybo.Matrix4x4.createIdentityMatrix();
             
@@ -178,7 +171,7 @@ function main() {
     function setUpTextures() {
         //
         var url = // which is relative to index.html, not main.js
-            '../../assets/images/tree.png';
+            '../../assets/images/jeremy-mann/cat.jpg';
 
         mainTexture = scene.assetManager.loadTexture2D(url);
     }

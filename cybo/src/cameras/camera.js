@@ -183,43 +183,6 @@ function Camera (
         m.elements = _projectionMatrix.elements.slice();
     }
 
-    // this.getTransform = function(m) {
-    //     //
-    //     // Checks the view matrix.
-    //     checkViewMatrix();
-
-    //     // Checks the projection matrix.
-    //     checkProjectionMatrix();
-
-    //     if (_hasToRaiseTransformUpdatedEvent === true) {
-    //         //
-    //         // Note:
-    //         // _hasToRaiseTransformUpdatedEvent == true means _viewMatrix or
-    //         // _projectionMatrix (or both) is recreated. So, _transform has
-    //         // to be recalculated.
-
-    //         // Recalculates the transform.
-    //         _transform = Matrix4x4.multiplyMatrices (
-    //             _projectionMatrix,
-    //             _viewMatrix
-    //         );
-    //     }
-
-    //     m.elements = _transform.elements.slice();
-
-    //     // Raises the transform-updated event (if necessary).
-    //     if (_hasToRaiseTransformUpdatedEvent === true) {
-    //         // Temp:
-    //         /*
-    //         if (this.TransformUpdated != null) {
-    //             this.TransformUpdated(this, EventArgs.Empty);
-    //         }
-    //         */
-
-    //         _hasToRaiseTransformUpdatedEvent = false;
-    //     }
-    // }
-
     this.getTransform = function(m) {
         //
         // Checks the view matrix.
