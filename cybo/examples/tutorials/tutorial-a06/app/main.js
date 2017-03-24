@@ -395,7 +395,7 @@ function main() {
 
             lastMousePosition = mousePosition;
 
-            rotateModel(Cybo.Vector2D.negateVector(offset));
+            rotateModel(offset);
         }
     }
 
@@ -539,7 +539,7 @@ function main() {
 
                 lastTouchPosition = touchPosition;
                 
-                rotateModel(offset);
+                rotateModel(Cybo.Vector2D.negateVector(offset));
 
                 break;
             }
