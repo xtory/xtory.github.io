@@ -1207,25 +1207,25 @@ Quaternion.prototype = {
 
         var a = [
             // Column 1.
-            1 - (2 * (yy + zz)),
-            2 * (xy + zw),
-            2 * (zx - yw),
-            0,
+            1 - (2 * (yy + zz)), // m.s11
+            2 * (xy + zw),       // m.s21
+            2 * (zx - yw),       // m.s31
+            0,                   // m.s41
             // Column 2.
-            2 * (xy - zw),
-            1 - (2 * (zz + xx)),
-            2 * (yz + xw),
-            0,
+            2 * (xy - zw),       // m.s12
+            1 - (2 * (zz + xx)), // m.s22
+            2 * (yz + xw),       // m.s32
+            0,                   // m.s42
             // Column 3.
-            2 * (zx + yw),
-            2 * (yz - xw),
-            1 - (2 * (yy + xx)),
-            0,
+            2 * (zx + yw),       // m.s13
+            2 * (yz - xw),       // m.s23
+            1 - (2 * (yy + xx)), // m.s33
+            0,                   // m.s43
             // Column 4.
-            0,
-            0,
-            0,
-            1
+            0,                   // n.s14
+            0,                   // n.s24
+            0,                   // n.s34
+            1                    // n.s44
         ];        
 
         return Matrix4x4.fromArray(a);
