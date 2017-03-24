@@ -10,11 +10,13 @@ function main() {
     var vertexPositionAttributeLocation;
     var vertexTextureCoordinateAttributeLocation;
     var transformUniformLocation;
-    var samplerUniformLocation;
+    var sampler1UniformLocation;
+    var sampler2UniformLocation;
     var vertexPositionBuffer;
     var vertexTextureCoordinateBuffer;
     var transform;
     var mainTexture;
+    var starburstTexture;
 
     try {
         //
@@ -41,17 +43,10 @@ function main() {
 
         // Here's where we call the routine that builds all the objects
         // we'll be drawing.
-        setUpBuffers(-30, 30, 640, 560);
+        setUpBuffers(0, 0, 500, 500);
 
         // Sets up the textures.
         setUpTextures();
-
-        renderingContext.enable(WebGLRenderingContext.BLEND);
-
-        renderingContext.blendFunc (
-            WebGLRenderingContext.SRC_ALPHA,
-            WebGLRenderingContext.ONE_MINUS_SRC_ALPHA
-        );
 
         transform = Cybo.Matrix4x4.createIdentityMatrix();
             
@@ -71,12 +66,12 @@ function main() {
         //
         var vertexShader = scene.assetManager.loadShader (
             Cybo.ShaderType.VERTEX_SHADER,
-            Cybo.PositionTextureCoordinates.VERTEX_SHADER_SOURCE
+            Multitexturing.VERTEX_SHADER_SOURCE
         );
 
         var fragmentShader = scene.assetManager.loadShader (
             Cybo.ShaderType.FRAGMENT_SHADER,
-            Cybo.PositionTextureCoordinates.FRAGMENT_SHADER_SOURCE
+            Multitexturing.FRAGMENT_SHADER_SOURCE
         );
 
         shaderProgram = shaderHelper.setUpShaderProgram (
@@ -105,10 +100,17 @@ function main() {
             )
         );
 
-        samplerUniformLocation = (
+        sampler1UniformLocation = (
             scene.graphicsManager.getUniformLocation (
                 shaderProgram,
-                'sampler'
+                'sampler1'
+            )
+        );
+
+        sampler2UniformLocation = (
+            scene.graphicsManager.getUniformLocation (
+                shaderProgram,
+                'sampler2'
             )
         );
     }
@@ -178,9 +180,14 @@ function main() {
     function setUpTextures() {
         //
         var url = // which is relative to index.html, not main.js
-            '../../assets/images/tree.png';
+            //'../../assets/images/mier.jpg';
+            '../../assets/images/jeremy-mann/cat.jpg';
 
         mainTexture = scene.assetManager.loadTexture2D(url);
+
+        url = '../../assets/images/starburst.jpg';
+
+        starburstTexture = scene.assetManager.loadTexture2D(url);        
     }
 
     function drawScene() {
@@ -241,8 +248,22 @@ function main() {
         );
 
         scene.graphicsManager.setSamplerUniform (
-            samplerUniformLocation,
+            sampler1UniformLocation,
             0
+        );
+
+        renderingContext.activeTexture (
+            WebGLRenderingContext.TEXTURE1
+        );
+
+        renderingContext.bindTexture (
+            WebGLRenderingContext.TEXTURE_2D,
+            starburstTexture
+        );
+        
+        scene.graphicsManager.setSamplerUniform (
+            sampler2UniformLocation,
+            1
         );
 
         renderingContext.drawArrays (
