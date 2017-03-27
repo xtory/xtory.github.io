@@ -85,21 +85,21 @@ function main() {
         );
 
         vertexPositionAttributeLocation = (
-            scene.graphicsManager.getAttributeLocation (
+            scene.graphicsManager.getShaderAttributeLocation (
                 shaderProgram,
                 'vertexPosition'
             )
         );
 
         vertexColorAttributeLocation = (
-            scene.graphicsManager.getAttributeLocation (
+            scene.graphicsManager.getShaderAttributeLocation (
                 shaderProgram,
                 'vertexColor'
             )
         );
 
         transformUniformLocation = (
-            scene.graphicsManager.getUniformLocation (
+            scene.graphicsManager.getShaderUniformLocation (
                 shaderProgram,
                 'transform'
             )
@@ -108,8 +108,10 @@ function main() {
    
     function setUpBuffers() {
         //
-        // Create an array of vertex positions for the square. Note that the Z
-        // coordinate is always 0 here.
+        // Vertex positions.
+        //
+        vertexPositionBuffer =
+            renderingContext.createBuffer();
 
         var vertexPositions = [
             //
@@ -150,28 +152,16 @@ function main() {
            -50, -50, -50
         ];
 
-        vertexPositionBuffer =
+        scene.graphicsManager.setUpVertexBuffer (
+            vertexPositionBuffer,
+            vertexPositions
+        );
+
+        //
+        // Vertex colors.
+        //
+        vertexColorBuffer =
             renderingContext.createBuffer();
-
-        // Select the vertexPositionBuffer as the one to apply vertex
-        // operations to from here out.
-
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            vertexPositionBuffer
-        );
-        
-        // Now pass the list of vertex positions into WebGL to build the shape.
-        // We do this by creating a Float32Array from the JavaScript array, then
-        // use it to fill the current vertex buffer.
-
-        renderingContext.bufferData (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            new Float32Array(vertexPositions),
-            WebGLRenderingContext.STATIC_DRAW
-        );
-
-        // Now set up the colors for the vertices
 
         var faceColors = [
             Cybo.Colors.PHOTOSHOP_DARK_RED.toArray(),
@@ -195,26 +185,16 @@ function main() {
             }
         }
 
-        vertexColorBuffer =
+        scene.graphicsManager.setUpVertexBuffer (
+            vertexColorBuffer,
+            vertexColors
+        );
+
+        //
+        // Vertex indices.
+        //
+        indexBuffer =
             renderingContext.createBuffer();
-
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            vertexColorBuffer
-        );
-
-        renderingContext.bufferData (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            new Float32Array(vertexColors),
-            WebGLRenderingContext.STATIC_DRAW
-        );
-
-        // Build the element array buffer; this specifies the indices
-        // into the vertex array for each face's vertices.
-
-        // This array defines each face as two triangles, using the
-        // indices into the vertex array to specify each triangle's
-        // position.
 
         var vertexIndices = [
             //
@@ -242,21 +222,10 @@ function main() {
             20, 21, 22,
             20, 22, 23
         ]
-        
-        indexBuffer =
-            renderingContext.createBuffer();
 
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
-            indexBuffer
-        );
-
-        // Now send the element array to GL
-
-        renderingContext.bufferData (
-            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
-            new Uint16Array(vertexIndices),
-            WebGLRenderingContext.STATIC_DRAW
+        scene.graphicsManager.setUpIndexBuffer (
+            indexBuffer,
+            vertexIndices
         );
     }
 
@@ -284,67 +253,21 @@ function main() {
             backgroundColor
         );
 
-        setUpTransform();
-
         scene.graphicsManager.shaderProgram =
             shaderProgram;
         
-        scene.graphicsManager.enableVertexAttribute (
-            vertexPositionAttributeLocation
-        );
-
-        // Draw the square by binding the array buffer to the square's vertices
-        // array, setting attributes, and pushing it to GL.
-
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            vertexPositionBuffer
-        );
-        
-        renderingContext.vertexAttribPointer (
+        scene.graphicsManager.setShaderAttribute (
             vertexPositionAttributeLocation,
-            3,
-            WebGLRenderingContext.FLOAT,
-            false,
-            0,
-            0
+            vertexPositionBuffer,
+            3
         );
 
-        // Set the colors attribute for the vertices.
-
-        scene.graphicsManager.enableVertexAttribute (
-            vertexColorAttributeLocation
-        );
-
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            vertexColorBuffer
-        );
-
-        renderingContext.vertexAttribPointer (
+        scene.graphicsManager.setShaderAttribute (
             vertexColorAttributeLocation,
-            4,
-            WebGLRenderingContext.FLOAT,
-            false,
-            0,
-            0
+            vertexColorBuffer,
+            4
         );
 
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
-            indexBuffer
-        );
-        
-        renderingContext.drawElements (
-            WebGLRenderingContext.TRIANGLES,
-            36,
-            WebGLRenderingContext.UNSIGNED_SHORT,
-            0
-        );
-    }
-
-    function setUpTransform() {
-        //
         camera.getTransform(transform);
 
         transform = Cybo.Matrix4x4.multiplyMatrices (
@@ -352,9 +275,15 @@ function main() {
             modelMatrix
         );
 
-        scene.graphicsManager.setMatrix4x4Uniform (
+        scene.graphicsManager.setShaderUniform (
             transformUniformLocation,
             transform
+        );
+        
+        scene.graphicsManager.drawIndexedPrimitives (
+            indexBuffer,
+            WebGLRenderingContext.TRIANGLES,
+            36
         );
     }
 

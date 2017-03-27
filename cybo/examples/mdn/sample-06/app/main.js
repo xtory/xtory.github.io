@@ -96,28 +96,28 @@ function main() {
         );
 
         vertexPositionAttributeLocation = (
-            scene.graphicsManager.getAttributeLocation (
+            scene.graphicsManager.getShaderAttributeLocation (
                 shaderProgram,
                 'vertexPosition'
             )
         );
 
         vertexTextureCoordinateAttributeLocation = (
-            scene.graphicsManager.getAttributeLocation (
+            scene.graphicsManager.getShaderAttributeLocation (
                 shaderProgram,
                 'vertexTextureCoordinates'
             )
         );
 
         transformUniformLocation = (
-            scene.graphicsManager.getUniformLocation (
+            scene.graphicsManager.getShaderUniformLocation (
                 shaderProgram,
                 'transform'
             )
         );
 
         samplerUniformLocation = (
-            scene.graphicsManager.getUniformLocation (
+            scene.graphicsManager.getShaderUniformLocation (
                 shaderProgram,
                 'sampler'
             )
@@ -126,6 +126,11 @@ function main() {
 
     function setUpBuffers() {
         //
+        // Vertex positions.
+        //
+        vertexPositionBuffer =
+            renderingContext.createBuffer();
+
         var vertexPositions = [
             //
             // Front face.
@@ -165,28 +170,18 @@ function main() {
            -50, -50, -50
         ];
 
-        vertexPositionBuffer =
+        scene.graphicsManager.setUpVertexBuffer (
+            vertexPositionBuffer,
+            vertexPositions
+        );
+
+        //
+        // Vertex texture coordinates.
+        //
+        vertexTextureCoordinateBuffer =
             renderingContext.createBuffer();
 
-        // Select the vertexPositionBuffer as the one to apply vertex
-        // operations to from here out.
-
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            vertexPositionBuffer
-        );
-
-        // Now pass the list of vertex positions into WebGL to build the shape.
-        // We do this by creating a Float32Array from the JavaScript array, then
-        // use it to fill the current vertex buffer.
-
-        renderingContext.bufferData (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            new Float32Array(vertexPositions),
-            WebGLRenderingContext.STATIC_DRAW
-        );
-
-        var textureCoordinates = [
+        var vertexTextureCoordinates = [
             //
             // Front face.
             1.0,  0.0,
@@ -225,19 +220,16 @@ function main() {
             0.0,  0.0,
         ];
 
-        vertexTextureCoordinateBuffer =
+        scene.graphicsManager.setUpVertexBuffer (
+            vertexTextureCoordinateBuffer,
+            vertexTextureCoordinates
+        );
+
+        //
+        // Vertex indices.
+        //
+        indexBuffer =
             renderingContext.createBuffer();
-
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            vertexTextureCoordinateBuffer
-        );
-
-        renderingContext.bufferData (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            new Float32Array(textureCoordinates),
-            WebGLRenderingContext.STATIC_DRAW
-        );
 
         var vertexIndices = [
             //
@@ -264,22 +256,11 @@ function main() {
             // Left face.
             20, 21, 22,
             20, 22, 23
-        ]
+        ];
 
-        indexBuffer =
-            renderingContext.createBuffer();
-
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
-            indexBuffer
-        );
-
-        // Now send the element array to GL
-
-        renderingContext.bufferData (
-            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
-            new Uint16Array(vertexIndices),
-            WebGLRenderingContext.STATIC_DRAW
+        scene.graphicsManager.setUpIndexBuffer (
+            indexBuffer,
+            vertexIndices
         );
     }
 
@@ -305,71 +286,32 @@ function main() {
             new Cybo.Color(0.75, 0.5, 0.5, 1)
         );
 
-        setUpTransform();
-
         scene.graphicsManager.shaderProgram =
             shaderProgram;
 
-        scene.graphicsManager.enableVertexAttribute (
-            vertexPositionAttributeLocation
-        );
-
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            vertexPositionBuffer
-        );
-
-        renderingContext.vertexAttribPointer (
+        scene.graphicsManager.setShaderAttribute (
             vertexPositionAttributeLocation,
-            3,
-            WebGLRenderingContext.FLOAT,
-            false,
-            0,
-            0
+            vertexPositionBuffer,
+            3
         );
 
-        scene.graphicsManager.enableVertexAttribute (
-            vertexTextureCoordinateAttributeLocation
-        );
-
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            vertexTextureCoordinateBuffer
-        );
-
-        renderingContext.vertexAttribPointer (
+        scene.graphicsManager.setShaderAttribute (
             vertexTextureCoordinateAttributeLocation,
-            2,
-            WebGLRenderingContext.FLOAT,
-            false,
-            0,
-            0
+            vertexTextureCoordinateBuffer,
+            2
         );
 
-        renderingContext.activeTexture (
-            WebGLRenderingContext.TEXTURE0
-        );
-
-        renderingContext.bindTexture (
-            WebGLRenderingContext.TEXTURE_2D,
+        setUpTransform();
+        
+        scene.graphicsManager.setShaderSampler (
+            samplerUniformLocation,
             mainTexture
         );
 
-        scene.graphicsManager.setSamplerUniform (
-            samplerUniformLocation,
-            0
-        );
-
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
-            indexBuffer
-        );
-
-        renderingContext.drawElements (
+        scene.graphicsManager.drawIndexedPrimitives (
+            indexBuffer,
             WebGLRenderingContext.TRIANGLES,
-            36,
-            WebGLRenderingContext.UNSIGNED_SHORT,
-            0
+            36
         );
     }
 
@@ -401,7 +343,7 @@ function main() {
             modelMatrix
         );
 
-        scene.graphicsManager.setMatrix4x4Uniform (
+        scene.graphicsManager.setShaderUniform (
             transformUniformLocation,
             transform
         );

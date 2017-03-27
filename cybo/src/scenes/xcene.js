@@ -176,16 +176,11 @@ function Xcene(_mainCanvas, _usesDefaultStyles) {
     // function onBeforeUnload() {
     //     // No contents.
     // }
-}
 
-//
-// Prototype.
-//
-Xcene.prototype = {
     //
-    // Public methods.
+    // Privileged methods.
     //
-    run: function(update, draw) {
+    this.run = function(update, draw) {
         //
         render();
 
@@ -201,8 +196,8 @@ Xcene.prototype = {
                 draw();
             }
         }
-    },
-};
+    };
+}
 
 Object.freeze(Xcene);
 

@@ -73,21 +73,21 @@ function main() {
         );
 
         vertexPositionAttributeLocation = (
-            scene.graphicsManager.getAttributeLocation (
+            scene.graphicsManager.getShaderAttributeLocation (
                 shaderProgram,
                 'vertexPosition'
             )
         );
         
         vertexColorAttributeLocation = (
-            scene.graphicsManager.getAttributeLocation (
+            scene.graphicsManager.getShaderAttributeLocation (
                 shaderProgram,
                 'vertexColor'
             )
         );
         
         transformUniformLocation = (
-            scene.graphicsManager.getUniformLocation (
+            scene.graphicsManager.getShaderUniformLocation (
                 shaderProgram,
                 'transform'
             )
@@ -96,10 +96,10 @@ function main() {
 
     function setUpBuffers() {
         //
-        // Create a buffer for the square's vertices.
-
-        // Create an array of vertex positions for the square. Note that the Z
-        // coordinate is always 0 here.
+        // Vertex positions.
+        //
+        vertexPositionBuffer =
+            renderingContext.createBuffer();
 
         var vertexPositions = [
             50.0, -50.0,  0.0,
@@ -108,28 +108,16 @@ function main() {
            -50.0,  50.0,  0.0
         ];
 
-        vertexPositionBuffer =
+        scene.graphicsManager.setUpVertexBuffer (
+            vertexPositionBuffer,
+            vertexPositions
+        );
+
+        //
+        // Vertex colors.
+        //
+        vertexColorBuffer =
             renderingContext.createBuffer();
-
-        // Select the vertexPositionBuffer as the one to apply vertex
-        // operations to from here out.
-
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            vertexPositionBuffer
-        );
-        
-        // Now pass the list of vertex positions into WebGL to build the shape.
-        // We do this by creating a Float32Array from the JavaScript array, then
-        // use it to fill the current vertex buffer.
-
-        renderingContext.bufferData (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            new Float32Array(vertexPositions),
-            WebGLRenderingContext.STATIC_DRAW
-        );
-
-        // Now set up the colors for the vertices
 
         var vertexColors = [].concat (
             Cybo.Colors.PHOTOSHOP_DARK_RED.toArray(),
@@ -138,18 +126,9 @@ function main() {
             Cybo.Colors.PHOTOSHOP_DARK_GREEN.toArray()
         );
 
-        vertexColorBuffer =
-            renderingContext.createBuffer();
-
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            vertexColorBuffer
-        );
-
-        renderingContext.bufferData (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            new Float32Array(vertexColors),
-            WebGLRenderingContext.STATIC_DRAW
+        scene.graphicsManager.setUpVertexBuffer (
+            vertexColorBuffer,
+            vertexColors
         );
     }
 
@@ -160,61 +139,32 @@ function main() {
             new Cybo.Color(0.75, 0.5, 0.5, 1)
         );
 
-        setUpTransform();
-
         scene.graphicsManager.shaderProgram =
             shaderProgram;
 
-        scene.graphicsManager.enableVertexAttribute (
-            vertexPositionAttributeLocation
-        );
-        
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            vertexPositionBuffer
-        );
-
-        renderingContext.vertexAttribPointer (
+        scene.graphicsManager.setShaderAttribute (
             vertexPositionAttributeLocation,
-            3,
-            WebGLRenderingContext.FLOAT,
-            false,
-            0,
-            0
+            vertexPositionBuffer,
+            3
         );
 
-        scene.graphicsManager.enableVertexAttribute (
-            vertexColorAttributeLocation
-        );
-
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            vertexColorBuffer
-        );
-
-        renderingContext.vertexAttribPointer (
+        scene.graphicsManager.setShaderAttribute (
             vertexColorAttributeLocation,
-            4,
-            WebGLRenderingContext.FLOAT,
-            false,
-            0,
-            0
+            vertexColorBuffer,
+            4
         );
         
-        renderingContext.drawArrays (
+        camera.getTransform(transform);
+
+        scene.graphicsManager.setShaderUniform (
+            transformUniformLocation,
+            transform
+        );
+        
+        scene.graphicsManager.drawPrimitives (
             WebGLRenderingContext.TRIANGLE_STRIP,
             0,
             4
         );
     }
-
-    function setUpTransform() {
-        //
-        camera.getTransform(transform);
-
-        scene.graphicsManager.setMatrix4x4Uniform (
-            transformUniformLocation,
-            transform
-        );
-    }    
 }

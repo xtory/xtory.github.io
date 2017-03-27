@@ -71,14 +71,14 @@ function main() {
         );
 
         vertexPositionAttributeLocation = (
-            scene.graphicsManager.getAttributeLocation (
+            scene.graphicsManager.getShaderAttributeLocation (
                 shaderProgram,
                 'vertexPosition'
             )
         );
         
         transformUniformLocation = (
-            scene.graphicsManager.getUniformLocation (
+            scene.graphicsManager.getShaderUniformLocation (
                 shaderProgram,
                 'transform'
             )
@@ -87,11 +87,9 @@ function main() {
 
     function setUpBuffers() {
         //
-        // Create a buffer for the square's vertex positions.
-
-        // Create an array of vertex positions for the square. Note that the Z
-        // coordinate is always 0 here.
-
+        vertexPositionBuffer =
+            renderingContext.createBuffer();
+            
         var vertexPositions = [
             50.0, -50.0,  0.0,
             50.0,  50.0,  0.0,
@@ -99,25 +97,9 @@ function main() {
            -50.0,  50.0,  0.0
         ];
 
-        vertexPositionBuffer =
-            renderingContext.createBuffer();
-
-        // Select the vertexPositionBuffer as the one to apply vertex
-        // operations to from here out.
-
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            vertexPositionBuffer
-        );
-        
-        // Now pass the list of vertex positions into WebGL to build the shape.
-        // We do this by creating a Float32Array from the JavaScript array, then
-        // use it to fill the current vertex buffer.
-
-        renderingContext.bufferData (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            new Float32Array(vertexPositions),
-            WebGLRenderingContext.STATIC_DRAW
+        scene.graphicsManager.setUpVertexBuffer (
+            vertexPositionBuffer,
+            vertexPositions
         );
     }
 
@@ -128,46 +110,26 @@ function main() {
             new Cybo.Color(0.75, 0.5, 0.5, 1)
         );
 
-        setUpTransform();
-
         scene.graphicsManager.shaderProgram =
             shaderProgram;
 
-        scene.graphicsManager.enableVertexAttribute (
-            vertexPositionAttributeLocation
-        );        
+        scene.graphicsManager.setShaderAttribute (
+            vertexPositionAttributeLocation,
+            vertexPositionBuffer,
+            3
+        );
 
-        // Draw the square by binding the array buffer to the square's vertices
-        // array, setting attributes, and pushing it to GL.
+        camera.getTransform(transform);
 
-        renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
-            vertexPositionBuffer
+        scene.graphicsManager.setShaderUniform (
+            transformUniformLocation,
+            transform
         );
         
-        renderingContext.vertexAttribPointer (
-            vertexPositionAttributeLocation,
-            3,
-            WebGLRenderingContext.FLOAT,
-            false,
-            0,
-            0
-        );
-
-        renderingContext.drawArrays (
+        scene.graphicsManager.drawPrimitives (
             WebGLRenderingContext.TRIANGLE_STRIP,
             0,
             4
-        );
-    }
-
-    function setUpTransform() {
-        //
-        camera.getTransform(transform);
-
-        scene.graphicsManager.setMatrix4x4Uniform (
-            transformUniformLocation,
-            transform
         );
     }
 }
