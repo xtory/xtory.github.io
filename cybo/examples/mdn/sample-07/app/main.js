@@ -33,7 +33,7 @@ function main() {
         
         setUpShaders();
 
-        setUpBuffers();
+        setUpGeometries();
 
         setUpTextures();
 
@@ -102,47 +102,47 @@ function main() {
         vertexPositionAttributeLocation = (
             scene.graphicsManager.getShaderAttributeLocation (
                 shaderProgram,
-                'vertexPosition'
+               'vertexPosition'
             )
         );
 
         vertexNormalAttributeLocation = (
             scene.graphicsManager.getShaderAttributeLocation (
                 shaderProgram,
-                'vertexNormal'
+               'vertexNormal'
             )
         );
         
         vertexTextureCoordinateAttributeLocation = (
             scene.graphicsManager.getShaderAttributeLocation (
                 shaderProgram,
-                'vertexTextureCoordinates'
+               'vertexTextureCoordinates'
             )
         );
         
         transformUniformLocation = (
             scene.graphicsManager.getShaderUniformLocation (
                 shaderProgram,
-                'transform'
+               'transform'
             )
         );
 
         transposeOfInverseOfModelMatrixUniformLocation = (
             scene.graphicsManager.getShaderUniformLocation (
                 shaderProgram,
-                'transposeOfInverseOfModelMatrix'
+               'transposeOfInverseOfModelMatrix'
             )
         );
 
         samplerUniformLocation = (
             scene.graphicsManager.getShaderUniformLocation (
                 shaderProgram,
-                'sampler'
+               'sampler'
             )
         );
     }
 
-    function setUpBuffers() {
+    function setUpGeometries() {
         //
         // Vertex positions.
         //

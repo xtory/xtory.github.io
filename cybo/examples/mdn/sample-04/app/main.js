@@ -29,7 +29,7 @@ function main() {
         
         setUpShaders();
 
-        setUpBuffers();
+        setUpGeometries(0, 0, 100, 100);
 
         renderingContext.disable(WebGLRenderingContext.CULL_FACE);
 
@@ -52,7 +52,7 @@ function main() {
     //
     function setUpCamera() {
         //
-        var p = new Cybo.Vector3D(0, 0, 300);
+        var p = new Cybo.Vector3D(0, 0, 375);
         var origin = new Cybo.Vector3D(0, 0, 0);
 
         camera = new Cybo.Camera (
@@ -85,37 +85,40 @@ function main() {
         vertexPositionAttributeLocation = (
             scene.graphicsManager.getShaderAttributeLocation (
                 shaderProgram,
-                'vertexPosition'
+               'vertexPosition'
             )
         );
         
         vertexColorAttributeLocation = (
             scene.graphicsManager.getShaderAttributeLocation (
                 shaderProgram,
-                'vertexColor'
+               'vertexColor'
             )
         );
         
         transformUniformLocation = (
             scene.graphicsManager.getShaderUniformLocation (
                 shaderProgram,
-                'transform'
+               'transform'
             )
         );
     }
 
-    function setUpBuffers() {
+    function setUpGeometries(x, y, w, h) {
         //
         // Vertex positions.
         //
         vertexPositionBuffer =
             renderingContext.createBuffer();
 
+        var halfWidth = w * 0.5;
+        var halfHeight = h * 0.5;
+            
         var vertexPositions = [
-            50.0, -50.0,  0.0,
-            50.0,  50.0,  0.0,
-           -50.0, -50.0,  0.0,
-           -50.0,  50.0,  0.0
+            x+halfWidth, y-halfHeight, 0,
+            x+halfWidth, y+halfHeight, 0,
+            x-halfWidth, y-halfHeight, 0,
+            x-halfWidth, y+halfHeight, 0
         ];
 
         scene.graphicsManager.setUpVertexBuffer (
@@ -192,7 +195,7 @@ function main() {
             4
         );
 
-        setUpTransform(-75);
+        setUpTransform(-100);
         
         scene.graphicsManager.drawPrimitives (
             Cybo.PrimitiveType.TRIANGLE_STRIP,
@@ -207,7 +210,7 @@ function main() {
             4
         );
 
-        setUpTransform(75);
+        setUpTransform(100);
         
         scene.graphicsManager.drawPrimitives (
             Cybo.PrimitiveType.TRIANGLE_STRIP,

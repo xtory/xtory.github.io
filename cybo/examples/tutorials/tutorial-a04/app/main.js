@@ -29,7 +29,7 @@ function main() {
 
         setUpShaders();
 
-        setUpBuffers(0, 0, 500, 500);
+        setUpGeometries(0, 0, 500, 500);
 
         setUpTextures();
 
@@ -82,48 +82,48 @@ function main() {
         vertexPositionAttributeLocation = (
             scene.graphicsManager.getShaderAttributeLocation (
                 shaderProgram,
-                'vertexPosition'
+               'vertexPosition'
             )
         );
 
         vertexTextureCoordinateAttributeLocation = (
             scene.graphicsManager.getShaderAttributeLocation (
                 shaderProgram,
-                'vertexTextureCoordinates'
+               'vertexTextureCoordinates'
             )
         );
 
         transformUniformLocation = (
             scene.graphicsManager.getShaderUniformLocation (
                 shaderProgram,
-                'transform'
+               'transform'
             )
         );
 
         sampler1UniformLocation = (
             scene.graphicsManager.getShaderUniformLocation (
                 shaderProgram,
-                'sampler1'
+               'sampler1'
             )
         );
 
         sampler2UniformLocation = (
             scene.graphicsManager.getShaderUniformLocation (
                 shaderProgram,
-                'sampler2'
+               'sampler2'
             )
         );
     }
 
-    function setUpBuffers(x, y, w, h) {
+    function setUpGeometries(x, y, w, h) {
         //
         // Vertex positions.
         //
         vertexPositionBuffer =
             renderingContext.createBuffer();
             
-        var halfWidth = w / 2;
-        var halfHeight = h / 2;
+        var halfWidth = w * 0.5;
+        var halfHeight = h * 0.5;
 
         var vertexPositions = [
             x+halfWidth, y-halfHeight, 0,

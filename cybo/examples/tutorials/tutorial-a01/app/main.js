@@ -26,7 +26,7 @@ function main() {
 
         setUpShaders();
 
-        setUpBuffers();
+        setUpGeometries();
 
         renderingContext.disable(WebGLRenderingContext.CULL_FACE);
 
@@ -82,26 +82,26 @@ function main() {
         vertexPositionAttributeLocation = (
             scene.graphicsManager.getShaderAttributeLocation (
                 shaderProgram,
-                'vertexPosition'
+               'vertexPosition'
             )
         );
         
         vertexColorAttributeLocation = (
             scene.graphicsManager.getShaderAttributeLocation (
                 shaderProgram,
-                'vertexColor'
+               'vertexColor'
             )
         );
         
         transformUniformLocation = (
             scene.graphicsManager.getShaderUniformLocation (
                 shaderProgram,
-                'transform'
+               'transform'
             )
         );
     }
 
-    function setUpBuffers() {
+    function setUpGeometries() {
         //
         // Vertex positions.
         //

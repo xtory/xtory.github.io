@@ -110,6 +110,87 @@ Object.freeze(PositionTextureCoordinates);
 //
 // Constructor.
 //
+function TransformedPositionColorTextureCoordinates() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+TransformedPositionColorTextureCoordinates.VERTEX_SHADER_SOURCE = [
+    //
+   'attribute vec4 vertexPosition;',
+   'attribute vec4 vertexColor;',
+   'attribute vec2 vertexTextureCoordinates;',
+    //
+   'varying highp vec4 color;',
+   'varying highp vec2 textureCoordinates;',
+    //
+   'void main() {',
+        //
+       'gl_Position = vertexPosition;',
+        //
+       'color = vertexColor;',
+       'textureCoordinates = vertexTextureCoordinates;',
+   '}'
+
+].join('\n');
+
+TransformedPositionColorTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
+    //
+   'varying highp vec4 color;',
+   'varying highp vec2 textureCoordinates;',
+    //
+   'uniform sampler2D sampler;',
+    //
+   'void main() {',
+       'gl_FragColor = color * texture2D(sampler, textureCoordinates);',
+   '}'
+   
+].join('\n');
+
+Object.freeze(TransformedPositionColorTextureCoordinates);
+
+//
+// Constructor.
+//
+function TransformedPositionTextureCoordinates() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+TransformedPositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
+    //
+   'attribute vec4 vertexPosition;',
+   'attribute vec2 vertexTextureCoordinates;',
+    //
+   'varying highp vec2 textureCoordinates;',
+    //
+   'void main() {',
+       'gl_Position = vertexPosition;',
+       'textureCoordinates = vertexTextureCoordinates;',
+   '}'
+
+].join('\n');
+
+TransformedPositionTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
+    //
+   'varying highp vec2 textureCoordinates;',
+   'uniform sampler2D sampler;',
+    //
+   'void main() {',
+       'gl_FragColor = texture2D(sampler, textureCoordinates);',
+   '}'
+   
+].join('\n');
+
+Object.freeze(TransformedPositionTextureCoordinates);
+
+//
+// Constructor.
+//
 function JSHelper() {
     // No contents.
 }
@@ -443,41 +524,32 @@ Object.freeze(ShaderType);
 //
 function AssetManager(_xcene) {
     //
-    var _renderingContext;
+    var _renderingContext =
+        _xcene.graphicsManager.renderingContext;
 
+    //
+    // Properties.
+    //
     Object.defineProperty(this, 'xcene', {
         get: function() { return _xcene; }
     });
     
-    _renderingContext =
-        _xcene.graphicsManager.renderingContext;
-
-    Object.defineProperty(this, 'renderingContext', {
-        get: function() { return _renderingContext; }
-    });
-}
-
-//
-// Prototype.
-//
-AssetManager.prototype = {
     //
-    // Public methods.
+    // Privileged methods.
     //
-    loadShader: function(shaderType, shaderSource) {
+    this.loadShader = function(shaderType, shaderSource) {
         //
-        var renderingContext = this.renderingContext;
         var shader;
 
         if (shaderType === ShaderType.VERTEX_SHADER) {
             //
-            shader = renderingContext.createShader (
+            shader = _renderingContext.createShader (
                 WebGLRenderingContext.VERTEX_SHADER
             );
         } else if (
             shaderType === ShaderType.FRAGMENT_SHADER
         ){
-            shader = renderingContext.createShader (
+            shader = _renderingContext.createShader (
                 WebGLRenderingContext.FRAGMENT_SHADER
             );
         } else {
@@ -485,14 +557,14 @@ AssetManager.prototype = {
         }        
 
         // Send the source to the shader object
-        renderingContext.shaderSource(shader, shaderSource);
+        _renderingContext.shaderSource(shader, shaderSource);
 
         // Compile the shader program
-        renderingContext.compileShader(shader);
+        _renderingContext.compileShader(shader);
 
         // See if it compiled successfully
         if (JSHelper.isUndefinedOrNull (
-                renderingContext.getShaderParameter (
+                _renderingContext.getShaderParameter (
                     shader,
                     WebGLRenderingContext.COMPILE_STATUS
                 )
@@ -500,22 +572,15 @@ AssetManager.prototype = {
         {
             throw (
                 'An error occurred compiling the shaders: ' +
-                renderingContext.getShaderInfoLog(shader)
+                _renderingContext.getShaderInfoLog(shader)
             );
         }
 
         return shader;
-    },
-    //
-    // loadShaderFromHtmlElement
-    //
-    // Loads a shader program by scouring the current document,
-    // looking for a script with the specified ID.
-    //
-    loadShaderFromHtmlElement: function(id) {
-        //
-        var renderingContext = this.renderingContext;
+    };
 
+    this.loadShaderFromHtmlElement = function(id) {
+        //
         var shaderScript = document.getElementById(id);
 
         // Didn't find an element with the specified ID; abort.
@@ -546,13 +611,13 @@ AssetManager.prototype = {
 
         if (shaderScript.type === 'x-shader/x-vertex') {
             //
-            shader = renderingContext.createShader (
+            shader = _renderingContext.createShader (
                 WebGLRenderingContext.VERTEX_SHADER
             );
         } else if (
             shaderScript.type === 'x-shader/x-fragment'
         ){
-            shader = renderingContext.createShader (
+            shader = _renderingContext.createShader (
                 WebGLRenderingContext.FRAGMENT_SHADER
             );
         } else {
@@ -560,14 +625,14 @@ AssetManager.prototype = {
         }
 
         // Send the source to the shader object
-        renderingContext.shaderSource(shader, shaderSource);
+        _renderingContext.shaderSource(shader, shaderSource);
 
         // Compile the shader program
-        renderingContext.compileShader(shader);
+        _renderingContext.compileShader(shader);
 
         // See if it compiled successfully
         if (JSHelper.isUndefinedOrNull (
-                renderingContext.getShaderParameter (
+                _renderingContext.getShaderParameter (
                     shader,
                     WebGLRenderingContext.COMPILE_STATUS
                 )
@@ -575,19 +640,17 @@ AssetManager.prototype = {
         {
             throw (
                 'An error occurred compiling the shaders: ' +
-                renderingContext.getShaderInfoLog(shader)
+                _renderingContext.getShaderInfoLog(shader)
             );
         }
 
         return shader;
-    },
+    };
 
-    loadTexture2D: function(imageSourceUrl) {
+    this.loadTexture2D = function(imageSourceUrl) {
         //
-        var renderingContext = this.renderingContext;
-
         var image = new Image();
-        var texture = renderingContext.createTexture();
+        var texture = _renderingContext.createTexture();
 
         image.addEventListener('load', function() {
             handleTextureLoaded(image, texture);
@@ -597,12 +660,17 @@ AssetManager.prototype = {
 
         function handleTextureLoaded(image, texture) {
             //
-            renderingContext.bindTexture (
+            // Test:
+            texture.width = image.width;
+            texture.height = image.height;
+            // :Test
+
+            _renderingContext.bindTexture (
                 WebGLRenderingContext.TEXTURE_2D,
                 texture
             );
 
-            renderingContext.texImage2D (
+            _renderingContext.texImage2D (
                 WebGLRenderingContext.TEXTURE_2D,    // target
                 0,                                   // level
                 WebGLRenderingContext.RGBA,          // internalFormat
@@ -614,11 +682,11 @@ AssetManager.prototype = {
             if (MathHelper.isPowerOfTwo(image.width) === true &&
                 MathHelper.isPowerOfTwo(image.height) === true) {
                 //
-                renderingContext.generateMipmap (
+                _renderingContext.generateMipmap (
                     WebGLRenderingContext.TEXTURE_2D
                 );
                 
-                renderingContext.texParameteri (
+                _renderingContext.texParameteri (
                     WebGLRenderingContext.TEXTURE_2D,
                     WebGLRenderingContext.TEXTURE_MIN_FILTER,
                     WebGLRenderingContext.LINEAR_MIPMAP_LINEAR
@@ -626,7 +694,7 @@ AssetManager.prototype = {
 
             } else {
                 //
-                renderingContext.texParameteri (
+                _renderingContext.texParameteri (
                     WebGLRenderingContext.TEXTURE_2D,
                     WebGLRenderingContext.TEXTURE_MIN_FILTER,
                     WebGLRenderingContext.LINEAR
@@ -635,33 +703,33 @@ AssetManager.prototype = {
 
             // TEXTURE_MAG_FILTER only has NEAREST or LINEAR to choose, no
             // LINEAR_MIPMAP_LINEAR.
-            renderingContext.texParameteri (
+            _renderingContext.texParameteri (
                 WebGLRenderingContext.TEXTURE_2D,
                 WebGLRenderingContext.TEXTURE_MAG_FILTER,
                 WebGLRenderingContext.LINEAR
             );
 
-            renderingContext.texParameteri (
+            _renderingContext.texParameteri (
                 WebGLRenderingContext.TEXTURE_2D,
                 WebGLRenderingContext.TEXTURE_WRAP_S,
                 WebGLRenderingContext.CLAMP_TO_EDGE
             );
 
-            renderingContext.texParameteri (
+            _renderingContext.texParameteri (
                 WebGLRenderingContext.TEXTURE_2D,
                 WebGLRenderingContext.TEXTURE_WRAP_T,
                 WebGLRenderingContext.CLAMP_TO_EDGE
             );
 
-            renderingContext.bindTexture (
+            _renderingContext.bindTexture (
                 WebGLRenderingContext.TEXTURE_2D,
                 null
             );
         }
 
         return texture;
-    }
-};
+    };
+}
 
 Object.freeze(AssetManager);
 
@@ -2019,6 +2087,21 @@ Object.freeze(Colors);
 //
 // Constructor.
 //
+function DepthBufferValues() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+DepthBufferValues.NEAR_CLIP_PLANE = 0.0; // = default zNear of gl.getParameter(gl.DEPTH_RANGE).
+DepthBufferValues.FAR_CLIP_PLANE  = 1.0; // = default zFar of gl.getParameter(gl.DEPTH_RANGE).
+
+Object.freeze(DepthBufferValues);
+
+//
+// Constructor.
+//
 function WebGLRenderingContextHelper() {
     // No contents.
 }
@@ -2586,8 +2669,13 @@ function GraphicsManager(_xcene) {
 
         WebGLRenderingContextHelper.syncConstants(_renderingContext);
 
-        _clearColor   = GraphicsManager.DEFAULT_CLEAR_COLOR;
-        _clearDepth   = GraphicsManager.DEFAULT_CLEAR_DEPTH;
+        _renderingContext.depthRange (
+            DepthBufferValues.NEAR_CLIP_PLANE, // = 0.0
+            DepthBufferValues.FAR_CLIP_PLANE   // = 1.0
+        );
+
+        _clearColor = GraphicsManager.DEFAULT_CLEAR_COLOR;
+        _clearDepth = GraphicsManager.DEFAULT_CLEAR_DEPTH;
         _clearStencil = GraphicsManager.DEFAULT_CLEAR_STENCIL;
 
         _renderingContext.clearColor (
@@ -2870,6 +2958,39 @@ GraphicsManager.DEFAULT_TEXTURE_UNIT  = 0;
 
 Object.freeze(GraphicsManager);
 
+// Note:
+// In OpenGL, there is a term called "Normalized Device Coordinates/Space". All
+// points in it are:
+// -1(left)   < X <= 1(right)
+// -1(bottom) < Y <= 1(top)
+// -1(near)   < Z <= 1(far)
+//
+// But in DirectX, there is no specific term for it. So I name it "(DirectX version
+// of) normalized device coordinates" as well as "clipping cuboid after projection
+// transform and perspective division". points in it are:
+// -1(left)   < X <= 1(right)
+// -1(bottom) < Y <= 1(top)
+//  0(near)   < Z <= 1(far)
+
+//
+// Constructor.
+//
+function NormalizedDeviceCoordinates() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+NormalizedDeviceCoordinates.MIN_X = -1; // Left.
+NormalizedDeviceCoordinates.MAX_X =  1; // Right.
+NormalizedDeviceCoordinates.MIN_Y = -1; // Bottom.
+NormalizedDeviceCoordinates.MAX_Y =  1; // Top.
+NormalizedDeviceCoordinates.MIN_Z = -1; // Near.
+NormalizedDeviceCoordinates.MAX_Z =  1; // Far.
+
+Object.freeze(NormalizedDeviceCoordinates);
+
 //
 // Constructor.
 //
@@ -3127,24 +3248,14 @@ function Plane() {
 
 Object.freeze(Plane);
 
-//
-// Constructor.
-//
-function DepthBufferValues() {
-    // No contents.
-}
-
-//
-// Static constants (after Object.freeze()).
-//
-DepthBufferValues.NEAR_CLIP_PLANE = 0.0; // = Viewport.MIN_DEPTH
-DepthBufferValues.FAR_CLIP_PLANE = 1.0; // = Viewport.MAX_DEPTH
-
-Object.freeze(DepthBufferValues);
+// Note:
+// OpenGL viewport's (X, Y) means the lower-left corner.
+// DirectX viewport's (X, Y) means the upper-left corner.
 
 // Note:
-// WebGL viewport's (X, Y) means the lower-left corner.
-// DirectX viewport's (X, Y) means the upper-left corner.
+// DirectX uses Viewport to set { left, top, width, height, minDepth(near), maxDepth(far) }
+// OpenGL uses gl.viewport() to set { left, bottom, width, height }
+// and gl.depthRange() to set { nearDepth, farDepth }
 
 //
 // Constructor.
@@ -3156,16 +3267,33 @@ function Viewport(_left, _bottom, _width, _height) {
     this.width = _width;
     this.height = _height;
 
+    //
+    // Properties.
+    //
     Object.defineProperty(this, 'aspectRatio', {
         get: function() { return _width / _height; }
     });
-}
 
-//
-// Static constants (after Object.freeze()).
-//
-Viewport.MIN_DEPTH = DepthBufferValues.NEAR_CLIP_PLANE;
-Viewport.MAX_DEPTH = DepthBufferValues.FAR_CLIP_PLANE;
+    // Priviledged methods.
+    this.toNormalizedDeviceSpace = function(screenPosition) {
+        //
+        // Note:
+        // Because the input is already a 'screen position', that is, we don't have
+        // to worry about w (perspective division), the formula below converts the
+        // screen position directly to normalized device coordinates.
+
+        return new Vector2D (
+            // Part 1.
+            NormalizedDeviceCoordinates.MIN_X +
+            ((screenPosition.x - 0.5) / _width) *
+            (NormalizedDeviceCoordinates.MAX_X - NormalizedDeviceCoordinates.MIN_X),
+            // Part 2.
+            NormalizedDeviceCoordinates.MIN_Y +
+            ((screenPosition.y - 0.5) / _height) *
+            (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y)
+        );
+    };
+}
 
 Object.freeze(Viewport);
 
@@ -3314,13 +3442,6 @@ function Xcene(_mainCanvas, _usesDefaultStyles) {
             _mainCanvas.width  = displayWidth;
             _mainCanvas.height = displayHeight;
             
-            // _graphicsManager.renderingContext.viewport (
-            //     // Part 1.
-            //     0, 0,
-            //     // Part 2.
-            //     _mainCanvas.width, _mainCanvas.height
-            // );
-
             _graphicsManager.viewport = new Viewport (
                 // Part 1.
                 0, 0,
@@ -3655,19 +3776,21 @@ function SineEase(_easeMode, _duration, _isLooped) {
 
 Object.freeze(SineEase);
 
-//
 // Assets.
-//
 
 exports.PositionColor = PositionColor;
 exports.PositionOnly = PositionOnly;
 exports.PositionTextureCoordinates = PositionTextureCoordinates;
+exports.TransformedPositionColorTextureCoordinates = TransformedPositionColorTextureCoordinates;
+exports.TransformedPositionTextureCoordinates = TransformedPositionTextureCoordinates;
 exports.AssetManager = AssetManager;
 exports.Camera = Camera;
 exports.ClearOptions = ClearOptions;
 exports.Color = Color;
 exports.Colors = Colors;
+exports.DepthBufferValues = DepthBufferValues;
 exports.GraphicsManager = GraphicsManager;
+exports.NormalizedDeviceCoordinates = NormalizedDeviceCoordinates;
 exports.PrimitiveType = PrimitiveType;
 exports.ShaderHelper = ShaderHelper;
 exports.ShaderType = ShaderType;

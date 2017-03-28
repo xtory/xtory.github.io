@@ -23,7 +23,7 @@ function main() {
         
         setUpShaders();
 
-        setUpBuffers();
+        setUpGeometries(0, 0, 100, 100);
 
         transform = Cybo.Matrix4x4.createIdentityMatrix();
         
@@ -74,28 +74,31 @@ function main() {
         vertexPositionAttributeLocation = (
             scene.graphicsManager.getShaderAttributeLocation (
                 shaderProgram,
-                'vertexPosition'
+               'vertexPosition'
             )
         );
         
         transformUniformLocation = (
             scene.graphicsManager.getShaderUniformLocation (
                 shaderProgram,
-                'transform'
+               'transform'
             )
         );
     }
 
-    function setUpBuffers() {
+    function setUpGeometries(x, y, w, h) {
         //
         vertexPositionBuffer =
             renderingContext.createBuffer();
+
+        var halfWidth = w * 0.5;
+        var halfHeight = h * 0.5;
             
         var vertexPositions = [
-            50.0, -50.0,  0.0,
-            50.0,  50.0,  0.0,
-           -50.0, -50.0,  0.0,
-           -50.0,  50.0,  0.0
+            x+halfWidth, y-halfHeight, 0,
+            x+halfWidth, y+halfHeight, 0,
+            x-halfWidth, y-halfHeight, 0,
+            x-halfWidth, y+halfHeight, 0
         ];
 
         scene.graphicsManager.setUpVertexBuffer (

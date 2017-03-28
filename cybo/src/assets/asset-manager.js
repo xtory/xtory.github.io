@@ -7,41 +7,32 @@ import { ShaderType } from '../graphics/fx/shader-type';
 //
 function AssetManager(_xcene) {
     //
-    var _renderingContext;
+    var _renderingContext =
+        _xcene.graphicsManager.renderingContext;
 
+    //
+    // Properties.
+    //
     Object.defineProperty(this, 'xcene', {
         get: function() { return _xcene; }
     });
     
-    _renderingContext =
-        _xcene.graphicsManager.renderingContext;
-
-    Object.defineProperty(this, 'renderingContext', {
-        get: function() { return _renderingContext; }
-    });
-}
-
-//
-// Prototype.
-//
-AssetManager.prototype = {
     //
-    // Public methods.
+    // Privileged methods.
     //
-    loadShader: function(shaderType, shaderSource) {
+    this.loadShader = function(shaderType, shaderSource) {
         //
-        var renderingContext = this.renderingContext;
         var shader;
 
         if (shaderType === ShaderType.VERTEX_SHADER) {
             //
-            shader = renderingContext.createShader (
+            shader = _renderingContext.createShader (
                 WebGLRenderingContext.VERTEX_SHADER
             );
         } else if (
             shaderType === ShaderType.FRAGMENT_SHADER
         ){
-            shader = renderingContext.createShader (
+            shader = _renderingContext.createShader (
                 WebGLRenderingContext.FRAGMENT_SHADER
             );
         } else {
@@ -49,14 +40,14 @@ AssetManager.prototype = {
         }        
 
         // Send the source to the shader object
-        renderingContext.shaderSource(shader, shaderSource);
+        _renderingContext.shaderSource(shader, shaderSource);
 
         // Compile the shader program
-        renderingContext.compileShader(shader);
+        _renderingContext.compileShader(shader);
 
         // See if it compiled successfully
         if (JSHelper.isUndefinedOrNull (
-                renderingContext.getShaderParameter (
+                _renderingContext.getShaderParameter (
                     shader,
                     WebGLRenderingContext.COMPILE_STATUS
                 )
@@ -64,22 +55,15 @@ AssetManager.prototype = {
         {
             throw (
                 'An error occurred compiling the shaders: ' +
-                renderingContext.getShaderInfoLog(shader)
+                _renderingContext.getShaderInfoLog(shader)
             );
         }
 
         return shader;
-    },
-    //
-    // loadShaderFromHtmlElement
-    //
-    // Loads a shader program by scouring the current document,
-    // looking for a script with the specified ID.
-    //
-    loadShaderFromHtmlElement: function(id) {
-        //
-        var renderingContext = this.renderingContext;
+    };
 
+    this.loadShaderFromHtmlElement = function(id) {
+        //
         var shaderScript = document.getElementById(id);
 
         // Didn't find an element with the specified ID; abort.
@@ -110,13 +94,13 @@ AssetManager.prototype = {
 
         if (shaderScript.type === 'x-shader/x-vertex') {
             //
-            shader = renderingContext.createShader (
+            shader = _renderingContext.createShader (
                 WebGLRenderingContext.VERTEX_SHADER
             );
         } else if (
             shaderScript.type === 'x-shader/x-fragment'
         ){
-            shader = renderingContext.createShader (
+            shader = _renderingContext.createShader (
                 WebGLRenderingContext.FRAGMENT_SHADER
             );
         } else {
@@ -124,14 +108,14 @@ AssetManager.prototype = {
         }
 
         // Send the source to the shader object
-        renderingContext.shaderSource(shader, shaderSource);
+        _renderingContext.shaderSource(shader, shaderSource);
 
         // Compile the shader program
-        renderingContext.compileShader(shader);
+        _renderingContext.compileShader(shader);
 
         // See if it compiled successfully
         if (JSHelper.isUndefinedOrNull (
-                renderingContext.getShaderParameter (
+                _renderingContext.getShaderParameter (
                     shader,
                     WebGLRenderingContext.COMPILE_STATUS
                 )
@@ -139,19 +123,17 @@ AssetManager.prototype = {
         {
             throw (
                 'An error occurred compiling the shaders: ' +
-                renderingContext.getShaderInfoLog(shader)
+                _renderingContext.getShaderInfoLog(shader)
             );
         }
 
         return shader;
-    },
+    };
 
-    loadTexture2D: function(imageSourceUrl) {
+    this.loadTexture2D = function(imageSourceUrl) {
         //
-        var renderingContext = this.renderingContext;
-
         var image = new Image();
-        var texture = renderingContext.createTexture();
+        var texture = _renderingContext.createTexture();
 
         image.addEventListener('load', function() {
             handleTextureLoaded(image, texture);
@@ -161,12 +143,17 @@ AssetManager.prototype = {
 
         function handleTextureLoaded(image, texture) {
             //
-            renderingContext.bindTexture (
+            // Test:
+            texture.width = image.width;
+            texture.height = image.height;
+            // :Test
+
+            _renderingContext.bindTexture (
                 WebGLRenderingContext.TEXTURE_2D,
                 texture
             );
 
-            renderingContext.texImage2D (
+            _renderingContext.texImage2D (
                 WebGLRenderingContext.TEXTURE_2D,    // target
                 0,                                   // level
                 WebGLRenderingContext.RGBA,          // internalFormat
@@ -178,11 +165,11 @@ AssetManager.prototype = {
             if (MathHelper.isPowerOfTwo(image.width) === true &&
                 MathHelper.isPowerOfTwo(image.height) === true) {
                 //
-                renderingContext.generateMipmap (
+                _renderingContext.generateMipmap (
                     WebGLRenderingContext.TEXTURE_2D
                 );
                 
-                renderingContext.texParameteri (
+                _renderingContext.texParameteri (
                     WebGLRenderingContext.TEXTURE_2D,
                     WebGLRenderingContext.TEXTURE_MIN_FILTER,
                     WebGLRenderingContext.LINEAR_MIPMAP_LINEAR
@@ -190,7 +177,7 @@ AssetManager.prototype = {
 
             } else {
                 //
-                renderingContext.texParameteri (
+                _renderingContext.texParameteri (
                     WebGLRenderingContext.TEXTURE_2D,
                     WebGLRenderingContext.TEXTURE_MIN_FILTER,
                     WebGLRenderingContext.LINEAR
@@ -199,33 +186,33 @@ AssetManager.prototype = {
 
             // TEXTURE_MAG_FILTER only has NEAREST or LINEAR to choose, no
             // LINEAR_MIPMAP_LINEAR.
-            renderingContext.texParameteri (
+            _renderingContext.texParameteri (
                 WebGLRenderingContext.TEXTURE_2D,
                 WebGLRenderingContext.TEXTURE_MAG_FILTER,
                 WebGLRenderingContext.LINEAR
             );
 
-            renderingContext.texParameteri (
+            _renderingContext.texParameteri (
                 WebGLRenderingContext.TEXTURE_2D,
                 WebGLRenderingContext.TEXTURE_WRAP_S,
                 WebGLRenderingContext.CLAMP_TO_EDGE
             );
 
-            renderingContext.texParameteri (
+            _renderingContext.texParameteri (
                 WebGLRenderingContext.TEXTURE_2D,
                 WebGLRenderingContext.TEXTURE_WRAP_T,
                 WebGLRenderingContext.CLAMP_TO_EDGE
             );
 
-            renderingContext.bindTexture (
+            _renderingContext.bindTexture (
                 WebGLRenderingContext.TEXTURE_2D,
                 null
             );
         }
 
         return texture;
-    }
-};
+    };
+}
 
 Object.freeze(AssetManager);
 

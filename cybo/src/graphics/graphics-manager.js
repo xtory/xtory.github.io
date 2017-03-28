@@ -1,6 +1,7 @@
 import { ClearOptions  }               from './clear-options';
 import { Color  }                      from './color';
 import { Colors }                      from './colors';
+import { DepthBufferValues }           from './depth-buffer-values';
 import { MathHelper }                  from '../math/helpers/math-helper';
 import { Matrix4x4 }                   from '../math/4x4-matrix';
 import { WebGLRenderingContextHelper } from './helpers/webgl-rendering-context-helper';
@@ -126,8 +127,13 @@ function GraphicsManager(_xcene) {
 
         WebGLRenderingContextHelper.syncConstants(_renderingContext);
 
-        _clearColor   = GraphicsManager.DEFAULT_CLEAR_COLOR;
-        _clearDepth   = GraphicsManager.DEFAULT_CLEAR_DEPTH;;
+        _renderingContext.depthRange (
+            DepthBufferValues.NEAR_CLIP_PLANE, // = 0.0
+            DepthBufferValues.FAR_CLIP_PLANE   // = 1.0
+        );
+
+        _clearColor = GraphicsManager.DEFAULT_CLEAR_COLOR;
+        _clearDepth = GraphicsManager.DEFAULT_CLEAR_DEPTH;;
         _clearStencil = GraphicsManager.DEFAULT_CLEAR_STENCIL;
 
         _renderingContext.clearColor (
