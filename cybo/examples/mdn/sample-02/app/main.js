@@ -19,24 +19,10 @@ function main() {
         renderingContext =
             scene.graphicsManager.renderingContext;
 
-        var p = new Cybo.Vector3D(0, 0, 275);
-        var origin = new Cybo.Vector3D(0, 0, 0);
-
-        camera = new Cybo.Camera (
-            scene,
-            p,
-            Cybo.Vector3D.subtractVectors(origin, p)
-        );
-
-        shaderHelper =
-            new Cybo.ShaderHelper(scene.graphicsManager);
-
-        // Set up the shaders; this is where all the lighting for the
-        // vertices and so forth is established.
+        setUpCamera();
+        
         setUpShaders();
 
-        // Here's where we call the routine that builds all the objects
-        // we'll be drawing.
         setUpBuffers();
 
         transform = Cybo.Matrix4x4.createIdentityMatrix();
@@ -53,8 +39,23 @@ function main() {
     //
     // Functions.
     //
+    function setUpCamera() {
+        //
+        var p = new Cybo.Vector3D(0, 0, 275);
+        var origin = new Cybo.Vector3D(0, 0, 0);
+
+        camera = new Cybo.Camera (
+            scene,
+            p,
+            Cybo.Vector3D.subtractVectors(origin, p)
+        );
+    }
+
     function setUpShaders() {
         //
+        shaderHelper =
+            new Cybo.ShaderHelper(scene.graphicsManager);
+            
         var vertexShader = scene.assetManager.loadShader (
             Cybo.ShaderType.VERTEX_SHADER,
             Cybo.PositionOnly.VERTEX_SHADER_SOURCE
@@ -127,7 +128,7 @@ function main() {
         );
         
         scene.graphicsManager.drawPrimitives (
-            WebGLRenderingContext.TRIANGLE_STRIP,
+            Cybo.PrimitiveType.TRIANGLE_STRIP,
             0,
             4
         );

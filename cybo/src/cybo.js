@@ -1,23 +1,39 @@
+//
+// Assets.
+//
 export { PositionColor }               from './assets/shaders/position-color';
 export { PositionOnly }                from './assets/shaders/position-only';
 export { PositionTextureCoordinates }  from './assets/shaders/position-texture-coordinates';
 export { AssetManager }                from './assets/asset-manager';
 
+//
+// Cameras.
+//
 export { Camera }                      from './cameras/camera';
 
-export { ShaderHelper }                from './graphics/fx/helpers/shader-helper';
-export { ShaderType }                  from './graphics/fx/shader-type';
-export { TextureCoordinateHelper }     from './graphics/helpers/texture-coordinate-helper';
-export { WebGLRenderingContextHelper } from './graphics/helpers/webgl-rendering-context-helper';
+//
+// Graphics.
+//
 export { ClearOptions }                from './graphics/clear-options';
 export { Color }                       from './graphics/color';
 export { Colors }                      from './graphics/colors';
 export { GraphicsManager }             from './graphics/graphics-manager';
+export { PrimitiveType }               from './graphics/primitive-type';
+export { ShaderHelper }                from './graphics/fx/helpers/shader-helper';
+export { ShaderType }                  from './graphics/fx/shader-type';
+export { TextureCoordinateHelper }     from './graphics/helpers/texture-coordinate-helper';
+export { WebGLRenderingContextHelper } from './graphics/helpers/webgl-rendering-context-helper';
 
+//
+// Helpers.
+//
 export { ExceptionHelper }             from './helpers/exception-helper';
 export { JSHelper }                    from './helpers/js-helper';
 export { MouseButton }                 from './helpers/mouse-button';
 
+//
+// Math.
+//
 export { AxisGroup }                   from './math/axis-group';
 export { MathHelper }                  from './math/helpers/math-helper';
 export { Vector2D }                    from './math/2d-vector';
@@ -29,8 +45,14 @@ export { Plane }                       from './math/plane';
 export { Quaternion }                  from './math/quaternion';
 export { ViewFrustum }                 from './math/view-frustum';
 
+//
+// Scenes.
+//
 export { Xcene }                       from './scenes/xcene';
 
+//
+// Time.
+//
 export { EaseMode }                    from './time/ease-mode';
 export { SineEase }                    from './time/sine-ease';
 export { Stopwatch }                   from './time/stopwatch';

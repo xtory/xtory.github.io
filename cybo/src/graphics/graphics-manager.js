@@ -289,15 +289,17 @@ function GraphicsManager(_xcene) {
     };
 
     this.drawPrimitives = function (
-        mode,
+        primitiveType,
         start, // Index of start vertex.
         count
     ){
-        _renderingContext.drawArrays(mode, start, count);
+        _renderingContext.drawArrays(primitiveType, start, count);
     };
     
-    this.drawIndexedPrimitives = function(indexBuffer, mode, count, offset) {
-        //
+    this.drawIndexedPrimitives = function (
+        indexBuffer,
+        primitiveType, count, offset
+    ){
         if (offset === undefined) {
             offset = 0;
         }
@@ -308,7 +310,7 @@ function GraphicsManager(_xcene) {
         );
         
         _renderingContext.drawElements (
-            mode,
+            primitiveType,
             count,
             WebGLRenderingContext.UNSIGNED_SHORT,
             offset

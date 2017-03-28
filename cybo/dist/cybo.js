@@ -1812,103 +1812,209 @@ Object.freeze(Camera);
 //
 // Constructor.
 //
-function ShaderHelper(_graphicsManager) {
+function ClearOptions() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+ClearOptions.COLOR_BUFFER   = 0x00004000; // = WebGLRenderingContext.COLOR_BUFFER_BIT
+ClearOptions.DEPTH_BUFFER   = 0x00000100; // = WebGLRenderingContext.DEPTH_BUFFER_BIT
+ClearOptions.STENCIL_BUFFER = 0x00000400; // = WebGLRenderingContext.STENCIL_BUFFER_BIT
+
+Object.freeze(ClearOptions);
+
+// Note:
+// WebGL's color is composed of (r, g, b, a) channels.
+// DirectX's color is composed of (a, r, g, b) channels.
+
+//
+// Constructor.
+//
+function Color(r, g, b, a) {
     //
-    var _renderingContext =
-        _graphicsManager.renderingContext;
-    
-    Object.defineProperty(this, 'renderingContext', {
-        get: function() { return _renderingContext; }
-    });
+    if (a === undefined) {
+        a = 1.0;
+    }
+
+    this.r = r;
+    this.g = g;
+    this.b = b;
+    this.a = a;
 }
 
 //
 // Prototype.
 //
-ShaderHelper.prototype = {
+Color.prototype = {
     //
     // Public methods.
     //
-    setUpShaderProgram: function(vertexShader, fragmentShader) {
-        //
-        var shaderProgram =
-            this.renderingContext.createProgram();
-        
-        this.renderingContext.attachShader(shaderProgram, vertexShader);
-        this.renderingContext.attachShader(shaderProgram, fragmentShader);
-        this.renderingContext.linkProgram(shaderProgram);
-
-        // If creating the shader program failed, alert
-
-        if (JSHelper.isUndefinedOrNull (
-                //
-                this.renderingContext.getProgramParameter (
-                    shaderProgram,
-                    WebGLRenderingContext.LINK_STATUS
-                )
-            ) === true)
-        {
-            throw (
-                'Unable to initialize the shader program: ' +
-                this.renderingContext.getProgramInfoLog(shader)
-            );
-        }
-        
-        return shaderProgram;
+    toArray: function() {
+        return [ this.r, this.g, this.b, this.a ];
     }
 };
-
-Object.freeze(ShaderHelper);
-
-// Note:
-// Texture Coordinates.
-//
-// DirectX: (U, V)      WebGL: (S, T)           
-//            
-// (0, 0)     (1, 0)    (0, 1)     (1, 1)        
-//     ┌───────┐            ┌───────┐            
-//     │       │            │       │            
-//     │       │            │       │            
-//     └───────┘            └───────┘            
-// (0, 1)     (1, 1)    (0, 0)     (1, 0)        
-//
-// The conditions below must be satisfied...
-// V = -2 <-> T =  3
-// V = -1 <-> T =  2
-// V =  0 <-> T =  1
-// V =  1 <-> T =  0
-// V =  2 <-> T = -1
-// V =  3 <-> T = -2
-// => T = 1 - V
-// => V = 1 - T
-
-//
-// Constructor.
-//
-function TextureCoordinateHelper() {
-    // No contents.
-}
 
 //
 // Static methods.
 //
-TextureCoordinateHelper.toUV = function(s, t) {
+Color.areEqual = function(value1, value2) {
     //
-    return {
-        u: s,
-        v: 1 - t
-    };
+    if ((value1 instanceof Color) === false ||
+        (value2 instanceof Color) === false) {
+        return false;
+    }
+
+    if (value1.r !== value2.r ||
+        value1.g !== value2.g ||
+        value1.b !== value2.b ||
+        value1.a !== value2.a) {
+        return false;
+    } else {
+        return true;
+    }
 };
 
-TextureCoordinateHelper.toST = function(u, v) {
-    //
-    return {
-        s: u,
-        t: 1 - v
-    };
-};    
+Object.freeze(Color);
 
-Object.freeze(TextureCoordinateHelper);
+// Reference:
+// Photoshop CS2 Swatches.
+
+//
+// Constructor.
+//
+function Colors() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+Colors.DEFAULT_BACKGROUND = new Color(32/255, 32/255, 32/255, 1);
+
+//
+// System.
+//
+Colors.BLACK              = new Color(0, 0, 0, 1);
+Colors.WHITE              = new Color(1, 1, 1, 1);
+Colors.TRANSPARENT        = new Color(1, 1, 1, 0);
+Colors.SKY_BLUE           = new Color(135/255, 206/255, 235/255, 1);
+Colors.CADET_BLUE         = new Color(95/255, 158/255, 160/255, 1);
+
+//
+// Photoshop
+//
+// Red.
+// (PS, There's no PHOTOSHOP_PASTEL_RED (cuz it's ugly), use PINK instead.)
+//
+Colors.PINK = new Color(255/255, 192/255, 203/255, 1);
+Colors.PHOTOSHOP_DARK_RED = new Color(157/255, 10/255, 14/255, 1);
+
+//
+// Red orange.
+//
+Colors.PHOTOSHOP_PASTEL_RED_ORANGE = new Color(255, 173/255, 129/255, 1);
+Colors.PHOTOSHOP_DARK_RED_ORANGE = new Color(255, 65/255, 13/255, 1);
+
+//
+// Yellow orange.
+//
+Colors.PHOTOSHOP_PASTEL_YELLOW_ORANGE = new Color(253/255, 198/255, 137/255, 1);
+Colors.PHOTOSHOP_DARK_YELLOW_ORANGE = new Color(163/255, 97/255, 9/255, 1);
+
+//
+// Yellow.
+//
+Colors.PHOTOSHOP_PASTEL_YELLOW = new Color(255/255, 247/255, 153/255, 1);
+Colors.PHOTOSHOP_DARK_YELLOW = new Color(171/255, 160/255, 0/255, 1);
+
+//
+// Green.
+//
+Colors.PHOTOSHOP_PASTEL_PEA_GREEN = new Color(196/255, 223/255, 155/255, 1);
+Colors.PHOTOSHOP_DARK_PEA_GREEN = new Color(89/255, 133/255, 39/255, 1);
+
+//
+// Yellow green.
+//
+Colors.PHOTOSHOP_PASTEL_YELLOW_GREEN = new Color(162/255, 211/255, 156/255, 1);
+Colors.PHOTOSHOP_DARK_YELLOW_GREEN = new Color(25/255, 122/255, 48/255, 1);
+
+//
+// Green.
+//
+Colors.PHOTOSHOP_PASTEL_GREEN = new Color(130/255, 202/255, 156/255, 1);
+Colors.PHOTOSHOP_DARK_GREEN = new Color(0/255, 114/255, 54/255, 1);
+
+//
+// Green cyan.
+//
+Colors.PHOTOSHOP_PASTEL_GREEN_CYAN = new Color(122/255, 204/255, 200/255, 1);
+Colors.PHOTOSHOP_DARK_GREEN_CYAN = new Color(0/255, 115/255, 106/255, 1);
+
+//
+// Cyan.
+//
+Colors.PHOTOSHOP_PASTEL_CYAN = new Color(109/255, 207/255, 246/255, 1);
+Colors.PHOTOSHOP_DARK_CYAN = new Color(0/255, 118/255, 163/255, 1);
+
+//
+// Cyan blue.
+//
+Colors.PHOTOSHOP_PASTEL_CYAN_BLUE = new Color(125/255, 167/255, 216/255, 1);
+Colors.PHOTOSHOP_DARK_CYAN_BLUE = new Color(0/255, 74/255, 128/255, 1);
+
+//
+// Blue.
+//
+Colors.PHOTOSHOP_PASTEL_BLUE = new Color(131/255, 147/255, 202/255, 1);
+Colors.PHOTOSHOP_DARK_BLUE = new Color(0/255, 52/255, 113/255, 1);
+
+//
+// Blue violet.
+//
+Colors.PHOTOSHOP_PASTEL_BLUE_VIOLET = new Color(135/255, 129/255, 189/255, 1);
+Colors.PHOTOSHOP_DARK_BLUE_VIOLET = new Color(27/255, 20/255, 100/255, 1);
+
+//
+// Violet.
+//
+Colors.PHOTOSHOP_PASTEL_VIOLET = new Color(161/255, 134/255, 190/255, 1);
+Colors.PHOTOSHOP_DARK_VIOLET = new Color(68/255, 14/255, 98/255, 1);
+
+//
+// Violet magenta.
+//
+Colors.PHOTOSHOP_PASTEL_VIOLET_MAGENTA = new Color(188/255, 140/255, 191/255, 1);
+Colors.PHOTOSHOP_DARK_VIOLET_MAGENTA = new Color(98/255, 4/255, 96/255, 1);
+
+//
+// Magenta.
+//
+Colors.PHOTOSHOP_PASTEL_MAGENTA = new Color(244/255, 154/255, 193/255, 1);
+Colors.PHOTOSHOP_DARK_MAGENTA = new Color(158/255, 0/255, 93/255, 1);
+
+//
+// Magenta red.
+//
+Colors.PHOTOSHOP_PASTEL_MAGENTA_RED = new Color(245/255, 152/255, 157/255, 1);
+Colors.PHOTOSHOP_DARK_MAGENTA_RED = new Color(157/255, 0/255, 57/255, 1);
+
+//
+// Brown.
+//
+Colors.PHOTOSHOP_PALE_COOL_BROWN = new Color(199/255, 178/255, 153/255, 1);
+Colors.PHOTOSHOP_DARK_COOL_BROWN = new Color(83/255, 71/255, 65/255, 1);
+Colors.PHOTOSHOP_PALE_WARM_BROWN = new Color(198/255, 156/255, 109/255, 1);
+Colors.PHOTOSHOP_DARK_WARM_BROWN = new Color(117/255, 76/255, 36/255, 1);
+
+//
+// OSX
+//
+Colors.OSX_SOLID_KELP = new Color(89/255, 136/255, 123/255, 1);
+
+Object.freeze(Colors);
 
 //
 // Constructor.
@@ -2362,213 +2468,6 @@ Object.freeze(WebGLRenderingContextHelper);
 //
 // Constructor.
 //
-function ClearOptions() {
-    // No contents.
-}
-
-//
-// Static constants (after Object.freeze()).
-//
-ClearOptions.COLOR_BUFFER   = 0x00004000; // = WebGLRenderingContext.COLOR_BUFFER_BIT
-ClearOptions.DEPTH_BUFFER   = 0x00000100; // = WebGLRenderingContext.DEPTH_BUFFER_BIT
-ClearOptions.STENCIL_BUFFER = 0x00000400; // = WebGLRenderingContext.STENCIL_BUFFER_BIT
-
-Object.freeze(ClearOptions);
-
-// Note:
-// WebGL's color is composed of (r, g, b, a) channels.
-// DirectX's color is composed of (a, r, g, b) channels.
-
-//
-// Constructor.
-//
-function Color(r, g, b, a) {
-    //
-    if (a === undefined) {
-        a = 1.0;
-    }
-
-    this.r = r;
-    this.g = g;
-    this.b = b;
-    this.a = a;
-}
-
-//
-// Prototype.
-//
-Color.prototype = {
-    //
-    // Public methods.
-    //
-    toArray: function() {
-        return [ this.r, this.g, this.b, this.a ];
-    }
-};
-
-//
-// Static methods.
-//
-Color.areEqual = function(value1, value2) {
-    //
-    if ((value1 instanceof Color) === false ||
-        (value2 instanceof Color) === false) {
-        return false;
-    }
-
-    if (value1.r !== value2.r ||
-        value1.g !== value2.g ||
-        value1.b !== value2.b ||
-        value1.a !== value2.a) {
-        return false;
-    } else {
-        return true;
-    }
-};
-
-Object.freeze(Color);
-
-// Reference:
-// Photoshop CS2 Swatches.
-
-//
-// Constructor.
-//
-function Colors() {
-    // No contents.
-}
-
-//
-// Static constants (after Object.freeze()).
-//
-Colors.DEFAULT_BACKGROUND = new Color(32/255, 32/255, 32/255, 1);
-
-//
-// System.
-//
-Colors.BLACK              = new Color(0, 0, 0, 1);
-Colors.WHITE              = new Color(1, 1, 1, 1);
-Colors.TRANSPARENT        = new Color(1, 1, 1, 0);
-Colors.SKY_BLUE           = new Color(135/255, 206/255, 235/255, 1);
-Colors.CADET_BLUE         = new Color(95/255, 158/255, 160/255, 1);
-
-//
-// Photoshop
-//
-// Red.
-// (PS, There's no PHOTOSHOP_PASTEL_RED (cuz it's ugly), use PINK instead.)
-//
-Colors.PINK = new Color(255/255, 192/255, 203/255, 1);
-Colors.PHOTOSHOP_DARK_RED = new Color(157/255, 10/255, 14/255, 1);
-
-//
-// Red orange.
-//
-Colors.PHOTOSHOP_PASTEL_RED_ORANGE = new Color(255, 173/255, 129/255, 1);
-Colors.PHOTOSHOP_DARK_RED_ORANGE = new Color(255, 65/255, 13/255, 1);
-
-//
-// Yellow orange.
-//
-Colors.PHOTOSHOP_PASTEL_YELLOW_ORANGE = new Color(253/255, 198/255, 137/255, 1);
-Colors.PHOTOSHOP_DARK_YELLOW_ORANGE = new Color(163/255, 97/255, 9/255, 1);
-
-//
-// Yellow.
-//
-Colors.PHOTOSHOP_PASTEL_YELLOW = new Color(255/255, 247/255, 153/255, 1);
-Colors.PHOTOSHOP_DARK_YELLOW = new Color(171/255, 160/255, 0/255, 1);
-
-//
-// Green.
-//
-Colors.PHOTOSHOP_PASTEL_PEA_GREEN = new Color(196/255, 223/255, 155/255, 1);
-Colors.PHOTOSHOP_DARK_PEA_GREEN = new Color(89/255, 133/255, 39/255, 1);
-
-//
-// Yellow green.
-//
-Colors.PHOTOSHOP_PASTEL_YELLOW_GREEN = new Color(162/255, 211/255, 156/255, 1);
-Colors.PHOTOSHOP_DARK_YELLOW_GREEN = new Color(25/255, 122/255, 48/255, 1);
-
-//
-// Green.
-//
-Colors.PHOTOSHOP_PASTEL_GREEN = new Color(130/255, 202/255, 156/255, 1);
-Colors.PHOTOSHOP_DARK_GREEN = new Color(0/255, 114/255, 54/255, 1);
-
-//
-// Green cyan.
-//
-Colors.PHOTOSHOP_PASTEL_GREEN_CYAN = new Color(122/255, 204/255, 200/255, 1);
-Colors.PHOTOSHOP_DARK_GREEN_CYAN = new Color(0/255, 115/255, 106/255, 1);
-
-//
-// Cyan.
-//
-Colors.PHOTOSHOP_PASTEL_CYAN = new Color(109/255, 207/255, 246/255, 1);
-Colors.PHOTOSHOP_DARK_CYAN = new Color(0/255, 118/255, 163/255, 1);
-
-//
-// Cyan blue.
-//
-Colors.PHOTOSHOP_PASTEL_CYAN_BLUE = new Color(125/255, 167/255, 216/255, 1);
-Colors.PHOTOSHOP_DARK_CYAN_BLUE = new Color(0/255, 74/255, 128/255, 1);
-
-//
-// Blue.
-//
-Colors.PHOTOSHOP_PASTEL_BLUE = new Color(131/255, 147/255, 202/255, 1);
-Colors.PHOTOSHOP_DARK_BLUE = new Color(0/255, 52/255, 113/255, 1);
-
-//
-// Blue violet.
-//
-Colors.PHOTOSHOP_PASTEL_BLUE_VIOLET = new Color(135/255, 129/255, 189/255, 1);
-Colors.PHOTOSHOP_DARK_BLUE_VIOLET = new Color(27/255, 20/255, 100/255, 1);
-
-//
-// Violet.
-//
-Colors.PHOTOSHOP_PASTEL_VIOLET = new Color(161/255, 134/255, 190/255, 1);
-Colors.PHOTOSHOP_DARK_VIOLET = new Color(68/255, 14/255, 98/255, 1);
-
-//
-// Violet magenta.
-//
-Colors.PHOTOSHOP_PASTEL_VIOLET_MAGENTA = new Color(188/255, 140/255, 191/255, 1);
-Colors.PHOTOSHOP_DARK_VIOLET_MAGENTA = new Color(98/255, 4/255, 96/255, 1);
-
-//
-// Magenta.
-//
-Colors.PHOTOSHOP_PASTEL_MAGENTA = new Color(244/255, 154/255, 193/255, 1);
-Colors.PHOTOSHOP_DARK_MAGENTA = new Color(158/255, 0/255, 93/255, 1);
-
-//
-// Magenta red.
-//
-Colors.PHOTOSHOP_PASTEL_MAGENTA_RED = new Color(245/255, 152/255, 157/255, 1);
-Colors.PHOTOSHOP_DARK_MAGENTA_RED = new Color(157/255, 0/255, 57/255, 1);
-
-//
-// Brown.
-//
-Colors.PHOTOSHOP_PALE_COOL_BROWN = new Color(199/255, 178/255, 153/255, 1);
-Colors.PHOTOSHOP_DARK_COOL_BROWN = new Color(83/255, 71/255, 65/255, 1);
-Colors.PHOTOSHOP_PALE_WARM_BROWN = new Color(198/255, 156/255, 109/255, 1);
-Colors.PHOTOSHOP_DARK_WARM_BROWN = new Color(117/255, 76/255, 36/255, 1);
-
-//
-// OSX
-//
-Colors.OSX_SOLID_KELP = new Color(89/255, 136/255, 123/255, 1);
-
-Object.freeze(Colors);
-
-//
-// Constructor.
-//
 function GraphicsManager(_xcene) {
     //
     var _renderingContext;
@@ -2850,15 +2749,17 @@ function GraphicsManager(_xcene) {
     };
 
     this.drawPrimitives = function (
-        mode,
+        primitiveType,
         start, // Index of start vertex.
         count
     ){
-        _renderingContext.drawArrays(mode, start, count);
+        _renderingContext.drawArrays(primitiveType, start, count);
     };
     
-    this.drawIndexedPrimitives = function(indexBuffer, mode, count, offset) {
-        //
+    this.drawIndexedPrimitives = function (
+        indexBuffer,
+        primitiveType, count, offset
+    ){
         if (offset === undefined) {
             offset = 0;
         }
@@ -2869,7 +2770,7 @@ function GraphicsManager(_xcene) {
         );
         
         _renderingContext.drawElements (
-            mode,
+            primitiveType,
             count,
             WebGLRenderingContext.UNSIGNED_SHORT,
             offset
@@ -2968,6 +2869,124 @@ GraphicsManager.DEFAULT_CLEAR_STENCIL = 0;
 GraphicsManager.DEFAULT_TEXTURE_UNIT  = 0;
 
 Object.freeze(GraphicsManager);
+
+//
+// Constructor.
+//
+function PrimitiveType() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+PrimitiveType.LINE_LIST      = 1; // = WebGLRenderingContext.LINES
+PrimitiveType.LINE_STRIP     = 3; // = WebGLRenderingContext.LINE_STRIP
+PrimitiveType.TRIANGLE_LIST  = 4; // = WebGLRenderingContext.TRIANGLES
+PrimitiveType.TRIANGLE_STRIP = 5; // = WebGLRenderingContext.TRIANGLE_STRIP
+
+Object.freeze(PrimitiveType);
+
+//
+// Constructor.
+//
+function ShaderHelper(_graphicsManager) {
+    //
+    var _renderingContext =
+        _graphicsManager.renderingContext;
+    
+    Object.defineProperty(this, 'renderingContext', {
+        get: function() { return _renderingContext; }
+    });
+}
+
+//
+// Prototype.
+//
+ShaderHelper.prototype = {
+    //
+    // Public methods.
+    //
+    setUpShaderProgram: function(vertexShader, fragmentShader) {
+        //
+        var shaderProgram =
+            this.renderingContext.createProgram();
+        
+        this.renderingContext.attachShader(shaderProgram, vertexShader);
+        this.renderingContext.attachShader(shaderProgram, fragmentShader);
+        this.renderingContext.linkProgram(shaderProgram);
+
+        // If creating the shader program failed, alert
+
+        if (JSHelper.isUndefinedOrNull (
+                //
+                this.renderingContext.getProgramParameter (
+                    shaderProgram,
+                    WebGLRenderingContext.LINK_STATUS
+                )
+            ) === true)
+        {
+            throw (
+                'Unable to initialize the shader program: ' +
+                this.renderingContext.getProgramInfoLog(shader)
+            );
+        }
+        
+        return shaderProgram;
+    }
+};
+
+Object.freeze(ShaderHelper);
+
+// Note:
+// Texture Coordinates.
+//
+// DirectX: (U, V)      WebGL: (S, T)           
+//            
+// (0, 0)     (1, 0)    (0, 1)     (1, 1)        
+//     ┌───────┐            ┌───────┐            
+//     │       │            │       │            
+//     │       │            │       │            
+//     └───────┘            └───────┘            
+// (0, 1)     (1, 1)    (0, 0)     (1, 0)        
+//
+// The conditions below must be satisfied...
+// V = -2 <-> T =  3
+// V = -1 <-> T =  2
+// V =  0 <-> T =  1
+// V =  1 <-> T =  0
+// V =  2 <-> T = -1
+// V =  3 <-> T = -2
+// => T = 1 - V
+// => V = 1 - T
+
+//
+// Constructor.
+//
+function TextureCoordinateHelper() {
+    // No contents.
+}
+
+//
+// Static methods.
+//
+TextureCoordinateHelper.toUV = function(s, t) {
+    //
+    return {
+        u: s,
+        v: 1 - t
+    };
+};
+
+TextureCoordinateHelper.toST = function(u, v) {
+    //
+    return {
+        s: u,
+        t: 1 - v
+    };
+};    
+
+Object.freeze(TextureCoordinateHelper);
 
 //
 // Constructor.
@@ -3636,19 +3655,24 @@ function SineEase(_easeMode, _duration, _isLooped) {
 
 Object.freeze(SineEase);
 
+//
+// Assets.
+//
+
 exports.PositionColor = PositionColor;
 exports.PositionOnly = PositionOnly;
 exports.PositionTextureCoordinates = PositionTextureCoordinates;
 exports.AssetManager = AssetManager;
 exports.Camera = Camera;
-exports.ShaderHelper = ShaderHelper;
-exports.ShaderType = ShaderType;
-exports.TextureCoordinateHelper = TextureCoordinateHelper;
-exports.WebGLRenderingContextHelper = WebGLRenderingContextHelper;
 exports.ClearOptions = ClearOptions;
 exports.Color = Color;
 exports.Colors = Colors;
 exports.GraphicsManager = GraphicsManager;
+exports.PrimitiveType = PrimitiveType;
+exports.ShaderHelper = ShaderHelper;
+exports.ShaderType = ShaderType;
+exports.TextureCoordinateHelper = TextureCoordinateHelper;
+exports.WebGLRenderingContextHelper = WebGLRenderingContextHelper;
 exports.ExceptionHelper = ExceptionHelper;
 exports.JSHelper = JSHelper;
 exports.MouseButton = MouseButton;
