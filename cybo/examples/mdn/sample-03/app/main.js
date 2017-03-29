@@ -83,15 +83,7 @@ function main() {
         //
         // Vertex positions.
         //
-        vertexPositionBuffer =
-            gl.createBuffer();
-
-        // var vertexPositions = [
-        //     50.0, -50.0,  0.0,
-        //     50.0,  50.0,  0.0,
-        //    -50.0, -50.0,  0.0,
-        //    -50.0,  50.0,  0.0
-        // ];
+        vertexPositionBuffer = gl.createBuffer();
 
         var halfWidth = w * 0.5;
         var halfHeight = h * 0.5;
@@ -111,8 +103,7 @@ function main() {
         //
         // Vertex colors.
         //
-        vertexColorBuffer =
-            gl.createBuffer();
+        vertexColorBuffer = gl.createBuffer();
 
         var vertexColors = [].concat (
             Cybo.Colors.PHOTOSHOP_DARK_RED.toArray(),

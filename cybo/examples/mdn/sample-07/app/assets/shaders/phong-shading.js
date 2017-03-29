@@ -10,15 +10,17 @@ function PhongShading() {
 //
 PhongShading.VERTEX_SHADER_SOURCE = [
     //
-   'attribute highp vec3 vertexPosition;',
-   'attribute highp vec3 vertexNormal;',
-   'attribute highp vec2 vertexTextureCoordinates;',
+   'precision highp float;', // which is the default vertex shader precision.
     //
-   'uniform highp mat4 transposeOfInverseOfModelMatrix;',
-   'uniform highp mat4 transform;',
+   'attribute vec3 vertexPosition;',
+   'attribute vec3 vertexNormal;',
+   'attribute vec2 vertexTextureCoordinates;',
     //
-   'varying highp vec2 textureCoordinates;',
-   'varying highp vec3 lighting;',
+   'uniform mat4 transposeOfInverseOfModelMatrix;',
+   'uniform mat4 transform;',
+    //
+   'varying vec2 textureCoordinates;',
+   'varying vec3 lighting;',
     //
    'void main() {',
         //
@@ -26,16 +28,16 @@ PhongShading.VERTEX_SHADER_SOURCE = [
        'textureCoordinates = vertexTextureCoordinates;',
         //
        '// Apply lighting effect',
-       'highp vec3 ambientLight = vec3(0.25, 0.25, 0.25);',
-       'highp vec3 directionalLightColor = vec3(1, 1, 1);',
-       'highp vec3 directionalVector = vec3(1, 1, 1);',
+       'vec3 ambientLight = vec3(0.25, 0.25, 0.25);',
+       'vec3 directionalLightColor = vec3(1, 1, 1);',
+       'vec3 directionalVector = vec3(1, 1, 1);',
         //
-       'highp vec4 transformedNormal = (',
+       'vec4 transformedNormal = (',
            'transposeOfInverseOfModelMatrix *',
            'vec4(vertexNormal, 1.0)',
        ');',
         //
-       'highp float directional = max (',
+       'float directional = max (',
            'dot(transformedNormal.xyz, directionalVector),',
            '0.0',
        ');',
@@ -50,14 +52,16 @@ PhongShading.VERTEX_SHADER_SOURCE = [
 
 PhongShading.FRAGMENT_SHADER_SOURCE = [
     //
-   'varying highp vec2 textureCoordinates;',
-   'varying highp vec3 lighting;',
+   'precision mediump float;', // which is the recommended fragment shader precision.
+    //
+   'varying vec2 textureCoordinates;',
+   'varying vec3 lighting;',
     //
    'uniform sampler2D sampler;',
     //
    'void main() {',
         //
-       'mediump vec4 texelColor =',
+       'vec4 texelColor =',
            'texture2D(sampler, textureCoordinates);',
         //
        'gl_FragColor =',

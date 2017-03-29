@@ -13,11 +13,13 @@ function PositionColor() {
 //
 PositionColor.VERTEX_SHADER_SOURCE = [
     //
+   'precision highp float;', // which is the default vertex shader precision.
+    //
    'attribute vec3 vertexPosition;',
    'attribute vec4 vertexColor;',
    'uniform mat4 transform;',
     //
-   'varying lowp vec4 color;',
+   'varying vec4 color;',
     //
    'void main() {',
        'gl_Position = transform * vec4(vertexPosition, 1.0);',
@@ -28,7 +30,9 @@ PositionColor.VERTEX_SHADER_SOURCE = [
 
 PositionColor.FRAGMENT_SHADER_SOURCE = [
     //
-   'varying lowp vec4 color;',
+   'precision mediump float;', // which is the recommended fragment shader precision.
+    //
+   'varying vec4 color;',
     //
    'void main() {',
        'gl_FragColor = color;',
@@ -50,6 +54,8 @@ function PositionOnly() {
 //
 PositionOnly.VERTEX_SHADER_SOURCE = [
     //
+   'precision highp float;', // which is the default vertex shader precision.
+    //
    'attribute vec3 vertexPosition;',
    'uniform mat4 transform;',
     //
@@ -60,6 +66,8 @@ PositionOnly.VERTEX_SHADER_SOURCE = [
 ].join('\n');
 
 PositionOnly.FRAGMENT_SHADER_SOURCE = [
+    //
+   'precision mediump float;', // which is the recommended fragment shader precision.
     //
    'void main() {',
        'gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);',
@@ -81,11 +89,13 @@ function PositionTextureCoordinates() {
 //
 PositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
     //
+   'precision highp float;', // which is the default vertex shader precision.
+    //
    'attribute vec3 vertexPosition;',
    'attribute vec2 vertexTextureCoordinates;',
    'uniform mat4 transform;',
     //
-   'varying highp vec2 textureCoordinates;',
+   'varying vec2 textureCoordinates;',
     //
    'void main() {',
        'gl_Position = transform * vec4(vertexPosition, 1.0);',
@@ -96,7 +106,9 @@ PositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
 
 PositionTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
     //
-   'varying highp vec2 textureCoordinates;',
+   'precision mediump float;', // which is the recommended fragment shader precision.
+    //
+   'varying vec2 textureCoordinates;',
    'uniform sampler2D sampler;',
     //
    'void main() {',
@@ -119,12 +131,14 @@ function TransformedPositionColorTextureCoordinates() {
 //
 TransformedPositionColorTextureCoordinates.VERTEX_SHADER_SOURCE = [
     //
+   'precision highp float;', // which is the default vertex shader precision.
+    //
    'attribute vec4 vertexPosition;',
    'attribute vec4 vertexColor;',
    'attribute vec2 vertexTextureCoordinates;',
     //
-   'varying highp vec4 color;',
-   'varying highp vec2 textureCoordinates;',
+   'varying vec4 color;',
+   'varying vec2 textureCoordinates;',
     //
    'void main() {',
         //
@@ -138,8 +152,10 @@ TransformedPositionColorTextureCoordinates.VERTEX_SHADER_SOURCE = [
 
 TransformedPositionColorTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
     //
-   'varying highp vec4 color;',
-   'varying highp vec2 textureCoordinates;',
+   'precision mediump float;', // which is the recommended fragment shader precision.
+    //
+   'varying vec4 color;',
+   'varying vec2 textureCoordinates;',
     //
    'uniform sampler2D sampler;',
     //
@@ -163,10 +179,12 @@ function TransformedPositionTextureCoordinates() {
 //
 TransformedPositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
     //
+   'precision highp float;', // which is the default vertex shader precision.
+    //
    'attribute vec4 vertexPosition;',
    'attribute vec2 vertexTextureCoordinates;',
     //
-   'varying highp vec2 textureCoordinates;',
+   'varying vec2 textureCoordinates;',
     //
    'void main() {',
        'gl_Position = vertexPosition;',
@@ -177,7 +195,9 @@ TransformedPositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
 
 TransformedPositionTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
     //
-   'varying highp vec2 textureCoordinates;',
+   'precision mediump float;', // which is the recommended fragment shader precision.
+    //
+   'varying vec2 textureCoordinates;',
    'uniform sampler2D sampler;',
     //
    'void main() {',

@@ -10,12 +10,14 @@ function Multitexturing() {
 //
 Multitexturing.VERTEX_SHADER_SOURCE = [
     //
-   'attribute highp vec3 vertexPosition;',
-   'attribute highp vec2 vertexTextureCoordinates;',
+   'precision highp float;', // which is the default vertex shader precision.
+
+   'attribute vec3 vertexPosition;',
+   'attribute vec2 vertexTextureCoordinates;',
     //
-   'uniform highp mat4 transform;',
+   'uniform mat4 transform;',
     //
-   'varying highp vec2 textureCoordinates;',
+   'varying vec2 textureCoordinates;',
     //
    'void main() {',
         //
@@ -25,32 +27,18 @@ Multitexturing.VERTEX_SHADER_SOURCE = [
 
 ].join('\n');
 
-// Multitexturing.FRAGMENT_SHADER_SOURCE = [
-//     //
-//    'varying highp vec2 textureCoordinates;',
-//     //
-//    'uniform sampler2D sampler1;',
-//    'uniform sampler2D sampler2;',
-//     //
-//    'void main() {',
-//         //
-//        'gl_FragColor = (',
-//            'texture2D(sampler1, textureCoordinates) *',
-//            'texture2D(sampler2, textureCoordinates)',
-//        ');',
-//    '}'
-
-// ].join('\n');
 Multitexturing.FRAGMENT_SHADER_SOURCE = [
     //
-   'varying highp vec2 textureCoordinates;',
+   'precision mediump float;', // which is the recommended fragment shader precision.
+    // 
+   'varying vec2 textureCoordinates;',
     //
    'uniform sampler2D sampler1;',
    'uniform sampler2D sampler2;',
     //
    'void main() {',
         //
-       'mediump vec4 color = texture2D(sampler2, textureCoordinates);',
+       'vec4 color = texture2D(sampler2, textureCoordinates);',
        //
        'gl_FragColor = (',
            'texture2D(sampler1, textureCoordinates) +',

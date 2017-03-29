@@ -10,10 +10,12 @@ function TransformedPositionTextureCoordinates() {
 //
 TransformedPositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
     //
+   'precision highp float;', // which is the default vertex shader precision.
+    //
    'attribute vec4 vertexPosition;',
    'attribute vec2 vertexTextureCoordinates;',
     //
-   'varying highp vec2 textureCoordinates;',
+   'varying vec2 textureCoordinates;',
     //
    'void main() {',
        'gl_Position = vertexPosition;',
@@ -24,7 +26,9 @@ TransformedPositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
 
 TransformedPositionTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
     //
-   'varying highp vec2 textureCoordinates;',
+   'precision mediump float;', // which is the recommended fragment shader precision.
+    //
+   'varying vec2 textureCoordinates;',
    'uniform sampler2D sampler;',
     //
    'void main() {',

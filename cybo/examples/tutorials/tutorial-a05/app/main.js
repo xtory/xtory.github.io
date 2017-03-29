@@ -136,8 +136,7 @@ function main() {
         //
         var viewport = scene.graphicsManager.viewport;
 
-        vertexPositionBuffer =
-            gl.createBuffer();
+        vertexPositionBuffer = gl.createBuffer();
             
         var halfWidth = w * 0.5;
         var halfHeight = h * 0.5;
@@ -170,8 +169,7 @@ function main() {
         //
         // Vertex colors.
         //
-        vertexColorBuffer =
-            gl.createBuffer();
+        vertexColorBuffer = gl.createBuffer();
             
         var halfWidth = w / 2;
         var halfHeight = h / 2;
@@ -193,8 +191,7 @@ function main() {
         //
         // Vertex texture coordinates.
         //
-        vertexTextureCoordinateBuffer =
-            gl.createBuffer();
+        vertexTextureCoordinateBuffer = gl.createBuffer();
             
         var vertexTextureCoordinates = [
             1.0, 0.0,

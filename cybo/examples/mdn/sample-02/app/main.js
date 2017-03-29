@@ -72,8 +72,7 @@ function main() {
 
     function setUpGeometries(x, y, w, h) {
         //
-        vertexPositionBuffer =
-            gl.createBuffer();
+        vertexPositionBuffer = gl.createBuffer();
 
         var halfWidth = w * 0.5;
         var halfHeight = h * 0.5;

@@ -113,8 +113,7 @@ function main() {
         //
         // Vertex positions.
         //
-        vertexPositionBuffer =
-            gl.createBuffer();
+        vertexPositionBuffer = gl.createBuffer();
 
         var vertexPositions = [
             //
@@ -163,8 +162,7 @@ function main() {
         //
         // Vertex texture coordinates.
         //
-        vertexTextureCoordinateBuffer =
-            gl.createBuffer();
+        vertexTextureCoordinateBuffer = gl.createBuffer();
 
         var vertexTextureCoordinates = [
             //
@@ -213,8 +211,7 @@ function main() {
         //
         // Vertex indices.
         //
-        indexBuffer =
-            gl.createBuffer();
+        indexBuffer = gl.createBuffer();
 
         var vertexIndices = [
             //

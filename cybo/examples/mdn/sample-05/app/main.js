@@ -102,8 +102,7 @@ function main() {
         //
         // Vertex positions.
         //
-        vertexPositionBuffer =
-            gl.createBuffer();
+        vertexPositionBuffer = gl.createBuffer();
 
         var vertexPositions = [
             //
@@ -152,8 +151,7 @@ function main() {
         //
         // Vertex colors.
         //
-        vertexColorBuffer =
-            gl.createBuffer();
+        vertexColorBuffer = gl.createBuffer();
 
         var faceColors = [
             Cybo.Colors.PHOTOSHOP_DARK_RED.toArray(),
@@ -185,8 +183,7 @@ function main() {
         //
         // Vertex indices.
         //
-        indexBuffer =
-            gl.createBuffer();
+        indexBuffer = gl.createBuffer();
 
         var vertexIndices = [
             //

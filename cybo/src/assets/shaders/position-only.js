@@ -10,6 +10,8 @@ function PositionOnly() {
 //
 PositionOnly.VERTEX_SHADER_SOURCE = [
     //
+   'precision highp float;', // which is the default vertex shader precision.
+    //
    'attribute vec3 vertexPosition;',
    'uniform mat4 transform;',
     //
@@ -20,6 +22,8 @@ PositionOnly.VERTEX_SHADER_SOURCE = [
 ].join('\n');
 
 PositionOnly.FRAGMENT_SHADER_SOURCE = [
+    //
+   'precision mediump float;', // which is the recommended fragment shader precision.
     //
    'void main() {',
        'gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);',
