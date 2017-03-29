@@ -169,7 +169,11 @@ function Camera (
     }
 
     //
-    // Privileged methods (accessors).
+    // Privileged methods
+    //
+
+    //
+    // Accessors
     //
     this.getViewMatrix = function(m) {
         //

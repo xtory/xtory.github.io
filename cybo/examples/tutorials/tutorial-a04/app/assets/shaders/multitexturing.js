@@ -25,6 +25,22 @@ Multitexturing.VERTEX_SHADER_SOURCE = [
 
 ].join('\n');
 
+// Multitexturing.FRAGMENT_SHADER_SOURCE = [
+//     //
+//    'varying highp vec2 textureCoordinates;',
+//     //
+//    'uniform sampler2D sampler1;',
+//    'uniform sampler2D sampler2;',
+//     //
+//    'void main() {',
+//         //
+//        'gl_FragColor = (',
+//            'texture2D(sampler1, textureCoordinates) *',
+//            'texture2D(sampler2, textureCoordinates)',
+//        ');',
+//    '}'
+
+// ].join('\n');
 Multitexturing.FRAGMENT_SHADER_SOURCE = [
     //
    'varying highp vec2 textureCoordinates;',
@@ -34,9 +50,16 @@ Multitexturing.FRAGMENT_SHADER_SOURCE = [
     //
    'void main() {',
         //
+       'mediump vec4 color = texture2D(sampler2, textureCoordinates);',
+       //
        'gl_FragColor = (',
-           'texture2D(sampler1, textureCoordinates) *',
-           'texture2D(sampler2, textureCoordinates)',
+           'texture2D(sampler1, textureCoordinates) +',
+           'vec4 (',
+               '(1.0 - color.r) * 0.25,',
+               '(1.0 - color.g) * 0.5,',
+               '(1.0 - color.b) * 0.5,',
+               '0',
+           ')',
        ');',
    '}'
 

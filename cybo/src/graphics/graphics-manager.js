@@ -350,9 +350,9 @@ function GraphicsManager(_xcene) {
         }
 
         // Note:
-        // _gl.TEXTUREX are numbers,
-        // _gl.TEXTURE0 = 33984,
-        // _gl.TEXTURE1 = 33985,
+        // gl.TEXTUREX are numbers,
+        // gl.TEXTURE0 = 33984,
+        // gl.TEXTURE1 = 33985,
         // ...
 
         _gl.activeTexture(_gl.TEXTURE0 + unit);

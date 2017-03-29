@@ -1815,7 +1815,11 @@ function Camera (
     };
 
     //
-    // Privileged methods (accessors).
+    // Privileged methods
+    //
+
+    //
+    // Accessors
     //
     this.getViewMatrix = function(m) {
         //
@@ -2452,9 +2456,9 @@ function GraphicsManager(_xcene) {
         }
 
         // Note:
-        // _gl.TEXTUREX are numbers,
-        // _gl.TEXTURE0 = 33984,
-        // _gl.TEXTURE1 = 33985,
+        // gl.TEXTUREX are numbers,
+        // gl.TEXTURE0 = 33984,
+        // gl.TEXTURE1 = 33985,
         // ...
 
         _gl.activeTexture(_gl.TEXTURE0 + unit);
@@ -2757,7 +2761,9 @@ function Viewport(_left, _bottom, _width, _height) {
         get: function() { return _width / _height; }
     });
 
-    // Priviledged methods.
+    //
+    // Privileged methods.
+    //
     this.toNormalizedDeviceSpace = function(screenPosition) {
         //
         // Note:
@@ -2765,6 +2771,10 @@ function Viewport(_left, _bottom, _width, _height) {
         // to worry about w (perspective division), the formula below converts the
         // screen position directly to normalized device coordinates.
 
+        // Note:
+        // Besides, OpenGL has no half-pixel offset problem like DirectX 9, don't
+        // have to handle it.
+        /*
         return new Vector2D (
             // Part 1.
             NormalizedDeviceCoordinates.MIN_X +
@@ -2775,6 +2785,19 @@ function Viewport(_left, _bottom, _width, _height) {
             ((screenPosition.y - 0.5) / _height) *
             (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y)
         );
+        */
+
+        return new Vector2D (
+            // Part 1.
+            NormalizedDeviceCoordinates.MIN_X +
+            (screenPosition.x / _width) *
+            (NormalizedDeviceCoordinates.MAX_X - NormalizedDeviceCoordinates.MIN_X),
+            // Part 2.
+            NormalizedDeviceCoordinates.MIN_Y +
+            (screenPosition.y / _height) *
+            (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y)
+        );
+        // :Note
     };
 }
 

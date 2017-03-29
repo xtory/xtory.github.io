@@ -316,13 +316,6 @@ function main() {
         );
     }
 
-    //
-    // setUpTextures
-    //
-    // Initialize the textures we'll be using, then initiate a load of
-    // the texture images. The handleTextureLoaded() callback will finish
-    // the job; it gets called each time a texture finishes loading.
-    //
     function setUpTextures() {
         //
         var url = // which is relative to index.html, not main.js

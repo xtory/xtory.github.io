@@ -24,7 +24,7 @@ function main() {
 
         setUpShaders();
 
-        setUpGeometries(-30, 30, 640, 560);
+        setUpGeometries(0, 0, 500, 500);
 
         setUpTextures();
 
@@ -51,7 +51,7 @@ function main() {
     //
     function setUpCamera() {
         //
-        var p = new Cybo.Vector3D(0, 0, 1250);
+        var p = new Cybo.Vector3D(0, 0, 1000);
         var origin = new Cybo.Vector3D(0, 0, 0);
 
         camera = new Cybo.Camera (
@@ -138,27 +138,17 @@ function main() {
         );
     }
 
-    //
-    // setUpTextures
-    //
-    // Initialize the textures we'll be using, then initiate a load of
-    // the texture images. The handleTextureLoaded() callback will finish
-    // the job; it gets called each time a texture finishes loading.
-    //
     function setUpTextures() {
         //
         var url = // which is relative to index.html, not main.js
-            '../../assets/images/tree.png';
+            '../../assets/images/space.png';
 
         mainTexture = scene.assetManager.loadTexture2D(url);
     }
 
     function drawScene() {
         //
-        scene.graphicsManager.clear (
-            undefined,
-            Cybo.Colors.CADET_BLUE
-        );
+        scene.graphicsManager.clear();
 
         scene.graphicsManager.shaderProgram =
             shaderProgram;

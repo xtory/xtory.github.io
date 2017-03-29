@@ -27,7 +27,9 @@ function Viewport(_left, _bottom, _width, _height) {
         get: function() { return _width / _height; }
     });
 
-    // Priviledged methods.
+    //
+    // Privileged methods.
+    //
     this.toNormalizedDeviceSpace = function(screenPosition) {
         //
         // Note:
@@ -35,6 +37,10 @@ function Viewport(_left, _bottom, _width, _height) {
         // to worry about w (perspective division), the formula below converts the
         // screen position directly to normalized device coordinates.
 
+        // Note:
+        // Besides, OpenGL has no half-pixel offset problem like DirectX 9, don't
+        // have to handle it.
+        /*
         return new Vector2D (
             // Part 1.
             NormalizedDeviceCoordinates.MIN_X +
@@ -45,6 +51,19 @@ function Viewport(_left, _bottom, _width, _height) {
             ((screenPosition.y - 0.5) / _height) *
             (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y)
         );
+        */
+
+        return new Vector2D (
+            // Part 1.
+            NormalizedDeviceCoordinates.MIN_X +
+            (screenPosition.x / _width) *
+            (NormalizedDeviceCoordinates.MAX_X - NormalizedDeviceCoordinates.MIN_X),
+            // Part 2.
+            NormalizedDeviceCoordinates.MIN_Y +
+            (screenPosition.y / _height) *
+            (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y)
+        );
+        // :Note
     }
 }
 

@@ -137,27 +137,17 @@ function main() {
         );
     }
 
-    //
-    // setUpTextures
-    //
-    // Initialize the textures we'll be using, then initiate a load of
-    // the texture images. The handleTextureLoaded() callback will finish
-    // the job; it gets called each time a texture finishes loading.
-    //
     function setUpTextures() {
         //
         var url = // which is relative to index.html, not main.js
-            '../../assets/images/jeremy-mann/cat.jpg';
+            '../../assets/images/jeremy-mann/market-street.jpg';
 
         mainTexture = scene.assetManager.loadTexture2D(url);
     }
 
     function drawScene() {
         //
-        scene.graphicsManager.clear (
-            undefined,
-            Cybo.Colors.CADET_BLUE
-        );
+        scene.graphicsManager.clear();
 
         scene.graphicsManager.shaderProgram =
             shaderProgram;

@@ -74,17 +74,14 @@ function main() {
     function setUpTextures() {
         //
         var url = // which is relative to index.html, not main.js
-            '../../assets/images/jeremy-mann/cat.jpg';
+            '../../assets/images/jeremy-mann/market-street.jpg';
 
         mainTexture = scene.assetManager.loadTexture2D(url);
     }
 
     function drawScene() {
         //
-        scene.graphicsManager.clear (
-            undefined,
-            Cybo.Colors.CADET_BLUE
-        );
+        scene.graphicsManager.clear();
 
         var viewport = scene.graphicsManager.viewport;
 
