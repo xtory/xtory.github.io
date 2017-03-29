@@ -143,6 +143,15 @@ function Xcene(_mainCanvas, _usesDefaultStyles) {
         if (_mainCanvas.width  != displayWidth ||
             _mainCanvas.height != displayHeight) {
             //
+            // Test:
+            alert (
+                'resized!\n' +
+                'canvas.width = ' + _mainCanvas.width + ', '  + 'canvas.height = ' + _mainCanvas.height + '\n' +
+                'canvas.clientWidth = ' + _mainCanvas.clientWidth + ', '  + 'canvas.clientHeight = ' + _mainCanvas.clientHeight + '\n' +
+                'window.devicePixelRatio = ' + window.devicePixelRatio
+            );
+            // :Test
+            
             // Make the canvas the same size
             _mainCanvas.width  = displayWidth;
             _mainCanvas.height = displayHeight;
@@ -154,11 +163,11 @@ function Xcene(_mainCanvas, _usesDefaultStyles) {
                 _mainCanvas.width, _mainCanvas.height
             );
 
-            alert (
-                'resized!\n' +
-                'width = ' + _mainCanvas.width + ', '  +
-                'height = ' + _mainCanvas.height + 'Hihi'
-            );
+            // alert (
+            //     'resized!\n' +
+            //     'width = ' + _mainCanvas.width + ', '  +
+            //     'height = ' + _mainCanvas.height + 'Hihi'
+            // );
         }
     }
 
