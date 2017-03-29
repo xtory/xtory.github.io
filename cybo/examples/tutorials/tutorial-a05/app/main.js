@@ -157,7 +157,7 @@ function main() {
 
             vertexPositions2.push(p.x);
             vertexPositions2.push(p.y);
-            vertexPositions2.push(0); // z.
+            vertexPositions2.push(-1); // z. //vertexPositions2.push(0); // z.
             vertexPositions2.push(1); // w.
         }
 

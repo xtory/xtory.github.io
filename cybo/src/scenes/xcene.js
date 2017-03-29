@@ -157,7 +157,7 @@ function Xcene(_mainCanvas, _usesDefaultStyles) {
             alert (
                 'resized!\n' +
                 'width = ' + _mainCanvas.width + ', '  +
-                'height = ' + _mainCanvas.height
+                'height = ' + _mainCanvas.height + 'Hihi'
             );
         }
     }
