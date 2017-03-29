@@ -133,6 +133,8 @@ function Xcene(_mainCanvas, _usesDefaultStyles) {
     //
     // Event handlers.
     //
+    // Test:
+    /*
     function onResize() {
         //
         // Lookup the size the browser is displaying the canvas.
@@ -146,9 +148,10 @@ function Xcene(_mainCanvas, _usesDefaultStyles) {
             // Test:
             alert (
                 'resized!\n' +
+                'window.innerWidth = ' + window.innerWidth + ', '  + 'window.innerHeight = ' + window.innerHeight + '\n' +
+                'window.devicePixelRatio = ' + window.devicePixelRatio + '\n' +
                 'canvas.width = ' + _mainCanvas.width + ', '  + 'canvas.height = ' + _mainCanvas.height + '\n' +
-                'canvas.clientWidth = ' + _mainCanvas.clientWidth + ', '  + 'canvas.clientHeight = ' + _mainCanvas.clientHeight + '\n' +
-                'window.devicePixelRatio = ' + window.devicePixelRatio
+                'canvas.clientWidth = ' + _mainCanvas.clientWidth + ', '  + 'canvas.clientHeight = ' + _mainCanvas.clientHeight
             );
             // :Test
             
@@ -170,6 +173,50 @@ function Xcene(_mainCanvas, _usesDefaultStyles) {
             // );
         }
     }
+    */
+
+    function onResize() {
+        //
+        // Lookup the size the browser is displaying the canvas.
+        var displayWidth  = _mainCanvas.clientWidth;
+        var displayHeight = _mainCanvas.clientHeight;
+
+        // Check if the canvas is not the same size.
+        if (_mainCanvas.width  != displayWidth ||
+            _mainCanvas.height != displayHeight) {
+            //
+            // // Test:
+            // alert (
+            //     'resized!\n' +
+            //     'window.innerWidth = ' + window.innerWidth + ', '  + 'window.innerHeight = ' + window.innerHeight + '\n' +
+            //     'window.devicePixelRatio = ' + window.devicePixelRatio + '\n' +
+            //     'canvas.width = ' + _mainCanvas.width + ', '  + 'canvas.height = ' + _mainCanvas.height + '\n' +
+            //     'canvas.clientWidth = ' + _mainCanvas.clientWidth + ', '  + 'canvas.clientHeight = ' + _mainCanvas.clientHeight
+            // );
+            // // :Test
+            
+            // Make the canvas the same size
+            // _mainCanvas.width  = displayWidth;
+            // _mainCanvas.height = displayHeight;
+            _mainCanvas.width  = displayWidth * _graphicsManager.pixelRatio;
+            _mainCanvas.height = displayHeight * _graphicsManager.pixelRatio;            
+            
+            _graphicsManager.viewport = new Viewport (
+                // Part 1.
+                0, 0,
+                // Part 2.
+                //_mainCanvas.width, _mainCanvas.height
+                displayWidth, displayHeight
+            );
+
+            // alert (
+            //     'resized!\n' +
+            //     'width = ' + _mainCanvas.width + ', '  +
+            //     'height = ' + _mainCanvas.height + 'Hihi'
+            // );
+        }
+    }
+    // :Test
 
     // function onError(errorMsg, url, lineNumber) {
     //     //

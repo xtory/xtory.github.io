@@ -11,6 +11,7 @@ import { Matrix4x4 }          from '../math/4x4-matrix';
 function GraphicsManager(_xcene) {
     //
     var _gl;
+    var _pixelRatio;
     var _viewport;
     var _shaderProgram;
     var _clearColor;
@@ -19,6 +20,8 @@ function GraphicsManager(_xcene) {
 
     try {
         //
+        _pixelRatio = window.devicePixelRatio;
+
         setUpWebGLContext();
 
     } catch (e) {
@@ -37,6 +40,10 @@ function GraphicsManager(_xcene) {
     
     Object.defineProperty(this, 'webGLContext', {
         get: function() { return _gl; }
+    });
+
+    Object.defineProperty(this, 'pixelRatio', {
+        get: function() { return _pixelRatio; }
     });
 
     Object.defineProperty(this, 'viewport', {
