@@ -50,10 +50,10 @@
                 "-allow-file-access-from-files"
             ]
         }, {
-            "name": "tutorials/tutorial-a06",
+            "name": "samples/inputs",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/cybo/examples/tutorials/tutorial-a06/index.html",
+            "file": "${workspaceRoot}/cybo/examples/samples/inputs/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
