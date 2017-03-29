@@ -2956,6 +2956,8 @@ function Xcene(_mainCanvas, _usesDefaultStyles) {
     //
     function onResize() {
         //
+        alert('resized!');
+
         // Lookup the size the browser is displaying the canvas.
         var displayWidth  = _mainCanvas.clientWidth;
         var displayHeight = _mainCanvas.clientHeight;
