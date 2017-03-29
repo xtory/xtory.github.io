@@ -1,7 +1,7 @@
 // Note:
 // Texture Coordinates.
 //
-// DirectX: (U, V)      WebGL: (S, T)           
+// DirectX: (U, V)      OpenGL: (S, T)           
 //            
 // (0, 0)     (1, 0)    (0, 1)     (1, 1)        
 //     ┌───────┐            ┌───────┐            

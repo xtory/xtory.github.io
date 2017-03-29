@@ -3,8 +3,7 @@ function main() {
     'use strict';
 
     var scene;
-    var renderingContext;
-    var shaderHelper;
+    var gl;
     var shaderProgram;
     var vertexPositionAttributeLocation;
     var vertexColorAttributeLocation;
@@ -18,9 +17,7 @@ function main() {
     try {
         //
         scene = new Cybo.Xcene();
-
-        renderingContext =
-            scene.graphicsManager.renderingContext;
+        gl = scene.graphicsManager.webGLContext;
 
         setUpShaders();
 
@@ -40,22 +37,9 @@ function main() {
     //
     function setUpShaders() {
         //
-        shaderHelper =
-            new Cybo.ShaderHelper(scene.graphicsManager);
-
-        var vertexShader = scene.assetManager.loadShader (
-            Cybo.ShaderType.VERTEX_SHADER,
-            Cybo.TransformedPositionColorTextureCoordinates.VERTEX_SHADER_SOURCE
-        );
-
-        var fragmentShader = scene.assetManager.loadShader (
-            Cybo.ShaderType.FRAGMENT_SHADER,
+        shaderProgram = scene.assetManager.setUpShaderProgram (
+            Cybo.TransformedPositionColorTextureCoordinates.VERTEX_SHADER_SOURCE,
             Cybo.TransformedPositionColorTextureCoordinates.FRAGMENT_SHADER_SOURCE
-        );
-
-        shaderProgram = shaderHelper.setUpShaderProgram (
-            vertexShader,
-            fragmentShader
         );
 
         vertexPositionAttributeLocation = (
@@ -156,7 +140,7 @@ function main() {
         var viewport = scene.graphicsManager.viewport;
 
         vertexPositionBuffer =
-            renderingContext.createBuffer();
+            gl.createBuffer();
             
         var halfWidth = w * 0.5;
         var halfHeight = h * 0.5;
@@ -190,7 +174,7 @@ function main() {
         // Vertex colors.
         //
         vertexColorBuffer =
-            renderingContext.createBuffer();
+            gl.createBuffer();
             
         var halfWidth = w / 2;
         var halfHeight = h / 2;
@@ -213,7 +197,7 @@ function main() {
         // Vertex texture coordinates.
         //
         vertexTextureCoordinateBuffer =
-            renderingContext.createBuffer();
+            gl.createBuffer();
             
         var vertexTextureCoordinates = [
             1.0, 0.0,

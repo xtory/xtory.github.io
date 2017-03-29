@@ -1,6 +1,5 @@
 import { AssetManager }    from '../assets/asset-manager';
 import { GraphicsManager } from '../graphics/graphics-manager';
-import { JSHelper }        from '../helpers/js-helper';
 import { Viewport }        from '../graphics/viewport';
 
 //
@@ -14,7 +13,7 @@ function Xcene(_mainCanvas, _usesDefaultStyles) {
             throw 'document.body === undefined';
         }
 
-        if (JSHelper.isUndefinedOrNull(_mainCanvas) === true) {
+        if (_mainCanvas === undefined) {
             //
             _mainCanvas = document.createElementNS (
                 'http://www.w3.org/1999/xhtml',

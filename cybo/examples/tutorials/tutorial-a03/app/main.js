@@ -3,9 +3,8 @@ function main() {
     'use strict';
 
     var scene;
-    var renderingContext;
+    var gl;
     var camera;
-    var shaderHelper;
     var shaderProgram;
     var vertexPositionAttributeLocation;
     var vertexTextureCoordinateAttributeLocation;
@@ -19,9 +18,7 @@ function main() {
     try {
         //
         scene = new Cybo.Xcene();
-
-        renderingContext =
-            scene.graphicsManager.renderingContext;
+        gl = scene.graphicsManager.webGLContext;
 
         setUpCamera();
 
@@ -31,11 +28,11 @@ function main() {
 
         setUpTextures();
 
-        renderingContext.enable(WebGLRenderingContext.BLEND);
+        gl.enable(gl.BLEND);
 
-        renderingContext.blendFunc (
-            WebGLRenderingContext.SRC_ALPHA,
-            WebGLRenderingContext.ONE_MINUS_SRC_ALPHA
+        gl.blendFunc (
+            gl.SRC_ALPHA,
+            gl.ONE_MINUS_SRC_ALPHA
         );
 
         transform = Cybo.Matrix4x4.createIdentityMatrix();
@@ -66,22 +63,9 @@ function main() {
 
     function setUpShaders() {
         //
-        shaderHelper =
-            new Cybo.ShaderHelper(scene.graphicsManager);
-            
-        var vertexShader = scene.assetManager.loadShader (
-            Cybo.ShaderType.VERTEX_SHADER,
-            Cybo.PositionTextureCoordinates.VERTEX_SHADER_SOURCE
-        );
-
-        var fragmentShader = scene.assetManager.loadShader (
-            Cybo.ShaderType.FRAGMENT_SHADER,
+        shaderProgram = scene.assetManager.setUpShaderProgram (
+            Cybo.PositionTextureCoordinates.VERTEX_SHADER_SOURCE,
             Cybo.PositionTextureCoordinates.FRAGMENT_SHADER_SOURCE
-        );
-
-        shaderProgram = shaderHelper.setUpShaderProgram (
-            vertexShader,
-            fragmentShader
         );
 
         vertexPositionAttributeLocation = (
@@ -118,7 +102,7 @@ function main() {
         // Vertex positions.
         //
         vertexPositionBuffer =
-            renderingContext.createBuffer();
+            gl.createBuffer();
 
         var halfWidth = w * 0.5;
         var halfHeight = h * 0.5;
@@ -139,7 +123,7 @@ function main() {
         // Vertex texture coordinates.
         //
         vertexTextureCoordinateBuffer =
-            renderingContext.createBuffer();
+            gl.createBuffer();
             
         var vertexTextureCoordinates = [
             1.0, 0.0,

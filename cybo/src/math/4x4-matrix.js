@@ -17,7 +17,7 @@ function Matrix4x4 (
     // 1. Stored in the order s11, s12, s13, ..., s43, s44
     // => called 'row major' (used by DirectX), or
     // 2. Stored in the order s11, s21, s31, ..., s34, s44
-    // => called 'column major' (used by OpenGL, WebGL)
+    // => called 'column major' (used by OpenGL)
 
     // Note:
     // 'm x n' matrix always means 'm rows, n columns' whether it's row or
@@ -282,7 +282,7 @@ Matrix4x4.createRotationMatrix = function (
             //     0,    0,      0,      1
             // );
             //
-            // But in WebGL,
+            // But in OpenGL,
             //
             return new Matrix4x4 (
                 1,    0,      0,      0,
@@ -304,7 +304,7 @@ Matrix4x4.createRotationMatrix = function (
             //     0,      0,    0,      1
             // );
             //
-            // But in WebGL,
+            // But in OpenGL,
             //
             return new Matrix4x4 (
                 cos,    0,    sin,    0,
@@ -326,7 +326,7 @@ Matrix4x4.createRotationMatrix = function (
             //     0,      0,      0,    1
             // );
             //
-            // But in WebGL,
+            // But in OpenGL,
             //
             return new Matrix4x4 (
                 cos,   -sin,    0,    0,

@@ -1,17 +1,16 @@
-import { ClearOptions  }               from './clear-options';
-import { Color  }                      from './color';
-import { Colors }                      from './colors';
-import { DepthBufferValues }           from './depth-buffer-values';
-import { MathHelper }                  from '../math/helpers/math-helper';
-import { Matrix4x4 }                   from '../math/4x4-matrix';
-import { WebGLRenderingContextHelper } from './helpers/webgl-rendering-context-helper';
+import { ClearOptions  }      from './clear-options';
+import { Color  }             from './color';
+import { Colors }             from './colors';
+import { DepthBufferValues }  from './depth-buffer-values';
+import { MathHelper }         from '../math/helpers/math-helper';
+import { Matrix4x4 }          from '../math/4x4-matrix';
 
 //
 // Constructor.
 //
 function GraphicsManager(_xcene) {
     //
-    var _renderingContext;
+    var _gl;
     var _viewport;
     var _shaderProgram;
     var _clearColor;
@@ -20,7 +19,7 @@ function GraphicsManager(_xcene) {
 
     try {
         //
-        setUpRenderingContext();
+        setUpWebGLContext();
 
     } catch (e) {
         //
@@ -36,8 +35,8 @@ function GraphicsManager(_xcene) {
         'get': function() { return _xcene; }
     });
     
-    Object.defineProperty(this, 'renderingContext', {
-        get: function() { return _renderingContext; }
+    Object.defineProperty(this, 'webGLContext', {
+        get: function() { return _gl; }
     });
 
     Object.defineProperty(this, 'viewport', {
@@ -59,8 +58,8 @@ function GraphicsManager(_xcene) {
 
             _viewport = value;
 
-            // Resets the WebGLRenderingContext's viewport as well.
-            _renderingContext.viewport (
+            // Resets the gl's viewport as well.
+            _gl.viewport (
                 // Part 1.
                 _viewport.left, _viewport.bottom,
                 // Part 2.
@@ -83,30 +82,25 @@ function GraphicsManager(_xcene) {
             }
             
             _shaderProgram = value;
-            _renderingContext.useProgram(_shaderProgram);
+            _gl.useProgram(_shaderProgram);
         },
     });
 
     //
     // Private methods.
     //
-    function setUpRenderingContext() {
+    function setUpWebGLContext() {
         //
-        // Try to grab the standard context. If it fails, fallback to experi-
-        // mental.
+        // Try to grab the standard context. If it fails, fallback to experimental.
         //
         // Note:
         // IE11 only supports 'experimental-webgl'.
         //
-        _renderingContext =
-            _xcene.mainCanvas.getContext('webgl');
-
-        if (_renderingContext === null) {
+        _gl = _xcene.mainCanvas.getContext('webgl');
+        if (_gl === null) {
             //
-            _renderingContext =
-                _xcene.mainCanvas.getContext('experimental-webgl');
-            
-            if (_renderingContext !== null) {
+            _gl = _xcene.mainCanvas.getContext('experimental-webgl');
+            if (_gl !== null) {
                 //
                 console.log (
                     'Your browser supports WebGL. \n\n' +
@@ -121,13 +115,12 @@ function GraphicsManager(_xcene) {
                     'Unable to initialize WebGL. Your browser may not support it.'
                 );
 
-                throw 'WebGL-not-supported exception raised.';
+                throw 'A WebGL-not-supported exception raised.';
             }
         }
 
-        WebGLRenderingContextHelper.syncConstants(_renderingContext);
-
-        _renderingContext.depthRange (
+        // See notes in DepthBufferValues.js
+        _gl.depthRange (
             DepthBufferValues.NEAR_CLIP_PLANE, // = 0.0
             DepthBufferValues.FAR_CLIP_PLANE   // = 1.0
         );
@@ -136,23 +129,23 @@ function GraphicsManager(_xcene) {
         _clearDepth = GraphicsManager.DEFAULT_CLEAR_DEPTH;;
         _clearStencil = GraphicsManager.DEFAULT_CLEAR_STENCIL;
 
-        _renderingContext.clearColor (
+        _gl.clearColor (
             // Part 1.
             _clearColor.r, _clearColor.g, _clearColor.b,
             // Part 2.
             _clearColor.a
         );
 
-        _renderingContext.clearDepth(_clearDepth);
-        _renderingContext.clearStencil(_clearStencil);
+        _gl.clearDepth(_clearDepth);
+        _gl.clearStencil(_clearStencil);
         
         // Sets up the states.
         setUpStates();
         
         // Flips the source data along its vertical axis to make WebGL's texture
         // coordinates (S, T) work correctly.
-        _renderingContext.pixelStorei (
-            WebGLRenderingContext.UNPACK_FLIP_Y_WEBGL,
+        _gl.pixelStorei (
+            _gl.UNPACK_FLIP_Y_WEBGL,
             true
         );
     };
@@ -170,17 +163,17 @@ function GraphicsManager(_xcene) {
 
     function setUpAlphaBlendState() {
         //
-        _renderingContext.disable(WebGLRenderingContext.BLEND); // default: disable.
+        _gl.disable(_gl.BLEND); // default: disable.
     }
 
     function setUpDepthStencilState() {
         //
         // Depth.
-        _renderingContext.enable(WebGLRenderingContext.DEPTH_TEST); // default: disable.
-        _renderingContext.depthFunc(WebGLRenderingContext.LEQUAL); // default: LESS.
+        _gl.enable(_gl.DEPTH_TEST); // default: disable.
+        _gl.depthFunc(_gl.LEQUAL); // default: LESS.
 
         // Stencil.
-        _renderingContext.disable(WebGLRenderingContext.STENCIL_TEST); // default: disable.
+        _gl.disable(_gl.STENCIL_TEST); // default: disable.
     }
 
     function setUpSamplerState() {
@@ -191,8 +184,8 @@ function GraphicsManager(_xcene) {
 
     function setUpRasterizerState() {
         //
-        _renderingContext.enable(WebGLRenderingContext.CULL_FACE); // default: disable.
-        _renderingContext.cullFace(WebGLRenderingContext.BACK); // default: BACK.
+        _gl.enable(_gl.CULL_FACE); // default: disable.
+        _gl.cullFace(_gl.BACK); // default: BACK.
     }
 
     //
@@ -200,22 +193,22 @@ function GraphicsManager(_xcene) {
     //
     this.setUpVertexBuffer = function(buffer, items) {
         //
-        _renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
+        _gl.bindBuffer (
+            _gl.ARRAY_BUFFER,
             buffer
         );
         
-        _renderingContext.bufferData (
-            WebGLRenderingContext.ARRAY_BUFFER,
+        _gl.bufferData (
+            _gl.ARRAY_BUFFER,
             new Float32Array(items),
-            WebGLRenderingContext.STATIC_DRAW
+            _gl.STATIC_DRAW
         );
     };
 
     this.setUpIndexBuffer = function(buffer, items) {
         //
-        _renderingContext.bindBuffer (
-            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
+        _gl.bindBuffer (
+            _gl.ELEMENT_ARRAY_BUFFER,
             buffer
         );
 
@@ -226,45 +219,38 @@ function GraphicsManager(_xcene) {
         /*
         if (uses16Bits === true) {
             //
-            _renderingContext.bufferData (
-                WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
+            _gl.bufferData (
+                _gl.ELEMENT_ARRAY_BUFFER,
                 new Uint16Array(items),
-                WebGLRenderingContext.STATIC_DRAW
+                _gl.STATIC_DRAW
             );
 
         } else {
             //
-            _renderingContext.bufferData (
-                WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
+            _gl.bufferData (
+                _gl.ELEMENT_ARRAY_BUFFER,
                 new Uint32Array(items),
-                WebGLRenderingContext.STATIC_DRAW
+                _gl.STATIC_DRAW
             );
         }
         */
 
-        _renderingContext.bufferData (
-            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
+        _gl.bufferData (
+            _gl.ELEMENT_ARRAY_BUFFER,
             new Uint16Array(items),
-            WebGLRenderingContext.STATIC_DRAW
+            _gl.STATIC_DRAW
         );
         // :Note
     };
 
     this.clear = function(clearOptions, color, depth, stencil) {
         //
-        // if (// Part 1.
-        //     color !== undefined && (
-        //     // Part 2.
-        //     color.r !== _clearColor.r ||
-        //     color.g !== _clearColor.g ||
-        //     color.b !== _clearColor.b ||
-        //     color.a !== _clearColor.a)) {
         if (color !== undefined &&
             Color.areEqual(color, _clearColor) === false) {
             //
             _clearColor = color;
             
-            _renderingContext.clearColor (
+            _gl.clearColor (
                 // Part 1.
                 _clearColor.r, _clearColor.g, _clearColor.b,
                 // Part 2.
@@ -275,13 +261,13 @@ function GraphicsManager(_xcene) {
         if (depth !== undefined &&
             depth !== _clearDepth) {
             _clearDepth = depth;
-            _renderingContext.clearDepth(_clearDepth);
+            _gl.clearDepth(_clearDepth);
         }
 
         if (stencil !== undefined &&
             stencil !== _clearStencil) {
             _clearStencil = stencil;
-            _renderingContext.clearStencil(_clearStencil);
+            _gl.clearStencil(_clearStencil);
         }
 
         // Note:
@@ -291,7 +277,7 @@ function GraphicsManager(_xcene) {
             clearOptions = GraphicsManager.DEFAULT_CLEAR_OPTIONS;
         }
 
-        _renderingContext.clear(clearOptions);
+        _gl.clear(clearOptions);
     };
 
     this.drawPrimitives = function (
@@ -299,7 +285,7 @@ function GraphicsManager(_xcene) {
         start, // Index of start vertex.
         count
     ){
-        _renderingContext.drawArrays(primitiveType, start, count);
+        _gl.drawArrays(primitiveType, start, count);
     };
     
     this.drawIndexedPrimitives = function (
@@ -310,15 +296,15 @@ function GraphicsManager(_xcene) {
             offset = 0;
         }
 
-        _renderingContext.bindBuffer (
-            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
+        _gl.bindBuffer (
+            _gl.ELEMENT_ARRAY_BUFFER,
             indexBuffer
         );
         
-        _renderingContext.drawElements (
+        _gl.drawElements (
             primitiveType,
             count,
-            WebGLRenderingContext.UNSIGNED_SHORT,
+            _gl.UNSIGNED_SHORT,
             offset
         );
     };
@@ -328,35 +314,29 @@ function GraphicsManager(_xcene) {
     //
     this.getShaderAttributeLocation = function(shaderProgram, attributeName) {
         //
-        return _renderingContext.getAttribLocation (
-            shaderProgram,
-            attributeName
-        );
+        return _gl.getAttribLocation(shaderProgram, attributeName);
     };
     
     this.getShaderUniformLocation = function(shaderProgram, uniformName) {
         //
-        return _renderingContext.getUniformLocation (
-            shaderProgram,
-            uniformName
-        );
+        return _gl.getUniformLocation(shaderProgram, uniformName);
     };
 
     this.setShaderAttribute = function(attributeLocation, buffer, size) {
         //
-        _renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
+        _gl.bindBuffer (
+            _gl.ARRAY_BUFFER,
             buffer
         );
 
-        _renderingContext.enableVertexAttribArray (
+        _gl.enableVertexAttribArray (
             attributeLocation
         );
 
-        _renderingContext.vertexAttribPointer (
+        _gl.vertexAttribPointer (
             attributeLocation,
             size,
-            WebGLRenderingContext.FLOAT,
+            _gl.FLOAT,
             false,
             0,
             0
@@ -370,19 +350,13 @@ function GraphicsManager(_xcene) {
         }
 
         // Note:
-        // WebGLRenderingContext.TEXTUREX are numbers,
-        // WebGLRenderingContext.TEXTURE0 = 33984,
-        // WebGLRenderingContext.TEXTURE1 = 33985,
+        // _gl.TEXTUREX are numbers,
+        // _gl.TEXTURE0 = 33984,
+        // _gl.TEXTURE1 = 33985,
         // ...
 
-        _renderingContext.activeTexture (
-            WebGLRenderingContext.TEXTURE0 + unit
-        );
-
-        _renderingContext.bindTexture (
-            WebGLRenderingContext.TEXTURE_2D,
-            texture
-        );
+        _gl.activeTexture(_gl.TEXTURE0 + unit);
+        _gl.bindTexture(_gl.TEXTURE_2D, texture);
 
         this.setShaderUniform(samplerUniformLocation, unit);
     };
@@ -391,14 +365,14 @@ function GraphicsManager(_xcene) {
         //
         if ((value instanceof Matrix4x4) === true) {
             //
-            _renderingContext.uniformMatrix4fv (
+            _gl.uniformMatrix4fv (
                 uniformLocation,
                 false, // which is always false.
                 new Float32Array(value.elements)
             );
 
         } else {
-            _renderingContext.uniform1i(uniformLocation, value);
+            _gl.uniform1i(uniformLocation, value);
         }
     };
 }

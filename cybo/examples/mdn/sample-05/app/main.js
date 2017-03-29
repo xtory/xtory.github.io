@@ -3,9 +3,8 @@ function main() {
     'use strict';
 
     var scene;
-    var renderingContext;
+    var gl;
     var camera;
-    var shaderHelper;
     var shaderProgram;
     var vertexPositionAttributeLocation;
     var vertexColorAttributeLocation;
@@ -20,9 +19,7 @@ function main() {
     try {
         //
         scene = new Cybo.Xcene();
-
-        renderingContext =
-            scene.graphicsManager.renderingContext;
+        gl = scene.graphicsManager.webGLContext;
 
         setUpCamera();
         
@@ -74,22 +71,9 @@ function main() {
 
     function setUpShaders() {
         //
-        shaderHelper =
-            new Cybo.ShaderHelper(scene.graphicsManager);
-
-        var vertexShader = scene.assetManager.loadShader (
-            Cybo.ShaderType.VERTEX_SHADER,
-            Cybo.PositionColor.VERTEX_SHADER_SOURCE
-        );
-            
-        var fragmentShader = scene.assetManager.loadShader (
-            Cybo.ShaderType.FRAGMENT_SHADER,
+        shaderProgram = scene.assetManager.setUpShaderProgram (
+            Cybo.PositionColor.VERTEX_SHADER_SOURCE,
             Cybo.PositionColor.FRAGMENT_SHADER_SOURCE
-        );
-
-        shaderProgram = shaderHelper.setUpShaderProgram (
-            vertexShader,
-            fragmentShader
         );
 
         vertexPositionAttributeLocation = (
@@ -119,7 +103,7 @@ function main() {
         // Vertex positions.
         //
         vertexPositionBuffer =
-            renderingContext.createBuffer();
+            gl.createBuffer();
 
         var vertexPositions = [
             //
@@ -169,7 +153,7 @@ function main() {
         // Vertex colors.
         //
         vertexColorBuffer =
-            renderingContext.createBuffer();
+            gl.createBuffer();
 
         var faceColors = [
             Cybo.Colors.PHOTOSHOP_DARK_RED.toArray(),
@@ -202,7 +186,7 @@ function main() {
         // Vertex indices.
         //
         indexBuffer =
-            renderingContext.createBuffer();
+            gl.createBuffer();
 
         var vertexIndices = [
             //

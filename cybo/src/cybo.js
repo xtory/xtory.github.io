@@ -17,14 +17,11 @@ export { DepthBufferValues }                          from './graphics/depth-buf
 export { GraphicsManager }                            from './graphics/graphics-manager';
 export { NormalizedDeviceCoordinates }                from './graphics/normalized-device-coordinates';
 export { PrimitiveType }                              from './graphics/primitive-type';
-export { ShaderHelper }                               from './graphics/fx/helpers/shader-helper';
 export { ShaderType }                                 from './graphics/fx/shader-type';
 export { TextureCoordinateHelper }                    from './graphics/helpers/texture-coordinate-helper';
-export { WebGLRenderingContextHelper }                from './graphics/helpers/webgl-rendering-context-helper';
 
 // Helpers.
 export { ExceptionHelper }                            from './helpers/exception-helper';
-export { JSHelper }                                   from './helpers/js-helper';
 export { MouseButton }                                from './helpers/mouse-button';
 
 // Math.

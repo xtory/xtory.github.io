@@ -1,3 +1,8 @@
+// Note:
+// Whether in OpenGL or DirectX, depth buffers have values 0 ~ 1, and conventionally,
+// 0: near plane, 1: far plane. We can change it (such as: using gl.depthRange()
+// or device.Viewport), but don't change it.
+
 //
 // Constructor.
 //

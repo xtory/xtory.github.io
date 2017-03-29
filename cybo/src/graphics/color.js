@@ -1,5 +1,5 @@
 // Note:
-// WebGL's color is composed of (r, g, b, a) channels.
+// OpenGL's color is composed of (r, g, b, a) channels.
 // DirectX's color is composed of (a, r, g, b) channels.
 
 //

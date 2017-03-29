@@ -1,4 +1,3 @@
-import { JSHelper }   from '../helpers/js-helper';
 import { MathHelper } from '../math/helpers/math-helper';
 import { ShaderType } from '../graphics/fx/shader-type';
 
@@ -7,8 +6,7 @@ import { ShaderType } from '../graphics/fx/shader-type';
 //
 function AssetManager(_xcene) {
     //
-    var _renderingContext =
-        _xcene.graphicsManager.renderingContext;
+    var _gl = _xcene.graphicsManager.webGLContext;
 
     //
     // Properties.
@@ -16,53 +14,43 @@ function AssetManager(_xcene) {
     Object.defineProperty(this, 'xcene', {
         get: function() { return _xcene; }
     });
-    
+
     //
-    // Privileged methods.
+    // Private methods.
     //
-    this.loadShader = function(shaderType, shaderSource) {
+    function loadShader(shaderType, shaderSource) {
         //
         var shader;
 
         if (shaderType === ShaderType.VERTEX_SHADER) {
-            //
-            shader = _renderingContext.createShader (
-                WebGLRenderingContext.VERTEX_SHADER
-            );
+            shader = _gl.createShader(_gl.VERTEX_SHADER);
         } else if (
             shaderType === ShaderType.FRAGMENT_SHADER
         ){
-            shader = _renderingContext.createShader (
-                WebGLRenderingContext.FRAGMENT_SHADER
-            );
+            shader = _gl.createShader(_gl.FRAGMENT_SHADER);
         } else {
-            return null; // Unknown shader type
+            return null; // Unknown shader type.
         }        
 
         // Send the source to the shader object
-        _renderingContext.shaderSource(shader, shaderSource);
+        _gl.shaderSource(shader, shaderSource);
 
         // Compile the shader program
-        _renderingContext.compileShader(shader);
+        _gl.compileShader(shader);
 
         // See if it compiled successfully
-        if (JSHelper.isUndefinedOrNull (
-                _renderingContext.getShaderParameter (
-                    shader,
-                    WebGLRenderingContext.COMPILE_STATUS
-                )
-            ) === true)
+        if (_gl.getShaderParameter(shader, _gl.COMPILE_STATUS) === false)
         {
             throw (
                 'An error occurred compiling the shaders: ' +
-                _renderingContext.getShaderInfoLog(shader)
+                _gl.getShaderInfoLog(shader)
             );
         }
 
         return shader;
-    };
+    }
 
-    this.loadShaderFromHtmlElement = function(id) {
+    function loadShaderFromHtmlElement(id) {
         //
         var shaderScript = document.getElementById(id);
 
@@ -93,47 +81,88 @@ function AssetManager(_xcene) {
         var shader;
 
         if (shaderScript.type === 'x-shader/x-vertex') {
-            //
-            shader = _renderingContext.createShader (
-                WebGLRenderingContext.VERTEX_SHADER
-            );
+            shader = _gl.createShader(_gl.VERTEX_SHADER);
         } else if (
             shaderScript.type === 'x-shader/x-fragment'
         ){
-            shader = _renderingContext.createShader (
-                WebGLRenderingContext.FRAGMENT_SHADER
-            );
+            shader = _gl.createShader(_gl.FRAGMENT_SHADER);
         } else {
-            return null; // Unknown shader type
+            return null; // Unknown shader type.
         }
 
         // Send the source to the shader object
-        _renderingContext.shaderSource(shader, shaderSource);
+        _gl.shaderSource(shader, shaderSource);
 
         // Compile the shader program
-        _renderingContext.compileShader(shader);
+        _gl.compileShader(shader);
 
         // See if it compiled successfully
-        if (JSHelper.isUndefinedOrNull (
-                _renderingContext.getShaderParameter (
-                    shader,
-                    WebGLRenderingContext.COMPILE_STATUS
-                )
-            ) === true)
+        if (_gl.getShaderParameter(shader, _gl.COMPILE_STATUS) === false)
         {
             throw (
                 'An error occurred compiling the shaders: ' +
-                _renderingContext.getShaderInfoLog(shader)
+                _gl.getShaderInfoLog(shader)
             );
         }
 
         return shader;
+    }
+
+    function setUpShaderProgram(vertexShader, fragmentShader) {
+        //
+        var shaderProgram = _gl.createProgram();
+
+        // var vertexShader =
+        //     loadShader(ShaderType.VERTEX_SHADER, vertexShaderSource);
+
+        // var fragmentShader =
+        //     loadShader(ShaderType.FRAGMENT_SHADER, fragmentShaderSource);
+
+        _gl.attachShader(shaderProgram, vertexShader);
+        _gl.attachShader(shaderProgram, fragmentShader);
+
+        _gl.linkProgram(shaderProgram);
+
+        if (_gl.getProgramParameter(shaderProgram, _gl.LINK_STATUS) === false)
+        {
+            throw (
+                'Unable to initialize the shader program: ' +
+                _gl.getProgramInfoLog(shader)
+            );
+        }
+        
+        return shaderProgram;
+    }
+    
+    //
+    // Privileged methods.
+    //
+    this.setUpShaderProgram = function(vertexShaderSource, fragmentShaderSource) {
+        //
+        var vertexShader =
+            loadShader(ShaderType.VERTEX_SHADER, vertexShaderSource);
+
+        var fragmentShader =
+            loadShader(ShaderType.FRAGMENT_SHADER, fragmentShaderSource);
+
+        return setUpShaderProgram(vertexShader, fragmentShader);
+    };
+
+    this.setUpShaderProgramFromHtmlElements = function(vertexShaderId, fragmentShaderId) {
+        //
+        var vertexShader =
+            loadShaderFromHtmlElement(ShaderType.VERTEX_SHADER, vertexShaderId);
+
+        var fragmentShader =
+            loadShaderFromHtmlElement(ShaderType.FRAGMENT_SHADER, fragmentShaderId);
+
+        return setUpShaderProgram(vertexShader, fragmentShader);
     };
 
     this.loadTexture2D = function(imageSourceUrl) {
         //
         var image = new Image();
-        var texture = _renderingContext.createTexture();
+        var texture = _gl.createTexture();
 
         image.addEventListener('load', function() {
             handleTextureLoaded(image, texture);
@@ -148,66 +177,61 @@ function AssetManager(_xcene) {
             texture.height = image.height;
             // :Test
 
-            _renderingContext.bindTexture (
-                WebGLRenderingContext.TEXTURE_2D,
+            _gl.bindTexture (
+                _gl.TEXTURE_2D,
                 texture
             );
 
-            _renderingContext.texImage2D (
-                WebGLRenderingContext.TEXTURE_2D,    // target
-                0,                                   // level
-                WebGLRenderingContext.RGBA,          // internalFormat
-                WebGLRenderingContext.RGBA,          // format
-                WebGLRenderingContext.UNSIGNED_BYTE, // type
-                image                                // htmlImageElement
+            _gl.texImage2D (
+                _gl.TEXTURE_2D,    // target
+                0,                 // level
+                _gl.RGBA,          // internalFormat
+                _gl.RGBA,          // format
+                _gl.UNSIGNED_BYTE, // type
+                image              // htmlImageElement
             );
 
             if (MathHelper.isPowerOfTwo(image.width) === true &&
                 MathHelper.isPowerOfTwo(image.height) === true) {
                 //
-                _renderingContext.generateMipmap (
-                    WebGLRenderingContext.TEXTURE_2D
-                );
+                _gl.generateMipmap(_gl.TEXTURE_2D);
                 
-                _renderingContext.texParameteri (
-                    WebGLRenderingContext.TEXTURE_2D,
-                    WebGLRenderingContext.TEXTURE_MIN_FILTER,
-                    WebGLRenderingContext.LINEAR_MIPMAP_LINEAR
+                _gl.texParameteri (
+                    _gl.TEXTURE_2D,
+                    _gl.TEXTURE_MIN_FILTER,
+                    _gl.LINEAR_MIPMAP_LINEAR
                 );
 
             } else {
                 //
-                _renderingContext.texParameteri (
-                    WebGLRenderingContext.TEXTURE_2D,
-                    WebGLRenderingContext.TEXTURE_MIN_FILTER,
-                    WebGLRenderingContext.LINEAR
+                _gl.texParameteri (
+                    _gl.TEXTURE_2D,
+                    _gl.TEXTURE_MIN_FILTER,
+                    _gl.LINEAR
                 );
             }
 
             // TEXTURE_MAG_FILTER only has NEAREST or LINEAR to choose, no
             // LINEAR_MIPMAP_LINEAR.
-            _renderingContext.texParameteri (
-                WebGLRenderingContext.TEXTURE_2D,
-                WebGLRenderingContext.TEXTURE_MAG_FILTER,
-                WebGLRenderingContext.LINEAR
+            _gl.texParameteri (
+                _gl.TEXTURE_2D,
+                _gl.TEXTURE_MAG_FILTER,
+                _gl.LINEAR
             );
 
-            _renderingContext.texParameteri (
-                WebGLRenderingContext.TEXTURE_2D,
-                WebGLRenderingContext.TEXTURE_WRAP_S,
-                WebGLRenderingContext.CLAMP_TO_EDGE
+            _gl.texParameteri (
+                _gl.TEXTURE_2D,
+                _gl.TEXTURE_WRAP_S,
+                _gl.CLAMP_TO_EDGE
             );
 
-            _renderingContext.texParameteri (
-                WebGLRenderingContext.TEXTURE_2D,
-                WebGLRenderingContext.TEXTURE_WRAP_T,
-                WebGLRenderingContext.CLAMP_TO_EDGE
+            _gl.texParameteri (
+                _gl.TEXTURE_2D,
+                _gl.TEXTURE_WRAP_T,
+                _gl.CLAMP_TO_EDGE
             );
 
-            _renderingContext.bindTexture (
-                WebGLRenderingContext.TEXTURE_2D,
-                null
-            );
+            _gl.bindTexture(_gl.TEXTURE_2D, null);
         }
 
         return texture;

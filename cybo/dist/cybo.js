@@ -188,28 +188,6 @@ TransformedPositionTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
 
 Object.freeze(TransformedPositionTextureCoordinates);
 
-//
-// Constructor.
-//
-function JSHelper() {
-    // No contents.
-}
-
-//
-// Static methods.
-//
-JSHelper.isUndefinedOrNull = function(value) {
-    //
-    if (value === undefined ||
-        value === null) {
-        return true;
-    } else {
-        return false;
-    }
-};
-
-Object.freeze(JSHelper);
-
 // Note:
 // The equivelant of this value in C is 'FLT_EPSILON', and in the GNU C Library,
 // http://www.gnu.org/software/libc/manual/html_node/Floating-Point-Parameters.html
@@ -524,8 +502,7 @@ Object.freeze(ShaderType);
 //
 function AssetManager(_xcene) {
     //
-    var _renderingContext =
-        _xcene.graphicsManager.renderingContext;
+    var _gl = _xcene.graphicsManager.webGLContext;
 
     //
     // Properties.
@@ -533,53 +510,43 @@ function AssetManager(_xcene) {
     Object.defineProperty(this, 'xcene', {
         get: function() { return _xcene; }
     });
-    
+
     //
-    // Privileged methods.
+    // Private methods.
     //
-    this.loadShader = function(shaderType, shaderSource) {
+    function loadShader(shaderType, shaderSource) {
         //
         var shader;
 
         if (shaderType === ShaderType.VERTEX_SHADER) {
-            //
-            shader = _renderingContext.createShader (
-                WebGLRenderingContext.VERTEX_SHADER
-            );
+            shader = _gl.createShader(_gl.VERTEX_SHADER);
         } else if (
             shaderType === ShaderType.FRAGMENT_SHADER
         ){
-            shader = _renderingContext.createShader (
-                WebGLRenderingContext.FRAGMENT_SHADER
-            );
+            shader = _gl.createShader(_gl.FRAGMENT_SHADER);
         } else {
-            return null; // Unknown shader type
+            return null; // Unknown shader type.
         }        
 
         // Send the source to the shader object
-        _renderingContext.shaderSource(shader, shaderSource);
+        _gl.shaderSource(shader, shaderSource);
 
         // Compile the shader program
-        _renderingContext.compileShader(shader);
+        _gl.compileShader(shader);
 
         // See if it compiled successfully
-        if (JSHelper.isUndefinedOrNull (
-                _renderingContext.getShaderParameter (
-                    shader,
-                    WebGLRenderingContext.COMPILE_STATUS
-                )
-            ) === true)
+        if (_gl.getShaderParameter(shader, _gl.COMPILE_STATUS) === false)
         {
             throw (
                 'An error occurred compiling the shaders: ' +
-                _renderingContext.getShaderInfoLog(shader)
+                _gl.getShaderInfoLog(shader)
             );
         }
 
         return shader;
-    };
+    }
 
-    this.loadShaderFromHtmlElement = function(id) {
+    function loadShaderFromHtmlElement(id) {
         //
         var shaderScript = document.getElementById(id);
 
@@ -610,47 +577,88 @@ function AssetManager(_xcene) {
         var shader;
 
         if (shaderScript.type === 'x-shader/x-vertex') {
-            //
-            shader = _renderingContext.createShader (
-                WebGLRenderingContext.VERTEX_SHADER
-            );
+            shader = _gl.createShader(_gl.VERTEX_SHADER);
         } else if (
             shaderScript.type === 'x-shader/x-fragment'
         ){
-            shader = _renderingContext.createShader (
-                WebGLRenderingContext.FRAGMENT_SHADER
-            );
+            shader = _gl.createShader(_gl.FRAGMENT_SHADER);
         } else {
-            return null; // Unknown shader type
+            return null; // Unknown shader type.
         }
 
         // Send the source to the shader object
-        _renderingContext.shaderSource(shader, shaderSource);
+        _gl.shaderSource(shader, shaderSource);
 
         // Compile the shader program
-        _renderingContext.compileShader(shader);
+        _gl.compileShader(shader);
 
         // See if it compiled successfully
-        if (JSHelper.isUndefinedOrNull (
-                _renderingContext.getShaderParameter (
-                    shader,
-                    WebGLRenderingContext.COMPILE_STATUS
-                )
-            ) === true)
+        if (_gl.getShaderParameter(shader, _gl.COMPILE_STATUS) === false)
         {
             throw (
                 'An error occurred compiling the shaders: ' +
-                _renderingContext.getShaderInfoLog(shader)
+                _gl.getShaderInfoLog(shader)
             );
         }
 
         return shader;
+    }
+
+    function setUpShaderProgram(vertexShader, fragmentShader) {
+        //
+        var shaderProgram = _gl.createProgram();
+
+        // var vertexShader =
+        //     loadShader(ShaderType.VERTEX_SHADER, vertexShaderSource);
+
+        // var fragmentShader =
+        //     loadShader(ShaderType.FRAGMENT_SHADER, fragmentShaderSource);
+
+        _gl.attachShader(shaderProgram, vertexShader);
+        _gl.attachShader(shaderProgram, fragmentShader);
+
+        _gl.linkProgram(shaderProgram);
+
+        if (_gl.getProgramParameter(shaderProgram, _gl.LINK_STATUS) === false)
+        {
+            throw (
+                'Unable to initialize the shader program: ' +
+                _gl.getProgramInfoLog(shader)
+            );
+        }
+        
+        return shaderProgram;
+    }
+    
+    //
+    // Privileged methods.
+    //
+    this.setUpShaderProgram = function(vertexShaderSource, fragmentShaderSource) {
+        //
+        var vertexShader =
+            loadShader(ShaderType.VERTEX_SHADER, vertexShaderSource);
+
+        var fragmentShader =
+            loadShader(ShaderType.FRAGMENT_SHADER, fragmentShaderSource);
+
+        return setUpShaderProgram(vertexShader, fragmentShader);
+    };
+
+    this.setUpShaderProgramFromHtmlElements = function(vertexShaderId, fragmentShaderId) {
+        //
+        var vertexShader =
+            loadShaderFromHtmlElement(ShaderType.VERTEX_SHADER, vertexShaderId);
+
+        var fragmentShader =
+            loadShaderFromHtmlElement(ShaderType.FRAGMENT_SHADER, fragmentShaderId);
+
+        return setUpShaderProgram(vertexShader, fragmentShader);
     };
 
     this.loadTexture2D = function(imageSourceUrl) {
         //
         var image = new Image();
-        var texture = _renderingContext.createTexture();
+        var texture = _gl.createTexture();
 
         image.addEventListener('load', function() {
             handleTextureLoaded(image, texture);
@@ -665,66 +673,61 @@ function AssetManager(_xcene) {
             texture.height = image.height;
             // :Test
 
-            _renderingContext.bindTexture (
-                WebGLRenderingContext.TEXTURE_2D,
+            _gl.bindTexture (
+                _gl.TEXTURE_2D,
                 texture
             );
 
-            _renderingContext.texImage2D (
-                WebGLRenderingContext.TEXTURE_2D,    // target
-                0,                                   // level
-                WebGLRenderingContext.RGBA,          // internalFormat
-                WebGLRenderingContext.RGBA,          // format
-                WebGLRenderingContext.UNSIGNED_BYTE, // type
-                image                                // htmlImageElement
+            _gl.texImage2D (
+                _gl.TEXTURE_2D,    // target
+                0,                 // level
+                _gl.RGBA,          // internalFormat
+                _gl.RGBA,          // format
+                _gl.UNSIGNED_BYTE, // type
+                image              // htmlImageElement
             );
 
             if (MathHelper.isPowerOfTwo(image.width) === true &&
                 MathHelper.isPowerOfTwo(image.height) === true) {
                 //
-                _renderingContext.generateMipmap (
-                    WebGLRenderingContext.TEXTURE_2D
-                );
+                _gl.generateMipmap(_gl.TEXTURE_2D);
                 
-                _renderingContext.texParameteri (
-                    WebGLRenderingContext.TEXTURE_2D,
-                    WebGLRenderingContext.TEXTURE_MIN_FILTER,
-                    WebGLRenderingContext.LINEAR_MIPMAP_LINEAR
+                _gl.texParameteri (
+                    _gl.TEXTURE_2D,
+                    _gl.TEXTURE_MIN_FILTER,
+                    _gl.LINEAR_MIPMAP_LINEAR
                 );
 
             } else {
                 //
-                _renderingContext.texParameteri (
-                    WebGLRenderingContext.TEXTURE_2D,
-                    WebGLRenderingContext.TEXTURE_MIN_FILTER,
-                    WebGLRenderingContext.LINEAR
+                _gl.texParameteri (
+                    _gl.TEXTURE_2D,
+                    _gl.TEXTURE_MIN_FILTER,
+                    _gl.LINEAR
                 );
             }
 
             // TEXTURE_MAG_FILTER only has NEAREST or LINEAR to choose, no
             // LINEAR_MIPMAP_LINEAR.
-            _renderingContext.texParameteri (
-                WebGLRenderingContext.TEXTURE_2D,
-                WebGLRenderingContext.TEXTURE_MAG_FILTER,
-                WebGLRenderingContext.LINEAR
+            _gl.texParameteri (
+                _gl.TEXTURE_2D,
+                _gl.TEXTURE_MAG_FILTER,
+                _gl.LINEAR
             );
 
-            _renderingContext.texParameteri (
-                WebGLRenderingContext.TEXTURE_2D,
-                WebGLRenderingContext.TEXTURE_WRAP_S,
-                WebGLRenderingContext.CLAMP_TO_EDGE
+            _gl.texParameteri (
+                _gl.TEXTURE_2D,
+                _gl.TEXTURE_WRAP_S,
+                _gl.CLAMP_TO_EDGE
             );
 
-            _renderingContext.texParameteri (
-                WebGLRenderingContext.TEXTURE_2D,
-                WebGLRenderingContext.TEXTURE_WRAP_T,
-                WebGLRenderingContext.CLAMP_TO_EDGE
+            _gl.texParameteri (
+                _gl.TEXTURE_2D,
+                _gl.TEXTURE_WRAP_T,
+                _gl.CLAMP_TO_EDGE
             );
 
-            _renderingContext.bindTexture (
-                WebGLRenderingContext.TEXTURE_2D,
-                null
-            );
+            _gl.bindTexture(_gl.TEXTURE_2D, null);
         }
 
         return texture;
@@ -764,7 +767,7 @@ function Matrix4x4 (
     // 1. Stored in the order s11, s12, s13, ..., s43, s44
     // => called 'row major' (used by DirectX), or
     // 2. Stored in the order s11, s21, s31, ..., s34, s44
-    // => called 'column major' (used by OpenGL, WebGL)
+    // => called 'column major' (used by OpenGL)
 
     // Note:
     // 'm x n' matrix always means 'm rows, n columns' whether it's row or
@@ -1029,7 +1032,7 @@ Matrix4x4.createRotationMatrix = function (
             //     0,    0,      0,      1
             // );
             //
-            // But in WebGL,
+            // But in OpenGL,
             //
             return new Matrix4x4 (
                 1,    0,      0,      0,
@@ -1051,7 +1054,7 @@ Matrix4x4.createRotationMatrix = function (
             //     0,      0,    0,      1
             // );
             //
-            // But in WebGL,
+            // But in OpenGL,
             //
             return new Matrix4x4 (
                 cos,    0,    sin,    0,
@@ -1073,7 +1076,7 @@ Matrix4x4.createRotationMatrix = function (
             //     0,      0,      0,    1
             // );
             //
-            // But in WebGL,
+            // But in OpenGL,
             //
             return new Matrix4x4 (
                 cos,   -sin,    0,    0,
@@ -1887,14 +1890,14 @@ function ClearOptions() {
 //
 // Static constants (after Object.freeze()).
 //
-ClearOptions.COLOR_BUFFER   = 0x00004000; // = WebGLRenderingContext.COLOR_BUFFER_BIT
-ClearOptions.DEPTH_BUFFER   = 0x00000100; // = WebGLRenderingContext.DEPTH_BUFFER_BIT
-ClearOptions.STENCIL_BUFFER = 0x00000400; // = WebGLRenderingContext.STENCIL_BUFFER_BIT
+ClearOptions.COLOR_BUFFER   = 0x00004000; // = gl.COLOR_BUFFER_BIT
+ClearOptions.DEPTH_BUFFER   = 0x00000100; // = gl.DEPTH_BUFFER_BIT
+ClearOptions.STENCIL_BUFFER = 0x00000400; // = gl.STENCIL_BUFFER_BIT
 
 Object.freeze(ClearOptions);
 
 // Note:
-// WebGL's color is composed of (r, g, b, a) channels.
+// OpenGL's color is composed of (r, g, b, a) channels.
 // DirectX's color is composed of (a, r, g, b) channels.
 
 //
@@ -2084,6 +2087,11 @@ Colors.OSX_SOLID_KELP = new Color(89/255, 136/255, 123/255, 1);
 
 Object.freeze(Colors);
 
+// Note:
+// Whether in OpenGL or DirectX, depth buffers have values 0 ~ 1, and conventionally,
+// 0: near plane, 1: far plane. We can change it (such as: using gl.depthRange()
+// or device.Viewport), but don't change it.
+
 //
 // Constructor.
 //
@@ -2102,458 +2110,9 @@ Object.freeze(DepthBufferValues);
 //
 // Constructor.
 //
-function WebGLRenderingContextHelper() {
-    // No contents.
-}
-
-//
-// Static methods.
-//
-WebGLRenderingContextHelper.syncConstants = function(renderingContext) {
-    //
-    // Note:
-    // Reference to WebGLRenderingContextBase interface in WebGL 1.0 spec.
-
-    /* ClearBufferMask */
-    syncConstant('DEPTH_BUFFER_BIT');
-
-    /* ClearBufferMask */
-    syncConstant('DEPTH_BUFFER_BIT');
-    syncConstant('STENCIL_BUFFER_BIT');
-    syncConstant('COLOR_BUFFER_BIT');
-
-    /* BeginMode */
-    syncConstant('POINTS');
-    syncConstant('LINES');
-    syncConstant('LINE_LOOP');
-    syncConstant('LINE_STRIP');
-    syncConstant('TRIANGLES');
-    syncConstant('TRIANGLE_STRIP');
-    syncConstant('TRIANGLE_FAN');
-
-    /* AlphaFunction (not supported in ES20) */
-    /*      NEVER */
-    /*      LESS */
-    /*      EQUAL */
-    /*      LEQUAL */
-    /*      GREATER */
-    /*      NOTEQUAL */
-    /*      GEQUAL */
-    /*      ALWAYS */
-
-    /* BlendingFactorDest */
-    syncConstant('ZERO');
-    syncConstant('ONE');
-    syncConstant('SRC_COLOR');
-    syncConstant('ONE_MINUS_SRC_COLOR');
-    syncConstant('SRC_ALPHA');
-    syncConstant('ONE_MINUS_SRC_ALPHA');
-    syncConstant('DST_ALPHA');
-    syncConstant('ONE_MINUS_DST_ALPHA');
-
-    /* BlendingFactorSrc */
-    /*      ZERO */
-    /*      ONE */
-    syncConstant('DST_COLOR');
-    syncConstant('ONE_MINUS_DST_COLOR');
-    syncConstant('SRC_ALPHA_SATURATE');
-    /*      SRC_ALPHA */
-    /*      ONE_MINUS_SRC_ALPHA */
-    /*      DST_ALPHA */
-    /*      ONE_MINUS_DST_ALPHA */
-
-    /* BlendEquationSeparate */
-    syncConstant('FUNC_ADD');
-    syncConstant('BLEND_EQUATION');
-    syncConstant('BLEND_EQUATION_RGB');   /* same as BLEND_EQUATION */
-    syncConstant('BLEND_EQUATION_ALPHA');
-
-    /* BlendSubtract */
-    syncConstant('FUNC_SUBTRACT');
-    syncConstant('FUNC_REVERSE_SUBTRACT');
-
-    /* Separate Blend Functions */
-    syncConstant('BLEND_DST_RGB');
-    syncConstant('BLEND_SRC_RGB');
-    syncConstant('BLEND_DST_ALPHA');
-    syncConstant('BLEND_SRC_ALPHA');
-    syncConstant('CONSTANT_COLOR');
-    syncConstant('ONE_MINUS_CONSTANT_COLOR');
-    syncConstant('CONSTANT_ALPHA');
-    syncConstant('ONE_MINUS_CONSTANT_ALPHA');
-    syncConstant('BLEND_COLOR');
-
-    /* Buffer Objects */
-    syncConstant('ARRAY_BUFFER');
-    syncConstant('ELEMENT_ARRAY_BUFFER');
-    syncConstant('ARRAY_BUFFER_BINDING');
-    syncConstant('ELEMENT_ARRAY_BUFFER_BINDING');
-
-    syncConstant('STREAM_DRAW');
-    syncConstant('STATIC_DRAW');
-    syncConstant('DYNAMIC_DRAW');
-
-    syncConstant('BUFFER_SIZE');
-    syncConstant('BUFFER_USAGE');
-
-    syncConstant('CURRENT_VERTEX_ATTRIB');
-
-    /* CullFaceMode */
-    syncConstant('FRONT');
-    syncConstant('BACK');
-    syncConstant('FRONT_AND_BACK');
-
-    /* DepthFunction */
-    /*      NEVER */
-    /*      LESS */
-    /*      EQUAL */
-    /*      LEQUAL */
-    /*      GREATER */
-    /*      NOTEQUAL */
-    /*      GEQUAL */
-    /*      ALWAYS */
-
-    /* EnableCap */
-    /* TEXTURE_2D */
-    syncConstant('CULL_FACE');
-    syncConstant('BLEND');
-    syncConstant('DITHER');
-    syncConstant('STENCIL_TEST');
-    syncConstant('DEPTH_TEST');
-    syncConstant('SCISSOR_TEST');
-    syncConstant('POLYGON_OFFSET_FILL');
-    syncConstant('SAMPLE_ALPHA_TO_COVERAGE');
-    syncConstant('SAMPLE_COVERAGE');
-
-    /* ErrorCode */
-    syncConstant('NO_ERROR');
-    syncConstant('INVALID_ENUM');
-    syncConstant('INVALID_VALUE');
-    syncConstant('INVALID_OPERATION');
-    syncConstant('OUT_OF_MEMORY');
-
-    /* FrontFaceDirection */
-    syncConstant('CW');
-    syncConstant('CCW');
-
-    /* GetPName */
-    syncConstant('LINE_WIDTH');
-    syncConstant('ALIASED_POINT_SIZE_RANGE');
-    syncConstant('ALIASED_LINE_WIDTH_RANGE');
-    syncConstant('CULL_FACE_MODE');
-    syncConstant('FRONT_FACE');
-    syncConstant('DEPTH_RANGE');
-    syncConstant('DEPTH_WRITEMASK');
-    syncConstant('DEPTH_CLEAR_VALUE');
-    syncConstant('DEPTH_FUNC');
-    syncConstant('STENCIL_CLEAR_VALUE');
-    syncConstant('STENCIL_FUNC');
-    syncConstant('STENCIL_FAIL');
-    syncConstant('STENCIL_PASS_DEPTH_FAIL');
-    syncConstant('STENCIL_PASS_DEPTH_PASS');
-    syncConstant('STENCIL_REF');
-    syncConstant('STENCIL_VALUE_MASK');
-    syncConstant('STENCIL_WRITEMASK');
-    syncConstant('STENCIL_BACK_FUNC');
-    syncConstant('STENCIL_BACK_FAIL');
-    syncConstant('STENCIL_BACK_PASS_DEPTH_FAIL');
-    syncConstant('STENCIL_BACK_PASS_DEPTH_PASS');
-    syncConstant('STENCIL_BACK_REF');
-    syncConstant('STENCIL_BACK_VALUE_MASK');
-    syncConstant('STENCIL_BACK_WRITEMASK');
-    syncConstant('VIEWPORT');
-    syncConstant('SCISSOR_BOX');
-    /*      SCISSOR_TEST */
-    syncConstant('COLOR_CLEAR_VALUE');
-    syncConstant('COLOR_WRITEMASK');
-    syncConstant('UNPACK_ALIGNMENT');
-    syncConstant('PACK_ALIGNMENT');
-    syncConstant('MAX_TEXTURE_SIZE');
-    syncConstant('MAX_VIEWPORT_DIMS');
-    syncConstant('SUBPIXEL_BITS');
-    syncConstant('RED_BITS');
-    syncConstant('GREEN_BITS');
-    syncConstant('BLUE_BITS');
-    syncConstant('ALPHA_BITS');
-    syncConstant('DEPTH_BITS');
-    syncConstant('STENCIL_BITS');
-    syncConstant('POLYGON_OFFSET_UNITS');
-    /*      POLYGON_OFFSET_FILL */
-    syncConstant('POLYGON_OFFSET_FACTOR');
-    syncConstant('TEXTURE_BINDING_2D');
-    syncConstant('SAMPLE_BUFFERS');
-    syncConstant('SAMPLES');
-    syncConstant('SAMPLE_COVERAGE_VALUE');
-    syncConstant('SAMPLE_COVERAGE_INVERT');
-
-    /* GetTextureParameter */
-    /*      TEXTURE_MAG_FILTER */
-    /*      TEXTURE_MIN_FILTER */
-    /*      TEXTURE_WRAP_S */
-    /*      TEXTURE_WRAP_T */
-
-    syncConstant('COMPRESSED_TEXTURE_FORMATS');
-
-    /* HintMode */
-    syncConstant('DONT_CARE');
-    syncConstant('FASTEST');
-    syncConstant('NICEST');
-
-    /* HintTarget */
-    syncConstant('GENERATE_MIPMAP_HINT');
-
-    /* DataType */
-    syncConstant('BYTE');
-    syncConstant('UNSIGNED_BYTE');
-    syncConstant('SHORT');
-    syncConstant('UNSIGNED_SHORT');
-    syncConstant('INT');
-    syncConstant('UNSIGNED_INT');
-    syncConstant('FLOAT');
-
-    /* PixelFormat */
-    syncConstant('DEPTH_COMPONENT');
-    syncConstant('ALPHA');
-    syncConstant('RGB');
-    syncConstant('RGBA');
-    syncConstant('LUMINANCE');
-    syncConstant('LUMINANCE_ALPHA');
-
-    /* PixelType */
-    /*      UNSIGNED_BYTE */
-    syncConstant('UNSIGNED_SHORT_4_4_4_4');
-    syncConstant('UNSIGNED_SHORT_5_5_5_1');
-    syncConstant('UNSIGNED_SHORT_5_6_5');
-
-    /* Shaders */
-    syncConstant('FRAGMENT_SHADER');
-    syncConstant('VERTEX_SHADER');
-    syncConstant('MAX_VERTEX_ATTRIBS');
-    syncConstant('MAX_VERTEX_UNIFORM_VECTORS');
-    syncConstant('MAX_VARYING_VECTORS');
-    syncConstant('MAX_COMBINED_TEXTURE_IMAGE_UNITS');
-    syncConstant('MAX_VERTEX_TEXTURE_IMAGE_UNITS');
-    syncConstant('MAX_TEXTURE_IMAGE_UNITS');
-    syncConstant('MAX_FRAGMENT_UNIFORM_VECTORS');
-    syncConstant('SHADER_TYPE');
-    syncConstant('DELETE_STATUS');
-    syncConstant('LINK_STATUS');
-    syncConstant('VALIDATE_STATUS');
-    syncConstant('ATTACHED_SHADERS');
-    syncConstant('ACTIVE_UNIFORMS');
-    syncConstant('ACTIVE_ATTRIBUTES');
-    syncConstant('SHADING_LANGUAGE_VERSION');
-    syncConstant('CURRENT_PROGRAM');
-
-    /* StencilFunction */
-    syncConstant('NEVER');
-    syncConstant('LESS');
-    syncConstant('EQUAL');
-    syncConstant('LEQUAL');
-    syncConstant('GREATER');
-    syncConstant('NOTEQUAL');
-    syncConstant('GEQUAL');
-    syncConstant('ALWAYS');
-
-    /* StencilOp */
-    /*      ZERO */
-    syncConstant('KEEP');
-    syncConstant('REPLACE');
-    syncConstant('INCR');
-    syncConstant('DECR');
-    syncConstant('INVERT');
-    syncConstant('INCR_WRAP');
-    syncConstant('DECR_WRAP');
-
-    /* StringName */
-    syncConstant('VENDOR');
-    syncConstant('RENDERER');
-    syncConstant('VERSION');
-
-    /* TextureMagFilter */
-    syncConstant('NEAREST');
-    syncConstant('LINEAR');
-
-    /* TextureMinFilter */
-    /*      NEAREST */
-    /*      LINEAR */
-    syncConstant('NEAREST_MIPMAP_NEAREST');
-    syncConstant('LINEAR_MIPMAP_NEAREST');
-    syncConstant('NEAREST_MIPMAP_LINEAR');
-    syncConstant('LINEAR_MIPMAP_LINEAR');
-
-    /* TextureParameterName */
-    syncConstant('TEXTURE_MAG_FILTER');
-    syncConstant('TEXTURE_MIN_FILTER');
-    syncConstant('TEXTURE_WRAP_S');
-    syncConstant('TEXTURE_WRAP_T');
-
-    /* TextureTarget */
-    syncConstant('TEXTURE_2D');
-    syncConstant('TEXTURE');
-
-    syncConstant('TEXTURE_CUBE_MAP');
-    syncConstant('TEXTURE_BINDING_CUBE_MAP');
-    syncConstant('TEXTURE_CUBE_MAP_POSITIVE_X');
-    syncConstant('TEXTURE_CUBE_MAP_NEGATIVE_X');
-    syncConstant('TEXTURE_CUBE_MAP_POSITIVE_Y');
-    syncConstant('TEXTURE_CUBE_MAP_NEGATIVE_Y');
-    syncConstant('TEXTURE_CUBE_MAP_POSITIVE_Z');
-    syncConstant('TEXTURE_CUBE_MAP_NEGATIVE_Z');
-    syncConstant('MAX_CUBE_MAP_TEXTURE_SIZE');
-
-    /* TextureUnit */
-    syncConstant('TEXTURE0');
-    syncConstant('TEXTURE1');
-    syncConstant('TEXTURE2');
-    syncConstant('TEXTURE3');
-    syncConstant('TEXTURE4');
-    syncConstant('TEXTURE5');
-    syncConstant('TEXTURE6');
-    syncConstant('TEXTURE7');
-    syncConstant('TEXTURE8');
-    syncConstant('TEXTURE9');
-    syncConstant('TEXTURE10');
-    syncConstant('TEXTURE11');
-    syncConstant('TEXTURE12');
-    syncConstant('TEXTURE13');
-    syncConstant('TEXTURE14');
-    syncConstant('TEXTURE15');
-    syncConstant('TEXTURE16');
-    syncConstant('TEXTURE17');
-    syncConstant('TEXTURE18');
-    syncConstant('TEXTURE19');
-    syncConstant('TEXTURE20');
-    syncConstant('TEXTURE21');
-    syncConstant('TEXTURE22');
-    syncConstant('TEXTURE23');
-    syncConstant('TEXTURE24');
-    syncConstant('TEXTURE25');
-    syncConstant('TEXTURE26');
-    syncConstant('TEXTURE27');
-    syncConstant('TEXTURE28');
-    syncConstant('TEXTURE29');
-    syncConstant('TEXTURE30');
-    syncConstant('TEXTURE31');
-    syncConstant('ACTIVE_TEXTURE');
-
-    /* TextureWrapMode */
-    syncConstant('REPEAT');
-    syncConstant('CLAMP_TO_EDGE');
-    syncConstant('MIRRORED_REPEAT');
-
-    /* Uniform Types */
-    syncConstant('FLOAT_VEC2');
-    syncConstant('FLOAT_VEC3');
-    syncConstant('FLOAT_VEC4');
-    syncConstant('INT_VEC2');
-    syncConstant('INT_VEC3');
-    syncConstant('INT_VEC4');
-    syncConstant('BOOL');
-    syncConstant('BOOL_VEC2');
-    syncConstant('BOOL_VEC3');
-    syncConstant('BOOL_VEC4');
-    syncConstant('FLOAT_MAT2');
-    syncConstant('FLOAT_MAT3');
-    syncConstant('FLOAT_MAT4');
-    syncConstant('SAMPLER_2D');
-    syncConstant('SAMPLER_CUBE');
-
-    /* Vertex Arrays */
-    syncConstant('VERTEX_ATTRIB_ARRAY_ENABLED');
-    syncConstant('VERTEX_ATTRIB_ARRAY_SIZE');
-    syncConstant('VERTEX_ATTRIB_ARRAY_STRIDE');
-    syncConstant('VERTEX_ATTRIB_ARRAY_TYPE');
-    syncConstant('VERTEX_ATTRIB_ARRAY_NORMALIZED');
-    syncConstant('VERTEX_ATTRIB_ARRAY_POINTER');
-    syncConstant('VERTEX_ATTRIB_ARRAY_BUFFER_BINDING');
-
-    /* Read Format */
-    syncConstant('IMPLEMENTATION_COLOR_READ_TYPE');
-    syncConstant('IMPLEMENTATION_COLOR_READ_FORMAT');
-
-    /* Shader Source */
-    syncConstant('COMPILE_STATUS');
-
-    /* Shader Precision-Specified Types */
-    syncConstant('LOW_FLOAT');
-    syncConstant('MEDIUM_FLOAT');
-    syncConstant('HIGH_FLOAT');
-    syncConstant('LOW_INT');
-    syncConstant('MEDIUM_INT');
-    syncConstant('HIGH_INT');
-
-    /* Framebuffer Object. */
-    syncConstant('FRAMEBUFFER');
-    syncConstant('RENDERBUFFER');
-
-    syncConstant('RGBA4');
-    syncConstant('RGB5_A1');
-    syncConstant('RGB565');
-    syncConstant('DEPTH_COMPONENT16');
-    syncConstant('STENCIL_INDEX');
-    syncConstant('STENCIL_INDEX8');
-    syncConstant('DEPTH_STENCIL');
-
-    syncConstant('RENDERBUFFER_WIDTH');
-    syncConstant('RENDERBUFFER_HEIGHT');
-    syncConstant('RENDERBUFFER_INTERNAL_FORMAT');
-    syncConstant('RENDERBUFFER_RED_SIZE');
-    syncConstant('RENDERBUFFER_GREEN_SIZE');
-    syncConstant('RENDERBUFFER_BLUE_SIZE');
-    syncConstant('RENDERBUFFER_ALPHA_SIZE');
-    syncConstant('RENDERBUFFER_DEPTH_SIZE');
-    syncConstant('RENDERBUFFER_STENCIL_SIZE');
-
-    syncConstant('FRAMEBUFFER_ATTACHMENT_OBJECT_TYPE');
-    syncConstant('FRAMEBUFFER_ATTACHMENT_OBJECT_NAME');
-    syncConstant('FRAMEBUFFER_ATTACHMENT_TEXTURE_LEVEL');
-    syncConstant('FRAMEBUFFER_ATTACHMENT_TEXTURE_CUBE_MAP_FACE');
-
-    syncConstant('COLOR_ATTACHMENT0');
-    syncConstant('DEPTH_ATTACHMENT');
-    syncConstant('STENCIL_ATTACHMENT');
-    syncConstant('DEPTH_STENCIL_ATTACHMENT');
-
-    syncConstant('NONE');
-
-    syncConstant('FRAMEBUFFER_COMPLETE');
-    syncConstant('FRAMEBUFFER_INCOMPLETE_ATTACHMENT');
-    syncConstant('FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT');
-    syncConstant('FRAMEBUFFER_INCOMPLETE_DIMENSIONS');
-    syncConstant('FRAMEBUFFER_UNSUPPORTED');
-
-    syncConstant('FRAMEBUFFER_BINDING');
-    syncConstant('RENDERBUFFER_BINDING');
-    syncConstant('MAX_RENDERBUFFER_SIZE');
-
-    syncConstant('INVALID_FRAMEBUFFER_OPERATION');
-
-    /* WebGL-specific enums */
-    syncConstant('UNPACK_FLIP_Y_WEBGL');
-    syncConstant('UNPACK_PREMULTIPLY_ALPHA_WEBGL');
-    syncConstant('CONTEXT_LOST_WEBGL');
-    syncConstant('UNPACK_COLORSPACE_CONVERSION_WEBGL');
-    syncConstant('BROWSER_DEFAULT_WEBGL');        
-
-    function syncConstant(name) {
-        //
-        if (WebGLRenderingContext[name] === undefined) {
-            WebGLRenderingContext[name] = renderingContext[name];
-        }
-    }
-
-    Object.freeze(WebGLRenderingContext);
-};
-
-Object.freeze(WebGLRenderingContextHelper);
-
-//
-// Constructor.
-//
 function GraphicsManager(_xcene) {
     //
-    var _renderingContext;
+    var _gl;
     var _viewport;
     var _shaderProgram;
     var _clearColor;
@@ -2562,7 +2121,7 @@ function GraphicsManager(_xcene) {
 
     try {
         //
-        setUpRenderingContext();
+        setUpWebGLContext();
 
     } catch (e) {
         //
@@ -2578,8 +2137,8 @@ function GraphicsManager(_xcene) {
         'get': function() { return _xcene; }
     });
     
-    Object.defineProperty(this, 'renderingContext', {
-        get: function() { return _renderingContext; }
+    Object.defineProperty(this, 'webGLContext', {
+        get: function() { return _gl; }
     });
 
     Object.defineProperty(this, 'viewport', {
@@ -2601,8 +2160,8 @@ function GraphicsManager(_xcene) {
 
             _viewport = value;
 
-            // Resets the WebGLRenderingContext's viewport as well.
-            _renderingContext.viewport (
+            // Resets the gl's viewport as well.
+            _gl.viewport (
                 // Part 1.
                 _viewport.left, _viewport.bottom,
                 // Part 2.
@@ -2625,30 +2184,25 @@ function GraphicsManager(_xcene) {
             }
             
             _shaderProgram = value;
-            _renderingContext.useProgram(_shaderProgram);
+            _gl.useProgram(_shaderProgram);
         },
     });
 
     //
     // Private methods.
     //
-    function setUpRenderingContext() {
+    function setUpWebGLContext() {
         //
-        // Try to grab the standard context. If it fails, fallback to experi-
-        // mental.
+        // Try to grab the standard context. If it fails, fallback to experimental.
         //
         // Note:
         // IE11 only supports 'experimental-webgl'.
         //
-        _renderingContext =
-            _xcene.mainCanvas.getContext('webgl');
-
-        if (_renderingContext === null) {
+        _gl = _xcene.mainCanvas.getContext('webgl');
+        if (_gl === null) {
             //
-            _renderingContext =
-                _xcene.mainCanvas.getContext('experimental-webgl');
-            
-            if (_renderingContext !== null) {
+            _gl = _xcene.mainCanvas.getContext('experimental-webgl');
+            if (_gl !== null) {
                 //
                 console.log (
                     'Your browser supports WebGL. \n\n' +
@@ -2663,13 +2217,12 @@ function GraphicsManager(_xcene) {
                     'Unable to initialize WebGL. Your browser may not support it.'
                 );
 
-                throw 'WebGL-not-supported exception raised.';
+                throw 'A WebGL-not-supported exception raised.';
             }
         }
 
-        WebGLRenderingContextHelper.syncConstants(_renderingContext);
-
-        _renderingContext.depthRange (
+        // See notes in DepthBufferValues.js
+        _gl.depthRange (
             DepthBufferValues.NEAR_CLIP_PLANE, // = 0.0
             DepthBufferValues.FAR_CLIP_PLANE   // = 1.0
         );
@@ -2678,23 +2231,23 @@ function GraphicsManager(_xcene) {
         _clearDepth = GraphicsManager.DEFAULT_CLEAR_DEPTH;
         _clearStencil = GraphicsManager.DEFAULT_CLEAR_STENCIL;
 
-        _renderingContext.clearColor (
+        _gl.clearColor (
             // Part 1.
             _clearColor.r, _clearColor.g, _clearColor.b,
             // Part 2.
             _clearColor.a
         );
 
-        _renderingContext.clearDepth(_clearDepth);
-        _renderingContext.clearStencil(_clearStencil);
+        _gl.clearDepth(_clearDepth);
+        _gl.clearStencil(_clearStencil);
         
         // Sets up the states.
         setUpStates();
         
         // Flips the source data along its vertical axis to make WebGL's texture
         // coordinates (S, T) work correctly.
-        _renderingContext.pixelStorei (
-            WebGLRenderingContext.UNPACK_FLIP_Y_WEBGL,
+        _gl.pixelStorei (
+            _gl.UNPACK_FLIP_Y_WEBGL,
             true
         );
     }
@@ -2712,17 +2265,17 @@ function GraphicsManager(_xcene) {
 
     function setUpAlphaBlendState() {
         //
-        _renderingContext.disable(WebGLRenderingContext.BLEND); // default: disable.
+        _gl.disable(_gl.BLEND); // default: disable.
     }
 
     function setUpDepthStencilState() {
         //
         // Depth.
-        _renderingContext.enable(WebGLRenderingContext.DEPTH_TEST); // default: disable.
-        _renderingContext.depthFunc(WebGLRenderingContext.LEQUAL); // default: LESS.
+        _gl.enable(_gl.DEPTH_TEST); // default: disable.
+        _gl.depthFunc(_gl.LEQUAL); // default: LESS.
 
         // Stencil.
-        _renderingContext.disable(WebGLRenderingContext.STENCIL_TEST); // default: disable.
+        _gl.disable(_gl.STENCIL_TEST); // default: disable.
     }
 
     function setUpSamplerState() {
@@ -2733,8 +2286,8 @@ function GraphicsManager(_xcene) {
 
     function setUpRasterizerState() {
         //
-        _renderingContext.enable(WebGLRenderingContext.CULL_FACE); // default: disable.
-        _renderingContext.cullFace(WebGLRenderingContext.BACK); // default: BACK.
+        _gl.enable(_gl.CULL_FACE); // default: disable.
+        _gl.cullFace(_gl.BACK); // default: BACK.
     }
 
     //
@@ -2742,22 +2295,22 @@ function GraphicsManager(_xcene) {
     //
     this.setUpVertexBuffer = function(buffer, items) {
         //
-        _renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
+        _gl.bindBuffer (
+            _gl.ARRAY_BUFFER,
             buffer
         );
         
-        _renderingContext.bufferData (
-            WebGLRenderingContext.ARRAY_BUFFER,
+        _gl.bufferData (
+            _gl.ARRAY_BUFFER,
             new Float32Array(items),
-            WebGLRenderingContext.STATIC_DRAW
+            _gl.STATIC_DRAW
         );
     };
 
     this.setUpIndexBuffer = function(buffer, items) {
         //
-        _renderingContext.bindBuffer (
-            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
+        _gl.bindBuffer (
+            _gl.ELEMENT_ARRAY_BUFFER,
             buffer
         );
 
@@ -2768,45 +2321,38 @@ function GraphicsManager(_xcene) {
         /*
         if (uses16Bits === true) {
             //
-            _renderingContext.bufferData (
-                WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
+            _gl.bufferData (
+                _gl.ELEMENT_ARRAY_BUFFER,
                 new Uint16Array(items),
-                WebGLRenderingContext.STATIC_DRAW
+                _gl.STATIC_DRAW
             );
 
         } else {
             //
-            _renderingContext.bufferData (
-                WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
+            _gl.bufferData (
+                _gl.ELEMENT_ARRAY_BUFFER,
                 new Uint32Array(items),
-                WebGLRenderingContext.STATIC_DRAW
+                _gl.STATIC_DRAW
             );
         }
         */
 
-        _renderingContext.bufferData (
-            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
+        _gl.bufferData (
+            _gl.ELEMENT_ARRAY_BUFFER,
             new Uint16Array(items),
-            WebGLRenderingContext.STATIC_DRAW
+            _gl.STATIC_DRAW
         );
         // :Note
     };
 
     this.clear = function(clearOptions, color, depth, stencil) {
         //
-        // if (// Part 1.
-        //     color !== undefined && (
-        //     // Part 2.
-        //     color.r !== _clearColor.r ||
-        //     color.g !== _clearColor.g ||
-        //     color.b !== _clearColor.b ||
-        //     color.a !== _clearColor.a)) {
         if (color !== undefined &&
             Color.areEqual(color, _clearColor) === false) {
             //
             _clearColor = color;
             
-            _renderingContext.clearColor (
+            _gl.clearColor (
                 // Part 1.
                 _clearColor.r, _clearColor.g, _clearColor.b,
                 // Part 2.
@@ -2817,13 +2363,13 @@ function GraphicsManager(_xcene) {
         if (depth !== undefined &&
             depth !== _clearDepth) {
             _clearDepth = depth;
-            _renderingContext.clearDepth(_clearDepth);
+            _gl.clearDepth(_clearDepth);
         }
 
         if (stencil !== undefined &&
             stencil !== _clearStencil) {
             _clearStencil = stencil;
-            _renderingContext.clearStencil(_clearStencil);
+            _gl.clearStencil(_clearStencil);
         }
 
         // Note:
@@ -2833,7 +2379,7 @@ function GraphicsManager(_xcene) {
             clearOptions = GraphicsManager.DEFAULT_CLEAR_OPTIONS;
         }
 
-        _renderingContext.clear(clearOptions);
+        _gl.clear(clearOptions);
     };
 
     this.drawPrimitives = function (
@@ -2841,7 +2387,7 @@ function GraphicsManager(_xcene) {
         start, // Index of start vertex.
         count
     ){
-        _renderingContext.drawArrays(primitiveType, start, count);
+        _gl.drawArrays(primitiveType, start, count);
     };
     
     this.drawIndexedPrimitives = function (
@@ -2852,15 +2398,15 @@ function GraphicsManager(_xcene) {
             offset = 0;
         }
 
-        _renderingContext.bindBuffer (
-            WebGLRenderingContext.ELEMENT_ARRAY_BUFFER,
+        _gl.bindBuffer (
+            _gl.ELEMENT_ARRAY_BUFFER,
             indexBuffer
         );
         
-        _renderingContext.drawElements (
+        _gl.drawElements (
             primitiveType,
             count,
-            WebGLRenderingContext.UNSIGNED_SHORT,
+            _gl.UNSIGNED_SHORT,
             offset
         );
     };
@@ -2870,35 +2416,29 @@ function GraphicsManager(_xcene) {
     //
     this.getShaderAttributeLocation = function(shaderProgram, attributeName) {
         //
-        return _renderingContext.getAttribLocation (
-            shaderProgram,
-            attributeName
-        );
+        return _gl.getAttribLocation(shaderProgram, attributeName);
     };
     
     this.getShaderUniformLocation = function(shaderProgram, uniformName) {
         //
-        return _renderingContext.getUniformLocation (
-            shaderProgram,
-            uniformName
-        );
+        return _gl.getUniformLocation(shaderProgram, uniformName);
     };
 
     this.setShaderAttribute = function(attributeLocation, buffer, size) {
         //
-        _renderingContext.bindBuffer (
-            WebGLRenderingContext.ARRAY_BUFFER,
+        _gl.bindBuffer (
+            _gl.ARRAY_BUFFER,
             buffer
         );
 
-        _renderingContext.enableVertexAttribArray (
+        _gl.enableVertexAttribArray (
             attributeLocation
         );
 
-        _renderingContext.vertexAttribPointer (
+        _gl.vertexAttribPointer (
             attributeLocation,
             size,
-            WebGLRenderingContext.FLOAT,
+            _gl.FLOAT,
             false,
             0,
             0
@@ -2912,19 +2452,13 @@ function GraphicsManager(_xcene) {
         }
 
         // Note:
-        // WebGLRenderingContext.TEXTUREX are numbers,
-        // WebGLRenderingContext.TEXTURE0 = 33984,
-        // WebGLRenderingContext.TEXTURE1 = 33985,
+        // _gl.TEXTUREX are numbers,
+        // _gl.TEXTURE0 = 33984,
+        // _gl.TEXTURE1 = 33985,
         // ...
 
-        _renderingContext.activeTexture (
-            WebGLRenderingContext.TEXTURE0 + unit
-        );
-
-        _renderingContext.bindTexture (
-            WebGLRenderingContext.TEXTURE_2D,
-            texture
-        );
+        _gl.activeTexture(_gl.TEXTURE0 + unit);
+        _gl.bindTexture(_gl.TEXTURE_2D, texture);
 
         this.setShaderUniform(samplerUniformLocation, unit);
     };
@@ -2933,14 +2467,14 @@ function GraphicsManager(_xcene) {
         //
         if ((value instanceof Matrix4x4) === true) {
             //
-            _renderingContext.uniformMatrix4fv (
+            _gl.uniformMatrix4fv (
                 uniformLocation,
                 false, // which is always false.
                 new Float32Array(value.elements)
             );
 
         } else {
-            _renderingContext.uniform1i(uniformLocation, value);
+            _gl.uniform1i(uniformLocation, value);
         }
     };
 }
@@ -3001,68 +2535,17 @@ function PrimitiveType() {
 //
 // Static constants (after Object.freeze()).
 //
-PrimitiveType.LINE_LIST      = 1; // = WebGLRenderingContext.LINES
-PrimitiveType.LINE_STRIP     = 3; // = WebGLRenderingContext.LINE_STRIP
-PrimitiveType.TRIANGLE_LIST  = 4; // = WebGLRenderingContext.TRIANGLES
-PrimitiveType.TRIANGLE_STRIP = 5; // = WebGLRenderingContext.TRIANGLE_STRIP
+PrimitiveType.LINE_LIST      = 1; // = gl.LINES
+PrimitiveType.LINE_STRIP     = 3; // = gl.LINE_STRIP
+PrimitiveType.TRIANGLE_LIST  = 4; // = gl.TRIANGLES
+PrimitiveType.TRIANGLE_STRIP = 5; // = gl.TRIANGLE_STRIP
 
 Object.freeze(PrimitiveType);
-
-//
-// Constructor.
-//
-function ShaderHelper(_graphicsManager) {
-    //
-    var _renderingContext =
-        _graphicsManager.renderingContext;
-    
-    Object.defineProperty(this, 'renderingContext', {
-        get: function() { return _renderingContext; }
-    });
-}
-
-//
-// Prototype.
-//
-ShaderHelper.prototype = {
-    //
-    // Public methods.
-    //
-    setUpShaderProgram: function(vertexShader, fragmentShader) {
-        //
-        var shaderProgram =
-            this.renderingContext.createProgram();
-        
-        this.renderingContext.attachShader(shaderProgram, vertexShader);
-        this.renderingContext.attachShader(shaderProgram, fragmentShader);
-        this.renderingContext.linkProgram(shaderProgram);
-
-        // If creating the shader program failed, alert
-
-        if (JSHelper.isUndefinedOrNull (
-                //
-                this.renderingContext.getProgramParameter (
-                    shaderProgram,
-                    WebGLRenderingContext.LINK_STATUS
-                )
-            ) === true)
-        {
-            throw (
-                'Unable to initialize the shader program: ' +
-                this.renderingContext.getProgramInfoLog(shader)
-            );
-        }
-        
-        return shaderProgram;
-    }
-};
-
-Object.freeze(ShaderHelper);
 
 // Note:
 // Texture Coordinates.
 //
-// DirectX: (U, V)      WebGL: (S, T)           
+// DirectX: (U, V)      OpenGL: (S, T)           
 //            
 // (0, 0)     (1, 0)    (0, 1)     (1, 1)        
 //     ┌───────┐            ┌───────┐            
@@ -3308,7 +2791,7 @@ function Xcene(_mainCanvas, _usesDefaultStyles) {
             throw 'document.body === undefined';
         }
 
-        if (JSHelper.isUndefinedOrNull(_mainCanvas) === true) {
+        if (_mainCanvas === undefined) {
             //
             _mainCanvas = document.createElementNS (
                 'http://www.w3.org/1999/xhtml',
@@ -3792,12 +3275,9 @@ exports.DepthBufferValues = DepthBufferValues;
 exports.GraphicsManager = GraphicsManager;
 exports.NormalizedDeviceCoordinates = NormalizedDeviceCoordinates;
 exports.PrimitiveType = PrimitiveType;
-exports.ShaderHelper = ShaderHelper;
 exports.ShaderType = ShaderType;
 exports.TextureCoordinateHelper = TextureCoordinateHelper;
-exports.WebGLRenderingContextHelper = WebGLRenderingContextHelper;
 exports.ExceptionHelper = ExceptionHelper;
-exports.JSHelper = JSHelper;
 exports.MouseButton = MouseButton;
 exports.AxisGroup = AxisGroup;
 exports.MathHelper = MathHelper;
