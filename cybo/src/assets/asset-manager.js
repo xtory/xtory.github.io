@@ -112,12 +112,6 @@ function AssetManager(_xcene) {
         //
         var shaderProgram = _gl.createProgram();
 
-        // var vertexShader =
-        //     loadShader(ShaderType.VERTEX_SHADER, vertexShaderSource);
-
-        // var fragmentShader =
-        //     loadShader(ShaderType.FRAGMENT_SHADER, fragmentShaderSource);
-
         _gl.attachShader(shaderProgram, vertexShader);
         _gl.attachShader(shaderProgram, fragmentShader);
 

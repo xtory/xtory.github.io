@@ -9,6 +9,15 @@ function Vector2D(_x, _y) {
     this.y = _y;
 }
 
+Vector2D.prototype = {
+    //
+    // Public methods.
+    //
+    toArray: function() {
+        return [ this.x, this.y ];
+    }
+};
+
 //
 // Static constants (after Object.freeze()).
 //
@@ -60,12 +69,46 @@ Vector2D.subtractVectors = function(v1, v2) {
     return new Vector2D(v1.x-v2.x, v1.y-v2.y);
 }
 
+Vector2D.multiplyVectorByScalar = function(v, s) {
+    return new Vector2D(v.x*s, v.y*s);
+}
+
 Vector2D.calculateLengthOf = function(v) {
     return Math.sqrt(v.x*v.x + v.y*v.y);
 }
 
 Vector2D.calculateLengthSquaredOf = function(v) {
     return v.x*v.x + v.y*v.y;
+}
+
+Vector2D.calculateDotProductOf = function(v1, v2) {
+    return v1.x*v2.x + v1.y*v2.y;
+}
+
+Vector2D.calculatePerpendicularVectorOf = function(v) {
+    //
+    // Note:
+    // There are two vectors perpendicular to any given vector, one rotated
+    // 90 degrees counterclockwise and the other rotated 90 degrees clockwise.
+    // F. S. Hill, Jr. (1994) defines the perpendicular vector (v2) obtained
+    // from an initial vector (v1) by a counterclockwise rotation by 90
+    // degrees.
+    //
+    return new Vector2D(-v.y, v.x);
+}
+
+Vector2D.calculatePerpendicularDotProductOf = function(v1, v2) {
+    //
+    // Optimization:
+    /*
+    var v3 = // which is v1 rotated 90 degrees counterclockwise.
+        Vector2D.calculatePerpendicularVectorOf(v1);
+
+    return Vector2D.calculateDotProductOf(v3, v2);
+    */
+
+    return -v1.y*v2.x + v1.x*v2.y;
+    // :Optimization
 }
 
 Vector2D.areEqual = function(v1, v2) {

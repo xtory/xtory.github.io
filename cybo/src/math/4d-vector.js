@@ -1,4 +1,5 @@
 import { MathHelper } from './helpers/math-helper';
+import { Vector3D }   from './3d-vector';
     
 //
 // Constructor.
@@ -10,6 +11,22 @@ function Vector4D(_x, _y, _z, _w) {
     this.z = _z;
     this.w = _w;
 }
+
+//
+// Prototype.
+//
+Vector4D.prototype = {
+    //
+    // Public methods.
+    //
+    toArray: function() {
+        return [ this.x, this.y, this.z, this.w ];
+    }
+};
+
+Object.defineProperty(Vector4D.prototype, 'xyz', {
+    'get': function() { return new Vector3D(this.x, this.y, this.z); }
+});
 
 //
 // Static constants (after Object.freeze()).
@@ -56,6 +73,10 @@ Vector4D.addVectors = function(v1, v2) {
 
 Vector4D.subtractVectors = function(v1, v2) {
     return new Vector4D(v1.x-v2.x, v1.y-v2.y, v1.z-v2.z, v1.w-v2.w);
+}
+
+Vector4D.multiplyVectorByScalar = function(v, s) {
+    return new Vector4D(v.x*s, v.y*s, v.z*s, v.w*s);
 }
 
 Vector4D.calculateLengthOf = function(v) {

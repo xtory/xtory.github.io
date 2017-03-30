@@ -2,6 +2,7 @@
 export { PositionColor }                              from './assets/shaders/position-color';
 export { PositionOnly }                               from './assets/shaders/position-only';
 export { PositionTextureCoordinates }                 from './assets/shaders/position-texture-coordinates';
+export { TransformedPositionColor }                   from './assets/shaders/transformed-position-color';
 export { TransformedPositionColorTextureCoordinates } from './assets/shaders/transformed-position-color-texture-coordinates';
 export { TransformedPositionTextureCoordinates }      from './assets/shaders/transformed-position-texture-coordinates';
 export { AssetManager }                               from './assets/asset-manager';

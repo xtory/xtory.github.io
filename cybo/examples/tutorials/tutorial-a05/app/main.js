@@ -152,27 +152,23 @@ function main() {
         for (var i=0; i<vertexPositions.length; i++) {
             //
             var item = vertexPositions[i];
-
             var p = viewport.toNormalizedDeviceSpace(item);
 
             vertexPositions2.push(p.x);
             vertexPositions2.push(p.y);
-            vertexPositions2.push(-1); // z. //vertexPositions2.push(0); // z.
+            vertexPositions2.push(0); // z.
             vertexPositions2.push(1); // w.
         }
 
         scene.graphicsManager.setUpVertexBuffer (
             vertexPositionBuffer,
-            vertexPositions2 //vertexPositions
+            vertexPositions2
         );
 
         //
         // Vertex colors.
         //
         vertexColorBuffer = gl.createBuffer();
-            
-        var halfWidth = w / 2;
-        var halfHeight = h / 2;
 
         var vertexColors = [];
 

@@ -1,5 +1,6 @@
 import { MathHelper } from './helpers/math-helper';
 import { Quaternion } from './quaternion';
+import { Vector2D }   from './2d-vector';
 import { Vector4D }   from './4d-vector';
 
 //
@@ -10,7 +11,24 @@ function Vector3D(_x, _y, _z) {
     this.x = _x;
     this.y = _y;
     this.z = _z;
+
+    // Object.defineProperty(this, 'xy', {
+    //     'get': function() { return new Vector2D(_x, _y); }
+    // });
 }
+
+Vector3D.prototype = {
+    //
+    // Public methods.
+    //
+    toArray: function() {
+        return [ this.x, this.y, this.z ];
+    }
+};
+
+Object.defineProperty(Vector3D.prototype, 'xy', {
+    'get': function() { return new Vector2D(this.x, this.y); }
+});
 
 //
 // Static constants (after Object.freeze()).
