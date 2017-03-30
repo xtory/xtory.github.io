@@ -2131,11 +2131,198 @@ DepthBufferValues.FAR_CLIP_PLANE  = 1.0; // = default zFar of gl.getParameter(gl
 
 Object.freeze(DepthBufferValues);
 
+// Note:
+// In OpenGL, there is a term called "Normalized Device Coordinates/Space". All
+// points in it are:
+// -1(left)   < X <= 1(right)
+// -1(bottom) < Y <= 1(top)
+// -1(near)   < Z <= 1(far)
+//
+// But in DirectX, there is no specific term for it. So I name it "(DirectX version
+// of) normalized device coordinates" as well as "clipping cuboid after projection
+// transform and perspective division". points in it are:
+// -1(left)   < X <= 1(right)
+// -1(bottom) < Y <= 1(top)
+//  0(near)   < Z <= 1(far)
+
+//
+// Constructor.
+//
+function NormalizedDeviceCoordinates() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+NormalizedDeviceCoordinates.MIN_X = -1; // Left.
+NormalizedDeviceCoordinates.MAX_X =  1; // Right.
+NormalizedDeviceCoordinates.MIN_Y = -1; // Bottom.
+NormalizedDeviceCoordinates.MAX_Y =  1; // Top.
+NormalizedDeviceCoordinates.MIN_Z = -1; // Near.
+NormalizedDeviceCoordinates.MAX_Z =  1; // Far.
+
+Object.freeze(NormalizedDeviceCoordinates);
+
+//
+// Constructor.
+//
+function Vector2D(_x, _y) {
+    //
+    this.x = _x;
+    this.y = _y;
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+Vector2D.ELEMENT_COUNT = 2;
+
+//
+// Static methods.
+//
+Vector2D.fromArray = function(a) {
+    return new Vector2D(a[0], a[1]);
+};
+
+Vector2D.calculateUnitVectorOf = function(v) {
+    //
+    // Note:
+    // All XNA, SlimDX, and WPF don't react to the situation when sqrt = 0, such
+    // as zero vector's normalization. But finally I decide to code in the way as
+    // the book 'Essential Mathematics for Games and Interactive Applications' does.
+
+    var sqrt = Math.sqrt(v.x*v.x + v.y*v.y);
+
+    if (sqrt < MathHelper.EPSILON) {
+        //
+        // Note:
+        // Cybo doesn't throw a divide-by-zero exception when normalizing
+        // Vector2D, Vector2D, Vector4D, Quaternion.
+        /*
+        console.log('A divide-by-zero exception raised.');
+        */
+
+        return new Vector2D(0, 0);
+
+    } else {
+        //
+        var s = 1.0 / sqrt;
+        return new Vector2D(v.x*s, v.y*s);
+    }
+};
+
+Vector2D.negateVector = function (v) {
+    return new Vector2D(-v.x, -v.y);
+};
+
+Vector2D.addVectors = function(v1, v2) {
+    return new Vector2D(v1.x+v2.x, v1.y+v2.y);
+};
+
+Vector2D.subtractVectors = function(v1, v2) {
+    return new Vector2D(v1.x-v2.x, v1.y-v2.y);
+};
+
+Vector2D.calculateLengthOf = function(v) {
+    return Math.sqrt(v.x*v.x + v.y*v.y);
+};
+
+Vector2D.calculateLengthSquaredOf = function(v) {
+    return v.x*v.x + v.y*v.y;
+};
+
+Vector2D.areEqual = function(v1, v2) {
+    //
+    if ((v1 instanceof Vector2D) === false ||
+        (v2 instanceof Vector2D) === false) {
+        return false;
+    }
+
+    if (v1.x !== v2.x ||
+        v1.y !== v2.y) {
+        return false;
+    } else {
+        return true;
+    }
+};
+
+Object.freeze(Vector2D);
+
+// Note:
+// OpenGL viewport's (X, Y) means the lower-left corner.
+// DirectX viewport's (X, Y) means the upper-left corner.
+
+// Note:
+// DirectX uses Viewport to set { left, top, width, height, minDepth(near), maxDepth(far) }
+// OpenGL uses gl.viewport() to set { left, bottom, width, height }
+// and gl.depthRange() to set { nearDepth, farDepth }
+
+//
+// Constructor.
+//
+function Viewport(_left, _bottom, _width, _height) {
+    //
+    this.left = _left;
+    this.bottom = _bottom;
+    this.width = _width;
+    this.height = _height;
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(this, 'aspectRatio', {
+        get: function() { return _width / _height; }
+    });
+
+    //
+    // Privileged methods.
+    //
+    this.toNormalizedDeviceSpace = function(screenPosition) {
+        //
+        // Note:
+        // Because the input is already a 'screen position', that is, we don't have
+        // to worry about w (perspective division), the formula below converts the
+        // screen position directly to normalized device coordinates.
+
+        // Note:
+        // Besides, OpenGL has no half-pixel offset problem like DirectX 9, don't
+        // have to handle it.
+        /*
+        return new Vector2D (
+            // Part 1.
+            NormalizedDeviceCoordinates.MIN_X +
+            ((screenPosition.x - 0.5) / _width) *
+            (NormalizedDeviceCoordinates.MAX_X - NormalizedDeviceCoordinates.MIN_X),
+            // Part 2.
+            NormalizedDeviceCoordinates.MIN_Y +
+            ((screenPosition.y - 0.5) / _height) *
+            (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y)
+        );
+        */
+
+        return new Vector2D (
+            // Part 1.
+            NormalizedDeviceCoordinates.MIN_X +
+            (screenPosition.x / _width) *
+            (NormalizedDeviceCoordinates.MAX_X - NormalizedDeviceCoordinates.MIN_X),
+            // Part 2.
+            NormalizedDeviceCoordinates.MIN_Y +
+            (screenPosition.y / _height) *
+            (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y)
+        );
+        // :Note
+    };
+}
+
+Object.freeze(Viewport);
+
 //
 // Constructor.
 //
 function GraphicsManager(_xcene) {
     //
+    var _canvas;
     var _gl;
     var _pixelRatio;
     var _viewport;
@@ -2147,6 +2334,10 @@ function GraphicsManager(_xcene) {
     try {
         //
         _pixelRatio = window.devicePixelRatio;
+
+        setUpCanvas();
+
+        setUpStyles();
 
         setUpWebGLContext();
 
@@ -2162,6 +2353,10 @@ function GraphicsManager(_xcene) {
     //
     Object.defineProperty(this, 'xcene', {
         'get': function() { return _xcene; }
+    });
+
+    Object.defineProperty(this, 'canvas', {
+        'get': function() { return _canvas; }
     });
     
     Object.defineProperty(this, 'webGLContext', {
@@ -2222,6 +2417,61 @@ function GraphicsManager(_xcene) {
     //
     // Private methods.
     //
+    function setUpCanvas() {
+        //
+        if (_xcene.settings !== undefined &&
+            _xcene.settings.canvas !== undefined) {
+            //
+            _canvas = _xcene.settings.canvas;
+
+        } else {
+            //
+            if (document.body === undefined) {
+                throw 'document.body === undefined';
+            }
+
+            _canvas = document.createElementNS (
+                'http://www.w3.org/1999/xhtml',
+                'canvas'
+            );
+
+            document.body.appendChild(_canvas);
+        }
+    }
+
+    function setUpStyles() {
+        //
+        // Note:
+        // This function is used to replace CSS below...
+        //
+        // body {
+        //     margin: 0;
+        //     background-color: #202020; /* = cybo.graphics.colors.DEFAULT_BACKGROUND*/
+        // }
+        //
+        // canvas {
+        //     width:   100vw;
+        //     height:  100vh;
+        //     display: block; /* prevents scrollbar */
+        // }
+        //
+        if (_xcene.settings !== undefined &&
+            _xcene.settings.usesDefaultStyles === true) {
+            return;
+        }
+
+        var style;
+
+        style = document.body.style;
+        style.margin = 0;
+        style.backgroundColor = '#202020'; // = cybo.graphics.colors.DEFAULT_BACKGROUND
+
+        style = _canvas.style;
+        style.width = '100vw';
+        style.height = '100vh';
+        style.display = 'block';
+    }    
+
     function setUpWebGLContext() {
         //
         // Try to grab the standard context. If it fails, fallback to experimental.
@@ -2229,10 +2479,10 @@ function GraphicsManager(_xcene) {
         // Note:
         // IE11 only supports 'experimental-webgl'.
         //
-        _gl = _xcene.mainCanvas.getContext('webgl');
+        _gl = _canvas.getContext('webgl');
         if (_gl === null) {
             //
-            _gl = _xcene.mainCanvas.getContext('experimental-webgl');
+            _gl = _canvas.getContext('experimental-webgl');
             if (_gl !== null) {
                 //
                 console.log (
@@ -2241,8 +2491,8 @@ function GraphicsManager(_xcene) {
                     'That is, not all WebGL functionality may be supported, ' +
                     'and content may not run as expected.'
                 );
-            }
-            else {
+
+            } else {
                 //
                 alert (
                     'Unable to initialize WebGL. Your browser may not support it.'
@@ -2324,6 +2574,39 @@ function GraphicsManager(_xcene) {
     //
     // Privileged methods.
     //
+    this.resize = function() {
+        //
+        // Lookup the size the browser is displaying the canvas.
+        var width  = _canvas.clientWidth;
+        var height = _canvas.clientHeight;
+
+        // Check if the canvas is not the same size.
+        if (_canvas.width  != width ||
+            _canvas.height != height) {
+            //
+            // // Test:
+            // alert (
+            //     'resized!\n' +
+            //     'window.innerWidth = ' + window.innerWidth + ', '  + 'window.innerHeight = ' + window.innerHeight + '\n' +
+            //     'window.devicePixelRatio = ' + window.devicePixelRatio + '\n' +
+            //     'canvas.width = ' + _mainCanvas.width + ', '  + 'canvas.height = ' + _mainCanvas.height + '\n' +
+            //     'canvas.clientWidth = ' + _mainCanvas.clientWidth + ', '  + 'canvas.clientHeight = ' + _mainCanvas.clientHeight
+            // );
+            // // :Test
+            
+            // Make the canvas the same size
+            _canvas.width  = width;
+            _canvas.height = height;
+            
+            this.viewport = new Viewport (
+                // Part 1.
+                0, 0,
+                // Part 2.
+                _canvas.width, _canvas.height
+            );
+        }
+    };
+
     this.setUpVertexBuffer = function(buffer, items) {
         //
         _gl.bindBuffer (
@@ -2345,7 +2628,6 @@ function GraphicsManager(_xcene) {
             buffer
         );
 
-        //
         // Note:
         // DirectX supports 16-bit or 32-bit index buffers. But in this engine,
         // so far, only 16-bit index buffer is supported.
@@ -2457,13 +2739,17 @@ function GraphicsManager(_xcene) {
 
     this.setShaderAttribute = function(attributeLocation, buffer, size) {
         //
+        // Turns the 'generic' vertex attribute array on at a given index position.
+        // That is, this vertex attribute location (an 'index') doesn't belong to
+        // any specific shader program.
+        _gl.enableVertexAttribArray (
+            attributeLocation
+        );
+
+        // Binds the buffer before calling gl.vertexAttribPointer().
         _gl.bindBuffer (
             _gl.ARRAY_BUFFER,
             buffer
-        );
-
-        _gl.enableVertexAttribArray (
-            attributeLocation
         );
 
         _gl.vertexAttribPointer (
@@ -2522,39 +2808,6 @@ GraphicsManager.DEFAULT_CLEAR_STENCIL = 0;
 GraphicsManager.DEFAULT_TEXTURE_UNIT  = 0;
 
 Object.freeze(GraphicsManager);
-
-// Note:
-// In OpenGL, there is a term called "Normalized Device Coordinates/Space". All
-// points in it are:
-// -1(left)   < X <= 1(right)
-// -1(bottom) < Y <= 1(top)
-// -1(near)   < Z <= 1(far)
-//
-// But in DirectX, there is no specific term for it. So I name it "(DirectX version
-// of) normalized device coordinates" as well as "clipping cuboid after projection
-// transform and perspective division". points in it are:
-// -1(left)   < X <= 1(right)
-// -1(bottom) < Y <= 1(top)
-//  0(near)   < Z <= 1(far)
-
-//
-// Constructor.
-//
-function NormalizedDeviceCoordinates() {
-    // No contents.
-}
-
-//
-// Static constants (after Object.freeze()).
-//
-NormalizedDeviceCoordinates.MIN_X = -1; // Left.
-NormalizedDeviceCoordinates.MAX_X =  1; // Right.
-NormalizedDeviceCoordinates.MIN_Y = -1; // Bottom.
-NormalizedDeviceCoordinates.MAX_Y =  1; // Top.
-NormalizedDeviceCoordinates.MIN_Z = -1; // Near.
-NormalizedDeviceCoordinates.MAX_Z =  1; // Far.
-
-Object.freeze(NormalizedDeviceCoordinates);
 
 //
 // Constructor.
@@ -2671,211 +2924,35 @@ Object.freeze(MouseButton);
 //
 // Constructor.
 //
-function Vector2D(_x, _y) {
-    //
-    this.x = _x;
-    this.y = _y;
-}
-
-//
-// Static constants (after Object.freeze()).
-//
-Vector2D.ELEMENT_COUNT = 2;
-
-//
-// Static methods.
-//
-Vector2D.fromArray = function(a) {
-    return new Vector2D(a[0], a[1]);
-};
-
-Vector2D.calculateUnitVectorOf = function(v) {
-    //
-    // Note:
-    // All XNA, SlimDX, and WPF don't react to the situation when sqrt = 0, such
-    // as zero vector's normalization. But finally I decide to code in the way as
-    // the book 'Essential Mathematics for Games and Interactive Applications' does.
-
-    var sqrt = Math.sqrt(v.x*v.x + v.y*v.y);
-
-    if (sqrt < MathHelper.EPSILON) {
-        //
-        // Note:
-        // Cybo doesn't throw a divide-by-zero exception when normalizing
-        // Vector2D, Vector2D, Vector4D, Quaternion.
-        /*
-        console.log('A divide-by-zero exception raised.');
-        */
-
-        return new Vector2D(0, 0);
-
-    } else {
-        //
-        var s = 1.0 / sqrt;
-        return new Vector2D(v.x*s, v.y*s);
-    }
-};
-
-Vector2D.negateVector = function (v) {
-    return new Vector2D(-v.x, -v.y);
-};
-
-Vector2D.addVectors = function(v1, v2) {
-    return new Vector2D(v1.x+v2.x, v1.y+v2.y);
-};
-
-Vector2D.subtractVectors = function(v1, v2) {
-    return new Vector2D(v1.x-v2.x, v1.y-v2.y);
-};
-
-Vector2D.calculateLengthOf = function(v) {
-    return Math.sqrt(v.x*v.x + v.y*v.y);
-};
-
-Vector2D.calculateLengthSquaredOf = function(v) {
-    return v.x*v.x + v.y*v.y;
-};
-
-Vector2D.areEqual = function(v1, v2) {
-    //
-    if ((v1 instanceof Vector2D) === false ||
-        (v2 instanceof Vector2D) === false) {
-        return false;
-    }
-
-    if (v1.x !== v2.x ||
-        v1.y !== v2.y) {
-        return false;
-    } else {
-        return true;
-    }
-};
-
-Object.freeze(Vector2D);
-
-//
-// Constructor.
-//
 function Plane() {
     // No contents.
 }
 
 Object.freeze(Plane);
 
-// Note:
-// OpenGL viewport's (X, Y) means the lower-left corner.
-// DirectX viewport's (X, Y) means the upper-left corner.
-
-// Note:
-// DirectX uses Viewport to set { left, top, width, height, minDepth(near), maxDepth(far) }
-// OpenGL uses gl.viewport() to set { left, bottom, width, height }
-// and gl.depthRange() to set { nearDepth, farDepth }
-
 //
 // Constructor.
 //
-function Viewport(_left, _bottom, _width, _height) {
-    //
-    this.left = _left;
-    this.bottom = _bottom;
-    this.width = _width;
-    this.height = _height;
-
-    //
-    // Properties.
-    //
-    Object.defineProperty(this, 'aspectRatio', {
-        get: function() { return _width / _height; }
-    });
-
-    //
-    // Privileged methods.
-    //
-    this.toNormalizedDeviceSpace = function(screenPosition) {
-        //
-        // Note:
-        // Because the input is already a 'screen position', that is, we don't have
-        // to worry about w (perspective division), the formula below converts the
-        // screen position directly to normalized device coordinates.
-
-        // Note:
-        // Besides, OpenGL has no half-pixel offset problem like DirectX 9, don't
-        // have to handle it.
-        /*
-        return new Vector2D (
-            // Part 1.
-            NormalizedDeviceCoordinates.MIN_X +
-            ((screenPosition.x - 0.5) / _width) *
-            (NormalizedDeviceCoordinates.MAX_X - NormalizedDeviceCoordinates.MIN_X),
-            // Part 2.
-            NormalizedDeviceCoordinates.MIN_Y +
-            ((screenPosition.y - 0.5) / _height) *
-            (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y)
-        );
-        */
-
-        return new Vector2D (
-            // Part 1.
-            NormalizedDeviceCoordinates.MIN_X +
-            (screenPosition.x / _width) *
-            (NormalizedDeviceCoordinates.MAX_X - NormalizedDeviceCoordinates.MIN_X),
-            // Part 2.
-            NormalizedDeviceCoordinates.MIN_Y +
-            (screenPosition.y / _height) *
-            (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y)
-        );
-        // :Note
-    };
-}
-
-Object.freeze(Viewport);
-
-//
-// Constructor.
-//
-function Xcene(_mainCanvas, _usesDefaultStyles) {
+function Xcene(_settings) {
     //
     try {
         //
-        if (document.body === undefined) {
-            throw 'document.body === undefined';
-        }
-
-        if (_mainCanvas === undefined) {
-            //
-            _mainCanvas = document.createElementNS (
-                'http://www.w3.org/1999/xhtml',
-                'canvas'
-            );
-
-            document.body.appendChild(_mainCanvas);
-        }
-
-        if (_usesDefaultStyles === undefined) {
-            _usesDefaultStyles = true;
-        }
+        Object.defineProperty(this, 'settings', {
+            get: function() { return _settings; }
+        });
         
         var _graphicsManager;
         var _assetManager;
-
-        Object.defineProperty(this, 'mainCanvas', {
-            get: function() { return _mainCanvas; }
-        });
 
         _graphicsManager = new GraphicsManager(this);
         Object.defineProperty(this, 'graphicsManager', {
             get: function() { return _graphicsManager; }
         });
-
+        
         _assetManager = new AssetManager(this);
         Object.defineProperty(this, 'assetManager', {
             get: function() { return _assetManager; }
         });
-
-        // Sets up the styles (if necessary).
-        if (_usesDefaultStyles === true) {
-            setUpStyles();
-        }
 
         // Sets up the timers.
         setUpTimers();
@@ -2896,34 +2973,6 @@ function Xcene(_mainCanvas, _usesDefaultStyles) {
     //
     // Private methods.
     //
-    function setUpStyles() {
-        //
-        // Note:
-        // This function is used to replace CSS below...
-        //
-        // body {
-        //     margin: 0;
-        //     background-color: #202020; /* = cybo.graphics.colors.DEFAULT_BACKGROUND*/
-        // }
-        //
-        // canvas {
-        //     width:   100vw;
-        //     height:  100vh;
-        //     display: block; /* prevents scrollbar */
-        // }
-
-        var style;
-
-        style = document.body.style;
-        style.margin = 0;
-        style.backgroundColor = '#202020'; // = cybo.graphics.colors.DEFAULT_BACKGROUND
-
-        style = _mainCanvas.style;
-        style.width = '100vw';
-        style.height = '100vh';
-        style.display = 'block';
-    }
-
     function setUpTimers() {
         //
         // Note:
@@ -2962,37 +3011,8 @@ function Xcene(_mainCanvas, _usesDefaultStyles) {
     // Event handlers.
     //
     function onResize() {
-        //
-        // Lookup the size the browser is displaying the canvas.
-        var width  = _mainCanvas.clientWidth;
-        var height = _mainCanvas.clientHeight;
-
-        // Check if the canvas is not the same size.
-        if (_mainCanvas.width  != width ||
-            _mainCanvas.height != height) {
-            //
-            // // Test:
-            // alert (
-            //     'resized!\n' +
-            //     'window.innerWidth = ' + window.innerWidth + ', '  + 'window.innerHeight = ' + window.innerHeight + '\n' +
-            //     'window.devicePixelRatio = ' + window.devicePixelRatio + '\n' +
-            //     'canvas.width = ' + _mainCanvas.width + ', '  + 'canvas.height = ' + _mainCanvas.height + '\n' +
-            //     'canvas.clientWidth = ' + _mainCanvas.clientWidth + ', '  + 'canvas.clientHeight = ' + _mainCanvas.clientHeight
-            // );
-            // // :Test
-            
-            // Make the canvas the same size
-            _mainCanvas.width  = width;
-            _mainCanvas.height = height;
-            
-            _graphicsManager.viewport = new Viewport (
-                // Part 1.
-                0, 0,
-                // Part 2.
-                _mainCanvas.width, _mainCanvas.height
-            );
-        }
-    }
+        _graphicsManager.resize();
+    }    
 
     // function onError(errorMsg, url, lineNumber) {
     //     //

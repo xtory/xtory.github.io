@@ -4,12 +4,14 @@ import { Colors }             from './colors';
 import { DepthBufferValues }  from './depth-buffer-values';
 import { MathHelper }         from '../math/helpers/math-helper';
 import { Matrix4x4 }          from '../math/4x4-matrix';
+import { Viewport }           from './viewport';
 
 //
 // Constructor.
 //
 function GraphicsManager(_xcene) {
     //
+    var _canvas;
     var _gl;
     var _pixelRatio;
     var _viewport;
@@ -21,6 +23,10 @@ function GraphicsManager(_xcene) {
     try {
         //
         _pixelRatio = window.devicePixelRatio;
+
+        setUpCanvas();
+
+        setUpStyles();
 
         setUpWebGLContext();
 
@@ -36,6 +42,10 @@ function GraphicsManager(_xcene) {
     //
     Object.defineProperty(this, 'xcene', {
         'get': function() { return _xcene; }
+    });
+
+    Object.defineProperty(this, 'canvas', {
+        'get': function() { return _canvas; }
     });
     
     Object.defineProperty(this, 'webGLContext', {
@@ -96,6 +106,61 @@ function GraphicsManager(_xcene) {
     //
     // Private methods.
     //
+    function setUpCanvas() {
+        //
+        if (_xcene.settings !== undefined &&
+            _xcene.settings.canvas !== undefined) {
+            //
+            _canvas = _xcene.settings.canvas;
+
+        } else {
+            //
+            if (document.body === undefined) {
+                throw 'document.body === undefined';
+            }
+
+            _canvas = document.createElementNS (
+                'http://www.w3.org/1999/xhtml',
+                'canvas'
+            );
+
+            document.body.appendChild(_canvas);
+        }
+    }
+
+    function setUpStyles() {
+        //
+        // Note:
+        // This function is used to replace CSS below...
+        //
+        // body {
+        //     margin: 0;
+        //     background-color: #202020; /* = cybo.graphics.colors.DEFAULT_BACKGROUND*/
+        // }
+        //
+        // canvas {
+        //     width:   100vw;
+        //     height:  100vh;
+        //     display: block; /* prevents scrollbar */
+        // }
+        //
+        if (_xcene.settings !== undefined &&
+            _xcene.settings.usesDefaultStyles === true) {
+            return;
+        }
+
+        var style;
+
+        style = document.body.style;
+        style.margin = 0;
+        style.backgroundColor = '#202020'; // = cybo.graphics.colors.DEFAULT_BACKGROUND
+
+        style = _canvas.style;
+        style.width = '100vw';
+        style.height = '100vh';
+        style.display = 'block';
+    }    
+
     function setUpWebGLContext() {
         //
         // Try to grab the standard context. If it fails, fallback to experimental.
@@ -103,10 +168,10 @@ function GraphicsManager(_xcene) {
         // Note:
         // IE11 only supports 'experimental-webgl'.
         //
-        _gl = _xcene.mainCanvas.getContext('webgl');
+        _gl = _canvas.getContext('webgl');
         if (_gl === null) {
             //
-            _gl = _xcene.mainCanvas.getContext('experimental-webgl');
+            _gl = _canvas.getContext('experimental-webgl');
             if (_gl !== null) {
                 //
                 console.log (
@@ -115,8 +180,8 @@ function GraphicsManager(_xcene) {
                     'That is, not all WebGL functionality may be supported, ' +
                     'and content may not run as expected.'
                 );
-            }
-            else {
+
+            } else {
                 //
                 alert (
                     'Unable to initialize WebGL. Your browser may not support it.'
@@ -198,6 +263,39 @@ function GraphicsManager(_xcene) {
     //
     // Privileged methods.
     //
+    this.resize = function() {
+        //
+        // Lookup the size the browser is displaying the canvas.
+        var width  = _canvas.clientWidth;
+        var height = _canvas.clientHeight;
+
+        // Check if the canvas is not the same size.
+        if (_canvas.width  != width ||
+            _canvas.height != height) {
+            //
+            // // Test:
+            // alert (
+            //     'resized!\n' +
+            //     'window.innerWidth = ' + window.innerWidth + ', '  + 'window.innerHeight = ' + window.innerHeight + '\n' +
+            //     'window.devicePixelRatio = ' + window.devicePixelRatio + '\n' +
+            //     'canvas.width = ' + _mainCanvas.width + ', '  + 'canvas.height = ' + _mainCanvas.height + '\n' +
+            //     'canvas.clientWidth = ' + _mainCanvas.clientWidth + ', '  + 'canvas.clientHeight = ' + _mainCanvas.clientHeight
+            // );
+            // // :Test
+            
+            // Make the canvas the same size
+            _canvas.width  = width;
+            _canvas.height = height;
+            
+            this.viewport = new Viewport (
+                // Part 1.
+                0, 0,
+                // Part 2.
+                _canvas.width, _canvas.height
+            );
+        }
+    }
+
     this.setUpVertexBuffer = function(buffer, items) {
         //
         _gl.bindBuffer (
@@ -219,7 +317,6 @@ function GraphicsManager(_xcene) {
             buffer
         );
 
-        //
         // Note:
         // DirectX supports 16-bit or 32-bit index buffers. But in this engine,
         // so far, only 16-bit index buffer is supported.
@@ -331,13 +428,17 @@ function GraphicsManager(_xcene) {
 
     this.setShaderAttribute = function(attributeLocation, buffer, size) {
         //
+        // Turns the 'generic' vertex attribute array on at a given index position.
+        // That is, this vertex attribute location (an 'index') doesn't belong to
+        // any specific shader program.
+        _gl.enableVertexAttribArray (
+            attributeLocation
+        );
+
+        // Binds the buffer before calling gl.vertexAttribPointer().
         _gl.bindBuffer (
             _gl.ARRAY_BUFFER,
             buffer
-        );
-
-        _gl.enableVertexAttribArray (
-            attributeLocation
         );
 
         _gl.vertexAttribPointer (
