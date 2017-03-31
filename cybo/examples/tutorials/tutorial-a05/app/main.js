@@ -4,7 +4,7 @@ function main() {
 
     var scene;
     var gl;
-    var shaderProgram;
+    var program;
     var vertexPositionAttributeLocation;
     var vertexColorAttributeLocation;
     var vertexTextureCoordinateAttributeLocation;
@@ -37,35 +37,35 @@ function main() {
     //
     function setUpShaders() {
         //
-        shaderProgram = scene.assetManager.setUpShaderProgram (
+        program = scene.assetManager.setUpProgram (
             Cybo.TransformedPositionColorTextureCoordinates.VERTEX_SHADER_SOURCE,
             Cybo.TransformedPositionColorTextureCoordinates.FRAGMENT_SHADER_SOURCE
         );
 
         vertexPositionAttributeLocation = (
-            scene.graphicsManager.getShaderAttributeLocation (
-                shaderProgram,
+            scene.graphicsManager.getAttributeLocation (
+                program,
                'vertexPosition'
             )
         );
 
         vertexColorAttributeLocation = (
-            scene.graphicsManager.getShaderAttributeLocation (
-                shaderProgram,
+            scene.graphicsManager.getAttributeLocation (
+                program,
                'vertexColor'
             )
         );
 
         vertexTextureCoordinateAttributeLocation = (
-            scene.graphicsManager.getShaderAttributeLocation (
-                shaderProgram,
+            scene.graphicsManager.getAttributeLocation (
+                program,
                'vertexTextureCoordinates'
             )
         );
 
         samplerUniformLocation = (
-            scene.graphicsManager.getShaderUniformLocation (
-                shaderProgram,
+            scene.graphicsManager.getUniformLocation (
+                program,
                'sampler'
             )
         );
@@ -97,28 +97,27 @@ function main() {
 
         setUpGeometries(p.x, p.y, size.x, size.y);
 
-        scene.graphicsManager.shaderProgram =
-            shaderProgram;
+        scene.graphicsManager.program = program;
 
-        scene.graphicsManager.setShaderAttribute (
+        scene.graphicsManager.setAttribute (
             vertexPositionAttributeLocation,
             vertexPositionBuffer,
             4
         );
 
-        scene.graphicsManager.setShaderAttribute (
+        scene.graphicsManager.setAttribute (
             vertexColorAttributeLocation,
             vertexColorBuffer,
             4
         );
 
-        scene.graphicsManager.setShaderAttribute (
+        scene.graphicsManager.setAttribute (
             vertexTextureCoordinateAttributeLocation,
             vertexTextureCoordinateBuffer,
             2
         );
 
-        scene.graphicsManager.setShaderSampler (
+        scene.graphicsManager.setSampler (
             samplerUniformLocation,
             mainTexture
         );
@@ -158,10 +157,11 @@ function main() {
                 item
             );
 
-            vertexPositions2.push(p.x);
-            vertexPositions2.push(p.y);
-            vertexPositions2.push(p.z);
-            vertexPositions2.push(1.0); // w.
+            // vertexPositions2.push(p.x);
+            // vertexPositions2.push(p.y);
+            // vertexPositions2.push(p.z);
+            // vertexPositions2.push(1.0);
+            vertexPositions2 = vertexPositions2.concat(p.toArray());
         }
 
         scene.graphicsManager.setUpVertexBuffer (

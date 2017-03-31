@@ -108,30 +108,30 @@ function AssetManager(_xcene) {
         return shader;
     }
 
-    function setUpShaderProgram(vertexShader, fragmentShader) {
+    function setUpProgram(vertexShader, fragmentShader) {
         //
-        var shaderProgram = _gl.createProgram();
+        var program = _gl.createProgram();
 
-        _gl.attachShader(shaderProgram, vertexShader);
-        _gl.attachShader(shaderProgram, fragmentShader);
+        _gl.attachShader(program, vertexShader);
+        _gl.attachShader(program, fragmentShader);
 
-        _gl.linkProgram(shaderProgram);
+        _gl.linkProgram(program);
 
-        if (_gl.getProgramParameter(shaderProgram, _gl.LINK_STATUS) === false)
+        if (_gl.getProgramParameter(program, _gl.LINK_STATUS) === false)
         {
             throw (
-                'Unable to initialize the shader program: ' +
-                _gl.getProgramInfoLog(shader)
+                'Unable to initialize the (shader) program: ' +
+                _gl.getProgramInfoLog(program)
             );
         }
         
-        return shaderProgram;
+        return program;
     }
     
     //
     // Privileged methods.
     //
-    this.setUpShaderProgram = function(vertexShaderSource, fragmentShaderSource) {
+    this.setUpProgram = function(vertexShaderSource, fragmentShaderSource) {
         //
         var vertexShader =
             loadShader(ShaderType.VERTEX_SHADER, vertexShaderSource);
@@ -139,10 +139,10 @@ function AssetManager(_xcene) {
         var fragmentShader =
             loadShader(ShaderType.FRAGMENT_SHADER, fragmentShaderSource);
 
-        return setUpShaderProgram(vertexShader, fragmentShader);
+        return setUpProgram(vertexShader, fragmentShader);
     };
 
-    this.setUpShaderProgramFromHtmlElements = function(vertexShaderId, fragmentShaderId) {
+    this.setUpProgramFromHtmlElements = function(vertexShaderId, fragmentShaderId) {
         //
         var vertexShader =
             loadShaderFromHtmlElement(ShaderType.VERTEX_SHADER, vertexShaderId);
@@ -150,7 +150,7 @@ function AssetManager(_xcene) {
         var fragmentShader =
             loadShaderFromHtmlElement(ShaderType.FRAGMENT_SHADER, fragmentShaderId);
 
-        return setUpShaderProgram(vertexShader, fragmentShader);
+        return setUpProgram(vertexShader, fragmentShader);
     };
 
     this.loadTexture2D = function(imageSourceUrl) {

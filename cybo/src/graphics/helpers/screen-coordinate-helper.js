@@ -2,7 +2,7 @@
 // NDC stands for 'normalized device coordinates'.
 
 import { NormalizedDeviceCoordinates  } from '../normalized-device-coordinates';
-import { Vector3D  } from '../../math/3d-vector';
+import { Vector4D  } from '../../math/4d-vector';
 
 //
 // Constructor.
@@ -25,7 +25,7 @@ ScreenCoordinateHelper.toClipSpace = function(viewport, p) {
     // Besides, OpenGL has no half-pixel offset problem like Direct3D 9, don't
     // have to handle it.
     /*
-    return new Vector2D (
+    return new Vector3D (
         // Part 1.
         NormalizedDeviceCoordinates.MIN_X +
         ((p.x - 0.5) / viewport.width) *
@@ -35,11 +35,13 @@ ScreenCoordinateHelper.toClipSpace = function(viewport, p) {
         ((p.y - 0.5) / viewport.height) *
         (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y),
         // Part 3.
-        p.z
+        p.z,
+        // Part 4.
+        1.0
     );
     */
 
-    return new Vector3D (
+    return new Vector4D (
         // Part 1.
         NormalizedDeviceCoordinates.MIN_X + // = -1
         (p.x / viewport.width) *
@@ -49,9 +51,11 @@ ScreenCoordinateHelper.toClipSpace = function(viewport, p) {
         (p.y / viewport.height) *
         (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y), // = 2
         // Part 3.
-        NormalizedDeviceCoordinates.MIN_Z + // -1
+        NormalizedDeviceCoordinates.MIN_Z + // = -1
         p.z *
-        (NormalizedDeviceCoordinates.MAX_Z - NormalizedDeviceCoordinates.MIN_Z) // = 2
+        (NormalizedDeviceCoordinates.MAX_Z - NormalizedDeviceCoordinates.MIN_Z), // = 2
+        // Part 4.
+        1.0 // w.
     );
     // :Note
 }

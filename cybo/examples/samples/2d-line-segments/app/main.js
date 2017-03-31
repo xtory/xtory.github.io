@@ -4,7 +4,7 @@ function main() {
 
     var scene;
     var gl;
-    var shaderProgram;
+    var program;
     var vertexPositionAttributeLocation;
     var vertexColorAttributeLocation;
     var vertexPositionBuffer;
@@ -31,21 +31,21 @@ function main() {
     //
     function setUpShaders() {
         //
-        shaderProgram = scene.assetManager.setUpShaderProgram (
+        program = scene.assetManager.setUpProgram (
             Cybo.TransformedPositionColor.VERTEX_SHADER_SOURCE,
             Cybo.TransformedPositionColor.FRAGMENT_SHADER_SOURCE
         );
 
         vertexPositionAttributeLocation = (
-            scene.graphicsManager.getShaderAttributeLocation (
-                shaderProgram,
+            scene.graphicsManager.getAttributeLocation (
+                program,
                'vertexPosition'
             )
         );
 
         vertexColorAttributeLocation = (
-            scene.graphicsManager.getShaderAttributeLocation (
-                shaderProgram,
+            scene.graphicsManager.getAttributeLocation (
+                program,
                'vertexColor'
             )
         );
@@ -63,8 +63,8 @@ function main() {
         );
 
         drawLineSegment (
-            new Cybo.Vector3D(p.x, p.y-150, 0),
-            new Cybo.Vector3D(p.x, p.y+150, 1),
+            new Cybo.Vector3D(p.x, p.y-200, 0),
+            new Cybo.Vector3D(p.x, p.y+200, 1),
             Cybo.Colors.PHOTOSHOP_DARK_BLUE,
             50
         );
@@ -90,16 +90,15 @@ function main() {
             screenThickness
         );
 
-        scene.graphicsManager.shaderProgram =
-            shaderProgram;
+        scene.graphicsManager.program = program;
 
-        scene.graphicsManager.setShaderAttribute (
+        scene.graphicsManager.setAttribute (
             vertexPositionAttributeLocation,
             vertexPositionBuffer,
             4
         );
 
-        scene.graphicsManager.setShaderAttribute (
+        scene.graphicsManager.setAttribute (
             vertexColorAttributeLocation,
             vertexColorBuffer,
             4
@@ -195,10 +194,7 @@ function main() {
                 item
             );
 
-            vertexPositions2.push(p.x);
-            vertexPositions2.push(p.y);
-            vertexPositions2.push(p.z);
-            vertexPositions2.push(1.0);
+            vertexPositions2 = vertexPositions2.concat(p.toArray());
         }
 
         scene.graphicsManager.setUpVertexBuffer (

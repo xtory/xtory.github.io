@@ -5,7 +5,7 @@ function main() {
     var scene;
     var gl;
     var camera;
-    var shaderProgram;
+    var program;
     var vertexPositionAttributeLocation;
     var transformUniformLocation;
     var vertexPositionBuffer;
@@ -50,21 +50,21 @@ function main() {
 
     function setUpShaders() {
         //
-        shaderProgram = scene.assetManager.setUpShaderProgram (
+        program = scene.assetManager.setUpProgram (
             Cybo.PositionOnly.VERTEX_SHADER_SOURCE,
             Cybo.PositionOnly.FRAGMENT_SHADER_SOURCE
         );
 
         vertexPositionAttributeLocation = (
-            scene.graphicsManager.getShaderAttributeLocation (
-                shaderProgram,
+            scene.graphicsManager.getAttributeLocation (
+                program,
                'vertexPosition'
             )
         );
         
         transformUniformLocation = (
-            scene.graphicsManager.getShaderUniformLocation (
-                shaderProgram,
+            scene.graphicsManager.getUniformLocation (
+                program,
                'transform'
             )
         );
@@ -97,10 +97,9 @@ function main() {
             new Cybo.Color(0.75, 0.5, 0.5, 1)
         );
 
-        scene.graphicsManager.shaderProgram =
-            shaderProgram;
+        scene.graphicsManager.program = program;
 
-        scene.graphicsManager.setShaderAttribute (
+        scene.graphicsManager.setAttribute (
             vertexPositionAttributeLocation,
             vertexPositionBuffer,
             3
@@ -108,7 +107,7 @@ function main() {
 
         camera.getTransform(transform);
 
-        scene.graphicsManager.setShaderUniform (
+        scene.graphicsManager.setUniform (
             transformUniformLocation,
             transform
         );

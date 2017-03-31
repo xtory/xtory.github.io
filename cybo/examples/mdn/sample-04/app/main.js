@@ -5,7 +5,7 @@ function main() {
     var scene;
     var gl;
     var camera;
-    var shaderProgram;
+    var program;
     var vertexPositionAttributeLocation;
     var vertexColorAttributeLocation;
     var transformUniformLocation;
@@ -61,28 +61,28 @@ function main() {
 
     function setUpShaders() {
         //
-        shaderProgram = scene.assetManager.setUpShaderProgram (
+        program = scene.assetManager.setUpProgram (
             Cybo.PositionColor.VERTEX_SHADER_SOURCE,
             Cybo.PositionColor.FRAGMENT_SHADER_SOURCE
         );
 
         vertexPositionAttributeLocation = (
-            scene.graphicsManager.getShaderAttributeLocation (
-                shaderProgram,
+            scene.graphicsManager.getAttributeLocation (
+                program,
                'vertexPosition'
             )
         );
         
         vertexColorAttributeLocation = (
-            scene.graphicsManager.getShaderAttributeLocation (
-                shaderProgram,
+            scene.graphicsManager.getAttributeLocation (
+                program,
                'vertexColor'
             )
         );
         
         transformUniformLocation = (
-            scene.graphicsManager.getShaderUniformLocation (
-                shaderProgram,
+            scene.graphicsManager.getUniformLocation (
+                program,
                'transform'
             )
         );
@@ -148,8 +148,7 @@ function main() {
             new Cybo.Color(0.75, 0.5, 0.5, 1)
         );
 
-        scene.graphicsManager.shaderProgram =
-            shaderProgram;
+        scene.graphicsManager.program = program;
 
         rotationY = (
             Cybo.MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES *
@@ -163,14 +162,14 @@ function main() {
 
         camera.getTransform(transform);
 
-        scene.graphicsManager.setShaderAttribute (
+        scene.graphicsManager.setAttribute (
             vertexPositionAttributeLocation,
             vertexPositionBuffer,
             3
         );
 
         // Left square.
-        scene.graphicsManager.setShaderAttribute (
+        scene.graphicsManager.setAttribute (
             vertexColorAttributeLocation,
             vertexColorBuffer,
             4
@@ -185,7 +184,7 @@ function main() {
         );
 
         // Right square.
-        scene.graphicsManager.setShaderAttribute (
+        scene.graphicsManager.setAttribute (
             vertexColorAttributeLocation,
             vertexColorBuffer2,
             4
@@ -214,7 +213,7 @@ function main() {
             modelMatrix2
         );
 
-        scene.graphicsManager.setShaderUniform (
+        scene.graphicsManager.setUniform (
             transformUniformLocation,
             transform2
         );

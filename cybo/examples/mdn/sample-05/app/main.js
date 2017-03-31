@@ -5,7 +5,7 @@ function main() {
     var scene;
     var gl;
     var camera;
-    var shaderProgram;
+    var program;
     var vertexPositionAttributeLocation;
     var vertexColorAttributeLocation;
     var transformUniformLocation;
@@ -71,28 +71,28 @@ function main() {
 
     function setUpShaders() {
         //
-        shaderProgram = scene.assetManager.setUpShaderProgram (
+        program = scene.assetManager.setUpProgram (
             Cybo.PositionColor.VERTEX_SHADER_SOURCE,
             Cybo.PositionColor.FRAGMENT_SHADER_SOURCE
         );
 
         vertexPositionAttributeLocation = (
-            scene.graphicsManager.getShaderAttributeLocation (
-                shaderProgram,
+            scene.graphicsManager.getAttributeLocation (
+                program,
                'vertexPosition'
             )
         );
 
         vertexColorAttributeLocation = (
-            scene.graphicsManager.getShaderAttributeLocation (
-                shaderProgram,
+            scene.graphicsManager.getAttributeLocation (
+                program,
                'vertexColor'
             )
         );
 
         transformUniformLocation = (
-            scene.graphicsManager.getShaderUniformLocation (
-                shaderProgram,
+            scene.graphicsManager.getUniformLocation (
+                program,
                'transform'
             )
         );
@@ -225,16 +225,15 @@ function main() {
             new Cybo.Color(0.75, 0.5, 0.5, 1)
         );
 
-        scene.graphicsManager.shaderProgram =
-            shaderProgram;
+        scene.graphicsManager.program = program;
 
-        scene.graphicsManager.setShaderAttribute (
+        scene.graphicsManager.setAttribute (
             vertexPositionAttributeLocation,
             vertexPositionBuffer,
             3
         );
 
-        scene.graphicsManager.setShaderAttribute (
+        scene.graphicsManager.setAttribute (
             vertexColorAttributeLocation,
             vertexColorBuffer,
             4
@@ -277,7 +276,7 @@ function main() {
             modelMatrix
         );
 
-        scene.graphicsManager.setShaderUniform (
+        scene.graphicsManager.setUniform (
             transformUniformLocation,
             transform
         );

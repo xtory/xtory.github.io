@@ -666,30 +666,30 @@ function AssetManager(_xcene) {
         return shader;
     }
 
-    function setUpShaderProgram(vertexShader, fragmentShader) {
+    function setUpProgram(vertexShader, fragmentShader) {
         //
-        var shaderProgram = _gl.createProgram();
+        var program = _gl.createProgram();
 
-        _gl.attachShader(shaderProgram, vertexShader);
-        _gl.attachShader(shaderProgram, fragmentShader);
+        _gl.attachShader(program, vertexShader);
+        _gl.attachShader(program, fragmentShader);
 
-        _gl.linkProgram(shaderProgram);
+        _gl.linkProgram(program);
 
-        if (_gl.getProgramParameter(shaderProgram, _gl.LINK_STATUS) === false)
+        if (_gl.getProgramParameter(program, _gl.LINK_STATUS) === false)
         {
             throw (
-                'Unable to initialize the shader program: ' +
-                _gl.getProgramInfoLog(shader)
+                'Unable to initialize the (shader) program: ' +
+                _gl.getProgramInfoLog(program)
             );
         }
         
-        return shaderProgram;
+        return program;
     }
     
     //
     // Privileged methods.
     //
-    this.setUpShaderProgram = function(vertexShaderSource, fragmentShaderSource) {
+    this.setUpProgram = function(vertexShaderSource, fragmentShaderSource) {
         //
         var vertexShader =
             loadShader(ShaderType.VERTEX_SHADER, vertexShaderSource);
@@ -697,10 +697,10 @@ function AssetManager(_xcene) {
         var fragmentShader =
             loadShader(ShaderType.FRAGMENT_SHADER, fragmentShaderSource);
 
-        return setUpShaderProgram(vertexShader, fragmentShader);
+        return setUpProgram(vertexShader, fragmentShader);
     };
 
-    this.setUpShaderProgramFromHtmlElements = function(vertexShaderId, fragmentShaderId) {
+    this.setUpProgramFromHtmlElements = function(vertexShaderId, fragmentShaderId) {
         //
         var vertexShader =
             loadShaderFromHtmlElement(ShaderType.VERTEX_SHADER, vertexShaderId);
@@ -708,7 +708,7 @@ function AssetManager(_xcene) {
         var fragmentShader =
             loadShaderFromHtmlElement(ShaderType.FRAGMENT_SHADER, fragmentShaderId);
 
-        return setUpShaderProgram(vertexShader, fragmentShader);
+        return setUpProgram(vertexShader, fragmentShader);
     };
 
     this.loadTexture2D = function(imageSourceUrl) {
@@ -2412,7 +2412,7 @@ function GraphicsManager(_xcene) {
     var _gl;
     var _pixelRatio;
     var _viewport;
-    var _shaderProgram;
+    var _program;
     var _clearColor;
     var _clearDepth;
     var _clearStencil;
@@ -2482,21 +2482,21 @@ function GraphicsManager(_xcene) {
         }
     });
     
-    Object.defineProperty(this, 'shaderProgram', {
+    Object.defineProperty(this, 'program', {
         //
         get: function() {
-            return _shaderProgram;
+            return _program;
         },
         
         set: function(value) {
             //
-            if (value === _shaderProgram)
+            if (value === _program)
             {
                 return;                
             }
             
-            _shaderProgram = value;
-            _gl.useProgram(_shaderProgram);
+            _program = value;
+            _gl.useProgram(_program);
         },
     });
 
@@ -2813,25 +2813,18 @@ function GraphicsManager(_xcene) {
     //
     // Accessors.
     //
-    this.getShaderAttributeLocation = function(shaderProgram, attributeName) {
+    this.getAttributeLocation = function(program, attributeName) {
         //
-        return _gl.getAttribLocation(shaderProgram, attributeName);
+        return _gl.getAttribLocation(program, attributeName);
     };
     
-    this.getShaderUniformLocation = function(shaderProgram, uniformName) {
+    this.getUniformLocation = function(program, uniformName) {
         //
-        return _gl.getUniformLocation(shaderProgram, uniformName);
+        return _gl.getUniformLocation(program, uniformName);
     };
 
-    this.setShaderAttribute = function(attributeLocation, buffer, size) {
+    this.setAttribute = function(attributeLocation, buffer, size) {
         //
-        // Turns the 'generic' vertex attribute array on at a given index position.
-        // That is, this vertex attribute location (an 'index') doesn't belong to
-        // any specific shader program.
-        _gl.enableVertexAttribArray (
-            attributeLocation
-        );
-
         // Binds the buffer before calling gl.vertexAttribPointer().
         _gl.bindBuffer (
             _gl.ARRAY_BUFFER,
@@ -2846,9 +2839,16 @@ function GraphicsManager(_xcene) {
             0,
             0
         );
+
+        // Turns the 'generic' vertex attribute array on at a given index position.
+        // That is, this vertex attribute location (an 'index') doesn't belong to
+        // any specific shader program.
+        _gl.enableVertexAttribArray (
+            attributeLocation
+        );
     };
 
-    this.setShaderSampler = function(samplerUniformLocation, texture, unit) {
+    this.setSampler = function(samplerUniformLocation, texture, unit) {
         //
         if (unit === undefined) {
             unit = GraphicsManager.DEFAULT_TEXTURE_UNIT;
@@ -2863,10 +2863,10 @@ function GraphicsManager(_xcene) {
         _gl.activeTexture(_gl.TEXTURE0 + unit);
         _gl.bindTexture(_gl.TEXTURE_2D, texture);
 
-        this.setShaderUniform(samplerUniformLocation, unit);
+        this.setUniform(samplerUniformLocation, unit);
     };
 
-    this.setShaderUniform = function(uniformLocation, value) {
+    this.setUniform = function(uniformLocation, value) {
         //
         if ((value instanceof Matrix4x4) === true) {
             //
@@ -2993,7 +2993,7 @@ ScreenCoordinateHelper.toClipSpace = function(viewport, p) {
     // Besides, OpenGL has no half-pixel offset problem like Direct3D 9, don't
     // have to handle it.
     /*
-    return new Vector2D (
+    return new Vector3D (
         // Part 1.
         NormalizedDeviceCoordinates.MIN_X +
         ((p.x - 0.5) / viewport.width) *
@@ -3003,11 +3003,13 @@ ScreenCoordinateHelper.toClipSpace = function(viewport, p) {
         ((p.y - 0.5) / viewport.height) *
         (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y),
         // Part 3.
-        p.z
+        p.z,
+        // Part 4.
+        1.0
     );
     */
 
-    return new Vector3D (
+    return new Vector4D (
         // Part 1.
         NormalizedDeviceCoordinates.MIN_X + // = -1
         (p.x / viewport.width) *
@@ -3017,9 +3019,11 @@ ScreenCoordinateHelper.toClipSpace = function(viewport, p) {
         (p.y / viewport.height) *
         (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y), // = 2
         // Part 3.
-        NormalizedDeviceCoordinates.MIN_Z + // -1
+        NormalizedDeviceCoordinates.MIN_Z + // = -1
         p.z *
-        (NormalizedDeviceCoordinates.MAX_Z - NormalizedDeviceCoordinates.MIN_Z) // = 2
+        (NormalizedDeviceCoordinates.MAX_Z - NormalizedDeviceCoordinates.MIN_Z), // = 2
+        // Part 4.
+        1.0 // w.
     );
     // :Note
 };

@@ -5,7 +5,7 @@ function main() {
     var scene;
     var gl;
     var camera;
-    var shaderProgram;
+    var program;
     var vertexPositionAttributeLocation;
     var vertexNormalAttributeLocation;
     var vertexTextureCoordinateAttributeLocation;
@@ -78,49 +78,49 @@ function main() {
 
     function setUpShaders() {
         //
-        shaderProgram = scene.assetManager.setUpShaderProgram (
+        program = scene.assetManager.setUpProgram (
             PhongShading.VERTEX_SHADER_SOURCE,
             PhongShading.FRAGMENT_SHADER_SOURCE
         );
 
         vertexPositionAttributeLocation = (
-            scene.graphicsManager.getShaderAttributeLocation (
-                shaderProgram,
+            scene.graphicsManager.getAttributeLocation (
+                program,
                'vertexPosition'
             )
         );
 
         vertexNormalAttributeLocation = (
-            scene.graphicsManager.getShaderAttributeLocation (
-                shaderProgram,
+            scene.graphicsManager.getAttributeLocation (
+                program,
                'vertexNormal'
             )
         );
         
         vertexTextureCoordinateAttributeLocation = (
-            scene.graphicsManager.getShaderAttributeLocation (
-                shaderProgram,
+            scene.graphicsManager.getAttributeLocation (
+                program,
                'vertexTextureCoordinates'
             )
         );
         
         transformUniformLocation = (
-            scene.graphicsManager.getShaderUniformLocation (
-                shaderProgram,
+            scene.graphicsManager.getUniformLocation (
+                program,
                'transform'
             )
         );
 
         transposeOfInverseOfModelMatrixUniformLocation = (
-            scene.graphicsManager.getShaderUniformLocation (
-                shaderProgram,
+            scene.graphicsManager.getUniformLocation (
+                program,
                'transposeOfInverseOfModelMatrix'
             )
         );
 
         samplerUniformLocation = (
-            scene.graphicsManager.getShaderUniformLocation (
-                shaderProgram,
+            scene.graphicsManager.getUniformLocation (
+                program,
                'sampler'
             )
         );
@@ -330,22 +330,21 @@ function main() {
             new Cybo.Color(0.75, 0.5, 0.5, 1)
         );
 
-        scene.graphicsManager.shaderProgram =
-            shaderProgram;
+        scene.graphicsManager.program = program;
 
-        scene.graphicsManager.setShaderAttribute (
+        scene.graphicsManager.setAttribute (
             vertexPositionAttributeLocation,
             vertexPositionBuffer,
             3
         );
 
-        scene.graphicsManager.setShaderAttribute (
+        scene.graphicsManager.setAttribute (
             vertexTextureCoordinateAttributeLocation,
             vertexTextureCoordinateBuffer,
             2
         );
 
-        scene.graphicsManager.setShaderAttribute (
+        scene.graphicsManager.setAttribute (
             vertexNormalAttributeLocation,
             vertexNormalBuffer,
             3
@@ -353,7 +352,7 @@ function main() {
 
         setUpTransform();
         
-        scene.graphicsManager.setShaderSampler (
+        scene.graphicsManager.setSampler (
             samplerUniformLocation,
             mainTexture
         );
@@ -392,7 +391,7 @@ function main() {
         transposeOfInverseOfModelMatrix =
             Cybo.Matrix4x4.transposeMatrix(transposeOfInverseOfModelMatrix);
         
-        scene.graphicsManager.setShaderUniform (
+        scene.graphicsManager.setUniform (
             transposeOfInverseOfModelMatrixUniformLocation,
             transposeOfInverseOfModelMatrix
         );
@@ -404,7 +403,7 @@ function main() {
             modelMatrix
         );
 
-        scene.graphicsManager.setShaderUniform (
+        scene.graphicsManager.setUniform (
             transformUniformLocation,
             transform
         );

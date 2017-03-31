@@ -5,7 +5,7 @@ function main() {
     var scene;
     var gl;
     var camera;
-    var shaderProgram;
+    var program;
     var vertexPositionAttributeLocation;
     var vertexTextureCoordinateAttributeLocation;
     var transformUniformLocation;
@@ -58,42 +58,42 @@ function main() {
 
     function setUpShaders() {
         //
-        shaderProgram = scene.assetManager.setUpShaderProgram (
+        program = scene.assetManager.setUpProgram (
             Multitexturing.VERTEX_SHADER_SOURCE,
             Multitexturing.FRAGMENT_SHADER_SOURCE
         );
 
         vertexPositionAttributeLocation = (
-            scene.graphicsManager.getShaderAttributeLocation (
-                shaderProgram,
+            scene.graphicsManager.getAttributeLocation (
+                program,
                'vertexPosition'
             )
         );
 
         vertexTextureCoordinateAttributeLocation = (
-            scene.graphicsManager.getShaderAttributeLocation (
-                shaderProgram,
+            scene.graphicsManager.getAttributeLocation (
+                program,
                'vertexTextureCoordinates'
             )
         );
 
         transformUniformLocation = (
-            scene.graphicsManager.getShaderUniformLocation (
-                shaderProgram,
+            scene.graphicsManager.getUniformLocation (
+                program,
                'transform'
             )
         );
 
         sampler1UniformLocation = (
-            scene.graphicsManager.getShaderUniformLocation (
-                shaderProgram,
+            scene.graphicsManager.getUniformLocation (
+                program,
                'sampler1'
             )
         );
 
         sampler2UniformLocation = (
-            scene.graphicsManager.getShaderUniformLocation (
-                shaderProgram,
+            scene.graphicsManager.getUniformLocation (
+                program,
                'sampler2'
             )
         );
@@ -151,16 +151,15 @@ function main() {
         //
         scene.graphicsManager.clear();
 
-        scene.graphicsManager.shaderProgram =
-            shaderProgram;
+        scene.graphicsManager.program = program;
 
-        scene.graphicsManager.setShaderAttribute (
+        scene.graphicsManager.setAttribute (
             vertexPositionAttributeLocation,
             vertexPositionBuffer,
             3
         );
 
-        scene.graphicsManager.setShaderAttribute (
+        scene.graphicsManager.setAttribute (
             vertexTextureCoordinateAttributeLocation,
             vertexTextureCoordinateBuffer,
             2
@@ -168,18 +167,18 @@ function main() {
 
         camera.getTransform(transform);
 
-        scene.graphicsManager.setShaderUniform (
+        scene.graphicsManager.setUniform (
             transformUniformLocation,
             transform
         );
         
-        scene.graphicsManager.setShaderSampler (
+        scene.graphicsManager.setSampler (
             sampler1UniformLocation,
             mainTexture,
             0
         );
 
-        scene.graphicsManager.setShaderSampler (
+        scene.graphicsManager.setSampler (
             sampler2UniformLocation,
             starburstTexture,
             1
