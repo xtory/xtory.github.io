@@ -63,17 +63,17 @@ function main() {
         );
 
         drawLineSegment (
-            new Cybo.Vector3D(p.x, p.y-150, -1),
-            new Cybo.Vector3D(p.x, p.y+150,  1),
+            new Cybo.Vector3D(p.x, p.y-150, 0),
+            new Cybo.Vector3D(p.x, p.y+150, 1),
             Cybo.Colors.PHOTOSHOP_DARK_BLUE,
-            35
+            50
         );
 
         drawLineSegment (
-            new Cybo.Vector3D(p.x-250, p.y, 0),
-            new Cybo.Vector3D(p.x+250, p.y, 0),
+            new Cybo.Vector3D(p.x-250, p.y, 0.5),
+            new Cybo.Vector3D(p.x+250, p.y, 0.5),
             Cybo.Colors.CADET_BLUE,
-            20
+            35
         );
     }
 
@@ -190,13 +190,14 @@ function main() {
             //
             var item = vertexPositions[i];
 
-            var p = viewport.toNormalizedDeviceSpace (
-                new Cybo.Vector2D(item.x, item.y)
+            var p = Cybo.ScreenCoordinateHelper.toClipSpace (
+                viewport,
+                item
             );
 
             vertexPositions2.push(p.x);
             vertexPositions2.push(p.y);
-            vertexPositions2.push(item.z);
+            vertexPositions2.push(p.z);
             vertexPositions2.push(1.0);
         }
 

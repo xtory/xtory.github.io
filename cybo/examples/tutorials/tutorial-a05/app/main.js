@@ -142,22 +142,26 @@ function main() {
         var halfHeight = h * 0.5;
 
         var vertexPositions = [
-            new Cybo.Vector2D(x+halfWidth, y-halfHeight),
-            new Cybo.Vector2D(x+halfWidth, y+halfHeight),
-            new Cybo.Vector2D(x-halfWidth, y-halfHeight),
-            new Cybo.Vector2D(x-halfWidth, y+halfHeight)
+            new Cybo.Vector3D(x+halfWidth, y-halfHeight, 0),
+            new Cybo.Vector3D(x+halfWidth, y+halfHeight, 0),
+            new Cybo.Vector3D(x-halfWidth, y-halfHeight, 0),
+            new Cybo.Vector3D(x-halfWidth, y+halfHeight, 0) 
         ];
 
         var vertexPositions2 = [];
         for (var i=0; i<vertexPositions.length; i++) {
             //
             var item = vertexPositions[i];
-            var p = viewport.toNormalizedDeviceSpace(item);
+
+            var p = Cybo.ScreenCoordinateHelper.toClipSpace (
+                viewport,
+                item
+            );
 
             vertexPositions2.push(p.x);
             vertexPositions2.push(p.y);
-            vertexPositions2.push(0); // z.
-            vertexPositions2.push(1); // w.
+            vertexPositions2.push(p.z);
+            vertexPositions2.push(1.0); // w.
         }
 
         scene.graphicsManager.setUpVertexBuffer (

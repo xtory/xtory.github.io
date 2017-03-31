@@ -6,6 +6,11 @@ import { GraphicsManager } from '../graphics/graphics-manager';
 //
 function Xcene(_settings) {
     //
+    // Note:
+    // 'settings' include...
+    // - canvas
+    // - usesDefaultStyles
+
     try {
         //
         Object.defineProperty(this, 'settings', {

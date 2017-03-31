@@ -2333,39 +2333,6 @@ DepthBufferValues.FAR_CLIP_PLANE  = 1.0; // = default zFar of gl.getParameter(gl
 Object.freeze(DepthBufferValues);
 
 // Note:
-// In OpenGL, there is a term called "Normalized Device Coordinates/Space". All
-// points in it are:
-// -1(left)   < X <= 1(right)
-// -1(bottom) < Y <= 1(top)
-// -1(near)   < Z <= 1(far)
-//
-// But in DirectX, there is no specific term for it. So I name it "(DirectX version
-// of) normalized device coordinates" as well as "clipping cuboid after projection
-// transform and perspective division". points in it are:
-// -1(left)   < X <= 1(right)
-// -1(bottom) < Y <= 1(top)
-//  0(near)   < Z <= 1(far)
-
-//
-// Constructor.
-//
-function NormalizedDeviceCoordinates() {
-    // No contents.
-}
-
-//
-// Static constants (after Object.freeze()).
-//
-NormalizedDeviceCoordinates.MIN_X = -1; // Left.
-NormalizedDeviceCoordinates.MAX_X =  1; // Right.
-NormalizedDeviceCoordinates.MIN_Y = -1; // Bottom.
-NormalizedDeviceCoordinates.MAX_Y =  1; // Top.
-NormalizedDeviceCoordinates.MIN_Z = -1; // Near.
-NormalizedDeviceCoordinates.MAX_Z =  1; // Far.
-
-Object.freeze(NormalizedDeviceCoordinates);
-
-// Note:
 // OpenGL viewport's (X, Y) means the lower-left corner.
 // DirectX viewport's (X, Y) means the upper-left corner.
 
@@ -2374,14 +2341,17 @@ Object.freeze(NormalizedDeviceCoordinates);
 // OpenGL uses gl.viewport() to set { left, bottom, width, height }
 // and gl.depthRange() to set { nearDepth, farDepth }
 
+// import { NormalizedDeviceCoordinates  } from './normalized-device-coordinates';
+// import { Vector2D  } from '../math/2d-vector';
+
 //
 // Constructor.
 //
 function Viewport(_left, _bottom, _width, _height) {
     //
-    this.left = _left;
+    this.left   = _left;
     this.bottom = _bottom;
-    this.width = _width;
+    this.width  = _width;
     this.height = _height;
 
     //
@@ -2391,44 +2361,44 @@ function Viewport(_left, _bottom, _width, _height) {
         get: function() { return _width / _height; }
     });
 
-    //
-    // Privileged methods.
-    //
-    this.toNormalizedDeviceSpace = function(screenPosition) {
-        //
-        // Note:
-        // Because the input is already a 'screen position', that is, we don't have
-        // to worry about w (perspective division), the formula below converts the
-        // screen position directly to normalized device coordinates.
+    // //
+    // // Privileged methods.
+    // //
+    // this.toNormalizedDeviceSpace = function(screenPosition) {
+    //     //
+    //     // Note:
+    //     // Because the input is already a 'screen position', that is, we don't have
+    //     // to worry about w (perspective division), the formula below converts the
+    //     // screen position directly to normalized device coordinates.
 
-        // Note:
-        // Besides, OpenGL has no half-pixel offset problem like DirectX 9, don't
-        // have to handle it.
-        /*
-        return new Vector2D (
-            // Part 1.
-            NormalizedDeviceCoordinates.MIN_X +
-            ((screenPosition.x - 0.5) / _width) *
-            (NormalizedDeviceCoordinates.MAX_X - NormalizedDeviceCoordinates.MIN_X),
-            // Part 2.
-            NormalizedDeviceCoordinates.MIN_Y +
-            ((screenPosition.y - 0.5) / _height) *
-            (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y)
-        );
-        */
+    //     // Note:
+    //     // Besides, OpenGL has no half-pixel offset problem like DirectX 9, don't
+    //     // have to handle it.
+    //     /*
+    //     return new Vector2D (
+    //         // Part 1.
+    //         NormalizedDeviceCoordinates.MIN_X +
+    //         ((screenPosition.x - 0.5) / _width) *
+    //         (NormalizedDeviceCoordinates.MAX_X - NormalizedDeviceCoordinates.MIN_X),
+    //         // Part 2.
+    //         NormalizedDeviceCoordinates.MIN_Y +
+    //         ((screenPosition.y - 0.5) / _height) *
+    //         (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y)
+    //     );
+    //     */
 
-        return new Vector2D (
-            // Part 1.
-            NormalizedDeviceCoordinates.MIN_X +
-            (screenPosition.x / _width) *
-            (NormalizedDeviceCoordinates.MAX_X - NormalizedDeviceCoordinates.MIN_X),
-            // Part 2.
-            NormalizedDeviceCoordinates.MIN_Y +
-            (screenPosition.y / _height) *
-            (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y)
-        );
-        // :Note
-    };
+    //     return new Vector2D (
+    //         // Part 1.
+    //         NormalizedDeviceCoordinates.MIN_X +
+    //         (screenPosition.x / _width) *
+    //         (NormalizedDeviceCoordinates.MAX_X - NormalizedDeviceCoordinates.MIN_X),
+    //         // Part 2.
+    //         NormalizedDeviceCoordinates.MIN_Y +
+    //         (screenPosition.y / _height) *
+    //         (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y)
+    //     );
+    //     // :Note
+    // }
 }
 
 Object.freeze(Viewport);
@@ -2925,6 +2895,63 @@ GraphicsManager.DEFAULT_TEXTURE_UNIT  = 0;
 
 Object.freeze(GraphicsManager);
 
+// Note:
+// NDC stands for 'normalized device coordinates'.
+
+// Note:
+// Projection transform converts positions from view space to 'clip space'. OpenGL
+// and Direct3D have slightly different rules for clip space. In OpenGL, everything
+// that is viewable must be within an axis-aligned cube such that the x, y, and
+// z components of its clip-space position are <= its corresponding w component.
+// This implies that -w <= x <= w, -w <= y <= w, -w <= z <= w. Direct3D has the
+// same clipping requirement for x and y, but the z requirement is 0 <= z <= w.
+
+// Note:
+// Clip coordinates are in the homogenous form of <x, y, z, w>, but we need to
+// compute a 2D position (an x and y pair) along with a depth value. Dividing x,
+// y, and z by w (, which is called 'perspective division') accomplishes this.
+// The resulting coordinates are called 'normalized device coordinates'. Now all
+// the visible geometric data lies in a cube with positions between <-1, -1, -1>
+// and <1, 1, 1> in OpenGL, and between <-1, -1, 0> and <1, 1, 1> in Direct3D.
+
+// Note:
+// We don't have to do perspective division ourselves, Direct3D/OpenGL do it for
+// us automatically in the pipeline. Besides, Direct3D/OpenGL converts positions
+// from NDC to screen space by 'viewport transform' automatically in the pipeline
+// as well.
+
+// Note:
+// For instance, the values we pass to gl_Position are not divided by w yet. OpenGL
+// takes care of 'perspective division' for us later in the pipeline.
+
+// Note:
+// Direct3D uses viewport transform; OpenGL uses viewport transform plus depth-
+// range transform to convert positions from NDC to screen space.
+
+// Note:
+// Conventionally, Direct3D and OpenGL's depth buffers both use 0.0 to represent
+// positions on the near clip plane; 1.0 to represent positions on the far clip
+// plane, as default values.
+
+//
+// Constructor.
+//
+function NormalizedDeviceCoordinates() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+NormalizedDeviceCoordinates.MIN_X = -1; // Left.
+NormalizedDeviceCoordinates.MAX_X =  1; // Right.
+NormalizedDeviceCoordinates.MIN_Y = -1; // Bottom.
+NormalizedDeviceCoordinates.MAX_Y =  1; // Top.
+NormalizedDeviceCoordinates.MIN_Z = -1; // Near.
+NormalizedDeviceCoordinates.MAX_Z =  1; // Far.
+
+Object.freeze(NormalizedDeviceCoordinates);
+
 //
 // Constructor.
 //
@@ -2941,6 +2968,63 @@ PrimitiveType.TRIANGLE_LIST  = 4; // = gl.TRIANGLES
 PrimitiveType.TRIANGLE_STRIP = 5; // = gl.TRIANGLE_STRIP
 
 Object.freeze(PrimitiveType);
+
+// Note:
+// NDC stands for 'normalized device coordinates'.
+
+//
+// Constructor.
+//
+function ScreenCoordinateHelper() {
+    // No contents.
+}
+
+//
+// Static methods.
+//
+ScreenCoordinateHelper.toClipSpace = function(viewport, p) {
+    //
+    // Note:
+    // Because the input is already a 'screen position', that is, we don't have
+    // to worry about the w component (which is related to 'perspective division').
+    // The formula below converts the screen position directly to clip space.
+
+    // Note:
+    // Besides, OpenGL has no half-pixel offset problem like Direct3D 9, don't
+    // have to handle it.
+    /*
+    return new Vector2D (
+        // Part 1.
+        NormalizedDeviceCoordinates.MIN_X +
+        ((p.x - 0.5) / viewport.width) *
+        (NormalizedDeviceCoordinates.MAX_X - NormalizedDeviceCoordinates.MIN_X),
+        // Part 2.
+        NormalizedDeviceCoordinates.MIN_Y +
+        ((p.y - 0.5) / viewport.height) *
+        (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y),
+        // Part 3.
+        p.z
+    );
+    */
+
+    return new Vector3D (
+        // Part 1.
+        NormalizedDeviceCoordinates.MIN_X + // = -1
+        (p.x / viewport.width) *
+        (NormalizedDeviceCoordinates.MAX_X - NormalizedDeviceCoordinates.MIN_X), // = 2
+        // Part 2.
+        NormalizedDeviceCoordinates.MIN_Y + // = -1
+        (p.y / viewport.height) *
+        (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y), // = 2
+        // Part 3.
+        NormalizedDeviceCoordinates.MIN_Z + // -1
+        p.z *
+        (NormalizedDeviceCoordinates.MAX_Z - NormalizedDeviceCoordinates.MIN_Z) // = 2
+    );
+    // :Note
+};
+
+Object.freeze(ScreenCoordinateHelper);
 
 // Note:
 // Texture Coordinates.
@@ -3051,6 +3135,11 @@ Object.freeze(Plane);
 //
 function Xcene(_settings) {
     //
+    // Note:
+    // 'settings' include...
+    // - canvas
+    // - usesDefaultStyles
+
     try {
         //
         Object.defineProperty(this, 'settings', {
@@ -3472,6 +3561,7 @@ exports.DepthBufferValues = DepthBufferValues;
 exports.GraphicsManager = GraphicsManager;
 exports.NormalizedDeviceCoordinates = NormalizedDeviceCoordinates;
 exports.PrimitiveType = PrimitiveType;
+exports.ScreenCoordinateHelper = ScreenCoordinateHelper;
 exports.ShaderType = ShaderType;
 exports.TextureCoordinateHelper = TextureCoordinateHelper;
 exports.ExceptionHelper = ExceptionHelper;

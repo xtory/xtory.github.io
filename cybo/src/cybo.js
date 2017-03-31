@@ -18,6 +18,7 @@ export { DepthBufferValues }                          from './graphics/depth-buf
 export { GraphicsManager }                            from './graphics/graphics-manager';
 export { NormalizedDeviceCoordinates }                from './graphics/normalized-device-coordinates';
 export { PrimitiveType }                              from './graphics/primitive-type';
+export { ScreenCoordinateHelper }                     from './graphics/helpers/screen-coordinate-helper';
 export { ShaderType }                                 from './graphics/fx/shader-type';
 export { TextureCoordinateHelper }                    from './graphics/helpers/texture-coordinate-helper';
 
