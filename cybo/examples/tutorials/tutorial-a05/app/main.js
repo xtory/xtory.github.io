@@ -4,14 +4,10 @@ function main() {
 
     var scene;
     var gl;
+    var vertexBuffers;
     var program;
-    var vertexPositionAttributeLocation;
-    var vertexColorAttributeLocation;
-    var vertexTextureCoordinateAttributeLocation;
-    var samplerUniformLocation;
-    var vertexPositionBuffer;
-    var vertexColorBuffer;
-    var vertexTextureCoordinateBuffer;
+    var attributeLocations;
+    var uniformLocations;
     var mainTexture;
 
     try {
@@ -19,9 +15,9 @@ function main() {
         scene = new Cybo.Xcene();
         gl = scene.graphicsManager.webGLContext;
 
-        setUpShaders();
-
         setUpTextures();
+
+        setUpShaders();
 
         scene.run(undefined, drawScene);
 
@@ -35,6 +31,14 @@ function main() {
     //
     // Functions.
     //
+    function setUpTextures() {
+        //
+        var url = // which is relative to index.html, not main.js
+            '../../assets/images/jeremy-mann/market-street.jpg';
+
+        mainTexture = scene.assetManager.loadTexture2D(url);
+    }
+
     function setUpShaders() {
         //
         program = scene.assetManager.setUpProgram (
@@ -42,41 +46,31 @@ function main() {
             Cybo.TransformedPositionColorTextureCoordinates.FRAGMENT_SHADER_SOURCE
         );
 
-        vertexPositionAttributeLocation = (
-            scene.graphicsManager.getAttributeLocation (
+        attributeLocations = {
+            //
+            vertexPosition: scene.graphicsManager.getAttributeLocation (
                 program,
                'vertexPosition'
-            )
-        );
+            ),
 
-        vertexColorAttributeLocation = (
-            scene.graphicsManager.getAttributeLocation (
+            vertexColor: scene.graphicsManager.getAttributeLocation (
                 program,
                'vertexColor'
-            )
-        );
+            ),
 
-        vertexTextureCoordinateAttributeLocation = (
-            scene.graphicsManager.getAttributeLocation (
+            vertexTextureCoordinates: scene.graphicsManager.getAttributeLocation (
                 program,
                'vertexTextureCoordinates'
             )
-        );
+        };
 
-        samplerUniformLocation = (
-            scene.graphicsManager.getUniformLocation (
+        uniformLocations = {
+            //
+            sampler: scene.graphicsManager.getUniformLocation (
                 program,
                'sampler'
             )
-        );
-    }
-
-    function setUpTextures() {
-        //
-        var url = // which is relative to index.html, not main.js
-            '../../assets/images/jeremy-mann/market-street.jpg';
-
-        mainTexture = scene.assetManager.loadTexture2D(url);
+        };
     }
 
     function drawScene() {
@@ -100,25 +94,25 @@ function main() {
         scene.graphicsManager.program = program;
 
         scene.graphicsManager.setAttribute (
-            vertexPositionAttributeLocation,
-            vertexPositionBuffer,
+            attributeLocations.vertexPosition,
+            vertexBuffers.position,
             4
         );
 
         scene.graphicsManager.setAttribute (
-            vertexColorAttributeLocation,
-            vertexColorBuffer,
+            attributeLocations.vertexColor,
+            vertexBuffers.color,
             4
         );
 
         scene.graphicsManager.setAttribute (
-            vertexTextureCoordinateAttributeLocation,
-            vertexTextureCoordinateBuffer,
+            attributeLocations.vertexTextureCoordinates,
+            vertexBuffers.textureCoordinates,
             2
         );
 
         scene.graphicsManager.setSampler (
-            samplerUniformLocation,
+            uniformLocations.sampler,
             mainTexture
         );
 
@@ -131,12 +125,17 @@ function main() {
 
     function setUpGeometries(x, y, w, h) {
         //
-        // Vertex positions.
-        //
+        vertexBuffers = {
+            position: gl.createBuffer(),
+            color: gl.createBuffer(),
+            textureCoordinates: gl.createBuffer()
+        };
+
         var viewport = scene.graphicsManager.viewport;
 
-        vertexPositionBuffer = gl.createBuffer();
-            
+        //
+        // Vertex positions.
+        //
         var halfWidth = w * 0.5;
         var halfHeight = h * 0.5;
 
@@ -157,23 +156,17 @@ function main() {
                 item
             );
 
-            // vertexPositions2.push(p.x);
-            // vertexPositions2.push(p.y);
-            // vertexPositions2.push(p.z);
-            // vertexPositions2.push(1.0);
             vertexPositions2 = vertexPositions2.concat(p.toArray());
         }
 
         scene.graphicsManager.setUpVertexBuffer (
-            vertexPositionBuffer,
+            vertexBuffers.position,
             vertexPositions2
         );
 
         //
         // Vertex colors.
         //
-        vertexColorBuffer = gl.createBuffer();
-
         var vertexColors = [];
 
         for (var i=0; i<4; i++) {
@@ -184,15 +177,13 @@ function main() {
         }
 
         scene.graphicsManager.setUpVertexBuffer (
-            vertexColorBuffer,
+            vertexBuffers.color,
             vertexColors
         );
 
         //
         // Vertex texture coordinates.
         //
-        vertexTextureCoordinateBuffer = gl.createBuffer();
-            
         var vertexTextureCoordinates = [
             1.0, 0.0,
             1.0, 1.0,
@@ -201,7 +192,7 @@ function main() {
         ];
 
         scene.graphicsManager.setUpVertexBuffer (
-            vertexTextureCoordinateBuffer,
+            vertexBuffers.textureCoordinates,
             vertexTextureCoordinates
         );
     } 

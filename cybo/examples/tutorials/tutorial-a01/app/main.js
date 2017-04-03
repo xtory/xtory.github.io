@@ -5,12 +5,10 @@ function main() {
     var scene;
     var gl;
     var camera;
+    var vertexBuffers;
     var program;
-    var vertexPositionAttributeLocation;
-    var vertexColorAttributeLocation;
-    var transformUniformLocation;
-    var vertexPositionBuffer;
-    var vertexColorBuffer;
+    var attributeLocations;
+    var uniformLocations;
     var sineEase;
     var transform;
 
@@ -21,9 +19,9 @@ function main() {
         
         setUpCamera();
 
-        setUpShaders();
-
         setUpGeometries();
+
+        setUpShaders();
 
         gl.disable(gl.CULL_FACE);
 
@@ -56,41 +54,16 @@ function main() {
         );
     }
 
-    function setUpShaders() {
-        //
-        program = scene.assetManager.setUpProgram (
-            Cybo.PositionColor.VERTEX_SHADER_SOURCE,
-            Cybo.PositionColor.FRAGMENT_SHADER_SOURCE
-        );
-
-        vertexPositionAttributeLocation = (
-            scene.graphicsManager.getAttributeLocation (
-                program,
-               'vertexPosition'
-            )
-        );
-        
-        vertexColorAttributeLocation = (
-            scene.graphicsManager.getAttributeLocation (
-                program,
-               'vertexColor'
-            )
-        );
-        
-        transformUniformLocation = (
-            scene.graphicsManager.getUniformLocation (
-                program,
-               'transform'
-            )
-        );
-    }
-
     function setUpGeometries() {
+        //
+        vertexBuffers = {
+            position: gl.createBuffer(),
+            color: gl.createBuffer()
+        };
+
         //
         // Vertex positions.
         //
-        vertexPositionBuffer = gl.createBuffer();
-
         var vertexPositions = [
               0,  225, 0,
            -250, -150, 0,
@@ -98,15 +71,13 @@ function main() {
         ];
 
         scene.graphicsManager.setUpVertexBuffer (
-            vertexPositionBuffer,
+            vertexBuffers.position,
             vertexPositions
         );
 
         //
         // Vertex colors.
         //
-        vertexColorBuffer = gl.createBuffer();
-
         var vertexColors = [].concat (
             Cybo.Colors.PHOTOSHOP_DARK_RED.toArray(),
             Cybo.Colors.PHOTOSHOP_DARK_GREEN.toArray(),
@@ -114,9 +85,37 @@ function main() {
         );
 
         scene.graphicsManager.setUpVertexBuffer (
-            vertexColorBuffer,
+            vertexBuffers.color,
             vertexColors
         );
+    }
+
+    function setUpShaders() {
+        //
+        program = scene.assetManager.setUpProgram (
+            Cybo.PositionColor.VERTEX_SHADER_SOURCE,
+            Cybo.PositionColor.FRAGMENT_SHADER_SOURCE
+        );
+
+        attributeLocations = {
+            //
+            vertexPosition: scene.graphicsManager.getAttributeLocation (
+                program,
+               'vertexPosition'
+            ),
+
+            vertexColor: scene.graphicsManager.getAttributeLocation (
+                program,
+               'vertexColor'
+            )
+        };
+        
+        uniformLocations = {
+            transform: scene.graphicsManager.getUniformLocation (
+                program,
+               'transform'
+            )
+        };
     }
 
     function drawScene() {
@@ -126,14 +125,14 @@ function main() {
         scene.graphicsManager.program = program;
 
         scene.graphicsManager.setAttribute (
-            vertexPositionAttributeLocation,
-            vertexPositionBuffer,
+            attributeLocations.vertexPosition,
+            vertexBuffers.position,
             3
         );
 
         scene.graphicsManager.setAttribute (
-            vertexColorAttributeLocation,
-            vertexColorBuffer,
+            attributeLocations.vertexColor,
+            vertexBuffers.color,
             4
         );
         
@@ -164,7 +163,7 @@ function main() {
         );
 
         scene.graphicsManager.setUniform (
-            transformUniformLocation,
+            uniformLocations.transform,
             transform
         );
     }    

@@ -5,13 +5,10 @@ function main() {
     var scene;
     var gl;
     var camera;
+    var vertexBuffers;
     var program;
-    var vertexPositionAttributeLocation;
-    var vertexTextureCoordinateAttributeLocation;
-    var transformUniformLocation;
-    var samplerUniformLocation;
-    var vertexPositionBuffer;
-    var vertexTextureCoordinateBuffer;
+    var attributeLocations;
+    var uniformLocations;
     var transform;
     var mainTexture;
 
@@ -22,11 +19,11 @@ function main() {
 
         setUpCamera();
 
-        setUpShaders();
-
         setUpGeometries(0, 0, 500, 500);
 
         setUpTextures();
+
+        setUpShaders();
 
         gl.enable(gl.BLEND);
 
@@ -61,48 +58,16 @@ function main() {
         );
     }
 
-    function setUpShaders() {
-        //
-        program = scene.assetManager.setUpProgram (
-            Cybo.PositionTextureCoordinates.VERTEX_SHADER_SOURCE,
-            Cybo.PositionTextureCoordinates.FRAGMENT_SHADER_SOURCE
-        );
-
-        vertexPositionAttributeLocation = (
-            scene.graphicsManager.getAttributeLocation (
-                program,
-               'vertexPosition'
-            )
-        );
-
-        vertexTextureCoordinateAttributeLocation = (
-            scene.graphicsManager.getAttributeLocation (
-                program,
-               'vertexTextureCoordinates'
-            )
-        );
-
-        transformUniformLocation = (
-            scene.graphicsManager.getUniformLocation (
-                program,
-               'transform'
-            )
-        );
-
-        samplerUniformLocation = (
-            scene.graphicsManager.getUniformLocation (
-                program,
-                'sampler'
-            )
-        );
-    }
-
     function setUpGeometries(x, y, w, h) {
+        //
+        vertexBuffers = {
+            position: gl.createBuffer(),
+            textureCoordinates: gl.createBuffer()
+        };
+
         //
         // Vertex positions.
         //
-        vertexPositionBuffer = gl.createBuffer();
-
         var halfWidth = w * 0.5;
         var halfHeight = h * 0.5;
 
@@ -114,15 +79,13 @@ function main() {
         ];        
 
         scene.graphicsManager.setUpVertexBuffer (
-            vertexPositionBuffer,
+            vertexBuffers.position,
             vertexPositions
         );
 
         //
         // Vertex texture coordinates.
         //
-        vertexTextureCoordinateBuffer = gl.createBuffer();
-            
         var vertexTextureCoordinates = [
             1.0, 0.0,
             1.0, 1.0,
@@ -131,7 +94,7 @@ function main() {
         ];
 
         scene.graphicsManager.setUpVertexBuffer (
-            vertexTextureCoordinateBuffer,
+            vertexBuffers.textureCoordinates,
             vertexTextureCoordinates
         );
     }
@@ -144,6 +107,40 @@ function main() {
         mainTexture = scene.assetManager.loadTexture2D(url);
     }
 
+    function setUpShaders() {
+        //
+        program = scene.assetManager.setUpProgram (
+            Cybo.PositionTextureCoordinates.VERTEX_SHADER_SOURCE,
+            Cybo.PositionTextureCoordinates.FRAGMENT_SHADER_SOURCE
+        );
+
+        attributeLocations = {
+            //
+            vertexPosition: scene.graphicsManager.getAttributeLocation (
+                program,
+               'vertexPosition'
+            ),
+
+            vertexTextureCoordinates: scene.graphicsManager.getAttributeLocation (
+                program,
+               'vertexTextureCoordinates'
+            )
+        };
+
+        uniformLocations = {
+            //
+            transform: scene.graphicsManager.getUniformLocation (
+                program,
+               'transform'
+            ),
+
+            sampler: scene.graphicsManager.getUniformLocation (
+                program,
+               'sampler'
+            )
+        };
+    }
+
     function drawScene() {
         //
         scene.graphicsManager.clear();
@@ -151,26 +148,26 @@ function main() {
         scene.graphicsManager.program = program;
 
         scene.graphicsManager.setAttribute (
-            vertexPositionAttributeLocation,
-            vertexPositionBuffer,
+            attributeLocations.vertexPosition,
+            vertexBuffers.position,
             3
         );
 
         scene.graphicsManager.setAttribute (
-            vertexTextureCoordinateAttributeLocation,
-            vertexTextureCoordinateBuffer,
+            attributeLocations.vertexTextureCoordinates,
+            vertexBuffers.textureCoordinates,
             2
         );
 
         camera.getTransform(transform);
 
         scene.graphicsManager.setUniform (
-            transformUniformLocation,
+            uniformLocations.transform,
             transform
         );
         
         scene.graphicsManager.setSampler (
-            samplerUniformLocation,
+            uniformLocations.sampler,
             mainTexture
         );
 

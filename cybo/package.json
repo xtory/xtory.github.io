@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/xtory/xtory.github.io#readme",
   "devDependencies": {
-    "rollup": "^0.41.4",
+    "rollup": "^0.41.6",
     "uglify": "^0.1.5"
   }
 }

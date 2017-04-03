@@ -4,11 +4,9 @@ function main() {
 
     var scene;
     var gl;
+    var vertexBuffers;
     var program;
-    var vertexPositionAttributeLocation;
-    var vertexColorAttributeLocation;
-    var vertexPositionBuffer;
-    var vertexColorBuffer;
+    var attributeLocations;
 
     try {
         //
@@ -36,19 +34,18 @@ function main() {
             Cybo.TransformedPositionColor.FRAGMENT_SHADER_SOURCE
         );
 
-        vertexPositionAttributeLocation = (
-            scene.graphicsManager.getAttributeLocation (
+        attributeLocations = {
+            //
+            vertexPosition: scene.graphicsManager.getAttributeLocation (
                 program,
                'vertexPosition'
-            )
-        );
+            ),
 
-        vertexColorAttributeLocation = (
-            scene.graphicsManager.getAttributeLocation (
+            vertexColor: scene.graphicsManager.getAttributeLocation (
                 program,
                'vertexColor'
             )
-        );
+        };
     }
 
     function drawScene() {
@@ -93,14 +90,14 @@ function main() {
         scene.graphicsManager.program = program;
 
         scene.graphicsManager.setAttribute (
-            vertexPositionAttributeLocation,
-            vertexPositionBuffer,
+            attributeLocations.vertexPosition,
+            vertexBuffers.position,
             4
         );
 
         scene.graphicsManager.setAttribute (
-            vertexColorAttributeLocation,
-            vertexColorBuffer,
+            attributeLocations.vertexColor,
+            vertexBuffers.color,
             4
         );
 
@@ -117,13 +114,16 @@ function main() {
         color,
         screenThickness
     ){
+        vertexBuffers = {
+            position: gl.createBuffer(),
+            color: gl.createBuffer()
+        };
+
+        var viewport = scene.graphicsManager.viewport;
+
         //
         // Vertex positions.
         //
-        var viewport = scene.graphicsManager.viewport;
-
-        vertexPositionBuffer = gl.createBuffer();
-
         var p1 = screenPosition1.xy;
         var p2 = screenPosition2.xy;
 
@@ -198,15 +198,13 @@ function main() {
         }
 
         scene.graphicsManager.setUpVertexBuffer (
-            vertexPositionBuffer,
+            vertexBuffers.position,
             vertexPositions2
         );
 
         //
         // Vertex colors.
         //
-        vertexColorBuffer = gl.createBuffer();
-
         var vertexColors = [];
 
         for (var i=0; i<4; i++) {
@@ -217,7 +215,7 @@ function main() {
         }
 
         scene.graphicsManager.setUpVertexBuffer (
-            vertexColorBuffer,
+            vertexBuffers.color,
             vertexColors
         );
     } 
