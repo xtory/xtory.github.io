@@ -39,12 +39,12 @@ function AssetManager(_xcene) {
         _gl.compileShader(shader);
 
         // See if it compiled successfully
-        if (_gl.getShaderParameter(shader, _gl.COMPILE_STATUS) === false)
-        {
-            throw (
-                'An error occurred compiling the shaders: ' +
-                _gl.getShaderInfoLog(shader)
-            );
+        if (_gl.getShaderParameter(shader, _gl.COMPILE_STATUS) === false) {
+            //
+            var log = _gl.getShaderInfoLog(shader);
+            _gl.deleteShader(shader);
+
+            throw 'An error occurred compiling the shaders: ' + log;
         }
 
         return shader;
@@ -97,12 +97,12 @@ function AssetManager(_xcene) {
         _gl.compileShader(shader);
 
         // See if it compiled successfully
-        if (_gl.getShaderParameter(shader, _gl.COMPILE_STATUS) === false)
-        {
-            throw (
-                'An error occurred compiling the shaders: ' +
-                _gl.getShaderInfoLog(shader)
-            );
+        if (_gl.getShaderParameter(shader, _gl.COMPILE_STATUS) === false) {
+            //
+            var log = _gl.getShaderInfoLog(shader);
+            _gl.deleteShader(shader);
+
+            throw 'An error occurred compiling the shaders: ' + log;
         }
 
         return shader;
@@ -117,12 +117,12 @@ function AssetManager(_xcene) {
 
         _gl.linkProgram(program);
 
-        if (_gl.getProgramParameter(program, _gl.LINK_STATUS) === false)
-        {
-            throw (
-                'Unable to initialize the (shader) program: ' +
-                _gl.getProgramInfoLog(program)
-            );
+        if (_gl.getProgramParameter(program, _gl.LINK_STATUS) === false) {
+            //
+            var log = _gl.getProgramInfoLog(program);
+            _gl.deleteProgram(program);
+
+            throw 'Unable to initialize the (shader) program: ' + log;
         }
         
         return program;

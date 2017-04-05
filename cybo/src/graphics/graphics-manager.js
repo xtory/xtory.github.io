@@ -52,9 +52,9 @@ function GraphicsManager(_xcene) {
         get: function() { return _gl; }
     });
 
-    Object.defineProperty(this, 'pixelRatio', {
-        get: function() { return _pixelRatio; }
-    });
+    // Object.defineProperty(this, 'pixelRatio', {
+    //     get: function() { return _pixelRatio; }
+    // });
 
     Object.defineProperty(this, 'viewport', {
         //
@@ -263,6 +263,9 @@ function GraphicsManager(_xcene) {
     //
     // Privileged methods.
     //
+
+    // Test:
+    /*
     this.resize = function() {
         //
         // Lookup the size the browser is displaying the canvas.
@@ -295,6 +298,30 @@ function GraphicsManager(_xcene) {
             );
         }
     }
+    */
+
+    this.resize = function() {
+        //
+        var displayWidth  = Math.floor(_canvas.clientWidth  * _pixelRatio);
+        var displayHeight = Math.floor(_canvas.clientHeight * _pixelRatio);
+
+        // Check if the canvas is not the same size.
+        if (_canvas.width  != displayWidth ||
+            _canvas.height != displayHeight) {
+            //
+            // Make the canvas the same size
+            _canvas.width  = displayWidth;
+            _canvas.height = displayHeight;
+            
+            this.viewport = new Viewport (
+                // Part 1.
+                0, 0,
+                // Part 2.
+                _canvas.width, _canvas.height
+            );
+        }
+    }
+    // :Test
 
     this.setUpVertexBuffer = function(buffer, items) {
         //

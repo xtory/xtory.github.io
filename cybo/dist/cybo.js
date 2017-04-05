@@ -597,12 +597,12 @@ function AssetManager(_xcene) {
         _gl.compileShader(shader);
 
         // See if it compiled successfully
-        if (_gl.getShaderParameter(shader, _gl.COMPILE_STATUS) === false)
-        {
-            throw (
-                'An error occurred compiling the shaders: ' +
-                _gl.getShaderInfoLog(shader)
-            );
+        if (_gl.getShaderParameter(shader, _gl.COMPILE_STATUS) === false) {
+            //
+            var log = _gl.getShaderInfoLog(shader);
+            _gl.deleteShader(shader);
+
+            throw 'An error occurred compiling the shaders: ' + log;
         }
 
         return shader;
@@ -655,12 +655,12 @@ function AssetManager(_xcene) {
         _gl.compileShader(shader);
 
         // See if it compiled successfully
-        if (_gl.getShaderParameter(shader, _gl.COMPILE_STATUS) === false)
-        {
-            throw (
-                'An error occurred compiling the shaders: ' +
-                _gl.getShaderInfoLog(shader)
-            );
+        if (_gl.getShaderParameter(shader, _gl.COMPILE_STATUS) === false) {
+            //
+            var log = _gl.getShaderInfoLog(shader);
+            _gl.deleteShader(shader);
+
+            throw 'An error occurred compiling the shaders: ' + log;
         }
 
         return shader;
@@ -675,12 +675,12 @@ function AssetManager(_xcene) {
 
         _gl.linkProgram(program);
 
-        if (_gl.getProgramParameter(program, _gl.LINK_STATUS) === false)
-        {
-            throw (
-                'Unable to initialize the (shader) program: ' +
-                _gl.getProgramInfoLog(program)
-            );
+        if (_gl.getProgramParameter(program, _gl.LINK_STATUS) === false) {
+            //
+            var log = _gl.getProgramInfoLog(program);
+            _gl.deleteProgram(program);
+
+            throw 'Unable to initialize the (shader) program: ' + log;
         }
         
         return program;
@@ -2449,9 +2449,9 @@ function GraphicsManager(_xcene) {
         get: function() { return _gl; }
     });
 
-    Object.defineProperty(this, 'pixelRatio', {
-        get: function() { return _pixelRatio; }
-    });
+    // Object.defineProperty(this, 'pixelRatio', {
+    //     get: function() { return _pixelRatio; }
+    // });
 
     Object.defineProperty(this, 'viewport', {
         //
@@ -2660,6 +2660,9 @@ function GraphicsManager(_xcene) {
     //
     // Privileged methods.
     //
+
+    // Test:
+    /*
     this.resize = function() {
         //
         // Lookup the size the browser is displaying the canvas.
@@ -2691,7 +2694,31 @@ function GraphicsManager(_xcene) {
                 _canvas.width, _canvas.height
             );
         }
+    }
+    */
+
+    this.resize = function() {
+        //
+        var displayWidth  = Math.floor(_canvas.clientWidth  * _pixelRatio);
+        var displayHeight = Math.floor(_canvas.clientHeight * _pixelRatio);
+
+        // Check if the canvas is not the same size.
+        if (_canvas.width  != displayWidth ||
+            _canvas.height != displayHeight) {
+            //
+            // Make the canvas the same size
+            _canvas.width  = displayWidth;
+            _canvas.height = displayHeight;
+            
+            this.viewport = new Viewport (
+                // Part 1.
+                0, 0,
+                // Part 2.
+                _canvas.width, _canvas.height
+            );
+        }
     };
+    // :Test
 
     this.setUpVertexBuffer = function(buffer, items) {
         //
