@@ -5,17 +5,11 @@ function main() {
     var scene;
     var gl;
     var camera;
-    var program;
-    var vertexPositionAttributeLocation;
-    var vertexNormalAttributeLocation;
-    var vertexTextureCoordinateAttributeLocation;
-    var transformUniformLocation;
-    var transposeOfInverseOfModelMatrixUniformLocation;
-    var samplerUniformLocation;
-    var vertexPositionBuffer;
-    var vertexNormalBuffer;
-    var vertexTextureCoordinateBuffer;
+    var vertexBuffers;
     var indexBuffer;
+    var program;
+    var attributeLocations;
+    var uniformLocations;
     var sineEase;
     var sineEase2;
     var transform;
@@ -28,31 +22,17 @@ function main() {
 
         setUpCamera();
         
-        setUpShaders();
-
         setUpGeometries();
 
         setUpTextures();
 
+        setUpShaders();
+
+        setUpTime();
+
         transform = Cybo.Matrix4x4.createIdentityMatrix();
 
-        sineEase = new Cybo.SineEase (
-            Cybo.EaseMode.EASE_IN_OUT,
-            3750,
-            true
-        );
-
-        sineEase.start();
-
-        sineEase2 = new Cybo.SineEase (
-            Cybo.EaseMode.EASE_IN_OUT,
-            7500,
-            true
-        );
-
-        sineEase2.start();
-
-        scene.run(updateScene, drawScene);
+        scene.run(undefined, drawScene);
 
     } catch (e) {
         //
@@ -76,62 +56,17 @@ function main() {
         );
     }
 
-    function setUpShaders() {
-        //
-        program = scene.assetManager.setUpProgram (
-            PhongShading.VERTEX_SHADER_SOURCE,
-            PhongShading.FRAGMENT_SHADER_SOURCE
-        );
-
-        vertexPositionAttributeLocation = (
-            scene.graphicsManager.getAttributeLocation (
-                program,
-               'vertexPosition'
-            )
-        );
-
-        vertexNormalAttributeLocation = (
-            scene.graphicsManager.getAttributeLocation (
-                program,
-               'vertexNormal'
-            )
-        );
-        
-        vertexTextureCoordinateAttributeLocation = (
-            scene.graphicsManager.getAttributeLocation (
-                program,
-               'vertexTextureCoordinates'
-            )
-        );
-        
-        transformUniformLocation = (
-            scene.graphicsManager.getUniformLocation (
-                program,
-               'transform'
-            )
-        );
-
-        transposeOfInverseOfModelMatrixUniformLocation = (
-            scene.graphicsManager.getUniformLocation (
-                program,
-               'transposeOfInverseOfModelMatrix'
-            )
-        );
-
-        samplerUniformLocation = (
-            scene.graphicsManager.getUniformLocation (
-                program,
-               'sampler'
-            )
-        );
-    }
-
     function setUpGeometries() {
+        //
+        vertexBuffers = {
+            position: gl.createBuffer(),
+            normal: gl.createBuffer(),
+            textureCoordinates: gl.createBuffer()
+        };
+
         //
         // Vertex positions.
         //
-        vertexPositionBuffer = gl.createBuffer();
-
         var vertexPositions = [
             //
             // Front face.
@@ -172,15 +107,13 @@ function main() {
         ];
 
         scene.graphicsManager.setUpVertexBuffer (
-            vertexPositionBuffer,
+            vertexBuffers.position,
             vertexPositions
         );
 
         // 
         // Vertex normals.
         //
-        vertexNormalBuffer = gl.createBuffer();
-
         var vertexNormals = [
             //
             // Front face.
@@ -221,15 +154,13 @@ function main() {
         ];
 
         scene.graphicsManager.setUpVertexBuffer (
-            vertexNormalBuffer,
+            vertexBuffers.normal,
             vertexNormals
         );
 
         //
         // Vertex texture coordinates.
         //
-        vertexTextureCoordinateBuffer = gl.createBuffer();
-
         var vertexTextureCoordinates = [
             //
             // Front face.
@@ -270,7 +201,7 @@ function main() {
         ];
 
         scene.graphicsManager.setUpVertexBuffer (
-            vertexTextureCoordinateBuffer,
+            vertexBuffers.textureCoordinates,
             vertexTextureCoordinates
         );
 
@@ -320,40 +251,97 @@ function main() {
         mainTexture = scene.assetManager.loadTexture2D(url);
     }
 
-    function updateScene() {
+    function setUpShaders() {
+        //
+        program = scene.assetManager.setUpProgram (
+            PhongShading.VERTEX_SHADER_SOURCE,
+            PhongShading.FRAGMENT_SHADER_SOURCE
+        );
+
+        attributeLocations = {
+            //
+            vertexPosition: scene.graphicsManager.getAttributeLocation (
+                program,
+               'vertexPosition'
+            ),
+
+            vertexNormal: scene.graphicsManager.getAttributeLocation (
+                program,
+               'vertexNormal'
+            ),
+            
+            vertexTextureCoordinates: scene.graphicsManager.getAttributeLocation (
+                program,
+               'vertexTextureCoordinates'
+            )
+        };
+        
+        uniformLocations = {
+            //
+            transform: scene.graphicsManager.getUniformLocation (
+                program,
+               'transform'
+            ),
+
+            transposeOfInverseOfModelMatrix: scene.graphicsManager.getUniformLocation (
+                program,
+               'transposeOfInverseOfModelMatrix'
+            ),
+
+            sampler: scene.graphicsManager.getUniformLocation (
+                program,
+               'sampler'
+            )
+        };
+    }
+
+    function setUpTime() {
+        //
+        sineEase = new Cybo.SineEase (
+            Cybo.EaseMode.EASE_IN_OUT,
+            3750,
+            true
+        );
+
+        sineEase.start();
+
+        sineEase2 = new Cybo.SineEase (
+            Cybo.EaseMode.EASE_IN_OUT,
+            7500,
+            true
+        );
+
+        sineEase2.start();
     }
 
     function drawScene() {
         //
-        scene.graphicsManager.clear (
-            undefined,
-            new Cybo.Color(0.75, 0.5, 0.5, 1)
-        );
+        scene.graphicsManager.clear();
 
         scene.graphicsManager.program = program;
 
         scene.graphicsManager.setAttribute (
-            vertexPositionAttributeLocation,
-            vertexPositionBuffer,
+            attributeLocations.vertexPosition,
+            vertexBuffers.position,
             3
         );
 
         scene.graphicsManager.setAttribute (
-            vertexTextureCoordinateAttributeLocation,
-            vertexTextureCoordinateBuffer,
+            attributeLocations.vertexTextureCoordinates,
+            vertexBuffers.textureCoordinates,
             2
         );
 
         scene.graphicsManager.setAttribute (
-            vertexNormalAttributeLocation,
-            vertexNormalBuffer,
+            attributeLocations.vertexNormal,
+            vertexBuffers.normal,
             3
         );
 
         setUpTransform();
         
         scene.graphicsManager.setSampler (
-            samplerUniformLocation,
+            uniformLocations.sampler,
             mainTexture
         );
 
@@ -392,7 +380,7 @@ function main() {
             Cybo.Matrix4x4.transposeMatrix(transposeOfInverseOfModelMatrix);
         
         scene.graphicsManager.setUniform (
-            transposeOfInverseOfModelMatrixUniformLocation,
+            uniformLocations.transposeOfInverseOfModelMatrix,
             transposeOfInverseOfModelMatrix
         );
 
@@ -404,7 +392,7 @@ function main() {
         );
 
         scene.graphicsManager.setUniform (
-            transformUniformLocation,
+            uniformLocations.transform,
             transform
         );
     }
