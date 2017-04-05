@@ -10,6 +10,7 @@ function Xcene(_settings) {
     // 'settings' include...
     // - canvas
     // - usesDefaultStyles
+    // - handlesHDDpiDisplay
 
     try {
         //

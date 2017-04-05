@@ -2699,8 +2699,16 @@ function GraphicsManager(_xcene) {
 
     this.resize = function() {
         //
-        var displayWidth  = Math.floor(_canvas.clientWidth  * _pixelRatio);
-        var displayHeight = Math.floor(_canvas.clientHeight * _pixelRatio);
+        var displayWidth, displayHeight;
+
+        if (_xcene.settings !== undefined &&
+            _xcene.settings.handlesHDDpiDisplay === true) {
+            displayWidth  = Math.floor(_canvas.clientWidth  * _pixelRatio);
+            displayHeight = Math.floor(_canvas.clientHeight * _pixelRatio);
+        } else {
+            displayWidth  = _canvas.clientWidth;
+            displayHeight = _canvas.clientHeight;
+        }
 
         // Check if the canvas is not the same size.
         if (_canvas.width  != displayWidth ||
@@ -3170,6 +3178,7 @@ function Xcene(_settings) {
     // 'settings' include...
     // - canvas
     // - usesDefaultStyles
+    // - handlesHDDpiDisplay
 
     try {
         //
