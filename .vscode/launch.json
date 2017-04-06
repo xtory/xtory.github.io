@@ -8,7 +8,7 @@
             "name": "tutorials/tutorial-a01",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/cybo/examples/tutorials/tutorial-a01/index.html",
+            "file": "${workspaceRoot}/g2l/examples/tutorials/tutorial-a01/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
@@ -17,7 +17,7 @@
             "name": "tutorials/tutorial-a02",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/cybo/examples/tutorials/tutorial-a02/index.html",
+            "file": "${workspaceRoot}/g2l/examples/tutorials/tutorial-a02/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
@@ -26,7 +26,7 @@
             "name": "tutorials/tutorial-a03",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/cybo/examples/tutorials/tutorial-a03/index.html",
+            "file": "${workspaceRoot}/g2l/examples/tutorials/tutorial-a03/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
@@ -35,7 +35,7 @@
             "name": "tutorials/tutorial-a04",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/cybo/examples/tutorials/tutorial-a04/index.html",
+            "file": "${workspaceRoot}/g2l/examples/tutorials/tutorial-a04/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
@@ -44,7 +44,7 @@
             "name": "tutorials/tutorial-a05",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/cybo/examples/tutorials/tutorial-a05/index.html",
+            "file": "${workspaceRoot}/g2l/examples/tutorials/tutorial-a05/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
@@ -53,7 +53,7 @@
             "name": "tutorials/tutorial-b01",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/cybo/examples/tutorials/tutorial-b01/index.html",
+            "file": "${workspaceRoot}/g2l/examples/tutorials/tutorial-b01/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
@@ -62,16 +62,7 @@
             "name": "samples/inputs",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/cybo/examples/samples/inputs/index.html",
-            "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
-            "runtimeArgs": [
-                "-allow-file-access-from-files"
-            ]
-        }, {
-            "name": "samples/inputs2",
-            "type": "chrome",
-            "request": "launch",
-            "file": "${workspaceRoot}/cybo/examples/samples/inputs2/index.html",
+            "file": "${workspaceRoot}/g2l/examples/samples/inputs/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
@@ -80,7 +71,7 @@
             "name": "samples/2d-line-segments",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/cybo/examples/samples/2d-line-segments/index.html",
+            "file": "${workspaceRoot}/g2l/examples/samples/2d-line-segments/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
