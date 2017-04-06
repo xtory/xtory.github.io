@@ -44,5 +44,6 @@ export { Xcene }                                      from './scenes/xcene';
 
 // Time.
 export { EaseMode }                                   from './time/ease-mode';
+export { Fps }                                        from './time/fps';
 export { SineEase }                                   from './time/sine-ease';
 export { Stopwatch }                                  from './time/stopwatch';

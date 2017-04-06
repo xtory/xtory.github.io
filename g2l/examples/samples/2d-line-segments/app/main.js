@@ -10,6 +10,12 @@ function main() {
     var program;
     var attributeLocations;
 
+    // FPS.
+    var leftTexts;
+    var fps;
+    var then;
+    var lastFps;
+
     try {
         //
         scene = new g2l.Xcene();
@@ -23,6 +29,8 @@ function main() {
         gl = scene.graphicsManager.webGLContext;
 
         setUpShaders();
+
+        setUpFps();
 
         scene.run(undefined, drawScene);
 
@@ -55,6 +63,14 @@ function main() {
                'vertexColor'
             )
         };
+    }
+
+    function setUpFps() {
+        //
+        leftTexts = document.getElementById("leftTexts");
+        fps = new g2l.Fps();
+        then = (new Date()).getTime() * 0.001;
+        lastFps = 0;
     }
 
     function drawScene() {
@@ -92,6 +108,8 @@ function main() {
             g2l.Colors.CADET_BLUE,
             35
         );
+
+        drawFps();
     }
 
     function drawLineSegment (
@@ -238,5 +256,22 @@ function main() {
             vertexBuffers.color,
             vertexColors
         );
-    } 
+    }
+
+    function drawFps() {
+        //
+        // Compute the elapsed time since the last rendered frame in seconds.
+        var now = (new Date()).getTime() * 0.001;
+        var elapsedTime = now - then;
+        then = now;
+
+        // Update the FPS counter.
+        fps.update(elapsedTime);
+
+        var fps2 = fps.average;
+        if (fps2 !== lastFps) {
+            leftTexts.innerHTML = 'FPS: ' + fps2;
+            lastFps = fps2;
+        }
+    }
 }

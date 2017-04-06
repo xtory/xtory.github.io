@@ -20,6 +20,12 @@ function main() {
     var lastTouchDistanceSqured;
     var backgroundColor;
 
+    // FPS.
+    var leftTexts;
+    var fps;
+    var then;
+    var lastFps;
+
     try {
         //
         scene = new g2l.Xcene();
@@ -30,6 +36,8 @@ function main() {
         setUpGeometries();
 
         setUpShaders();
+
+        setUpFps();
 
         hookEvents();
 
@@ -212,6 +220,14 @@ function main() {
             )
         };
     }
+
+    function setUpFps() {
+        //
+        leftTexts = document.getElementById("leftTexts");
+        fps = new g2l.Fps();
+        then = (new Date()).getTime() * 0.001;
+        lastFps = 0;
+    }
     
     function hookEvents() {
         //
@@ -268,6 +284,25 @@ function main() {
             g2l.PrimitiveType.TRIANGLE_LIST,
             36
         );
+
+        drawFps();
+    }
+
+    function drawFps() {
+        //
+        // Compute the elapsed time since the last rendered frame in seconds.
+        var now = (new Date()).getTime() * 0.001;
+        var elapsedTime = now - then;
+        then = now;
+
+        // Update the FPS counter.
+        fps.update(elapsedTime);
+
+        var fps2 = fps.average;
+        if (fps2 !== lastFps) {
+            leftTexts.innerHTML = 'FPS: ' + fps2;
+            lastFps = fps2;
+        }
     }
 
     //
@@ -291,6 +326,8 @@ function main() {
                 break;
             }
         }
+
+        event.preventDefault();
     }
 
     function onMouseMove(event) {
@@ -309,6 +346,8 @@ function main() {
 
             rotateModel(offset);
         }
+
+        event.preventDefault();
     }
 
     function onMouseUp(event) {
@@ -324,15 +363,21 @@ function main() {
                 break;
             }
         }
+
+        event.preventDefault();
     }
     
     function onMouseWheel(event) {
         //
         camera.zoom(event.wheelDelta);
+
+        event.preventDefault();
     }
 
     function onKeyDown(event) {
         changeBackground();
+
+        event.preventDefault();
     }
 
     function onKeyUp(event) {
@@ -347,6 +392,8 @@ function main() {
         //     }
         // }
         changeBackground();
+
+        event.preventDefault();
     }
 
     // function onTouchStart(event) {
@@ -407,6 +454,8 @@ function main() {
                 break;
             }
         }
+
+        event.preventDefault();
     }    
 
     // function onTouchMove(event) {
@@ -432,8 +481,6 @@ function main() {
         // if (event.touches.length < 1) {
         //     return;
         // }
-
-        event.preventDefault() 
 
         switch (event.touches.length) {
             //
@@ -486,16 +533,22 @@ function main() {
                 break;
             }
         }
+
+        event.preventDefault();
     }    
 
     function onTouchCancel(event) {
         //alert('touchcancel!');
+
+        event.preventDefault();
     }    
 
     function onTouchEnd(event) {
         //alert('touchend!');
         // isTouch1ing = false;
         // isTouch2ing = false;
+
+        event.preventDefault();
     }
 
     function rotateModel(offset) {
