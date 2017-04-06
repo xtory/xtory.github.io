@@ -17,7 +17,7 @@ npm run build
 
 ---
 
-If Cybo uses ES6 in the future, the steps below are how to use babel:
+If this engine uses ES6 in the future, the steps below are how to use babel:
 
 6. npm install --save-dev rollup-plugin-babel
 

@@ -68,6 +68,15 @@
                 "-allow-file-access-from-files"
             ]
         }, {
+            "name": "samples/inputs2",
+            "type": "chrome",
+            "request": "launch",
+            "file": "${workspaceRoot}/cybo/examples/samples/inputs2/index.html",
+            "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
+            "runtimeArgs": [
+                "-allow-file-access-from-files"
+            ]
+        }, {
             "name": "samples/2d-line-segments",
             "type": "chrome",
             "request": "launch",

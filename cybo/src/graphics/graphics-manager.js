@@ -1,10 +1,18 @@
-import { ClearOptions  }      from './clear-options';
-import { Color  }             from './color';
-import { Colors }             from './colors';
-import { DepthBufferValues }  from './depth-buffer-values';
-import { MathHelper }         from '../math/helpers/math-helper';
-import { Matrix4x4 }          from '../math/4x4-matrix';
-import { Viewport }           from './viewport';
+// Note:
+// This engine doesn't handle window's resize event anymore. See the article...
+// https://webglfundamentals.org/webgl/lessons/webgl-anti-patterns.html
+
+// Note:
+// See viewport.js to understand the relationship between viewport and canvas.
+
+import { CanvasCoordinateHelper  } from './helpers/canvas-coordinate-helper';
+import { ClearOptions  }           from './clear-options';
+import { Color  }                  from './color';
+import { Colors }                  from './colors';
+import { DepthBufferValues }       from './depth-buffer-values';
+import { MathHelper }              from '../math/helpers/math-helper';
+import { Matrix4x4 }               from '../math/4x4-matrix';
+import { Vector2D }                from '../math/2d-vector';
 
 //
 // Constructor.
@@ -13,8 +21,6 @@ function GraphicsManager(_xcene) {
     //
     var _canvas;
     var _gl;
-    var _pixelRatio;
-    var _viewport;
     var _program;
     var _clearColor;
     var _clearDepth;
@@ -22,8 +28,6 @@ function GraphicsManager(_xcene) {
 
     try {
         //
-        _pixelRatio = window.devicePixelRatio;
-
         setUpCanvas();
 
         setUpStyles();
@@ -52,38 +56,37 @@ function GraphicsManager(_xcene) {
         get: function() { return _gl; }
     });
 
-    // Object.defineProperty(this, 'pixelRatio', {
-    //     get: function() { return _pixelRatio; }
-    // });
-
+    // Note:
+    // This engine uses a constant viewport. To get viewport size for displaying
+    // (nor for drawing), use canvas.clientWidth and clientHeight instead. If we
+    // want to change x, y of the viewport, use gl to change it manually. This
+    // engine doesn't handle it for us.
+    /*
     Object.defineProperty(this, 'viewport', {
         //
         'get': function() {
-            return _viewport;
+            //
+            var value = _gl.getParameter(_gl.VIEWPORT);
+
+            var p1 = new Vector2D(value[0], value[1]);
+            var p2 = new Vector2D(value[2], value[3]);
+            var p3 = CanvasCoordinateHelper.fromDrawToDisplaySpace(_canvas, p1);
+            var p4 = CanvasCoordinateHelper.fromDrawToDisplaySpace(_canvas, p2);
+
+            return new Viewport(p3.x, p3.y, p4.x, p4.y);
         },
 
         'set': function(value) {
             //
-            if (value !== undefined &&
-                _viewport !== undefined &&
-                value.left   === _viewport.left &&
-                value.bottom === _viewport.bottom &&
-                value.width  === _viewport.width &&
-                value.height === _viewport.height) {
-                return;
-            }
+            var p1 = new Vector2D(value[0], value[1]);
+            var p2 = new Vector2D(value[2], value[3]);
+            var p3 = CanvasCoordinateHelper.fromDisplayToDrawSpace(_canvas, p1);
+            var p4 = CanvasCoordinateHelper.fromDisplayToDrawSpace(_canvas, p2);
 
-            _viewport = value;
-
-            // Resets the gl's viewport as well.
-            _gl.viewport (
-                // Part 1.
-                _viewport.left, _viewport.bottom,
-                // Part 2.
-                _viewport.width, _viewport.height
-            );
+            _gl.viewport(p3.x, p3.y, p4.x, p4.y);
         }
     });
+    */
     
     Object.defineProperty(this, 'program', {
         //
@@ -124,6 +127,9 @@ function GraphicsManager(_xcene) {
                 'canvas'
             );
 
+            _canvas.width = GraphicsManager.CANVAS_WIDTH;
+            _canvas.height = GraphicsManager.CANVAS_HEIGHT;
+
             document.body.appendChild(_canvas);
         }
     }
@@ -133,31 +139,20 @@ function GraphicsManager(_xcene) {
         // Note:
         // This function is used to replace CSS below...
         //
-        // body {
-        //     margin: 0;
-        //     background-color: #202020; /* = cybo.graphics.colors.DEFAULT_BACKGROUND*/
-        // }
-        //
         // canvas {
-        //     width:   100vw;
-        //     height:  100vh;
+        //     width:   100%;
+        //     height:  100%;
         //     display: block; /* prevents scrollbar */
         // }
         //
         if (_xcene.settings !== undefined &&
-            _xcene.settings.usesDefaultStyles === true) {
+            _xcene.settings.usesDefaultStyles === false) {
             return;
         }
 
-        var style;
-
-        style = document.body.style;
-        style.margin = 0;
-        style.backgroundColor = '#202020'; // = cybo.graphics.colors.DEFAULT_BACKGROUND
-
-        style = _canvas.style;
-        style.width = '100vw';
-        style.height = '100vh';
+        var style = _canvas.style;
+        style.width = '100%';
+        style.height = '100%';
         style.display = 'block';
     }    
 
@@ -263,74 +258,6 @@ function GraphicsManager(_xcene) {
     //
     // Privileged methods.
     //
-
-    // Test:
-    /*
-    this.resize = function() {
-        //
-        // Lookup the size the browser is displaying the canvas.
-        var width  = _canvas.clientWidth;
-        var height = _canvas.clientHeight;
-
-        // Check if the canvas is not the same size.
-        if (_canvas.width  != width ||
-            _canvas.height != height) {
-            //
-            // // Test:
-            // alert (
-            //     'resized!\n' +
-            //     'window.innerWidth = ' + window.innerWidth + ', '  + 'window.innerHeight = ' + window.innerHeight + '\n' +
-            //     'window.devicePixelRatio = ' + window.devicePixelRatio + '\n' +
-            //     'canvas.width = ' + _mainCanvas.width + ', '  + 'canvas.height = ' + _mainCanvas.height + '\n' +
-            //     'canvas.clientWidth = ' + _mainCanvas.clientWidth + ', '  + 'canvas.clientHeight = ' + _mainCanvas.clientHeight
-            // );
-            // // :Test
-            
-            // Make the canvas the same size
-            _canvas.width  = width;
-            _canvas.height = height;
-            
-            this.viewport = new Viewport (
-                // Part 1.
-                0, 0,
-                // Part 2.
-                _canvas.width, _canvas.height
-            );
-        }
-    }
-    */
-
-    this.resize = function() {
-        //
-        var displayWidth, displayHeight;
-
-        if (_xcene.settings !== undefined &&
-            _xcene.settings.handlesHDDpiDisplay === true) {
-            displayWidth  = Math.floor(_canvas.clientWidth  * _pixelRatio);
-            displayHeight = Math.floor(_canvas.clientHeight * _pixelRatio);
-        } else {
-            displayWidth  = _canvas.clientWidth;
-            displayHeight = _canvas.clientHeight;
-        }
-
-        // Check if the canvas is not the same size.
-        if (_canvas.width  != displayWidth ||
-            _canvas.height != displayHeight) {
-            //
-            // Make the canvas the same size
-            _canvas.width  = displayWidth;
-            _canvas.height = displayHeight;
-            
-            this.viewport = new Viewport (
-                // Part 1.
-                0, 0,
-                // Part 2.
-                _canvas.width, _canvas.height
-            );
-        }
-    }
-    // :Test
-
     this.setUpVertexBuffer = function(buffer, items) {
         //
         _gl.bindBuffer (
@@ -523,6 +450,9 @@ function GraphicsManager(_xcene) {
 //
 // Static constants (after Object.freeze()).
 //
+GraphicsManager.CANVAS_WIDTH = 1024;
+GraphicsManager.CANVAS_HEIGHT = 1024;
+
 GraphicsManager.DEFAULT_CLEAR_OPTIONS =
     ClearOptions.COLOR_BUFFER | ClearOptions.DEPTH_BUFFER;
 

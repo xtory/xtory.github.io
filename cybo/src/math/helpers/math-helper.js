@@ -13,7 +13,7 @@
 
 // Note:
 // SlimDX, Fly3D both define this value as 1e-06f and XNA uses 1e-04f, 1e-05f, or
-// 1e-06f (in difference places) as epsilons. Cybo selects 1e-05f.
+// 1e-06f (in difference places) as epsilons. This engine selects 1e-05f.
 
 // Note:
 // SlimDX uses the term ZeroTolerance to represent Epsilon.

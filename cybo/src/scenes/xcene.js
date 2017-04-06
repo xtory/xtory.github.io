@@ -36,9 +36,6 @@ function Xcene(_settings) {
 
         // Hooks the events.        
         hookEvents();
-
-        // Calls onResize() immediately at the end of Xcene's constructor.
-        onResize();
         
     } catch (e) {
         //
@@ -78,8 +75,6 @@ function Xcene(_settings) {
 
     function hookEvents() {
         //
-        window.addEventListener('resize', onResize);
-
         // window.addEventListener('error', onError)
         // window.addEventListener('beforeunload', onBeforeUnload);
     }
@@ -87,10 +82,6 @@ function Xcene(_settings) {
     //
     // Event handlers.
     //
-    function onResize() {
-        _graphicsManager.resize();
-    }    
-
     // function onError(errorMsg, url, lineNumber) {
     //     //
     //     alert (

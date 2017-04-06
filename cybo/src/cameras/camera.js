@@ -15,6 +15,7 @@ function Camera (
     _distanceToNearPlane,
     _distanceToFarPlane
 ){
+    var _canvas;
     var _viewMatrix;
     var _projectionMatrix;
     var _transform;
@@ -22,7 +23,7 @@ function Camera (
     var _hasToUpdateViewMatrix;
     var _hasToUpdateProjectionMatrix;
     var _hasToRaiseTransformUpdatedEvent;
-    var _lastViewportAspectRatio;
+    var _lastAspectRatio;
         
     try {
         //
@@ -53,6 +54,8 @@ function Camera (
         if (Camera.MAX_DISTANCE_TO_FAR_PLANE < _distanceToFarPlane) {
             _distanceToFarPlane = Camera.MAX_DISTANCE_TO_FAR_PLANE;
         }
+
+        _canvas = _scene.graphicsManager.canvas;
 
         _viewFrustum = new ViewFrustum();
 
@@ -113,35 +116,40 @@ function Camera (
     function checkProjectionMatrix() {
         //
         // Note:
-        // Calculates the aspect ratio of 'viewport', not 'back buffer'.
-
-        var viewportAspectRatio =
-            _scene.graphicsManager.viewport.aspectRatio;
+        // In Direct3D, we calculate the aspect ratio of 'viewport', not 'back
+        // buffer'. But in WebGL, we calculate the aspect ratio of 'canvas' (by
+        // its 'clientWidth/clientHeight', not 'width/height') to get better
+        // performance.
+        // 
+        // Reference:
+        // https://www.youtube.com/watch?v=rfQ8rKGTVlg
+        /*
+        var aspectRatio = _scene.graphicsManager.viewport.aspectRatio;
+        */
+        var aspectRatio = _canvas.clientWidth / _canvas.clientHeight;
+        // :Note
 
         // Note:
         // The values we want to compare are ratios, we can't just compare if
-        // they are equal. The results could be different in the debug and re-
-        // lease modes and this will cause subtle bugs. Be careful!
+        // they are equal. The results could be different in the debug and release
+        // modes and this will cause subtle bugs. Be careful!
         /*
-        if (viewportAspectRatio === _lastViewportAspectRatio) {
+        if (aspectRatio === _lastAspectRatio) {
             return;
         }
         */
 
-        if (// Part 1.
-            _hasToUpdateProjectionMatrix === false &&
-            // Part 2.
-            MathHelper.areEqual(viewportAspectRatio, _lastViewportAspectRatio) ===
-            true) {
+        if (_hasToUpdateProjectionMatrix === false &&
+            MathHelper.areEqual(aspectRatio, _lastAspectRatio) === true) {
             return;
         }
         // :Note
 
-        _lastViewportAspectRatio = viewportAspectRatio;
+        _lastAspectRatio = aspectRatio;
 
         _projectionMatrix = Matrix4x4.createProjectionMatrix (
             Camera.FIELD_OF_VIEW_Y,
-            _lastViewportAspectRatio,
+            _lastAspectRatio,
             _distanceToNearPlane,
             _distanceToFarPlane
         );
@@ -175,10 +183,28 @@ function Camera (
     //
     // Accessors
     //
-    this.getViewMatrix = function(m) {
-        //
-        checkViewMatrix();
-        m.elements = _viewMatrix.elements.slice();
+    this.getPosition = function() {
+        return _position;
+    }
+
+    this.getFacingDirection = function() {
+        return _facingDirection;
+    }
+
+    this.getUpDirection = function() {
+        return _upDirection;
+    }
+
+    this.getUpDirection = function() {
+        return _upDirection;
+    }
+    
+    this.getDistanceToNearPlane = function(m) {
+        return _distanceToNearPlane;
+    }
+
+    this.getDistanceToFarPlane = function(m) {
+        return _distanceToFarPlane;
     }
 
     this.getProjectionMatrix = function(m) {
@@ -213,6 +239,7 @@ function Camera (
 
         // Raises the transform-updated event (if necessary).
         if (_hasToRaiseTransformUpdatedEvent === true) {
+            //
             // Temp:
             /*
             if (this.TransformUpdated != null) {

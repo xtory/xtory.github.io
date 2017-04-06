@@ -265,7 +265,7 @@ Object.freeze(TransformedPositionTextureCoordinates);
 
 // Note:
 // SlimDX, Fly3D both define this value as 1e-06f and XNA uses 1e-04f, 1e-05f, or
-// 1e-06f (in difference places) as epsilons. Cybo selects 1e-05f.
+// 1e-06f (in difference places) as epsilons. This engine selects 1e-05f.
 
 // Note:
 // SlimDX uses the term ZeroTolerance to represent Epsilon.
@@ -1475,7 +1475,7 @@ Vector2D.calculateUnitVectorOf = function(v) {
     if (sqrt < MathHelper.EPSILON) {
         //
         // Note:
-        // Cybo doesn't throw a divide-by-zero exception when normalizing
+        // This engine doesn't throw a divide-by-zero exception when normalizing
         // Vector2D, Vector2D, Vector4D, Quaternion.
         /*
         console.log('A divide-by-zero exception raised.');
@@ -1612,7 +1612,7 @@ Vector4D.calculateUnitVectorOf = function(v) {
     if (sqrt < MathHelper.EPSILON) {
         //
         // Note:
-        // Cybo doesn't throw a divide-by-zero exception when normalizing
+        // This engine doesn't throw a divide-by-zero exception when normalizing
         // Vector2D, Vector4D, Vector4D, Quaternion.
         /*
         console.log('A divide-by-zero exception raised.');
@@ -1727,7 +1727,7 @@ Vector3D.calculateUnitVectorOf = function(v) {
     if (sqrt < MathHelper.EPSILON) {
         //
         // Note:
-        // Cybo doesn't throw a divide-by-zero exception when normalizing
+        // This engine doesn't throw a divide-by-zero exception when normalizing
         // Vector2D, Vector3D, Vector4D, Quaternion.
         /*
         console.log('A divide-by-zero exception raised.');
@@ -1882,6 +1882,7 @@ function Camera (
     _distanceToNearPlane,
     _distanceToFarPlane
 ){
+    var _canvas;
     var _viewMatrix;
     var _projectionMatrix;
     var _transform;
@@ -1889,7 +1890,7 @@ function Camera (
     var _hasToUpdateViewMatrix;
     var _hasToUpdateProjectionMatrix;
     var _hasToRaiseTransformUpdatedEvent;
-    var _lastViewportAspectRatio;
+    var _lastAspectRatio;
         
     try {
         //
@@ -1920,6 +1921,8 @@ function Camera (
         if (Camera.MAX_DISTANCE_TO_FAR_PLANE < _distanceToFarPlane) {
             _distanceToFarPlane = Camera.MAX_DISTANCE_TO_FAR_PLANE;
         }
+
+        _canvas = _scene.graphicsManager.canvas;
 
         _viewFrustum = new ViewFrustum();
 
@@ -1980,35 +1983,40 @@ function Camera (
     function checkProjectionMatrix() {
         //
         // Note:
-        // Calculates the aspect ratio of 'viewport', not 'back buffer'.
-
-        var viewportAspectRatio =
-            _scene.graphicsManager.viewport.aspectRatio;
+        // In Direct3D, we calculate the aspect ratio of 'viewport', not 'back
+        // buffer'. But in WebGL, we calculate the aspect ratio of 'canvas' (by
+        // its 'clientWidth/clientHeight', not 'width/height') to get better
+        // performance.
+        // 
+        // Reference:
+        // https://www.youtube.com/watch?v=rfQ8rKGTVlg
+        /*
+        var aspectRatio = _scene.graphicsManager.viewport.aspectRatio;
+        */
+        var aspectRatio = _canvas.clientWidth / _canvas.clientHeight;
+        // :Note
 
         // Note:
         // The values we want to compare are ratios, we can't just compare if
-        // they are equal. The results could be different in the debug and re-
-        // lease modes and this will cause subtle bugs. Be careful!
+        // they are equal. The results could be different in the debug and release
+        // modes and this will cause subtle bugs. Be careful!
         /*
-        if (viewportAspectRatio === _lastViewportAspectRatio) {
+        if (aspectRatio === _lastAspectRatio) {
             return;
         }
         */
 
-        if (// Part 1.
-            _hasToUpdateProjectionMatrix === false &&
-            // Part 2.
-            MathHelper.areEqual(viewportAspectRatio, _lastViewportAspectRatio) ===
-            true) {
+        if (_hasToUpdateProjectionMatrix === false &&
+            MathHelper.areEqual(aspectRatio, _lastAspectRatio) === true) {
             return;
         }
         // :Note
 
-        _lastViewportAspectRatio = viewportAspectRatio;
+        _lastAspectRatio = aspectRatio;
 
         _projectionMatrix = Matrix4x4.createProjectionMatrix (
             Camera.FIELD_OF_VIEW_Y,
-            _lastViewportAspectRatio,
+            _lastAspectRatio,
             _distanceToNearPlane,
             _distanceToFarPlane
         );
@@ -2042,10 +2050,28 @@ function Camera (
     //
     // Accessors
     //
-    this.getViewMatrix = function(m) {
-        //
-        checkViewMatrix();
-        m.elements = _viewMatrix.elements.slice();
+    this.getPosition = function() {
+        return _position;
+    };
+
+    this.getFacingDirection = function() {
+        return _facingDirection;
+    };
+
+    this.getUpDirection = function() {
+        return _upDirection;
+    };
+
+    this.getUpDirection = function() {
+        return _upDirection;
+    };
+    
+    this.getDistanceToNearPlane = function(m) {
+        return _distanceToNearPlane;
+    };
+
+    this.getDistanceToFarPlane = function(m) {
+        return _distanceToFarPlane;
     };
 
     this.getProjectionMatrix = function(m) {
@@ -2080,6 +2106,7 @@ function Camera (
 
         // Raises the transform-updated event (if necessary).
         if (_hasToRaiseTransformUpdatedEvent === true) {
+            //
             // Temp:
             /*
             if (this.TransformUpdated != null) {
@@ -2104,6 +2131,34 @@ Camera.DEFAULT_DISTANCE_TO_NEAR_PLANE = Camera.MIN_DISTANCE_TO_NEAR_PLANE; // = 
 Camera.DEFAULT_DISTANCE_TO_FAR_PLANE  = 100000;                            // = 10^5
 
 Object.freeze(Camera);
+
+//
+// Constructor.
+//
+function CanvasCoordinateHelper() {
+    // No contents.
+}
+
+//
+// Static methods.
+//
+CanvasCoordinateHelper.fromDisplayToDrawSpace = function(canvas, p) {
+    //
+    return {
+        x: (p.x / canvas.clientWidth) * canvas.width,
+        y: (p.y / canvas.clientHeight) * canvas.height
+    };
+};
+
+CanvasCoordinateHelper.fromDrawToDisplaySpace = function(canvas, p) {
+    //
+    return {
+        x: (p.x / canvas.width) * canvas.clientWidth,
+        y: (p.y / canvas.height) * canvas.clientHeight
+    };
+};
+
+Object.freeze(CanvasCoordinateHelper);
 
 //
 // Constructor.
@@ -2333,75 +2388,11 @@ DepthBufferValues.FAR_CLIP_PLANE  = 1.0; // = default zFar of gl.getParameter(gl
 Object.freeze(DepthBufferValues);
 
 // Note:
-// OpenGL viewport's (X, Y) means the lower-left corner.
-// DirectX viewport's (X, Y) means the upper-left corner.
+// This engine doesn't handle window's resize event anymore. See the article...
+// https://webglfundamentals.org/webgl/lessons/webgl-anti-patterns.html
 
 // Note:
-// DirectX uses Viewport to set { left, top, width, height, minDepth(near), maxDepth(far) }
-// OpenGL uses gl.viewport() to set { left, bottom, width, height }
-// and gl.depthRange() to set { nearDepth, farDepth }
-
-// import { NormalizedDeviceCoordinates  } from './normalized-device-coordinates';
-// import { Vector2D  } from '../math/2d-vector';
-
-//
-// Constructor.
-//
-function Viewport(_left, _bottom, _width, _height) {
-    //
-    this.left   = _left;
-    this.bottom = _bottom;
-    this.width  = _width;
-    this.height = _height;
-
-    //
-    // Properties.
-    //
-    Object.defineProperty(this, 'aspectRatio', {
-        get: function() { return _width / _height; }
-    });
-
-    // //
-    // // Privileged methods.
-    // //
-    // this.toNormalizedDeviceSpace = function(screenPosition) {
-    //     //
-    //     // Note:
-    //     // Because the input is already a 'screen position', that is, we don't have
-    //     // to worry about w (perspective division), the formula below converts the
-    //     // screen position directly to normalized device coordinates.
-
-    //     // Note:
-    //     // Besides, OpenGL has no half-pixel offset problem like DirectX 9, don't
-    //     // have to handle it.
-    //     /*
-    //     return new Vector2D (
-    //         // Part 1.
-    //         NormalizedDeviceCoordinates.MIN_X +
-    //         ((screenPosition.x - 0.5) / _width) *
-    //         (NormalizedDeviceCoordinates.MAX_X - NormalizedDeviceCoordinates.MIN_X),
-    //         // Part 2.
-    //         NormalizedDeviceCoordinates.MIN_Y +
-    //         ((screenPosition.y - 0.5) / _height) *
-    //         (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y)
-    //     );
-    //     */
-
-    //     return new Vector2D (
-    //         // Part 1.
-    //         NormalizedDeviceCoordinates.MIN_X +
-    //         (screenPosition.x / _width) *
-    //         (NormalizedDeviceCoordinates.MAX_X - NormalizedDeviceCoordinates.MIN_X),
-    //         // Part 2.
-    //         NormalizedDeviceCoordinates.MIN_Y +
-    //         (screenPosition.y / _height) *
-    //         (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y)
-    //     );
-    //     // :Note
-    // }
-}
-
-Object.freeze(Viewport);
+// See viewport.js to understand the relationship between viewport and canvas.
 
 //
 // Constructor.
@@ -2410,8 +2401,6 @@ function GraphicsManager(_xcene) {
     //
     var _canvas;
     var _gl;
-    var _pixelRatio;
-    var _viewport;
     var _program;
     var _clearColor;
     var _clearDepth;
@@ -2419,8 +2408,6 @@ function GraphicsManager(_xcene) {
 
     try {
         //
-        _pixelRatio = window.devicePixelRatio;
-
         setUpCanvas();
 
         setUpStyles();
@@ -2449,38 +2436,37 @@ function GraphicsManager(_xcene) {
         get: function() { return _gl; }
     });
 
-    // Object.defineProperty(this, 'pixelRatio', {
-    //     get: function() { return _pixelRatio; }
-    // });
-
+    // Note:
+    // This engine uses a constant viewport. To get viewport size for displaying
+    // (nor for drawing), use canvas.clientWidth and clientHeight instead. If we
+    // want to change x, y of the viewport, use gl to change it manually. This
+    // engine doesn't handle it for us.
+    /*
     Object.defineProperty(this, 'viewport', {
         //
         'get': function() {
-            return _viewport;
+            //
+            var value = _gl.getParameter(_gl.VIEWPORT);
+
+            var p1 = new Vector2D(value[0], value[1]);
+            var p2 = new Vector2D(value[2], value[3]);
+            var p3 = CanvasCoordinateHelper.fromDrawToDisplaySpace(_canvas, p1);
+            var p4 = CanvasCoordinateHelper.fromDrawToDisplaySpace(_canvas, p2);
+
+            return new Viewport(p3.x, p3.y, p4.x, p4.y);
         },
 
         'set': function(value) {
             //
-            if (value !== undefined &&
-                _viewport !== undefined &&
-                value.left   === _viewport.left &&
-                value.bottom === _viewport.bottom &&
-                value.width  === _viewport.width &&
-                value.height === _viewport.height) {
-                return;
-            }
+            var p1 = new Vector2D(value[0], value[1]);
+            var p2 = new Vector2D(value[2], value[3]);
+            var p3 = CanvasCoordinateHelper.fromDisplayToDrawSpace(_canvas, p1);
+            var p4 = CanvasCoordinateHelper.fromDisplayToDrawSpace(_canvas, p2);
 
-            _viewport = value;
-
-            // Resets the gl's viewport as well.
-            _gl.viewport (
-                // Part 1.
-                _viewport.left, _viewport.bottom,
-                // Part 2.
-                _viewport.width, _viewport.height
-            );
+            _gl.viewport(p3.x, p3.y, p4.x, p4.y);
         }
     });
+    */
     
     Object.defineProperty(this, 'program', {
         //
@@ -2521,6 +2507,9 @@ function GraphicsManager(_xcene) {
                 'canvas'
             );
 
+            _canvas.width = GraphicsManager.CANVAS_WIDTH;
+            _canvas.height = GraphicsManager.CANVAS_HEIGHT;
+
             document.body.appendChild(_canvas);
         }
     }
@@ -2530,31 +2519,20 @@ function GraphicsManager(_xcene) {
         // Note:
         // This function is used to replace CSS below...
         //
-        // body {
-        //     margin: 0;
-        //     background-color: #202020; /* = cybo.graphics.colors.DEFAULT_BACKGROUND*/
-        // }
-        //
         // canvas {
-        //     width:   100vw;
-        //     height:  100vh;
+        //     width:   100%;
+        //     height:  100%;
         //     display: block; /* prevents scrollbar */
         // }
         //
         if (_xcene.settings !== undefined &&
-            _xcene.settings.usesDefaultStyles === true) {
+            _xcene.settings.usesDefaultStyles === false) {
             return;
         }
 
-        var style;
-
-        style = document.body.style;
-        style.margin = 0;
-        style.backgroundColor = '#202020'; // = cybo.graphics.colors.DEFAULT_BACKGROUND
-
-        style = _canvas.style;
-        style.width = '100vw';
-        style.height = '100vh';
+        var style = _canvas.style;
+        style.width = '100%';
+        style.height = '100%';
         style.display = 'block';
     }    
 
@@ -2660,74 +2638,6 @@ function GraphicsManager(_xcene) {
     //
     // Privileged methods.
     //
-
-    // Test:
-    /*
-    this.resize = function() {
-        //
-        // Lookup the size the browser is displaying the canvas.
-        var width  = _canvas.clientWidth;
-        var height = _canvas.clientHeight;
-
-        // Check if the canvas is not the same size.
-        if (_canvas.width  != width ||
-            _canvas.height != height) {
-            //
-            // // Test:
-            // alert (
-            //     'resized!\n' +
-            //     'window.innerWidth = ' + window.innerWidth + ', '  + 'window.innerHeight = ' + window.innerHeight + '\n' +
-            //     'window.devicePixelRatio = ' + window.devicePixelRatio + '\n' +
-            //     'canvas.width = ' + _mainCanvas.width + ', '  + 'canvas.height = ' + _mainCanvas.height + '\n' +
-            //     'canvas.clientWidth = ' + _mainCanvas.clientWidth + ', '  + 'canvas.clientHeight = ' + _mainCanvas.clientHeight
-            // );
-            // // :Test
-            
-            // Make the canvas the same size
-            _canvas.width  = width;
-            _canvas.height = height;
-            
-            this.viewport = new Viewport (
-                // Part 1.
-                0, 0,
-                // Part 2.
-                _canvas.width, _canvas.height
-            );
-        }
-    }
-    */
-
-    this.resize = function() {
-        //
-        var displayWidth, displayHeight;
-
-        if (_xcene.settings !== undefined &&
-            _xcene.settings.handlesHDDpiDisplay === true) {
-            displayWidth  = Math.floor(_canvas.clientWidth  * _pixelRatio);
-            displayHeight = Math.floor(_canvas.clientHeight * _pixelRatio);
-        } else {
-            displayWidth  = _canvas.clientWidth;
-            displayHeight = _canvas.clientHeight;
-        }
-
-        // Check if the canvas is not the same size.
-        if (_canvas.width  != displayWidth ||
-            _canvas.height != displayHeight) {
-            //
-            // Make the canvas the same size
-            _canvas.width  = displayWidth;
-            _canvas.height = displayHeight;
-            
-            this.viewport = new Viewport (
-                // Part 1.
-                0, 0,
-                // Part 2.
-                _canvas.width, _canvas.height
-            );
-        }
-    };
-    // :Test
-
     this.setUpVertexBuffer = function(buffer, items) {
         //
         _gl.bindBuffer (
@@ -2920,6 +2830,9 @@ function GraphicsManager(_xcene) {
 //
 // Static constants (after Object.freeze()).
 //
+GraphicsManager.CANVAS_WIDTH = 1024;
+GraphicsManager.CANVAS_HEIGHT = 1024;
+
 GraphicsManager.DEFAULT_CLEAR_OPTIONS =
     ClearOptions.COLOR_BUFFER | ClearOptions.DEPTH_BUFFER;
 
@@ -3017,7 +2930,7 @@ function ScreenCoordinateHelper() {
 //
 // Static methods.
 //
-ScreenCoordinateHelper.toClipSpace = function(viewport, p) {
+ScreenCoordinateHelper.toClipSpace = function(canvas, p) {
     //
     // Note:
     // Because the input is already a 'screen position', that is, we don't have
@@ -3027,6 +2940,10 @@ ScreenCoordinateHelper.toClipSpace = function(viewport, p) {
     // Note:
     // Besides, OpenGL has no half-pixel offset problem like Direct3D 9, don't
     // have to handle it.
+
+    // Note:
+    // This engine uses a constant viewport. To get viewport size for displaying
+    // (nor for drawing), use canvas.clientWidth and clientHeight instead.
     /*
     return new Vector3D (
         // Part 1.
@@ -3047,11 +2964,11 @@ ScreenCoordinateHelper.toClipSpace = function(viewport, p) {
     return new Vector4D (
         // Part 1.
         NormalizedDeviceCoordinates.MIN_X + // = -1
-        (p.x / viewport.width) *
+        (p.x / canvas.clientWidth) *
         (NormalizedDeviceCoordinates.MAX_X - NormalizedDeviceCoordinates.MIN_X), // = 2
         // Part 2.
         NormalizedDeviceCoordinates.MIN_Y + // = -1
-        (p.y / viewport.height) *
+        (p.y / canvas.clientHeight) *
         (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y), // = 2
         // Part 3.
         NormalizedDeviceCoordinates.MIN_Z + // = -1
@@ -3204,9 +3121,6 @@ function Xcene(_settings) {
 
         // Hooks the events.        
         hookEvents();
-
-        // Calls onResize() immediately at the end of Xcene's constructor.
-        onResize();
         
     } catch (e) {
         //
@@ -3246,8 +3160,6 @@ function Xcene(_settings) {
 
     function hookEvents() {
         //
-        window.addEventListener('resize', onResize);
-
         // window.addEventListener('error', onError)
         // window.addEventListener('beforeunload', onBeforeUnload);
     }
@@ -3255,10 +3167,6 @@ function Xcene(_settings) {
     //
     // Event handlers.
     //
-    function onResize() {
-        _graphicsManager.resize();
-    }    
-
     // function onError(errorMsg, url, lineNumber) {
     //     //
     //     alert (
@@ -3594,6 +3502,7 @@ exports.TransformedPositionColorTextureCoordinates = TransformedPositionColorTex
 exports.TransformedPositionTextureCoordinates = TransformedPositionTextureCoordinates;
 exports.AssetManager = AssetManager;
 exports.Camera = Camera;
+exports.CanvasCoordinateHelper = CanvasCoordinateHelper;
 exports.ClearOptions = ClearOptions;
 exports.Color = Color;
 exports.Colors = Colors;

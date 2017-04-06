@@ -14,7 +14,7 @@ function ScreenCoordinateHelper() {
 //
 // Static methods.
 //
-ScreenCoordinateHelper.toClipSpace = function(viewport, p) {
+ScreenCoordinateHelper.toClipSpace = function(canvas, p) {
     //
     // Note:
     // Because the input is already a 'screen position', that is, we don't have
@@ -24,6 +24,10 @@ ScreenCoordinateHelper.toClipSpace = function(viewport, p) {
     // Note:
     // Besides, OpenGL has no half-pixel offset problem like Direct3D 9, don't
     // have to handle it.
+
+    // Note:
+    // This engine uses a constant viewport. To get viewport size for displaying
+    // (nor for drawing), use canvas.clientWidth and clientHeight instead.
     /*
     return new Vector3D (
         // Part 1.
@@ -44,11 +48,11 @@ ScreenCoordinateHelper.toClipSpace = function(viewport, p) {
     return new Vector4D (
         // Part 1.
         NormalizedDeviceCoordinates.MIN_X + // = -1
-        (p.x / viewport.width) *
+        (p.x / canvas.clientWidth) *
         (NormalizedDeviceCoordinates.MAX_X - NormalizedDeviceCoordinates.MIN_X), // = 2
         // Part 2.
         NormalizedDeviceCoordinates.MIN_Y + // = -1
-        (p.y / viewport.height) *
+        (p.y / canvas.clientHeight) *
         (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y), // = 2
         // Part 3.
         NormalizedDeviceCoordinates.MIN_Z + // = -1

@@ -54,7 +54,7 @@ Vector3D.calculateUnitVectorOf = function(v) {
     if (sqrt < MathHelper.EPSILON) {
         //
         // Note:
-        // Cybo doesn't throw a divide-by-zero exception when normalizing
+        // This engine doesn't throw a divide-by-zero exception when normalizing
         // Vector2D, Vector3D, Vector4D, Quaternion.
         /*
         console.log('A divide-by-zero exception raised.');

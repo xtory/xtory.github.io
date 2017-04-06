@@ -11,6 +11,13 @@ function main() {
     try {
         //
         scene = new Cybo.Xcene();
+
+        // var canvas = document.getElementById("canvas");
+        // scene = new Cybo.Xcene({
+        //     canvas: canvas,
+        //     usesDefaultStyles: false
+        // });
+
         gl = scene.graphicsManager.webGLContext;
 
         setUpShaders();
@@ -52,12 +59,23 @@ function main() {
         //
         scene.graphicsManager.clear();
 
+        // Test:
+        /*
         var viewport = scene.graphicsManager.viewport;
 
         var p = new Cybo.Vector2D (
             viewport.width * 0.5,
             viewport.height * 0.5
         );
+        */
+
+        var canvas = scene.graphicsManager.canvas;
+        
+        var p = new Cybo.Vector2D (
+            canvas.clientWidth * 0.5,
+            canvas.clientHeight * 0.5
+        );
+        // :Test
 
         drawLineSegment (
             new Cybo.Vector3D(p.x, p.y-200, 0),
@@ -190,7 +208,7 @@ function main() {
             var item = vertexPositions[i];
 
             var p = Cybo.ScreenCoordinateHelper.toClipSpace (
-                viewport,
+                gl.canvas,
                 item
             );
 

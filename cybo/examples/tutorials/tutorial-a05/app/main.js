@@ -77,11 +77,9 @@ function main() {
         //
         scene.graphicsManager.clear();
 
-        var viewport = scene.graphicsManager.viewport;
-
         var p = new Cybo.Vector2D (
-            viewport.width * 0.5,
-            viewport.height * 0.5
+            gl.canvas.clientWidth * 0.5,
+            gl.canvas.clientHeight * 0.5
         );
 
         var size = new Cybo.Vector2D (
@@ -152,7 +150,7 @@ function main() {
             var item = vertexPositions[i];
 
             var p = Cybo.ScreenCoordinateHelper.toClipSpace (
-                viewport,
+                gl.canvas,
                 item
             );
 

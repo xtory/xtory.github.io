@@ -11,6 +11,7 @@ export { AssetManager }                               from './assets/asset-manag
 export { Camera }                                     from './cameras/camera';
 
 // Graphics.
+export { CanvasCoordinateHelper }                     from './graphics/helpers/canvas-coordinate-helper';
 export { ClearOptions }                               from './graphics/clear-options';
 export { Color }                                      from './graphics/color';
 export { Colors }                                     from './graphics/colors';
