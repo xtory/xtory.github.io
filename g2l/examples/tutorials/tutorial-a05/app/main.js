@@ -97,20 +97,17 @@ function main() {
 
         scene.graphicsManager.setAttribute (
             attributeLocations.vertexPosition,
-            vertexBuffers.position,
-            4
+            vertexBuffers.position
         );
 
         scene.graphicsManager.setAttribute (
             attributeLocations.vertexColor,
-            vertexBuffers.color,
-            4
+            vertexBuffers.color
         );
 
         scene.graphicsManager.setAttribute (
             attributeLocations.vertexTextureCoordinates,
-            vertexBuffers.textureCoordinates,
-            2
+            vertexBuffers.textureCoordinates
         );
 
         scene.graphicsManager.setSampler (
@@ -128,9 +125,9 @@ function main() {
     function setUpGeometries(x, y, w, h) {
         //
         vertexBuffers = {
-            position: gl.createBuffer(),
-            color: gl.createBuffer(),
-            textureCoordinates: gl.createBuffer()
+            position: scene.assetManager.createVertexBuffer(),
+            color: scene.assetManager.createVertexBuffer(),
+            textureCoordinates: scene.assetManager.createVertexBuffer()
         };
 
         var viewport = scene.graphicsManager.viewport;
@@ -161,9 +158,9 @@ function main() {
             vertexPositions2 = vertexPositions2.concat(p.toArray());
         }
 
-        scene.graphicsManager.setUpVertexBuffer (
-            vertexBuffers.position,
-            vertexPositions2
+        vertexBuffers.position.setItems (
+            vertexPositions2,
+            4
         );
 
         //
@@ -178,9 +175,9 @@ function main() {
             );
         }
 
-        scene.graphicsManager.setUpVertexBuffer (
-            vertexBuffers.color,
-            vertexColors
+        vertexBuffers.color.setItems (
+            vertexColors,
+            4
         );
 
         //
@@ -193,9 +190,9 @@ function main() {
             0.0, 1.0
         ];
 
-        scene.graphicsManager.setUpVertexBuffer (
-            vertexBuffers.textureCoordinates,
-            vertexTextureCoordinates
+        vertexBuffers.textureCoordinates.setItems (
+            vertexTextureCoordinates,
+            2
         );
     } 
 }

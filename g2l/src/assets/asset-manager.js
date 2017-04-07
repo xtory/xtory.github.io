@@ -1,5 +1,7 @@
-import { MathHelper } from '../math/helpers/math-helper';
-import { ShaderType } from '../graphics/fx/shader-type';
+import { IndexBuffer }  from '../graphics/index-buffer';
+import { MathHelper }   from '../math/helpers/math-helper';
+import { ShaderType }   from '../graphics/fx/shader-type';
+import { VertexBuffer } from '../graphics/vertex-buffer';
 
 //
 // Constructor.
@@ -131,6 +133,14 @@ function AssetManager(_xcene) {
     //
     // Privileged methods.
     //
+    this.createVertexBuffer = function() {
+        return new VertexBuffer(_gl);
+    };
+
+    this.createIndexBuffer = function() {
+        return new IndexBuffer(_gl);
+    };
+
     this.setUpProgram = function(vertexShaderSource, fragmentShaderSource) {
         //
         var vertexShader =

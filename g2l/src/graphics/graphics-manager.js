@@ -10,9 +10,11 @@ import { ClearOptions  }           from './clear-options';
 import { Color  }                  from './color';
 import { Colors }                  from './colors';
 import { DepthBufferValues }       from './depth-buffer-values';
+// import { IndexBuffer }             from './index-buffer';
 import { MathHelper }              from '../math/helpers/math-helper';
 import { Matrix4x4 }               from '../math/4x4-matrix';
 import { Vector2D }                from '../math/2d-vector';
+// import { VertexBuffer }            from './vertex-buffer';
 
 //
 // Constructor.
@@ -258,56 +260,64 @@ function GraphicsManager(_xcene) {
     //
     // Privileged methods.
     //
-    this.setUpVertexBuffer = function(buffer, items) {
-        //
-        _gl.bindBuffer (
-            _gl.ARRAY_BUFFER,
-            buffer
-        );
+    // this.createVertexBuffer = function() {
+    //     return new VertexBuffer(_gl);
+    // };
+
+    // this.createIndexBuffer = function() {
+    //     return new IndexBuffer(_gl);
+    // };
+
+    // this.setUpVertexBuffer = function(buffer, items) {
+    //     //
+    //     _gl.bindBuffer (
+    //         _gl.ARRAY_BUFFER,
+    //         buffer.webGLBuffer
+    //     );
         
-        _gl.bufferData (
-            _gl.ARRAY_BUFFER,
-            new Float32Array(items),
-            _gl.STATIC_DRAW
-        );
-    };
+    //     _gl.bufferData (
+    //         _gl.ARRAY_BUFFER,
+    //         new Float32Array(items),
+    //         _gl.STATIC_DRAW
+    //     );
+    // };
 
-    this.setUpIndexBuffer = function(buffer, items) {
-        //
-        _gl.bindBuffer (
-            _gl.ELEMENT_ARRAY_BUFFER,
-            buffer
-        );
+    // this.setUpIndexBuffer = function(buffer, items) {
+    //     //
+    //     _gl.bindBuffer (
+    //         _gl.ELEMENT_ARRAY_BUFFER,
+    //         buffer.webGLBuffer
+    //     );
 
-        // Note:
-        // DirectX supports 16-bit or 32-bit index buffers. But in this engine,
-        // so far, only 16-bit index buffer is supported.
-        /*
-        if (uses16Bits === true) {
-            //
-            _gl.bufferData (
-                _gl.ELEMENT_ARRAY_BUFFER,
-                new Uint16Array(items),
-                _gl.STATIC_DRAW
-            );
+    //     // Note:
+    //     // DirectX supports 16-bit or 32-bit index buffers. But in this engine,
+    //     // so far, only 16-bit index buffer is supported.
+    //     /*
+    //     if (uses16Bits === true) {
+    //         //
+    //         _gl.bufferData (
+    //             _gl.ELEMENT_ARRAY_BUFFER,
+    //             new Uint16Array(items),
+    //             _gl.STATIC_DRAW
+    //         );
 
-        } else {
-            //
-            _gl.bufferData (
-                _gl.ELEMENT_ARRAY_BUFFER,
-                new Uint32Array(items),
-                _gl.STATIC_DRAW
-            );
-        }
-        */
+    //     } else {
+    //         //
+    //         _gl.bufferData (
+    //             _gl.ELEMENT_ARRAY_BUFFER,
+    //             new Uint32Array(items),
+    //             _gl.STATIC_DRAW
+    //         );
+    //     }
+    //     */
 
-        _gl.bufferData (
-            _gl.ELEMENT_ARRAY_BUFFER,
-            new Uint16Array(items),
-            _gl.STATIC_DRAW
-        );
-        // :Note
-    };
+    //     _gl.bufferData (
+    //         _gl.ELEMENT_ARRAY_BUFFER,
+    //         new Uint16Array(items),
+    //         _gl.STATIC_DRAW
+    //     );
+    //     // :Note
+    // };
 
     this.clear = function(clearOptions, color, depth, stencil) {
         //
@@ -364,7 +374,7 @@ function GraphicsManager(_xcene) {
 
         _gl.bindBuffer (
             _gl.ELEMENT_ARRAY_BUFFER,
-            indexBuffer
+            indexBuffer.webGLBuffer
         );
         
         _gl.drawElements (
@@ -388,17 +398,17 @@ function GraphicsManager(_xcene) {
         return _gl.getUniformLocation(program, uniformName);
     };
 
-    this.setAttribute = function(attributeLocation, buffer, size) {
+    this.setAttribute = function(attributeLocation, buffer) {
         //
         // Binds the buffer before calling gl.vertexAttribPointer().
         _gl.bindBuffer (
             _gl.ARRAY_BUFFER,
-            buffer
+            buffer.webGLBuffer
         );
 
         _gl.vertexAttribPointer (
             attributeLocation,
-            size,
+            buffer.size,
             _gl.FLOAT,
             false,
             0,

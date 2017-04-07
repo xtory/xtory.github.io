@@ -63,9 +63,9 @@ function main() {
     function setUpGeometries() {
         //
         vertexBuffers = {
-            position: gl.createBuffer(),
-            normal: gl.createBuffer(),
-            textureCoordinates: gl.createBuffer()
+            position: scene.assetManager.createVertexBuffer(),
+            normal: scene.assetManager.createVertexBuffer(),
+            textureCoordinates: scene.assetManager.createVertexBuffer()
         };
 
         //
@@ -110,9 +110,9 @@ function main() {
            -50, -50, -50
         ];
 
-        scene.graphicsManager.setUpVertexBuffer (
-            vertexBuffers.position,
-            vertexPositions
+        vertexBuffers.position.setItems (
+            vertexPositions,
+            3
         );
 
         // 
@@ -157,9 +157,9 @@ function main() {
            -1.0,  0.0,  0.0
         ];
 
-        scene.graphicsManager.setUpVertexBuffer (
-            vertexBuffers.normal,
-            vertexNormals
+        vertexBuffers.normal.setItems (
+            vertexNormals,
+            3
         );
 
         //
@@ -204,15 +204,15 @@ function main() {
             0.0,  0.0,
         ];
 
-        scene.graphicsManager.setUpVertexBuffer (
-            vertexBuffers.textureCoordinates,
-            vertexTextureCoordinates
+        vertexBuffers.textureCoordinates.setItems (
+            vertexTextureCoordinates,
+            2
         );
 
         //
         // Vertex indices.
         //
-        indexBuffer = gl.createBuffer();
+        indexBuffer = scene.assetManager.createIndexBuffer();
 
         var vertexIndices = [
             //
@@ -241,10 +241,7 @@ function main() {
             20, 22, 23
         ]
         
-        scene.graphicsManager.setUpIndexBuffer (
-            indexBuffer,
-            vertexIndices
-        );
+        indexBuffer.setItems(vertexIndices);
     }
 
     function setUpTextures() {
@@ -326,20 +323,17 @@ function main() {
 
         scene.graphicsManager.setAttribute (
             attributeLocations.vertexPosition,
-            vertexBuffers.position,
-            3
+            vertexBuffers.position
         );
 
         scene.graphicsManager.setAttribute (
             attributeLocations.vertexTextureCoordinates,
-            vertexBuffers.textureCoordinates,
-            2
+            vertexBuffers.textureCoordinates
         );
 
         scene.graphicsManager.setAttribute (
             attributeLocations.vertexNormal,
-            vertexBuffers.normal,
-            3
+            vertexBuffers.normal
         );
 
         setUpTransform();
@@ -362,7 +356,7 @@ function main() {
             // Part 1.
             g2l.CartesianAxis.Y,
             // Part 2.
-            g2l.MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES *
+           -g2l.MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES *
             sineEase.ratioOfCurrentToTotalTimeOffset
         );
 
@@ -371,7 +365,7 @@ function main() {
                 // Part 1.
                 g2l.CartesianAxis.X,
                 // Part 2.
-               -g2l.MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES *
+                g2l.MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES *
                 sineEase2.ratioOfCurrentToTotalTimeOffset
             ),
             modelMatrix

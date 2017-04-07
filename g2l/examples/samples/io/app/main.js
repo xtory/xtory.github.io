@@ -22,6 +22,7 @@ function main() {
 
     // FPS.
     var leftTexts;
+    var rightTexts;
     var fps;
     var then;
     var lastFps;
@@ -75,8 +76,8 @@ function main() {
     function setUpGeometries() {
         //
         vertexBuffers = {
-            position: gl.createBuffer(),
-            color: gl.createBuffer()
+            position: scene.assetManager.createVertexBuffer(),
+            color: scene.assetManager.createVertexBuffer()
         };
 
         //
@@ -121,10 +122,7 @@ function main() {
            -50, -50, -50
         ];
 
-        scene.graphicsManager.setUpVertexBuffer (
-            vertexBuffers.position,
-            vertexPositions
-        );
+        vertexBuffers.position.setItems(vertexPositions, 3);
 
         //
         // Vertex colors.
@@ -151,15 +149,12 @@ function main() {
             }
         }
 
-        scene.graphicsManager.setUpVertexBuffer (
-            vertexBuffers.color,
-            vertexColors
-        );
+        vertexBuffers.color.setItems(vertexColors, 4);
 
         //
         // Vertex indices.
         //
-        indexBuffer = gl.createBuffer();
+        indexBuffer = scene.assetManager.createIndexBuffer();
 
         var vertexIndices = [
             //
@@ -188,10 +183,7 @@ function main() {
             20, 22, 23
         ]
 
-        scene.graphicsManager.setUpIndexBuffer (
-            indexBuffer,
-            vertexIndices
-        );
+        indexBuffer.setItems(vertexIndices);
     }
 
     function setUpShaders() {
@@ -226,6 +218,7 @@ function main() {
     function setUpFps() {
         //
         leftTexts = document.getElementById("leftTexts");
+        rightTexts = document.getElementById("rightTexts");
         fps = new g2l.Fps();
         then = (new Date()).getTime() * 0.001;
         lastFps = 0;
@@ -259,14 +252,12 @@ function main() {
         
         scene.graphicsManager.setAttribute (
             attributeLocations.vertexPosition,
-            vertexBuffers.position,
-            3
+            vertexBuffers.position
         );
 
         scene.graphicsManager.setAttribute (
             attributeLocations.vertexColor,
-            vertexBuffers.color,
-            4
+            vertexBuffers.color
         );
 
         camera.getTransform(transform);
@@ -302,7 +293,8 @@ function main() {
 
         var fps2 = fps.average;
         if (fps2 !== lastFps) {
-            leftTexts.innerHTML = 'FPS: ' + fps2;
+            leftTexts.innerHTML = 'FPS: ' + fps2 + 'A​‌B​‌C​‌Ć​‌Č​‌D​‌Đ​‌E​‌F​‌G​‌H​‌I​‌J​‌K​‌L​‌M​‌N​‌O​‌P​‌Q​‌R​‌S​‌Š​‌T​‌U​‌V​‌W​‌X​‌Y​‌Z​‌Ž​‌a​‌b​‌c​‌č​‌ć​‌d​‌đ​‌e​‌f​‌g​‌h​‌i​‌j​‌k​‌l​‌m​‌n​‌o​‌p​‌q​‌r​‌s​‌š​‌t​‌u​‌v​‌w​‌x​‌y​‌z​‌ž​‌1​‌2​‌3​‌4​‌5​‌6​‌7​‌8​‌9​‌0​‌';
+            rightTexts.innerHTML = 'FPS: ' + fps2 + 'A​‌B​‌C​‌Ć​‌Č​‌D​‌Đ​‌E​‌F​‌G​‌H​‌I​‌J​‌K​‌L​‌M​‌N​‌O​‌P​‌Q​‌R​‌S​‌Š​‌T​‌U​‌V​‌W​‌X​‌Y​‌Z​‌Ž​‌a​‌b​‌c​‌č​‌ć​‌d​‌đ​‌e​‌f​‌g​‌h​‌i​‌j​‌k​‌l​‌m​‌n​‌o​‌p​‌q​‌r​‌s​‌š​‌t​‌u​‌v​‌w​‌x​‌y​‌z​‌ž​‌1​‌2​‌3​‌4​‌5​‌6​‌7​‌8​‌9​‌0​‌';
             lastFps = fps2;
         }
     }

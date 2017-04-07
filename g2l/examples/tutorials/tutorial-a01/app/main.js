@@ -61,8 +61,8 @@ function main() {
     function setUpGeometries() {
         //
         vertexBuffers = {
-            position: gl.createBuffer(),
-            color: gl.createBuffer()
+            position: scene.assetManager.createVertexBuffer(),
+            color: scene.assetManager.createVertexBuffer()
         };
 
         //
@@ -74,10 +74,7 @@ function main() {
             250, -150, 0
         ];
 
-        scene.graphicsManager.setUpVertexBuffer (
-            vertexBuffers.position,
-            vertexPositions
-        );
+        vertexBuffers.position.setItems(vertexPositions, 3);
 
         //
         // Vertex colors.
@@ -88,10 +85,7 @@ function main() {
             g2l.Colors.PHOTOSHOP_DARK_BLUE.toArray()
         );
 
-        scene.graphicsManager.setUpVertexBuffer (
-            vertexBuffers.color,
-            vertexColors
-        );
+        vertexBuffers.color.setItems(vertexColors, 4);
     }
 
     function setUpShaders() {
@@ -130,14 +124,12 @@ function main() {
 
         scene.graphicsManager.setAttribute (
             attributeLocations.vertexPosition,
-            vertexBuffers.position,
-            3
+            vertexBuffers.position
         );
 
         scene.graphicsManager.setAttribute (
             attributeLocations.vertexColor,
-            vertexBuffers.color,
-            4
+            vertexBuffers.color
         );
         
         setUpTransform();

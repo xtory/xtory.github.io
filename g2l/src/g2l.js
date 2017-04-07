@@ -19,11 +19,13 @@ export { Color }                                      from './graphics/color';
 export { Colors }                                     from './graphics/colors';
 export { DepthBufferValues }                          from './graphics/depth-buffer-values';
 export { GraphicsManager }                            from './graphics/graphics-manager';
+export { IndexBuffer }                                from './graphics/index-buffer';
 export { NormalizedDeviceCoordinates }                from './graphics/normalized-device-coordinates';
 export { PrimitiveType }                              from './graphics/primitive-type';
 export { ScreenCoordinateHelper }                     from './graphics/helpers/screen-coordinate-helper';
 export { ShaderType }                                 from './graphics/fx/shader-type';
 export { TextureCoordinateHelper }                    from './graphics/helpers/texture-coordinate-helper';
+export { VertexBuffer }                               from './graphics/vertex-buffer';
 
 // Helpers.
 export { ExceptionHelper }                            from './helpers/exception-helper';

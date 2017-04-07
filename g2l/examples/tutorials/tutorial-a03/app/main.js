@@ -65,8 +65,8 @@ function main() {
     function setUpGeometries(x, y, w, h) {
         //
         vertexBuffers = {
-            position: gl.createBuffer(),
-            textureCoordinates: gl.createBuffer()
+            position: scene.assetManager.createVertexBuffer(),
+            textureCoordinates: scene.assetManager.createVertexBuffer()
         };
 
         //
@@ -82,9 +82,9 @@ function main() {
             x-halfWidth, y+halfHeight, 0
         ];        
 
-        scene.graphicsManager.setUpVertexBuffer (
-            vertexBuffers.position,
-            vertexPositions
+        vertexBuffers.position.setItems (
+            vertexPositions,
+            3
         );
 
         //
@@ -97,9 +97,9 @@ function main() {
             0.0, 1.0
         ];
 
-        scene.graphicsManager.setUpVertexBuffer (
-            vertexBuffers.textureCoordinates,
-            vertexTextureCoordinates
+        vertexBuffers.textureCoordinates.setItems (
+            vertexTextureCoordinates,
+            2
         );
     }
 
@@ -153,14 +153,12 @@ function main() {
 
         scene.graphicsManager.setAttribute (
             attributeLocations.vertexPosition,
-            vertexBuffers.position,
-            3
+            vertexBuffers.position
         );
 
         scene.graphicsManager.setAttribute (
             attributeLocations.vertexTextureCoordinates,
-            vertexBuffers.textureCoordinates,
-            2
+            vertexBuffers.textureCoordinates
         );
 
         camera.getTransform(transform);

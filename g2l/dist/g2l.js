@@ -250,6 +250,120 @@ TransformedPositionTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
 
 Object.freeze(TransformedPositionTextureCoordinates);
 
+//
+// Constructor.
+//
+function IndexBuffer(_gl) {
+    //
+    var _webGLBuffer = _gl.createBuffer();
+    //var _itemCount;
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(this, 'gl', {
+        'get': function() { return _gl; }
+    });
+
+    Object.defineProperty(this, 'webGLBuffer', {
+        'get': function() { return _webGLBuffer; }
+    });
+
+    // Object.defineProperty(this, 'ItemCount', {
+    //     'get': function() { return _itemCount; }
+    // });
+}
+
+IndexBuffer.prototype = {
+    //
+    // Public methods.
+    //
+    setItems: function(items) {
+        //
+        var gl = this.gl;
+
+        //_itemCount = items.length;
+
+        gl.bindBuffer (
+            gl.ELEMENT_ARRAY_BUFFER,
+            this.webGLBuffer
+        );
+
+        // Note:
+        // DirectX supports 16-bit or 32-bit index buffers. But in this engine,
+        // so far, only 16-bit index buffer is supported.
+        /*
+        if (uses16Bits === true) {
+            //
+            gl.bufferData (
+                gl.ELEMENT_ARRAY_BUFFER,
+                new Uint16Array(items),
+                gl.STATIC_DRAW
+            );
+
+        } else {
+            //
+            gl.bufferData (
+                gl.ELEMENT_ARRAY_BUFFER,
+                new Uint32Array(items),
+                gl.STATIC_DRAW
+            );
+        }
+        */
+
+        gl.bufferData (
+            gl.ELEMENT_ARRAY_BUFFER,
+            new Uint16Array(items),
+            gl.STATIC_DRAW
+        );
+        // :Note
+    }
+};
+
+Object.defineProperty(IndexBuffer.prototype, 'items', {
+    //
+    'set': function(value) {
+        //
+        var gl = this.gl;
+
+        gl.bindBuffer (
+            gl.ELEMENT_ARRAY_BUFFER,
+            buffer.webGLBuffer
+        );
+
+        // Note:
+        // DirectX supports 16-bit or 32-bit index buffers. But in this engine,
+        // so far, only 16-bit index buffer is supported.
+        /*
+        if (uses16Bits === true) {
+            //
+            gl.bufferData (
+                gl.ELEMENT_ARRAY_BUFFER,
+                new Uint16Array(items),
+                gl.STATIC_DRAW
+            );
+
+        } else {
+            //
+            gl.bufferData (
+                gl.ELEMENT_ARRAY_BUFFER,
+                new Uint32Array(items),
+                gl.STATIC_DRAW
+            );
+        }
+        */
+
+        gl.bufferData (
+            gl.ELEMENT_ARRAY_BUFFER,
+            new Uint16Array(items),
+            gl.STATIC_DRAW
+        );
+        // :Note
+    }
+});
+
+Object.freeze(IndexBuffer);
+
 // Note:
 // The equivelant of this value in C is 'FLT_EPSILON', and in the GNU C Library,
 // http://www.gnu.org/software/libc/manual/html_node/Floating-Point-Parameters.html
@@ -562,6 +676,62 @@ Object.freeze(ShaderType);
 //
 // Constructor.
 //
+function VertexBuffer(_gl) {
+    //
+    var _webGLBuffer = _gl.createBuffer();
+    var _size; // Number of components per vertex attribute. Must be 1, 2, 3, or 4.
+    //var _itemCount;
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(this, 'gl', {
+        'get': function() { return _gl; }
+    });
+
+    Object.defineProperty(this, 'webGLBuffer', {
+        'get': function() { return _webGLBuffer; }
+    });
+
+    Object.defineProperty(this, 'size', {
+        'get': function() { return _size; },
+        'set': function(value) { _size = value; }
+    });
+}
+
+VertexBuffer.prototype = {
+    //
+    // Public methods.
+    //
+    setItems: function(items, size) {
+        //
+        var gl = this.gl;
+
+        this.size = size;
+        //_itemCount = items.length / _itemSize;
+
+        // if ((item.length % _itemSize) !== 0) {
+        //     console.log('(item.length % _itemSize) !== 0');
+        // }
+
+        gl.bindBuffer (
+            gl.ARRAY_BUFFER,
+            this.webGLBuffer
+        );
+        
+        gl.bufferData (
+            gl.ARRAY_BUFFER,
+            new Float32Array(items),
+            gl.STATIC_DRAW
+        );
+    }
+};
+
+Object.freeze(VertexBuffer);
+
+//
+// Constructor.
+//
 function AssetManager(_xcene) {
     //
     var _gl = _xcene.graphicsManager.webGLContext;
@@ -689,6 +859,14 @@ function AssetManager(_xcene) {
     //
     // Privileged methods.
     //
+    this.createVertexBuffer = function() {
+        return new VertexBuffer(_gl);
+    };
+
+    this.createIndexBuffer = function() {
+        return new IndexBuffer(_gl);
+    };
+
     this.setUpProgram = function(vertexShaderSource, fragmentShaderSource) {
         //
         var vertexShader =
@@ -2394,6 +2572,9 @@ Object.freeze(DepthBufferValues);
 // Note:
 // See viewport.js to understand the relationship between viewport and canvas.
 
+// import { IndexBuffer }             from './index-buffer';
+// import { VertexBuffer }            from './vertex-buffer';
+
 //
 // Constructor.
 //
@@ -2638,56 +2819,64 @@ function GraphicsManager(_xcene) {
     //
     // Privileged methods.
     //
-    this.setUpVertexBuffer = function(buffer, items) {
-        //
-        _gl.bindBuffer (
-            _gl.ARRAY_BUFFER,
-            buffer
-        );
+    // this.createVertexBuffer = function() {
+    //     return new VertexBuffer(_gl);
+    // };
+
+    // this.createIndexBuffer = function() {
+    //     return new IndexBuffer(_gl);
+    // };
+
+    // this.setUpVertexBuffer = function(buffer, items) {
+    //     //
+    //     _gl.bindBuffer (
+    //         _gl.ARRAY_BUFFER,
+    //         buffer.webGLBuffer
+    //     );
         
-        _gl.bufferData (
-            _gl.ARRAY_BUFFER,
-            new Float32Array(items),
-            _gl.STATIC_DRAW
-        );
-    };
+    //     _gl.bufferData (
+    //         _gl.ARRAY_BUFFER,
+    //         new Float32Array(items),
+    //         _gl.STATIC_DRAW
+    //     );
+    // };
 
-    this.setUpIndexBuffer = function(buffer, items) {
-        //
-        _gl.bindBuffer (
-            _gl.ELEMENT_ARRAY_BUFFER,
-            buffer
-        );
+    // this.setUpIndexBuffer = function(buffer, items) {
+    //     //
+    //     _gl.bindBuffer (
+    //         _gl.ELEMENT_ARRAY_BUFFER,
+    //         buffer.webGLBuffer
+    //     );
 
-        // Note:
-        // DirectX supports 16-bit or 32-bit index buffers. But in this engine,
-        // so far, only 16-bit index buffer is supported.
-        /*
-        if (uses16Bits === true) {
-            //
-            _gl.bufferData (
-                _gl.ELEMENT_ARRAY_BUFFER,
-                new Uint16Array(items),
-                _gl.STATIC_DRAW
-            );
+    //     // Note:
+    //     // DirectX supports 16-bit or 32-bit index buffers. But in this engine,
+    //     // so far, only 16-bit index buffer is supported.
+    //     /*
+    //     if (uses16Bits === true) {
+    //         //
+    //         _gl.bufferData (
+    //             _gl.ELEMENT_ARRAY_BUFFER,
+    //             new Uint16Array(items),
+    //             _gl.STATIC_DRAW
+    //         );
 
-        } else {
-            //
-            _gl.bufferData (
-                _gl.ELEMENT_ARRAY_BUFFER,
-                new Uint32Array(items),
-                _gl.STATIC_DRAW
-            );
-        }
-        */
+    //     } else {
+    //         //
+    //         _gl.bufferData (
+    //             _gl.ELEMENT_ARRAY_BUFFER,
+    //             new Uint32Array(items),
+    //             _gl.STATIC_DRAW
+    //         );
+    //     }
+    //     */
 
-        _gl.bufferData (
-            _gl.ELEMENT_ARRAY_BUFFER,
-            new Uint16Array(items),
-            _gl.STATIC_DRAW
-        );
-        // :Note
-    };
+    //     _gl.bufferData (
+    //         _gl.ELEMENT_ARRAY_BUFFER,
+    //         new Uint16Array(items),
+    //         _gl.STATIC_DRAW
+    //     );
+    //     // :Note
+    // };
 
     this.clear = function(clearOptions, color, depth, stencil) {
         //
@@ -2744,7 +2933,7 @@ function GraphicsManager(_xcene) {
 
         _gl.bindBuffer (
             _gl.ELEMENT_ARRAY_BUFFER,
-            indexBuffer
+            indexBuffer.webGLBuffer
         );
         
         _gl.drawElements (
@@ -2768,17 +2957,17 @@ function GraphicsManager(_xcene) {
         return _gl.getUniformLocation(program, uniformName);
     };
 
-    this.setAttribute = function(attributeLocation, buffer, size) {
+    this.setAttribute = function(attributeLocation, buffer) {
         //
         // Binds the buffer before calling gl.vertexAttribPointer().
         _gl.bindBuffer (
             _gl.ARRAY_BUFFER,
-            buffer
+            buffer.webGLBuffer
         );
 
         _gl.vertexAttribPointer (
             attributeLocation,
-            size,
+            buffer.size,
             _gl.FLOAT,
             false,
             0,
@@ -3139,7 +3328,7 @@ function Xcene(_settings) {
         // @author paulirish / http://paulirish.com/
 
         if (window.requestAnimationFrame === undefined) {
-
+            //
             window.requestAnimationFrame = (function() {
                 //
                 return (
@@ -3582,11 +3771,13 @@ exports.Color = Color;
 exports.Colors = Colors;
 exports.DepthBufferValues = DepthBufferValues;
 exports.GraphicsManager = GraphicsManager;
+exports.IndexBuffer = IndexBuffer;
 exports.NormalizedDeviceCoordinates = NormalizedDeviceCoordinates;
 exports.PrimitiveType = PrimitiveType;
 exports.ScreenCoordinateHelper = ScreenCoordinateHelper;
 exports.ShaderType = ShaderType;
 exports.TextureCoordinateHelper = TextureCoordinateHelper;
+exports.VertexBuffer = VertexBuffer;
 exports.ExceptionHelper = ExceptionHelper;
 exports.MouseButton = MouseButton;
 exports.AxisGroup = AxisGroup;
