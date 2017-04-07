@@ -3,9 +3,19 @@
 //
 function VertexBuffer(_gl) {
     //
-    var _webGLBuffer = _gl.createBuffer();
+    var _webGLBuffer;
     var _size; // Number of components per vertex attribute. Must be 1, 2, 3, or 4.
-    //var _itemCount;
+
+    try {
+        //
+        _webGLBuffer = _gl.createBuffer();
+
+    } catch (e) {
+        //
+        console.log('VertexBuffer: '+ e);
+
+        throw e;
+    }
 
     //
     // Properties.

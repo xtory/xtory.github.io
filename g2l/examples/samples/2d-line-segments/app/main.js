@@ -14,6 +14,7 @@ function main() {
     var leftTexts;
     var fps;
     var then;
+    var lastElapsedMilliseconds;
     var lastFps;
 
     try {
@@ -71,7 +72,8 @@ function main() {
         //
         leftTexts = document.getElementById("leftTexts");
         fps = new g2l.Fps();
-        then = (new Date()).getTime() * 0.001;
+        then = 0;
+        lastElapsedMilliseconds = 0;
         lastFps = 0;
     }
 
@@ -255,12 +257,18 @@ function main() {
     function drawFps() {
         //
         // Compute the elapsed time since the last rendered frame in seconds.
-        var now = (new Date()).getTime() * 0.001;
+        var now = (new Date()).getTime();
         var elapsedTime = now - then;
         then = now;
 
         // Update the FPS counter.
         fps.update(elapsedTime);
+
+        if (now - lastElapsedMilliseconds < 1000) {
+            return;
+        }
+
+        lastElapsedMilliseconds = now;
 
         var fps2 = fps.average;
         if (fps2 !== lastFps) {

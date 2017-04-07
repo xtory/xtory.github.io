@@ -24,6 +24,7 @@ export { NormalizedDeviceCoordinates }                from './graphics/normalize
 export { PrimitiveType }                              from './graphics/primitive-type';
 export { ScreenCoordinateHelper }                     from './graphics/helpers/screen-coordinate-helper';
 export { ShaderType }                                 from './graphics/fx/shader-type';
+export { Texture2D }                                  from './graphics/2d-texture';
 export { TextureCoordinateHelper }                    from './graphics/helpers/texture-coordinate-helper';
 export { VertexBuffer }                               from './graphics/vertex-buffer';
 

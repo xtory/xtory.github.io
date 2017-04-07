@@ -12,7 +12,7 @@ function main() {
     var attributeLocations;
     var uniformLocations;
     var transform;
-    var mainTexture;
+    var texture;
 
     try {
         //
@@ -108,7 +108,7 @@ function main() {
         var url = // which is relative to index.html, not main.js
             '../../assets/images/space.png';
 
-        mainTexture = scene.assetManager.loadTexture2D(url);
+        texture = scene.assetManager.loadTexture2D(url);
     }
 
     function setUpShaders() {
@@ -170,7 +170,7 @@ function main() {
         
         scene.graphicsManager.setSampler (
             uniformLocations.sampler,
-            mainTexture
+            texture
         );
 
         scene.graphicsManager.drawPrimitives (

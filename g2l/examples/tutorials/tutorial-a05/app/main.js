@@ -10,7 +10,7 @@ function main() {
     var program;
     var attributeLocations;
     var uniformLocations;
-    var mainTexture;
+    var texture;
 
     try {
         //
@@ -40,7 +40,7 @@ function main() {
         var url = // which is relative to index.html, not main.js
             '../../assets/images/jeremy-mann/market-street.jpg';
 
-        mainTexture = scene.assetManager.loadTexture2D(url);
+        texture = scene.assetManager.loadTexture2D(url);
     }
 
     function setUpShaders() {
@@ -87,8 +87,8 @@ function main() {
         );
 
         var size = new g2l.Vector2D (
-            mainTexture.width * 0.5,
-            mainTexture.height * 0.5
+            texture.width * 0.5,
+            texture.height * 0.5
         );
 
         setUpGeometries(p.x, p.y, size.x, size.y);
@@ -112,7 +112,7 @@ function main() {
 
         scene.graphicsManager.setSampler (
             uniformLocations.sampler,
-            mainTexture
+            texture
         );
 
         scene.graphicsManager.drawPrimitives (

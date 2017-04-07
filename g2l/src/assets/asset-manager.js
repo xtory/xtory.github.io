@@ -1,6 +1,8 @@
 import { IndexBuffer }  from '../graphics/index-buffer';
 import { MathHelper }   from '../math/helpers/math-helper';
+import { Program }      from '../graphics/fx/program';
 import { ShaderType }   from '../graphics/fx/shader-type';
+import { Texture2D }    from '../graphics/2d-texture';
 import { VertexBuffer } from '../graphics/vertex-buffer';
 
 //
@@ -20,39 +22,39 @@ function AssetManager(_xcene) {
     //
     // Private methods.
     //
-    function loadShader(shaderType, shaderSource) {
+    function loadWebGLShader(shaderType, shaderSource) {
         //
-        var shader;
+        var webGLShader;
 
         if (shaderType === ShaderType.VERTEX_SHADER) {
-            shader = _gl.createShader(_gl.VERTEX_SHADER);
+            webGLShader = _gl.createShader(_gl.VERTEX_SHADER);
         } else if (
             shaderType === ShaderType.FRAGMENT_SHADER
         ){
-            shader = _gl.createShader(_gl.FRAGMENT_SHADER);
+            webGLShader = _gl.createShader(_gl.FRAGMENT_SHADER);
         } else {
             return null; // Unknown shader type.
         }        
 
         // Send the source to the shader object
-        _gl.shaderSource(shader, shaderSource);
+        _gl.shaderSource(webGLShader, shaderSource);
 
         // Compile the shader program
-        _gl.compileShader(shader);
+        _gl.compileShader(webGLShader);
 
         // See if it compiled successfully
-        if (_gl.getShaderParameter(shader, _gl.COMPILE_STATUS) === false) {
+        if (_gl.getShaderParameter(webGLShader, _gl.COMPILE_STATUS) === false) {
             //
-            var log = _gl.getShaderInfoLog(shader);
-            _gl.deleteShader(shader);
+            var log = _gl.getShaderInfoLog(webGLShader);
+            _gl.deleteShader(webGLShader);
 
             throw 'An error occurred compiling the shaders: ' + log;
         }
 
-        return shader;
+        return webGLShader;
     }
 
-    function loadShaderFromHtmlElement(id) {
+    function loadWebGLShaderFromHtmlElement(id) {
         //
         var shaderScript = document.getElementById(id);
 
@@ -80,49 +82,50 @@ function AssetManager(_xcene) {
         // Now figure out what type of shader script we have,
         // based on its MIME type.
 
-        var shader;
+        var webGLShader;
 
         if (shaderScript.type === 'x-shader/x-vertex') {
-            shader = _gl.createShader(_gl.VERTEX_SHADER);
+            webGLShader = _gl.createShader(_gl.VERTEX_SHADER);
         } else if (
             shaderScript.type === 'x-shader/x-fragment'
         ){
-            shader = _gl.createShader(_gl.FRAGMENT_SHADER);
+            webGLShader = _gl.createShader(_gl.FRAGMENT_SHADER);
         } else {
             return null; // Unknown shader type.
         }
 
         // Send the source to the shader object
-        _gl.shaderSource(shader, shaderSource);
+        _gl.shaderSource(webGLShader, shaderSource);
 
         // Compile the shader program
-        _gl.compileShader(shader);
+        _gl.compileShader(webGLShader);
 
         // See if it compiled successfully
-        if (_gl.getShaderParameter(shader, _gl.COMPILE_STATUS) === false) {
+        if (_gl.getShaderParameter(webGLShader, _gl.COMPILE_STATUS) === false) {
             //
-            var log = _gl.getShaderInfoLog(shader);
-            _gl.deleteShader(shader);
+            var log = _gl.getShaderInfoLog(webGLShader);
+            _gl.deleteShader(webGLShader);
 
             throw 'An error occurred compiling the shaders: ' + log;
         }
 
-        return shader;
+        return webGLShader;
     }
 
-    function setUpProgram(vertexShader, fragmentShader) {
+    function setUpProgram(webGLVertexShader, webGLFragmentShader) {
         //
-        var program = _gl.createProgram();
+        var program = new Program(_gl);
+        var webGLProgram = program.webGLProgram;
 
-        _gl.attachShader(program, vertexShader);
-        _gl.attachShader(program, fragmentShader);
+        _gl.attachShader(webGLProgram, webGLVertexShader);
+        _gl.attachShader(webGLProgram, webGLFragmentShader);
 
-        _gl.linkProgram(program);
+        _gl.linkProgram(webGLProgram);
 
-        if (_gl.getProgramParameter(program, _gl.LINK_STATUS) === false) {
+        if (_gl.getProgramParameter(webGLProgram, _gl.LINK_STATUS) === false) {
             //
-            var log = _gl.getProgramInfoLog(program);
-            _gl.deleteProgram(program);
+            var log = _gl.getProgramInfoLog(webGLProgram);
+            _gl.deleteProgram(webGLProgram);
 
             throw 'Unable to initialize the (shader) program: ' + log;
         }
@@ -143,22 +146,22 @@ function AssetManager(_xcene) {
 
     this.setUpProgram = function(vertexShaderSource, fragmentShaderSource) {
         //
-        var vertexShader =
-            loadShader(ShaderType.VERTEX_SHADER, vertexShaderSource);
+        var webGLVertexShader =
+            loadWebGLShader(ShaderType.VERTEX_SHADER, vertexShaderSource);
 
-        var fragmentShader =
-            loadShader(ShaderType.FRAGMENT_SHADER, fragmentShaderSource);
+        var webGLFragmentShader =
+            loadWebGLShader(ShaderType.FRAGMENT_SHADER, fragmentShaderSource);
 
-        return setUpProgram(vertexShader, fragmentShader);
+        return setUpProgram(webGLVertexShader, webGLFragmentShader);
     };
 
     this.setUpProgramFromHtmlElements = function(vertexShaderId, fragmentShaderId) {
         //
         var vertexShader =
-            loadShaderFromHtmlElement(ShaderType.VERTEX_SHADER, vertexShaderId);
+            loadWebGLShaderFromHtmlElement(ShaderType.VERTEX_SHADER, vertexShaderId);
 
         var fragmentShader =
-            loadShaderFromHtmlElement(ShaderType.FRAGMENT_SHADER, fragmentShaderId);
+            loadWebGLShaderFromHtmlElement(ShaderType.FRAGMENT_SHADER, fragmentShaderId);
 
         return setUpProgram(vertexShader, fragmentShader);
     };
@@ -166,7 +169,7 @@ function AssetManager(_xcene) {
     this.loadTexture2D = function(imageSourceUrl) {
         //
         var image = new Image();
-        var texture = _gl.createTexture();
+        var texture = new Texture2D(_gl);
 
         image.addEventListener('load', function() {
             handleTextureLoaded(image, texture);
@@ -176,14 +179,9 @@ function AssetManager(_xcene) {
 
         function handleTextureLoaded(image, texture) {
             //
-            // Test:
-            texture.width = image.width;
-            texture.height = image.height;
-            // :Test
-
             _gl.bindTexture (
                 _gl.TEXTURE_2D,
-                texture
+                texture.webGLTexture
             );
 
             _gl.texImage2D (
@@ -236,6 +234,9 @@ function AssetManager(_xcene) {
             );
 
             _gl.bindTexture(_gl.TEXTURE_2D, null);
+
+            texture.width = image.width;
+            texture.height = image.height;
         }
 
         return texture;

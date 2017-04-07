@@ -12,8 +12,8 @@ function main() {
     var attributeLocations;
     var uniformLocations;
     var transform;
-    var mainTexture;
-    var starburstTexture;
+    var texture1;
+    var texture2;
 
     try {
         //
@@ -100,10 +100,10 @@ function main() {
     function setUpTextures() {
         //
         var url = '../../assets/images/jeremy-mann/market-street.jpg';
-        mainTexture = scene.assetManager.loadTexture2D(url);
+        texture1 = scene.assetManager.loadTexture2D(url);
 
         url = '../../assets/images/starburst.jpg';
-        starburstTexture = scene.assetManager.loadTexture2D(url);        
+        texture2 = scene.assetManager.loadTexture2D(url);        
     }
 
     function setUpShaders() {
@@ -170,13 +170,13 @@ function main() {
         
         scene.graphicsManager.setSampler (
             uniformLocations.sampler1,
-            mainTexture,
+            texture1,
             0
         );
 
         scene.graphicsManager.setSampler (
             uniformLocations.sampler2,
-            starburstTexture,
+            texture2,
             1
         );
 

@@ -104,7 +104,7 @@ function GraphicsManager(_xcene) {
             }
             
             _program = value;
-            _gl.useProgram(_program);
+            _gl.useProgram(_program.webGLProgram);
         },
     });
 
@@ -390,12 +390,12 @@ function GraphicsManager(_xcene) {
     //
     this.getAttributeLocation = function(program, attributeName) {
         //
-        return _gl.getAttribLocation(program, attributeName);
+        return _gl.getAttribLocation(program.webGLProgram, attributeName);
     };
     
     this.getUniformLocation = function(program, uniformName) {
         //
-        return _gl.getUniformLocation(program, uniformName);
+        return _gl.getUniformLocation(program.webGLProgram, uniformName);
     };
 
     this.setAttribute = function(attributeLocation, buffer) {
@@ -436,7 +436,7 @@ function GraphicsManager(_xcene) {
         // ...
 
         _gl.activeTexture(_gl.TEXTURE0 + unit);
-        _gl.bindTexture(_gl.TEXTURE_2D, texture);
+        _gl.bindTexture(_gl.TEXTURE_2D, texture.webGLTexture);
 
         this.setUniform(samplerUniformLocation, unit);
     };

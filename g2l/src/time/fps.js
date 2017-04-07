@@ -43,13 +43,16 @@ function Fps() {
     //
     // Privileged methods.
     //
-    this.update = function(elapsedTime) {
-        //
+    this.update = function (
+        elapsedTime // in milliseconds.
+    ){
+        var elapsedTime2 = elapsedTime * 0.001;
+
         // Keep the total time and total active time for the last N frames.
-        _totalTime += elapsedTime - _timeTable[_timeTableIndex];
+        _totalTime += elapsedTime2 - _timeTable[_timeTableIndex];
 
         // Save off the elapsed time for this frame so we can subtract it later.
-        _timeTable[_timeTableIndex] = elapsedTime;
+        _timeTable[_timeTableIndex] = elapsedTime2;
 
         // Wrap the place to store the next time sample.
         _timeTableIndex++;

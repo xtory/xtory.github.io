@@ -22,14 +22,21 @@ function main() {
 
     // FPS.
     var leftTexts;
-    var rightTexts;
     var fps;
     var then;
+    var lastElapsedMilliseconds;
     var lastFps;
 
     try {
         //
         scene = new g2l.Xcene();
+
+        // var canvas = document.getElementById("canvas");
+        // scene = new g2l.Xcene({
+        //     canvas: canvas,
+        //     usesDefaultStyles: false
+        // });
+
         gl = scene.graphicsManager.webGLContext;
 
         document.body.appendChild(gl.canvas);
@@ -218,27 +225,25 @@ function main() {
     function setUpFps() {
         //
         leftTexts = document.getElementById("leftTexts");
-        rightTexts = document.getElementById("rightTexts");
         fps = new g2l.Fps();
-        then = (new Date()).getTime() * 0.001;
+        then = 0;
+        lastElapsedMilliseconds = 0;
         lastFps = 0;
     }
     
     function hookEvents() {
         //
-        var mainCanvas = gl.canvas;
+        gl.canvas.addEventListener('mousedown',  onMouseDown);
+        gl.canvas.addEventListener('mousemove',  onMouseMove);
+        gl.canvas.addEventListener('mouseup',    onMouseUp);
+        gl.canvas.addEventListener('mousewheel', onMouseWheel);
+        gl.canvas.addEventListener('keydown',    onKeyDown);
+        gl.canvas.addEventListener('keyup',      onKeyUp);
 
-        mainCanvas.addEventListener('mousedown',  onMouseDown);
-        mainCanvas.addEventListener('mousemove',  onMouseMove);
-        mainCanvas.addEventListener('mouseup',    onMouseUp);
-        mainCanvas.addEventListener('mousewheel', onMouseWheel);
-        mainCanvas.addEventListener('keydown',    onKeyDown);
-        mainCanvas.addEventListener('keyup',      onKeyUp);
-
-        mainCanvas.addEventListener('touchstart',  onTouchStart);
-        mainCanvas.addEventListener('touchmove',   onTouchMove);
-        mainCanvas.addEventListener('touchcancel', onTouchCancel);
-        mainCanvas.addEventListener('touchend',    onTouchEnd);
+        gl.canvas.addEventListener('touchstart',  onTouchStart);
+        gl.canvas.addEventListener('touchmove',   onTouchMove);
+        gl.canvas.addEventListener('touchcancel', onTouchCancel);
+        gl.canvas.addEventListener('touchend',    onTouchEnd);
     }
 
     function drawScene() {
@@ -284,17 +289,22 @@ function main() {
     function drawFps() {
         //
         // Compute the elapsed time since the last rendered frame in seconds.
-        var now = (new Date()).getTime() * 0.001;
+        var now = (new Date()).getTime();
         var elapsedTime = now - then;
         then = now;
 
         // Update the FPS counter.
         fps.update(elapsedTime);
 
+        if (now - lastElapsedMilliseconds < 1000) {
+            return;
+        }
+
+        lastElapsedMilliseconds = now;
+        
         var fps2 = fps.average;
         if (fps2 !== lastFps) {
-            leftTexts.innerHTML = 'FPS: ' + fps2 + 'A​‌B​‌C​‌Ć​‌Č​‌D​‌Đ​‌E​‌F​‌G​‌H​‌I​‌J​‌K​‌L​‌M​‌N​‌O​‌P​‌Q​‌R​‌S​‌Š​‌T​‌U​‌V​‌W​‌X​‌Y​‌Z​‌Ž​‌a​‌b​‌c​‌č​‌ć​‌d​‌đ​‌e​‌f​‌g​‌h​‌i​‌j​‌k​‌l​‌m​‌n​‌o​‌p​‌q​‌r​‌s​‌š​‌t​‌u​‌v​‌w​‌x​‌y​‌z​‌ž​‌1​‌2​‌3​‌4​‌5​‌6​‌7​‌8​‌9​‌0​‌';
-            rightTexts.innerHTML = 'FPS: ' + fps2 + 'A​‌B​‌C​‌Ć​‌Č​‌D​‌Đ​‌E​‌F​‌G​‌H​‌I​‌J​‌K​‌L​‌M​‌N​‌O​‌P​‌Q​‌R​‌S​‌Š​‌T​‌U​‌V​‌W​‌X​‌Y​‌Z​‌Ž​‌a​‌b​‌c​‌č​‌ć​‌d​‌đ​‌e​‌f​‌g​‌h​‌i​‌j​‌k​‌l​‌m​‌n​‌o​‌p​‌q​‌r​‌s​‌š​‌t​‌u​‌v​‌w​‌x​‌y​‌z​‌ž​‌1​‌2​‌3​‌4​‌5​‌6​‌7​‌8​‌9​‌0​‌';
+            leftTexts.innerHTML = 'FPS: ' + fps2;
             lastFps = fps2;
         }
     }

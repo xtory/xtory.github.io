@@ -3,8 +3,18 @@
 //
 function IndexBuffer(_gl) {
     //
-    var _webGLBuffer = _gl.createBuffer();
-    //var _itemCount;
+    var _webGLBuffer;
+
+    try {
+        //
+        _webGLBuffer = _gl.createBuffer();
+
+    } catch (e) {
+        //
+        console.log('IndexBuffer: '+ e);
+
+        throw e;
+    }
 
     //
     // Properties.
@@ -16,10 +26,6 @@ function IndexBuffer(_gl) {
     Object.defineProperty(this, 'webGLBuffer', {
         'get': function() { return _webGLBuffer; }
     });
-
-    // Object.defineProperty(this, 'ItemCount', {
-    //     'get': function() { return _itemCount; }
-    // });
 }
 
 IndexBuffer.prototype = {

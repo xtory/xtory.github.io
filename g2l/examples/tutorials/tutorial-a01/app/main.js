@@ -134,7 +134,7 @@ function main() {
         
         setUpTransform();
 
-        gl.drawArrays (
+        scene.graphicsManager.drawPrimitives (
             g2l.PrimitiveType.TRIANGLE_STRIP,
             0,
             3
