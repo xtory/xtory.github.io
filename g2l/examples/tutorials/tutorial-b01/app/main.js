@@ -22,6 +22,8 @@ function main() {
         scene = new g2l.Xcene();
         gl = scene.graphicsManager.webGLContext;
 
+        document.body.appendChild(gl.canvas);
+
         setUpCamera();
         
         setUpGeometries();

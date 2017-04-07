@@ -54,7 +54,7 @@ function Xcene(_settings) {
         // @author paulirish / http://paulirish.com/
 
         if (window.requestAnimationFrame === undefined) {
-
+            //
             window.requestAnimationFrame = (function() {
                 //
                 return (

@@ -1,3 +1,5 @@
+// g2l stands for GorillaGL.
+
 // Assets.
 export { PositionColor }                              from './assets/shaders/position-color';
 export { PositionOnly }                               from './assets/shaders/position-only';

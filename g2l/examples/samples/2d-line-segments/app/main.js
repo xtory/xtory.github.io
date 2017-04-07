@@ -28,6 +28,8 @@ function main() {
 
         gl = scene.graphicsManager.webGLContext;
 
+        document.body.appendChild(gl.canvas);
+
         setUpShaders();
 
         setUpFps();

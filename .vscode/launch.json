@@ -59,10 +59,10 @@
                 "-allow-file-access-from-files"
             ]
         }, {
-            "name": "samples/inputs",
+            "name": "samples/io",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/g2l/examples/samples/inputs/index.html",
+            "file": "${workspaceRoot}/g2l/examples/samples/io/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"

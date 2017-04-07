@@ -130,7 +130,7 @@ function GraphicsManager(_xcene) {
             _canvas.width = GraphicsManager.CANVAS_WIDTH;
             _canvas.height = GraphicsManager.CANVAS_HEIGHT;
 
-            document.body.appendChild(_canvas);
+            //document.body.appendChild(_canvas);
         }
     }
 
