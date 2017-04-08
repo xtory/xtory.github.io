@@ -4,7 +4,7 @@ import { Renderer } from '../graphics/renderer';
 //
 // Constructor.
 //
-function Xcene(_settings) {
+function Scene(_settings) {
     //
     // Note:
     // 'settings' include...
@@ -39,7 +39,7 @@ function Xcene(_settings) {
         
     } catch (e) {
         //
-        console.error('g2l.Xcene: ' + e);
+        console.log('g2l.Scene: ' + e);
         
         throw e;
     }
@@ -117,6 +117,6 @@ function Xcene(_settings) {
     };
 }
 
-Object.freeze(Xcene);
+Object.freeze(Scene);
 
-export { Xcene };
+export { Scene };

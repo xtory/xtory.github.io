@@ -17,7 +17,7 @@ import { Vector2D }                from '../math/2d-vector';
 //
 // Constructor.
 //
-function Renderer(_xcene) {
+function Renderer(_scene) {
     //
     var _canvas;
     var _gl;
@@ -36,7 +36,7 @@ function Renderer(_xcene) {
 
     } catch (e) {
         //
-        console.log('Renderer: '+ e);
+        console.log('g2l.Renderer: '+ e);
 
         throw e;
     }
@@ -44,8 +44,8 @@ function Renderer(_xcene) {
     //
     // Properties.
     //
-    Object.defineProperty(this, 'xcene', {
-        'get': function() { return _xcene; }
+    Object.defineProperty(this, 'scene', {
+        'get': function() { return _scene; }
     });
 
     Object.defineProperty(this, 'canvas', {
@@ -111,10 +111,10 @@ function Renderer(_xcene) {
     //
     function setUpCanvas() {
         //
-        if (_xcene.settings !== undefined &&
-            _xcene.settings.canvas !== undefined) {
+        if (_scene.settings !== undefined &&
+            _scene.settings.canvas !== undefined) {
             //
-            _canvas = _xcene.settings.canvas;
+            _canvas = _scene.settings.canvas;
 
         } else {
             //
@@ -145,8 +145,8 @@ function Renderer(_xcene) {
         //     display: block; /* prevents scrollbar */
         // }
         //
-        if (_xcene.settings !== undefined &&
-            _xcene.settings.usesDefaultStyles === false) {
+        if (_scene.settings !== undefined &&
+            _scene.settings.usesDefaultStyles === false) {
             return;
         }
 

@@ -28,7 +28,7 @@ function Fps() {
 
     } catch (e) {
         //
-        console.log('Fps: '+ e);
+        console.log('g2l.Fps: '+ e);
 
         throw e;
     }

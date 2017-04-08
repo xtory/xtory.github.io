@@ -11,7 +11,7 @@ function Program(_gl) {
 
     } catch (e) {
         //
-        console.log('Program: '+ e);
+        console.log('g2l.Program: '+ e);
 
         throw e;
     }

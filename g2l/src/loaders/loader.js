@@ -8,15 +8,15 @@ import { VertexBuffer } from '../graphics/vertex-buffer';
 //
 // Constructor.
 //
-function Loader(_xcene) {
+function Loader(_scene) {
     //
-    var _gl = _xcene.renderer.webGLContext;
+    var _gl = _scene.renderer.webGLContext;
 
     //
     // Properties.
     //
-    Object.defineProperty(this, 'xcene', {
-        get: function() { return _xcene; }
+    Object.defineProperty(this, 'scene', {
+        get: function() { return _scene; }
     });
 
     //

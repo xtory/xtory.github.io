@@ -19,7 +19,7 @@ function main() {
 
     try {
         //
-        scene = new g2l.Xcene();
+        scene = new g2l.Scene();
         gl = scene.renderer.webGLContext;
 
         document.body.appendChild(gl.canvas);

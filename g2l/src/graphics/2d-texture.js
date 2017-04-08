@@ -13,7 +13,7 @@ function Texture2D(_gl) {
 
     } catch (e) {
         //
-        console.log('IndexBuffer: '+ e);
+        console.log('g2l.Texture2D: '+ e);
 
         throw e;
     }

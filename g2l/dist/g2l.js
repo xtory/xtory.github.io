@@ -1900,7 +1900,7 @@ Object.freeze(DepthBufferValues);
 //
 // Constructor.
 //
-function Renderer(_xcene) {
+function Renderer(_scene) {
     //
     var _canvas;
     var _gl;
@@ -1919,7 +1919,7 @@ function Renderer(_xcene) {
 
     } catch (e) {
         //
-        console.log('Renderer: '+ e);
+        console.log('g2l.Renderer: '+ e);
 
         throw e;
     }
@@ -1927,8 +1927,8 @@ function Renderer(_xcene) {
     //
     // Properties.
     //
-    Object.defineProperty(this, 'xcene', {
-        'get': function() { return _xcene; }
+    Object.defineProperty(this, 'scene', {
+        'get': function() { return _scene; }
     });
 
     Object.defineProperty(this, 'canvas', {
@@ -1994,10 +1994,10 @@ function Renderer(_xcene) {
     //
     function setUpCanvas() {
         //
-        if (_xcene.settings !== undefined &&
-            _xcene.settings.canvas !== undefined) {
+        if (_scene.settings !== undefined &&
+            _scene.settings.canvas !== undefined) {
             //
-            _canvas = _xcene.settings.canvas;
+            _canvas = _scene.settings.canvas;
 
         } else {
             //
@@ -2028,8 +2028,8 @@ function Renderer(_xcene) {
         //     display: block; /* prevents scrollbar */
         // }
         //
-        if (_xcene.settings !== undefined &&
-            _xcene.settings.usesDefaultStyles === false) {
+        if (_scene.settings !== undefined &&
+            _scene.settings.usesDefaultStyles === false) {
             return;
         }
 
@@ -2367,7 +2367,7 @@ function IndexBuffer(_gl) {
 
     } catch (e) {
         //
-        console.log('IndexBuffer: '+ e);
+        console.log('g2l.IndexBuffer: '+ e);
 
         throw e;
     }
@@ -2679,7 +2679,7 @@ function Program(_gl) {
 
     } catch (e) {
         //
-        console.log('Program: '+ e);
+        console.log('g2l.Program: '+ e);
 
         throw e;
     }
@@ -2793,7 +2793,7 @@ function Texture2D(_gl) {
 
     } catch (e) {
         //
-        console.log('IndexBuffer: '+ e);
+        console.log('g2l.Texture2D: '+ e);
 
         throw e;
     }
@@ -3017,7 +3017,7 @@ function VertexBuffer(_gl) {
 
     } catch (e) {
         //
-        console.log('VertexBuffer: '+ e);
+        console.log('g2l.VertexBuffer: '+ e);
 
         throw e;
     }
@@ -3117,15 +3117,15 @@ Object.freeze(MouseButton);
 //
 // Constructor.
 //
-function Loader(_xcene) {
+function Loader(_scene) {
     //
-    var _gl = _xcene.renderer.webGLContext;
+    var _gl = _scene.renderer.webGLContext;
 
     //
     // Properties.
     //
-    Object.defineProperty(this, 'xcene', {
-        get: function() { return _xcene; }
+    Object.defineProperty(this, 'scene', {
+        get: function() { return _scene; }
     });
 
     //
@@ -3366,7 +3366,7 @@ Object.freeze(Plane);
 //
 // Constructor.
 //
-function Xcene(_settings) {
+function Scene(_settings) {
     //
     // Note:
     // 'settings' include...
@@ -3401,7 +3401,7 @@ function Xcene(_settings) {
         
     } catch (e) {
         //
-        console.error('g2l.Xcene: ' + e);
+        console.log('g2l.Scene: ' + e);
         
         throw e;
     }
@@ -3479,7 +3479,7 @@ function Xcene(_settings) {
     };
 }
 
-Object.freeze(Xcene);
+Object.freeze(Scene);
 
 //
 // Constructor.
@@ -3527,7 +3527,7 @@ function Fps() {
 
     } catch (e) {
         //
-        console.log('Fps: '+ e);
+        console.log('g2l.Fps: '+ e);
 
         throw e;
     }
@@ -3883,7 +3883,7 @@ exports.CartesianAxis = CartesianAxis;
 exports.Plane = Plane;
 exports.Quaternion = Quaternion;
 exports.ViewFrustum = ViewFrustum;
-exports.Xcene = Xcene;
+exports.Scene = Scene;
 exports.EaseMode = EaseMode;
 exports.Fps = Fps;
 exports.SineEase = SineEase;

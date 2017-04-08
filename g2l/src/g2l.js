@@ -46,7 +46,7 @@ export { Quaternion }                                 from './math/quaternion';
 export { ViewFrustum }                                from './math/view-frustum';
 
 // Scenes.
-export { Xcene }                                      from './scenes/xcene';
+export { Scene }                                      from './scenes/scene';
 
 // Time.
 export { EaseMode }                                   from './time/ease-mode';

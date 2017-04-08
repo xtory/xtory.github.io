@@ -12,7 +12,7 @@ function VertexBuffer(_gl) {
 
     } catch (e) {
         //
-        console.log('VertexBuffer: '+ e);
+        console.log('g2l.VertexBuffer: '+ e);
 
         throw e;
     }

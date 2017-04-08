@@ -11,7 +11,7 @@ function IndexBuffer(_gl) {
 
     } catch (e) {
         //
-        console.log('IndexBuffer: '+ e);
+        console.log('g2l.IndexBuffer: '+ e);
 
         throw e;
     }

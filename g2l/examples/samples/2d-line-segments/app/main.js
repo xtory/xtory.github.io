@@ -19,10 +19,10 @@ function main() {
 
     try {
         //
-        scene = new g2l.Xcene();
+        scene = new g2l.Scene();
 
         // var canvas = document.getElementById("canvas");
-        // scene = new g2l.Xcene({
+        // scene = new g2l.Scene({
         //     canvas: canvas,
         //     usesDefaultStyles: false
         // });
