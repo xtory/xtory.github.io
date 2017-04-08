@@ -15,7 +15,7 @@ function main() {
     try {
         //
         scene = new g2l.Xcene();
-        gl = scene.graphicsManager.webGLContext;
+        gl = scene.renderer.webGLContext;
 
         document.body.appendChild(gl.canvas);
 
@@ -40,29 +40,29 @@ function main() {
         var url = // which is relative to index.html, not main.js
             '../../assets/images/jeremy-mann/market-street.jpg';
 
-        texture = scene.assetManager.loadTexture2D(url);
+        texture = scene.loader.loadTexture2D(url);
     }
 
     function setUpShaders() {
         //
-        program = scene.assetManager.setUpProgram (
+        program = scene.loader.setUpProgram (
             g2l.TransformedPositionColorTextureCoordinates.VERTEX_SHADER_SOURCE,
             g2l.TransformedPositionColorTextureCoordinates.FRAGMENT_SHADER_SOURCE
         );
 
         attributeLocations = {
             //
-            vertexPosition: scene.graphicsManager.getAttributeLocation (
+            vertexPosition: scene.renderer.getAttributeLocation (
                 program,
                'vertexPosition'
             ),
 
-            vertexColor: scene.graphicsManager.getAttributeLocation (
+            vertexColor: scene.renderer.getAttributeLocation (
                 program,
                'vertexColor'
             ),
 
-            vertexTextureCoordinates: scene.graphicsManager.getAttributeLocation (
+            vertexTextureCoordinates: scene.renderer.getAttributeLocation (
                 program,
                'vertexTextureCoordinates'
             )
@@ -70,7 +70,7 @@ function main() {
 
         uniformLocations = {
             //
-            sampler: scene.graphicsManager.getUniformLocation (
+            sampler: scene.renderer.getUniformLocation (
                 program,
                'sampler'
             )
@@ -79,7 +79,7 @@ function main() {
 
     function drawScene() {
         //
-        scene.graphicsManager.clear();
+        scene.renderer.clear();
 
         var p = new g2l.Vector2D (
             gl.canvas.clientWidth * 0.5,
@@ -93,29 +93,29 @@ function main() {
 
         setUpGeometries(p.x, p.y, size.x, size.y);
 
-        scene.graphicsManager.program = program;
+        scene.renderer.program = program;
 
-        scene.graphicsManager.setAttribute (
+        scene.renderer.setAttribute (
             attributeLocations.vertexPosition,
             vertexBuffers.position
         );
 
-        scene.graphicsManager.setAttribute (
+        scene.renderer.setAttribute (
             attributeLocations.vertexColor,
             vertexBuffers.color
         );
 
-        scene.graphicsManager.setAttribute (
+        scene.renderer.setAttribute (
             attributeLocations.vertexTextureCoordinates,
             vertexBuffers.textureCoordinates
         );
 
-        scene.graphicsManager.setSampler (
+        scene.renderer.setSampler (
             uniformLocations.sampler,
             texture
         );
 
-        scene.graphicsManager.drawPrimitives (
+        scene.renderer.drawPrimitives (
             g2l.PrimitiveType.TRIANGLE_STRIP,
             0,
             4
@@ -125,12 +125,12 @@ function main() {
     function setUpGeometries(x, y, w, h) {
         //
         vertexBuffers = {
-            position: scene.assetManager.createVertexBuffer(),
-            color: scene.assetManager.createVertexBuffer(),
-            textureCoordinates: scene.assetManager.createVertexBuffer()
+            position: scene.loader.createVertexBuffer(),
+            color: scene.loader.createVertexBuffer(),
+            textureCoordinates: scene.loader.createVertexBuffer()
         };
 
-        var viewport = scene.graphicsManager.viewport;
+        var viewport = scene.renderer.viewport;
 
         //
         // Vertex positions.

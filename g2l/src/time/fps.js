@@ -28,7 +28,7 @@ function Fps() {
 
     } catch (e) {
         //
-        console.log('GraphicsManager: '+ e);
+        console.log('Fps: '+ e);
 
         throw e;
     }

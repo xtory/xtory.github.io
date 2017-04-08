@@ -20,7 +20,7 @@ function main() {
     try {
         //
         scene = new g2l.Xcene();
-        gl = scene.graphicsManager.webGLContext;
+        gl = scene.renderer.webGLContext;
 
         document.body.appendChild(gl.canvas);
 
@@ -63,9 +63,9 @@ function main() {
     function setUpGeometries() {
         //
         vertexBuffers = {
-            position: scene.assetManager.createVertexBuffer(),
-            normal: scene.assetManager.createVertexBuffer(),
-            textureCoordinates: scene.assetManager.createVertexBuffer()
+            position: scene.loader.createVertexBuffer(),
+            normal: scene.loader.createVertexBuffer(),
+            textureCoordinates: scene.loader.createVertexBuffer()
         };
 
         //
@@ -212,7 +212,7 @@ function main() {
         //
         // Vertex indices.
         //
-        indexBuffer = scene.assetManager.createIndexBuffer();
+        indexBuffer = scene.loader.createIndexBuffer();
 
         var vertexIndices = [
             //
@@ -249,29 +249,29 @@ function main() {
         var url = // which is relative to index.html, not main.js
             '../../assets/images/jeremy-mann/market-street.jpg';
 
-        texture = scene.assetManager.loadTexture2D(url);
+        texture = scene.loader.loadTexture2D(url);
     }
 
     function setUpShaders() {
         //
-        program = scene.assetManager.setUpProgram (
+        program = scene.loader.setUpProgram (
             PhongShading.VERTEX_SHADER_SOURCE,
             PhongShading.FRAGMENT_SHADER_SOURCE
         );
 
         attributeLocations = {
             //
-            vertexPosition: scene.graphicsManager.getAttributeLocation (
+            vertexPosition: scene.renderer.getAttributeLocation (
                 program,
                'vertexPosition'
             ),
 
-            vertexNormal: scene.graphicsManager.getAttributeLocation (
+            vertexNormal: scene.renderer.getAttributeLocation (
                 program,
                'vertexNormal'
             ),
             
-            vertexTextureCoordinates: scene.graphicsManager.getAttributeLocation (
+            vertexTextureCoordinates: scene.renderer.getAttributeLocation (
                 program,
                'vertexTextureCoordinates'
             )
@@ -279,17 +279,17 @@ function main() {
         
         uniformLocations = {
             //
-            transform: scene.graphicsManager.getUniformLocation (
+            transform: scene.renderer.getUniformLocation (
                 program,
                'transform'
             ),
 
-            transposeOfInverseOfModelMatrix: scene.graphicsManager.getUniformLocation (
+            transposeOfInverseOfModelMatrix: scene.renderer.getUniformLocation (
                 program,
                'transposeOfInverseOfModelMatrix'
             ),
 
-            sampler: scene.graphicsManager.getUniformLocation (
+            sampler: scene.renderer.getUniformLocation (
                 program,
                'sampler'
             )
@@ -317,33 +317,33 @@ function main() {
 
     function drawScene() {
         //
-        scene.graphicsManager.clear();
+        scene.renderer.clear();
 
-        scene.graphicsManager.program = program;
+        scene.renderer.program = program;
 
-        scene.graphicsManager.setAttribute (
+        scene.renderer.setAttribute (
             attributeLocations.vertexPosition,
             vertexBuffers.position
         );
 
-        scene.graphicsManager.setAttribute (
+        scene.renderer.setAttribute (
             attributeLocations.vertexTextureCoordinates,
             vertexBuffers.textureCoordinates
         );
 
-        scene.graphicsManager.setAttribute (
+        scene.renderer.setAttribute (
             attributeLocations.vertexNormal,
             vertexBuffers.normal
         );
 
         setUpTransform();
         
-        scene.graphicsManager.setSampler (
+        scene.renderer.setSampler (
             uniformLocations.sampler,
             texture
         );
 
-        scene.graphicsManager.drawIndexedPrimitives (
+        scene.renderer.drawIndexedPrimitives (
             indexBuffer,
             g2l.PrimitiveType.TRIANGLE_LIST,
             36
@@ -377,7 +377,7 @@ function main() {
         transposeOfInverseOfModelMatrix =
             g2l.Matrix4x4.transposeMatrix(transposeOfInverseOfModelMatrix);
         
-        scene.graphicsManager.setUniform (
+        scene.renderer.setUniform (
             uniformLocations.transposeOfInverseOfModelMatrix,
             transposeOfInverseOfModelMatrix
         );
@@ -389,7 +389,7 @@ function main() {
             modelMatrix
         );
 
-        scene.graphicsManager.setUniform (
+        scene.renderer.setUniform (
             uniformLocations.transform,
             transform
         );

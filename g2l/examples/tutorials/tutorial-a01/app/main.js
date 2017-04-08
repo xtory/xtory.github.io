@@ -17,7 +17,7 @@ function main() {
     try {
         //
         scene = new g2l.Xcene();
-        gl = scene.graphicsManager.webGLContext;
+        gl = scene.renderer.webGLContext;
         
         document.body.appendChild(gl.canvas);
         
@@ -61,8 +61,8 @@ function main() {
     function setUpGeometries() {
         //
         vertexBuffers = {
-            position: scene.assetManager.createVertexBuffer(),
-            color: scene.assetManager.createVertexBuffer()
+            position: scene.loader.createVertexBuffer(),
+            color: scene.loader.createVertexBuffer()
         };
 
         //
@@ -90,26 +90,26 @@ function main() {
 
     function setUpShaders() {
         //
-        program = scene.assetManager.setUpProgram (
+        program = scene.loader.setUpProgram (
             g2l.PositionColor.VERTEX_SHADER_SOURCE,
             g2l.PositionColor.FRAGMENT_SHADER_SOURCE
         );
 
         attributeLocations = {
             //
-            vertexPosition: scene.graphicsManager.getAttributeLocation (
+            vertexPosition: scene.renderer.getAttributeLocation (
                 program,
                'vertexPosition'
             ),
 
-            vertexColor: scene.graphicsManager.getAttributeLocation (
+            vertexColor: scene.renderer.getAttributeLocation (
                 program,
                'vertexColor'
             )
         };
         
         uniformLocations = {
-            transform: scene.graphicsManager.getUniformLocation (
+            transform: scene.renderer.getUniformLocation (
                 program,
                'transform'
             )
@@ -118,23 +118,23 @@ function main() {
 
     function drawScene() {
         //
-        scene.graphicsManager.clear();
+        scene.renderer.clear();
 
-        scene.graphicsManager.program = program;
+        scene.renderer.program = program;
 
-        scene.graphicsManager.setAttribute (
+        scene.renderer.setAttribute (
             attributeLocations.vertexPosition,
             vertexBuffers.position
         );
 
-        scene.graphicsManager.setAttribute (
+        scene.renderer.setAttribute (
             attributeLocations.vertexColor,
             vertexBuffers.color
         );
         
         setUpTransform();
 
-        scene.graphicsManager.drawPrimitives (
+        scene.renderer.drawPrimitives (
             g2l.PrimitiveType.TRIANGLE_STRIP,
             0,
             3
@@ -158,7 +158,7 @@ function main() {
             rotation.toMatrix4x4()
         );
 
-        scene.graphicsManager.setUniform (
+        scene.renderer.setUniform (
             uniformLocations.transform,
             transform
         );

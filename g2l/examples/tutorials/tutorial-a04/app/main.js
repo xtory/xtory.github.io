@@ -18,7 +18,7 @@ function main() {
     try {
         //
         scene = new g2l.Xcene();
-        gl = scene.graphicsManager.webGLContext;
+        gl = scene.renderer.webGLContext;
 
         document.body.appendChild(gl.canvas);
 
@@ -59,8 +59,8 @@ function main() {
     function setUpGeometries(x, y, w, h) {
         //
         vertexBuffers = {
-            position: scene.assetManager.createVertexBuffer(),
-            textureCoordinates: scene.assetManager.createVertexBuffer()
+            position: scene.loader.createVertexBuffer(),
+            textureCoordinates: scene.loader.createVertexBuffer()
         };
 
         //
@@ -100,27 +100,27 @@ function main() {
     function setUpTextures() {
         //
         var url = '../../assets/images/jeremy-mann/market-street.jpg';
-        texture1 = scene.assetManager.loadTexture2D(url);
+        texture1 = scene.loader.loadTexture2D(url);
 
         url = '../../assets/images/starburst.jpg';
-        texture2 = scene.assetManager.loadTexture2D(url);        
+        texture2 = scene.loader.loadTexture2D(url);        
     }
 
     function setUpShaders() {
         //
-        program = scene.assetManager.setUpProgram (
+        program = scene.loader.setUpProgram (
             Multitexturing.VERTEX_SHADER_SOURCE,
             Multitexturing.FRAGMENT_SHADER_SOURCE
         );
 
         attributeLocations = {
             //
-            vertexPosition: scene.graphicsManager.getAttributeLocation (
+            vertexPosition: scene.renderer.getAttributeLocation (
                 program,
                'vertexPosition'
             ),
 
-            vertexTextureCoordinates: scene.graphicsManager.getAttributeLocation (
+            vertexTextureCoordinates: scene.renderer.getAttributeLocation (
                 program,
                'vertexTextureCoordinates'
             )
@@ -128,17 +128,17 @@ function main() {
 
         uniformLocations = {
             //
-            transform: scene.graphicsManager.getUniformLocation (
+            transform: scene.renderer.getUniformLocation (
                 program,
                'transform'
             ),
 
-            sampler1: scene.graphicsManager.getUniformLocation (
+            sampler1: scene.renderer.getUniformLocation (
                 program,
                'sampler1'
             ),
 
-            sampler2: scene.graphicsManager.getUniformLocation (
+            sampler2: scene.renderer.getUniformLocation (
                 program,
                'sampler2'
             )
@@ -147,40 +147,40 @@ function main() {
     
     function drawScene() {
         //
-        scene.graphicsManager.clear();
+        scene.renderer.clear();
 
-        scene.graphicsManager.program = program;
+        scene.renderer.program = program;
 
-        scene.graphicsManager.setAttribute (
+        scene.renderer.setAttribute (
             attributeLocations.vertexPosition,
             vertexBuffers.position
         );
 
-        scene.graphicsManager.setAttribute (
+        scene.renderer.setAttribute (
             attributeLocations.vertexTextureCoordinates,
             vertexBuffers.textureCoordinates
         );
 
         camera.getTransform(transform);
 
-        scene.graphicsManager.setUniform (
+        scene.renderer.setUniform (
             uniformLocations.transform,
             transform
         );
         
-        scene.graphicsManager.setSampler (
+        scene.renderer.setSampler (
             uniformLocations.sampler1,
             texture1,
             0
         );
 
-        scene.graphicsManager.setSampler (
+        scene.renderer.setSampler (
             uniformLocations.sampler2,
             texture2,
             1
         );
 
-        scene.graphicsManager.drawPrimitives (
+        scene.renderer.drawPrimitives (
             g2l.PrimitiveType.TRIANGLE_STRIP,
             0,
             4

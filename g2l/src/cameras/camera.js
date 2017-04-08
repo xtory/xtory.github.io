@@ -55,7 +55,7 @@ function Camera (
             _distanceToFarPlane = Camera.MAX_DISTANCE_TO_FAR_PLANE;
         }
 
-        _canvas = _scene.graphicsManager.canvas;
+        _canvas = _scene.renderer.canvas;
 
         _viewFrustum = new ViewFrustum();
 
@@ -124,7 +124,7 @@ function Camera (
         // Reference:
         // https://www.youtube.com/watch?v=rfQ8rKGTVlg
         /*
-        var aspectRatio = _scene.graphicsManager.viewport.aspectRatio;
+        var aspectRatio = _scene.renderer.viewport.aspectRatio;
         */
         var aspectRatio = _canvas.clientWidth / _canvas.clientHeight;
         // :Note

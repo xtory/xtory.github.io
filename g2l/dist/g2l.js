@@ -1,375 +1,6 @@
 (function (exports) {
 'use strict';
 
-//
-// Constructor.
-//
-function PositionColor() {
-    // No contents.
-}
-
-//
-// Static constants (after Object.freeze()).
-//
-PositionColor.VERTEX_SHADER_SOURCE = [
-    //
-   'precision highp float;', // which is the default vertex shader precision.
-    //
-   'attribute vec3 vertexPosition;',
-   'attribute vec4 vertexColor;',
-   'uniform mat4 transform;',
-    //
-   'varying vec4 color;',
-    //
-   'void main() {',
-       'gl_Position = transform * vec4(vertexPosition, 1.0);',
-       'color = vertexColor;',
-   '}'
-
-].join('\n');
-
-PositionColor.FRAGMENT_SHADER_SOURCE = [
-    //
-   'precision mediump float;', // which is the recommended fragment shader precision.
-    //
-   'varying vec4 color;',
-    //
-   'void main() {',
-       'gl_FragColor = color;',
-   '}'
-
-].join('\n');
-
-Object.freeze(PositionColor);
-
-//
-// Constructor.
-//
-function PositionOnly() {
-    // No contents.
-}
-
-//
-// Static constants (after Object.freeze()).
-//
-PositionOnly.VERTEX_SHADER_SOURCE = [
-    //
-   'precision highp float;', // which is the default vertex shader precision.
-    //
-   'attribute vec3 vertexPosition;',
-   'uniform mat4 transform;',
-    //
-   'void main() {',
-       'gl_Position = transform * vec4(vertexPosition, 1.0);',
-   '}'
-   
-].join('\n');
-
-PositionOnly.FRAGMENT_SHADER_SOURCE = [
-    //
-   'precision mediump float;', // which is the recommended fragment shader precision.
-    //
-   'void main() {',
-       'gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);',
-   '}'
-
-].join('\n');
-
-Object.freeze(PositionOnly);
-
-//
-// Constructor.
-//
-function PositionTextureCoordinates() {
-    // No contents.
-}
-
-//
-// Static constants (after Object.freeze()).
-//
-PositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
-    //
-   'precision highp float;', // which is the default vertex shader precision.
-    //
-   'attribute vec3 vertexPosition;',
-   'attribute vec2 vertexTextureCoordinates;',
-   'uniform mat4 transform;',
-    //
-   'varying vec2 textureCoordinates;',
-    //
-   'void main() {',
-       'gl_Position = transform * vec4(vertexPosition, 1.0);',
-       'textureCoordinates = vertexTextureCoordinates;',
-   '}'
-
-].join('\n');
-
-PositionTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
-    //
-   'precision mediump float;', // which is the recommended fragment shader precision.
-    //
-   'varying vec2 textureCoordinates;',
-   'uniform sampler2D sampler;',
-    //
-   'void main() {',
-       'gl_FragColor = texture2D(sampler, textureCoordinates);',
-   '}'
-   
-].join('\n');
-
-Object.freeze(PositionTextureCoordinates);
-
-//
-// Constructor.
-//
-function TransformedPositionColor() {
-    // No contents.
-}
-
-//
-// Static constants (after Object.freeze()).
-//
-TransformedPositionColor.VERTEX_SHADER_SOURCE = [
-    //
-   'precision highp float;', // which is the default vertex shader precision.
-    //
-   'attribute vec4 vertexPosition;',
-   'attribute vec4 vertexColor;',
-    //
-   'varying vec4 color;',
-    //
-   'void main() {',
-        //
-       'gl_Position = vertexPosition;',
-        //
-       'color = vertexColor;',
-   '}'
-
-].join('\n');
-
-TransformedPositionColor.FRAGMENT_SHADER_SOURCE = [
-    //
-   'precision mediump float;', // which is the recommended fragment shader precision.
-    //
-   'varying vec4 color;',
-    //
-   'void main() {',
-       'gl_FragColor = color;',
-   '}'
-   
-].join('\n');
-
-Object.freeze(TransformedPositionColor);
-
-//
-// Constructor.
-//
-function TransformedPositionColorTextureCoordinates() {
-    // No contents.
-}
-
-//
-// Static constants (after Object.freeze()).
-//
-TransformedPositionColorTextureCoordinates.VERTEX_SHADER_SOURCE = [
-    //
-   'precision highp float;', // which is the default vertex shader precision.
-    //
-   'attribute vec4 vertexPosition;',
-   'attribute vec4 vertexColor;',
-   'attribute vec2 vertexTextureCoordinates;',
-    //
-   'varying vec4 color;',
-   'varying vec2 textureCoordinates;',
-    //
-   'void main() {',
-        //
-       'gl_Position = vertexPosition;',
-        //
-       'color = vertexColor;',
-       'textureCoordinates = vertexTextureCoordinates;',
-   '}'
-
-].join('\n');
-
-TransformedPositionColorTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
-    //
-   'precision mediump float;', // which is the recommended fragment shader precision.
-    //
-   'varying vec4 color;',
-   'varying vec2 textureCoordinates;',
-    //
-   'uniform sampler2D sampler;',
-    //
-   'void main() {',
-       'gl_FragColor = color * texture2D(sampler, textureCoordinates);',
-   '}'
-   
-].join('\n');
-
-Object.freeze(TransformedPositionColorTextureCoordinates);
-
-//
-// Constructor.
-//
-function TransformedPositionTextureCoordinates() {
-    // No contents.
-}
-
-//
-// Static constants (after Object.freeze()).
-//
-TransformedPositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
-    //
-   'precision highp float;', // which is the default vertex shader precision.
-    //
-   'attribute vec4 vertexPosition;',
-   'attribute vec2 vertexTextureCoordinates;',
-    //
-   'varying vec2 textureCoordinates;',
-    //
-   'void main() {',
-       'gl_Position = vertexPosition;',
-       'textureCoordinates = vertexTextureCoordinates;',
-   '}'
-
-].join('\n');
-
-TransformedPositionTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
-    //
-   'precision mediump float;', // which is the recommended fragment shader precision.
-    //
-   'varying vec2 textureCoordinates;',
-   'uniform sampler2D sampler;',
-    //
-   'void main() {',
-       'gl_FragColor = texture2D(sampler, textureCoordinates);',
-   '}'
-   
-].join('\n');
-
-Object.freeze(TransformedPositionTextureCoordinates);
-
-//
-// Constructor.
-//
-function IndexBuffer(_gl) {
-    //
-    var _webGLBuffer;
-
-    try {
-        //
-        _webGLBuffer = _gl.createBuffer();
-
-    } catch (e) {
-        //
-        console.log('IndexBuffer: '+ e);
-
-        throw e;
-    }
-
-    //
-    // Properties.
-    //
-    Object.defineProperty(this, 'gl', {
-        'get': function() { return _gl; }
-    });
-
-    Object.defineProperty(this, 'webGLBuffer', {
-        'get': function() { return _webGLBuffer; }
-    });
-}
-
-IndexBuffer.prototype = {
-    //
-    // Public methods.
-    //
-    setItems: function(items) {
-        //
-        var gl = this.gl;
-
-        //_itemCount = items.length;
-
-        gl.bindBuffer (
-            gl.ELEMENT_ARRAY_BUFFER,
-            this.webGLBuffer
-        );
-
-        // Note:
-        // DirectX supports 16-bit or 32-bit index buffers. But in this engine,
-        // so far, only 16-bit index buffer is supported.
-        /*
-        if (uses16Bits === true) {
-            //
-            gl.bufferData (
-                gl.ELEMENT_ARRAY_BUFFER,
-                new Uint16Array(items),
-                gl.STATIC_DRAW
-            );
-
-        } else {
-            //
-            gl.bufferData (
-                gl.ELEMENT_ARRAY_BUFFER,
-                new Uint32Array(items),
-                gl.STATIC_DRAW
-            );
-        }
-        */
-
-        gl.bufferData (
-            gl.ELEMENT_ARRAY_BUFFER,
-            new Uint16Array(items),
-            gl.STATIC_DRAW
-        );
-        // :Note
-    }
-};
-
-Object.defineProperty(IndexBuffer.prototype, 'items', {
-    //
-    'set': function(value) {
-        //
-        var gl = this.gl;
-
-        gl.bindBuffer (
-            gl.ELEMENT_ARRAY_BUFFER,
-            buffer.webGLBuffer
-        );
-
-        // Note:
-        // DirectX supports 16-bit or 32-bit index buffers. But in this engine,
-        // so far, only 16-bit index buffer is supported.
-        /*
-        if (uses16Bits === true) {
-            //
-            gl.bufferData (
-                gl.ELEMENT_ARRAY_BUFFER,
-                new Uint16Array(items),
-                gl.STATIC_DRAW
-            );
-
-        } else {
-            //
-            gl.bufferData (
-                gl.ELEMENT_ARRAY_BUFFER,
-                new Uint32Array(items),
-                gl.STATIC_DRAW
-            );
-        }
-        */
-
-        gl.bufferData (
-            gl.ELEMENT_ARRAY_BUFFER,
-            new Uint16Array(items),
-            gl.STATIC_DRAW
-        );
-        // :Note
-    }
-});
-
-Object.freeze(IndexBuffer);
-
 // Note:
 // The equivelant of this value in C is 'FLT_EPSILON', and in the GNU C Library,
 // http://www.gnu.org/software/libc/manual/html_node/Floating-Point-Parameters.html
@@ -663,403 +294,6 @@ MathHelper.isPowerOfTwo = function(s) {
 };
 
 Object.freeze(MathHelper);
-
-//
-// Constructor.
-//
-function Program(_gl) {
-    //
-    var _webGLProgram;
-
-    try {
-        //
-        _webGLProgram = _gl.createProgram();
-
-    } catch (e) {
-        //
-        console.log('Program: '+ e);
-
-        throw e;
-    }
-
-    //
-    // Properties.
-    //
-    Object.defineProperty(this, 'gl', {
-        'get': function() { return _gl; }
-    });
-
-    Object.defineProperty(this, 'webGLProgram', {
-        'get': function() { return _webGLProgram; }
-    });
-}
-
-Object.freeze(Program);
-
-//
-// Constructor.
-//
-function ShaderType() {
-    // No contents.
-}
-
-//
-// Static constants (after Object.freeze()).
-//
-ShaderType.VERTEX_SHADER = 0;
-ShaderType.FRAGMENT_SHADER = 1;
-
-Object.freeze(ShaderType);
-
-//
-// Constructor.
-//
-function Texture2D(_gl) {
-    //
-    var _webGLTexture;
-    var _width;
-    var _height;
-
-    try {
-        //
-        _webGLTexture = _gl.createTexture();
-
-    } catch (e) {
-        //
-        console.log('IndexBuffer: '+ e);
-
-        throw e;
-    }
-
-    //
-    // Properties.
-    //
-    Object.defineProperty(this, 'gl', {
-        'get': function() { return _gl; }
-    });
-
-    Object.defineProperty(this, 'webGLTexture', {
-        'get': function() { return _webGLTexture; }
-    });
-
-    Object.defineProperty(this, 'width', {
-        'get': function() { return _width; },
-        'set': function(value) { _width = value; }
-    });
-
-    Object.defineProperty(this, 'height', {
-        'get': function() { return _height; },
-        'set': function(value) { _height = value; }
-    });    
-}
-
-Object.freeze(Texture2D);
-
-//
-// Constructor.
-//
-function VertexBuffer(_gl) {
-    //
-    var _webGLBuffer;
-    var _size; // Number of components per vertex attribute. Must be 1, 2, 3, or 4.
-
-    try {
-        //
-        _webGLBuffer = _gl.createBuffer();
-
-    } catch (e) {
-        //
-        console.log('VertexBuffer: '+ e);
-
-        throw e;
-    }
-
-    //
-    // Properties.
-    //
-    Object.defineProperty(this, 'gl', {
-        'get': function() { return _gl; }
-    });
-
-    Object.defineProperty(this, 'webGLBuffer', {
-        'get': function() { return _webGLBuffer; }
-    });
-
-    Object.defineProperty(this, 'size', {
-        'get': function() { return _size; },
-        'set': function(value) { _size = value; }
-    });
-}
-
-VertexBuffer.prototype = {
-    //
-    // Public methods.
-    //
-    setItems: function(items, size) {
-        //
-        var gl = this.gl;
-
-        this.size = size;
-        //_itemCount = items.length / _itemSize;
-
-        // if ((item.length % _itemSize) !== 0) {
-        //     console.log('(item.length % _itemSize) !== 0');
-        // }
-
-        gl.bindBuffer (
-            gl.ARRAY_BUFFER,
-            this.webGLBuffer
-        );
-        
-        gl.bufferData (
-            gl.ARRAY_BUFFER,
-            new Float32Array(items),
-            gl.STATIC_DRAW
-        );
-    }
-};
-
-Object.freeze(VertexBuffer);
-
-//
-// Constructor.
-//
-function AssetManager(_xcene) {
-    //
-    var _gl = _xcene.graphicsManager.webGLContext;
-
-    //
-    // Properties.
-    //
-    Object.defineProperty(this, 'xcene', {
-        get: function() { return _xcene; }
-    });
-
-    //
-    // Private methods.
-    //
-    function loadWebGLShader(shaderType, shaderSource) {
-        //
-        var webGLShader;
-
-        if (shaderType === ShaderType.VERTEX_SHADER) {
-            webGLShader = _gl.createShader(_gl.VERTEX_SHADER);
-        } else if (
-            shaderType === ShaderType.FRAGMENT_SHADER
-        ){
-            webGLShader = _gl.createShader(_gl.FRAGMENT_SHADER);
-        } else {
-            return null; // Unknown shader type.
-        }        
-
-        // Send the source to the shader object
-        _gl.shaderSource(webGLShader, shaderSource);
-
-        // Compile the shader program
-        _gl.compileShader(webGLShader);
-
-        // See if it compiled successfully
-        if (_gl.getShaderParameter(webGLShader, _gl.COMPILE_STATUS) === false) {
-            //
-            var log = _gl.getShaderInfoLog(webGLShader);
-            _gl.deleteShader(webGLShader);
-
-            throw 'An error occurred compiling the shaders: ' + log;
-        }
-
-        return webGLShader;
-    }
-
-    function loadWebGLShaderFromHtmlElement(id) {
-        //
-        var shaderScript = document.getElementById(id);
-
-        // Didn't find an element with the specified ID; abort.
-
-        if (shaderScript === null) {
-            return null;
-        }
-
-        // Walk through the source element's children, building the
-        // shader source string.
-
-        var shaderSource = '';
-        var currentChild = shaderScript.firstChild;
-
-        while (currentChild !== null) {
-            //
-            if (currentChild.nodeType === Node.TEXT_NODE) {
-                shaderSource += currentChild.textContent;
-            }
-
-            currentChild = currentChild.nextSibling;
-        }
-
-        // Now figure out what type of shader script we have,
-        // based on its MIME type.
-
-        var webGLShader;
-
-        if (shaderScript.type === 'x-shader/x-vertex') {
-            webGLShader = _gl.createShader(_gl.VERTEX_SHADER);
-        } else if (
-            shaderScript.type === 'x-shader/x-fragment'
-        ){
-            webGLShader = _gl.createShader(_gl.FRAGMENT_SHADER);
-        } else {
-            return null; // Unknown shader type.
-        }
-
-        // Send the source to the shader object
-        _gl.shaderSource(webGLShader, shaderSource);
-
-        // Compile the shader program
-        _gl.compileShader(webGLShader);
-
-        // See if it compiled successfully
-        if (_gl.getShaderParameter(webGLShader, _gl.COMPILE_STATUS) === false) {
-            //
-            var log = _gl.getShaderInfoLog(webGLShader);
-            _gl.deleteShader(webGLShader);
-
-            throw 'An error occurred compiling the shaders: ' + log;
-        }
-
-        return webGLShader;
-    }
-
-    function setUpProgram(webGLVertexShader, webGLFragmentShader) {
-        //
-        var program = new Program(_gl);
-        var webGLProgram = program.webGLProgram;
-
-        _gl.attachShader(webGLProgram, webGLVertexShader);
-        _gl.attachShader(webGLProgram, webGLFragmentShader);
-
-        _gl.linkProgram(webGLProgram);
-
-        if (_gl.getProgramParameter(webGLProgram, _gl.LINK_STATUS) === false) {
-            //
-            var log = _gl.getProgramInfoLog(webGLProgram);
-            _gl.deleteProgram(webGLProgram);
-
-            throw 'Unable to initialize the (shader) program: ' + log;
-        }
-        
-        return program;
-    }
-    
-    //
-    // Privileged methods.
-    //
-    this.createVertexBuffer = function() {
-        return new VertexBuffer(_gl);
-    };
-
-    this.createIndexBuffer = function() {
-        return new IndexBuffer(_gl);
-    };
-
-    this.setUpProgram = function(vertexShaderSource, fragmentShaderSource) {
-        //
-        var webGLVertexShader =
-            loadWebGLShader(ShaderType.VERTEX_SHADER, vertexShaderSource);
-
-        var webGLFragmentShader =
-            loadWebGLShader(ShaderType.FRAGMENT_SHADER, fragmentShaderSource);
-
-        return setUpProgram(webGLVertexShader, webGLFragmentShader);
-    };
-
-    this.setUpProgramFromHtmlElements = function(vertexShaderId, fragmentShaderId) {
-        //
-        var vertexShader =
-            loadWebGLShaderFromHtmlElement(ShaderType.VERTEX_SHADER, vertexShaderId);
-
-        var fragmentShader =
-            loadWebGLShaderFromHtmlElement(ShaderType.FRAGMENT_SHADER, fragmentShaderId);
-
-        return setUpProgram(vertexShader, fragmentShader);
-    };
-
-    this.loadTexture2D = function(imageSourceUrl) {
-        //
-        var image = new Image();
-        var texture = new Texture2D(_gl);
-
-        image.addEventListener('load', function() {
-            handleTextureLoaded(image, texture);
-        });
-
-        image.src = imageSourceUrl;
-
-        function handleTextureLoaded(image, texture) {
-            //
-            _gl.bindTexture (
-                _gl.TEXTURE_2D,
-                texture.webGLTexture
-            );
-
-            _gl.texImage2D (
-                _gl.TEXTURE_2D,    // target
-                0,                 // level
-                _gl.RGBA,          // internalFormat
-                _gl.RGBA,          // format
-                _gl.UNSIGNED_BYTE, // type
-                image              // htmlImageElement
-            );
-
-            if (MathHelper.isPowerOfTwo(image.width) === true &&
-                MathHelper.isPowerOfTwo(image.height) === true) {
-                //
-                _gl.generateMipmap(_gl.TEXTURE_2D);
-                
-                _gl.texParameteri (
-                    _gl.TEXTURE_2D,
-                    _gl.TEXTURE_MIN_FILTER,
-                    _gl.LINEAR_MIPMAP_LINEAR
-                );
-
-            } else {
-                //
-                _gl.texParameteri (
-                    _gl.TEXTURE_2D,
-                    _gl.TEXTURE_MIN_FILTER,
-                    _gl.LINEAR
-                );
-            }
-
-            // TEXTURE_MAG_FILTER only has NEAREST or LINEAR to choose, no
-            // LINEAR_MIPMAP_LINEAR.
-            _gl.texParameteri (
-                _gl.TEXTURE_2D,
-                _gl.TEXTURE_MAG_FILTER,
-                _gl.LINEAR
-            );
-
-            _gl.texParameteri (
-                _gl.TEXTURE_2D,
-                _gl.TEXTURE_WRAP_S,
-                _gl.CLAMP_TO_EDGE
-            );
-
-            _gl.texParameteri (
-                _gl.TEXTURE_2D,
-                _gl.TEXTURE_WRAP_T,
-                _gl.CLAMP_TO_EDGE
-            );
-
-            _gl.bindTexture(_gl.TEXTURE_2D, null);
-
-            texture.width = image.width;
-            texture.height = image.height;
-        }
-
-        return texture;
-    };
-}
-
-Object.freeze(AssetManager);
 
 //
 // Constructor.
@@ -2191,7 +1425,7 @@ function Camera (
             _distanceToFarPlane = Camera.MAX_DISTANCE_TO_FAR_PLANE;
         }
 
-        _canvas = _scene.graphicsManager.canvas;
+        _canvas = _scene.renderer.canvas;
 
         _viewFrustum = new ViewFrustum();
 
@@ -2260,7 +1494,7 @@ function Camera (
         // Reference:
         // https://www.youtube.com/watch?v=rfQ8rKGTVlg
         /*
-        var aspectRatio = _scene.graphicsManager.viewport.aspectRatio;
+        var aspectRatio = _scene.renderer.viewport.aspectRatio;
         */
         var aspectRatio = _canvas.clientWidth / _canvas.clientHeight;
         // :Note
@@ -2663,13 +1897,10 @@ Object.freeze(DepthBufferValues);
 // Note:
 // See viewport.js to understand the relationship between viewport and canvas.
 
-// import { IndexBuffer }             from './index-buffer';
-// import { VertexBuffer }            from './vertex-buffer';
-
 //
 // Constructor.
 //
-function GraphicsManager(_xcene) {
+function Renderer(_xcene) {
     //
     var _canvas;
     var _gl;
@@ -2688,7 +1919,7 @@ function GraphicsManager(_xcene) {
 
     } catch (e) {
         //
-        console.log('GraphicsManager: '+ e);
+        console.log('Renderer: '+ e);
 
         throw e;
     }
@@ -2779,8 +2010,8 @@ function GraphicsManager(_xcene) {
                 'canvas'
             );
 
-            _canvas.width = GraphicsManager.CANVAS_WIDTH;
-            _canvas.height = GraphicsManager.CANVAS_HEIGHT;
+            _canvas.width = Renderer.CANVAS_WIDTH;
+            _canvas.height = Renderer.CANVAS_HEIGHT;
 
             //document.body.appendChild(_canvas);
         }
@@ -2844,9 +2075,9 @@ function GraphicsManager(_xcene) {
             DepthBufferValues.FAR_CLIP_PLANE   // = 1.0
         );
 
-        _clearColor = GraphicsManager.DEFAULT_CLEAR_COLOR;
-        _clearDepth = GraphicsManager.DEFAULT_CLEAR_DEPTH;
-        _clearStencil = GraphicsManager.DEFAULT_CLEAR_STENCIL;
+        _clearColor = Renderer.DEFAULT_CLEAR_COLOR;
+        _clearDepth = Renderer.DEFAULT_CLEAR_DEPTH;
+        _clearStencil = Renderer.DEFAULT_CLEAR_STENCIL;
 
         _gl.clearColor (
             // Part 1.
@@ -3000,7 +2231,7 @@ function GraphicsManager(_xcene) {
         // There's no _clearOptions.
 
         if (clearOptions === undefined) {
-            clearOptions = GraphicsManager.DEFAULT_CLEAR_OPTIONS;
+            clearOptions = Renderer.DEFAULT_CLEAR_OPTIONS;
         }
 
         _gl.clear(clearOptions);
@@ -3076,7 +2307,7 @@ function GraphicsManager(_xcene) {
     this.setSampler = function(samplerUniformLocation, texture, unit) {
         //
         if (unit === undefined) {
-            unit = GraphicsManager.DEFAULT_TEXTURE_UNIT;
+            unit = Renderer.DEFAULT_TEXTURE_UNIT;
         }
 
         // Note:
@@ -3110,18 +2341,138 @@ function GraphicsManager(_xcene) {
 //
 // Static constants (after Object.freeze()).
 //
-GraphicsManager.CANVAS_WIDTH = 1024;
-GraphicsManager.CANVAS_HEIGHT = 1024;
+Renderer.CANVAS_WIDTH = 1024;
+Renderer.CANVAS_HEIGHT = 1024;
 
-GraphicsManager.DEFAULT_CLEAR_OPTIONS =
+Renderer.DEFAULT_CLEAR_OPTIONS =
     ClearOptions.COLOR_BUFFER | ClearOptions.DEPTH_BUFFER;
 
-GraphicsManager.DEFAULT_CLEAR_COLOR   = Colors.DEFAULT_BACKGROUND;
-GraphicsManager.DEFAULT_CLEAR_DEPTH   = 1;
-GraphicsManager.DEFAULT_CLEAR_STENCIL = 0;
-GraphicsManager.DEFAULT_TEXTURE_UNIT  = 0;
+Renderer.DEFAULT_CLEAR_COLOR   = Colors.DEFAULT_BACKGROUND;
+Renderer.DEFAULT_CLEAR_DEPTH   = 1;
+Renderer.DEFAULT_CLEAR_STENCIL = 0;
+Renderer.DEFAULT_TEXTURE_UNIT  = 0;
 
-Object.freeze(GraphicsManager);
+Object.freeze(Renderer);
+
+//
+// Constructor.
+//
+function IndexBuffer(_gl) {
+    //
+    var _webGLBuffer;
+
+    try {
+        //
+        _webGLBuffer = _gl.createBuffer();
+
+    } catch (e) {
+        //
+        console.log('IndexBuffer: '+ e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(this, 'gl', {
+        'get': function() { return _gl; }
+    });
+
+    Object.defineProperty(this, 'webGLBuffer', {
+        'get': function() { return _webGLBuffer; }
+    });
+}
+
+IndexBuffer.prototype = {
+    //
+    // Public methods.
+    //
+    setItems: function(items) {
+        //
+        var gl = this.gl;
+
+        //_itemCount = items.length;
+
+        gl.bindBuffer (
+            gl.ELEMENT_ARRAY_BUFFER,
+            this.webGLBuffer
+        );
+
+        // Note:
+        // DirectX supports 16-bit or 32-bit index buffers. But in this engine,
+        // so far, only 16-bit index buffer is supported.
+        /*
+        if (uses16Bits === true) {
+            //
+            gl.bufferData (
+                gl.ELEMENT_ARRAY_BUFFER,
+                new Uint16Array(items),
+                gl.STATIC_DRAW
+            );
+
+        } else {
+            //
+            gl.bufferData (
+                gl.ELEMENT_ARRAY_BUFFER,
+                new Uint32Array(items),
+                gl.STATIC_DRAW
+            );
+        }
+        */
+
+        gl.bufferData (
+            gl.ELEMENT_ARRAY_BUFFER,
+            new Uint16Array(items),
+            gl.STATIC_DRAW
+        );
+        // :Note
+    }
+};
+
+Object.defineProperty(IndexBuffer.prototype, 'items', {
+    //
+    'set': function(value) {
+        //
+        var gl = this.gl;
+
+        gl.bindBuffer (
+            gl.ELEMENT_ARRAY_BUFFER,
+            buffer.webGLBuffer
+        );
+
+        // Note:
+        // DirectX supports 16-bit or 32-bit index buffers. But in this engine,
+        // so far, only 16-bit index buffer is supported.
+        /*
+        if (uses16Bits === true) {
+            //
+            gl.bufferData (
+                gl.ELEMENT_ARRAY_BUFFER,
+                new Uint16Array(items),
+                gl.STATIC_DRAW
+            );
+
+        } else {
+            //
+            gl.bufferData (
+                gl.ELEMENT_ARRAY_BUFFER,
+                new Uint32Array(items),
+                gl.STATIC_DRAW
+            );
+        }
+        */
+
+        gl.bufferData (
+            gl.ELEMENT_ARRAY_BUFFER,
+            new Uint16Array(items),
+            gl.STATIC_DRAW
+        );
+        // :Note
+    }
+});
+
+Object.freeze(IndexBuffer);
 
 // Note:
 // NDC stands for 'normalized device coordinates'.
@@ -3183,6 +2534,124 @@ Object.freeze(NormalizedDeviceCoordinates);
 //
 // Constructor.
 //
+function PositionColor() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+PositionColor.VERTEX_SHADER_SOURCE = [
+    //
+   'precision highp float;', // which is the default vertex shader precision.
+    //
+   'attribute vec3 vertexPosition;',
+   'attribute vec4 vertexColor;',
+   'uniform mat4 transform;',
+    //
+   'varying vec4 color;',
+    //
+   'void main() {',
+       'gl_Position = transform * vec4(vertexPosition, 1.0);',
+       'color = vertexColor;',
+   '}'
+
+].join('\n');
+
+PositionColor.FRAGMENT_SHADER_SOURCE = [
+    //
+   'precision mediump float;', // which is the recommended fragment shader precision.
+    //
+   'varying vec4 color;',
+    //
+   'void main() {',
+       'gl_FragColor = color;',
+   '}'
+
+].join('\n');
+
+Object.freeze(PositionColor);
+
+//
+// Constructor.
+//
+function PositionOnly() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+PositionOnly.VERTEX_SHADER_SOURCE = [
+    //
+   'precision highp float;', // which is the default vertex shader precision.
+    //
+   'attribute vec3 vertexPosition;',
+   'uniform mat4 transform;',
+    //
+   'void main() {',
+       'gl_Position = transform * vec4(vertexPosition, 1.0);',
+   '}'
+   
+].join('\n');
+
+PositionOnly.FRAGMENT_SHADER_SOURCE = [
+    //
+   'precision mediump float;', // which is the recommended fragment shader precision.
+    //
+   'void main() {',
+       'gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);',
+   '}'
+
+].join('\n');
+
+Object.freeze(PositionOnly);
+
+//
+// Constructor.
+//
+function PositionTextureCoordinates() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+PositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
+    //
+   'precision highp float;', // which is the default vertex shader precision.
+    //
+   'attribute vec3 vertexPosition;',
+   'attribute vec2 vertexTextureCoordinates;',
+   'uniform mat4 transform;',
+    //
+   'varying vec2 textureCoordinates;',
+    //
+   'void main() {',
+       'gl_Position = transform * vec4(vertexPosition, 1.0);',
+       'textureCoordinates = vertexTextureCoordinates;',
+   '}'
+
+].join('\n');
+
+PositionTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
+    //
+   'precision mediump float;', // which is the recommended fragment shader precision.
+    //
+   'varying vec2 textureCoordinates;',
+   'uniform sampler2D sampler;',
+    //
+   'void main() {',
+       'gl_FragColor = texture2D(sampler, textureCoordinates);',
+   '}'
+   
+].join('\n');
+
+Object.freeze(PositionTextureCoordinates);
+
+//
+// Constructor.
+//
 function PrimitiveType() {
     // No contents.
 }
@@ -3196,6 +2665,38 @@ PrimitiveType.TRIANGLE_LIST  = 4; // = gl.TRIANGLES
 PrimitiveType.TRIANGLE_STRIP = 5; // = gl.TRIANGLE_STRIP
 
 Object.freeze(PrimitiveType);
+
+//
+// Constructor.
+//
+function Program(_gl) {
+    //
+    var _webGLProgram;
+
+    try {
+        //
+        _webGLProgram = _gl.createProgram();
+
+    } catch (e) {
+        //
+        console.log('Program: '+ e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(this, 'gl', {
+        'get': function() { return _gl; }
+    });
+
+    Object.defineProperty(this, 'webGLProgram', {
+        'get': function() { return _webGLProgram; }
+    });
+}
+
+Object.freeze(Program);
 
 // Note:
 // NDC stands for 'normalized device coordinates'.
@@ -3262,6 +2763,65 @@ ScreenCoordinateHelper.toClipSpace = function(canvas, p) {
 
 Object.freeze(ScreenCoordinateHelper);
 
+//
+// Constructor.
+//
+function ShaderType() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+ShaderType.VERTEX_SHADER = 0;
+ShaderType.FRAGMENT_SHADER = 1;
+
+Object.freeze(ShaderType);
+
+//
+// Constructor.
+//
+function Texture2D(_gl) {
+    //
+    var _webGLTexture;
+    var _width;
+    var _height;
+
+    try {
+        //
+        _webGLTexture = _gl.createTexture();
+
+    } catch (e) {
+        //
+        console.log('IndexBuffer: '+ e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(this, 'gl', {
+        'get': function() { return _gl; }
+    });
+
+    Object.defineProperty(this, 'webGLTexture', {
+        'get': function() { return _webGLTexture; }
+    });
+
+    Object.defineProperty(this, 'width', {
+        'get': function() { return _width; },
+        'set': function(value) { _width = value; }
+    });
+
+    Object.defineProperty(this, 'height', {
+        'get': function() { return _height; },
+        'set': function(value) { _height = value; }
+    });    
+}
+
+Object.freeze(Texture2D);
+
 // Note:
 // Texture Coordinates.
 //
@@ -3315,6 +2875,203 @@ Object.freeze(TextureCoordinateHelper);
 //
 // Constructor.
 //
+function TransformedPositionColor() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+TransformedPositionColor.VERTEX_SHADER_SOURCE = [
+    //
+   'precision highp float;', // which is the default vertex shader precision.
+    //
+   'attribute vec4 vertexPosition;',
+   'attribute vec4 vertexColor;',
+    //
+   'varying vec4 color;',
+    //
+   'void main() {',
+        //
+       'gl_Position = vertexPosition;',
+        //
+       'color = vertexColor;',
+   '}'
+
+].join('\n');
+
+TransformedPositionColor.FRAGMENT_SHADER_SOURCE = [
+    //
+   'precision mediump float;', // which is the recommended fragment shader precision.
+    //
+   'varying vec4 color;',
+    //
+   'void main() {',
+       'gl_FragColor = color;',
+   '}'
+   
+].join('\n');
+
+Object.freeze(TransformedPositionColor);
+
+//
+// Constructor.
+//
+function TransformedPositionColorTextureCoordinates() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+TransformedPositionColorTextureCoordinates.VERTEX_SHADER_SOURCE = [
+    //
+   'precision highp float;', // which is the default vertex shader precision.
+    //
+   'attribute vec4 vertexPosition;',
+   'attribute vec4 vertexColor;',
+   'attribute vec2 vertexTextureCoordinates;',
+    //
+   'varying vec4 color;',
+   'varying vec2 textureCoordinates;',
+    //
+   'void main() {',
+        //
+       'gl_Position = vertexPosition;',
+        //
+       'color = vertexColor;',
+       'textureCoordinates = vertexTextureCoordinates;',
+   '}'
+
+].join('\n');
+
+TransformedPositionColorTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
+    //
+   'precision mediump float;', // which is the recommended fragment shader precision.
+    //
+   'varying vec4 color;',
+   'varying vec2 textureCoordinates;',
+    //
+   'uniform sampler2D sampler;',
+    //
+   'void main() {',
+       'gl_FragColor = color * texture2D(sampler, textureCoordinates);',
+   '}'
+   
+].join('\n');
+
+Object.freeze(TransformedPositionColorTextureCoordinates);
+
+//
+// Constructor.
+//
+function TransformedPositionTextureCoordinates() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+TransformedPositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
+    //
+   'precision highp float;', // which is the default vertex shader precision.
+    //
+   'attribute vec4 vertexPosition;',
+   'attribute vec2 vertexTextureCoordinates;',
+    //
+   'varying vec2 textureCoordinates;',
+    //
+   'void main() {',
+       'gl_Position = vertexPosition;',
+       'textureCoordinates = vertexTextureCoordinates;',
+   '}'
+
+].join('\n');
+
+TransformedPositionTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
+    //
+   'precision mediump float;', // which is the recommended fragment shader precision.
+    //
+   'varying vec2 textureCoordinates;',
+   'uniform sampler2D sampler;',
+    //
+   'void main() {',
+       'gl_FragColor = texture2D(sampler, textureCoordinates);',
+   '}'
+   
+].join('\n');
+
+Object.freeze(TransformedPositionTextureCoordinates);
+
+//
+// Constructor.
+//
+function VertexBuffer(_gl) {
+    //
+    var _webGLBuffer;
+    var _size; // Number of components per vertex attribute. Must be 1, 2, 3, or 4.
+
+    try {
+        //
+        _webGLBuffer = _gl.createBuffer();
+
+    } catch (e) {
+        //
+        console.log('VertexBuffer: '+ e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(this, 'gl', {
+        'get': function() { return _gl; }
+    });
+
+    Object.defineProperty(this, 'webGLBuffer', {
+        'get': function() { return _webGLBuffer; }
+    });
+
+    Object.defineProperty(this, 'size', {
+        'get': function() { return _size; },
+        'set': function(value) { _size = value; }
+    });
+}
+
+VertexBuffer.prototype = {
+    //
+    // Public methods.
+    //
+    setItems: function(items, size) {
+        //
+        var gl = this.gl;
+
+        this.size = size;
+        //_itemCount = items.length / _itemSize;
+
+        // if ((item.length % _itemSize) !== 0) {
+        //     console.log('(item.length % _itemSize) !== 0');
+        // }
+
+        gl.bindBuffer (
+            gl.ARRAY_BUFFER,
+            this.webGLBuffer
+        );
+        
+        gl.bufferData (
+            gl.ARRAY_BUFFER,
+            new Float32Array(items),
+            gl.STATIC_DRAW
+        );
+    }
+};
+
+Object.freeze(VertexBuffer);
+
+//
+// Constructor.
+//
 function ExceptionHelper() {
     // No contents.
 }
@@ -3360,6 +3117,246 @@ Object.freeze(MouseButton);
 //
 // Constructor.
 //
+function Loader(_xcene) {
+    //
+    var _gl = _xcene.renderer.webGLContext;
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(this, 'xcene', {
+        get: function() { return _xcene; }
+    });
+
+    //
+    // Private methods.
+    //
+    function loadWebGLShader(shaderType, shaderSource) {
+        //
+        var webGLShader;
+
+        if (shaderType === ShaderType.VERTEX_SHADER) {
+            webGLShader = _gl.createShader(_gl.VERTEX_SHADER);
+        } else if (
+            shaderType === ShaderType.FRAGMENT_SHADER
+        ){
+            webGLShader = _gl.createShader(_gl.FRAGMENT_SHADER);
+        } else {
+            return null; // Unknown shader type.
+        }        
+
+        // Send the source to the shader object
+        _gl.shaderSource(webGLShader, shaderSource);
+
+        // Compile the shader program
+        _gl.compileShader(webGLShader);
+
+        // See if it compiled successfully
+        if (_gl.getShaderParameter(webGLShader, _gl.COMPILE_STATUS) === false) {
+            //
+            var log = _gl.getShaderInfoLog(webGLShader);
+            _gl.deleteShader(webGLShader);
+
+            throw 'An error occurred compiling the shaders: ' + log;
+        }
+
+        return webGLShader;
+    }
+
+    function loadWebGLShaderFromHtmlElement(id) {
+        //
+        var shaderScript = document.getElementById(id);
+
+        // Didn't find an element with the specified ID; abort.
+
+        if (shaderScript === null) {
+            return null;
+        }
+
+        // Walk through the source element's children, building the
+        // shader source string.
+
+        var shaderSource = '';
+        var currentChild = shaderScript.firstChild;
+
+        while (currentChild !== null) {
+            //
+            if (currentChild.nodeType === Node.TEXT_NODE) {
+                shaderSource += currentChild.textContent;
+            }
+
+            currentChild = currentChild.nextSibling;
+        }
+
+        // Now figure out what type of shader script we have,
+        // based on its MIME type.
+
+        var webGLShader;
+
+        if (shaderScript.type === 'x-shader/x-vertex') {
+            webGLShader = _gl.createShader(_gl.VERTEX_SHADER);
+        } else if (
+            shaderScript.type === 'x-shader/x-fragment'
+        ){
+            webGLShader = _gl.createShader(_gl.FRAGMENT_SHADER);
+        } else {
+            return null; // Unknown shader type.
+        }
+
+        // Send the source to the shader object
+        _gl.shaderSource(webGLShader, shaderSource);
+
+        // Compile the shader program
+        _gl.compileShader(webGLShader);
+
+        // See if it compiled successfully
+        if (_gl.getShaderParameter(webGLShader, _gl.COMPILE_STATUS) === false) {
+            //
+            var log = _gl.getShaderInfoLog(webGLShader);
+            _gl.deleteShader(webGLShader);
+
+            throw 'An error occurred compiling the shaders: ' + log;
+        }
+
+        return webGLShader;
+    }
+
+    function setUpProgram(webGLVertexShader, webGLFragmentShader) {
+        //
+        var program = new Program(_gl);
+        var webGLProgram = program.webGLProgram;
+
+        _gl.attachShader(webGLProgram, webGLVertexShader);
+        _gl.attachShader(webGLProgram, webGLFragmentShader);
+
+        _gl.linkProgram(webGLProgram);
+
+        if (_gl.getProgramParameter(webGLProgram, _gl.LINK_STATUS) === false) {
+            //
+            var log = _gl.getProgramInfoLog(webGLProgram);
+            _gl.deleteProgram(webGLProgram);
+
+            throw 'Unable to initialize the (shader) program: ' + log;
+        }
+        
+        return program;
+    }
+    
+    //
+    // Privileged methods.
+    //
+    this.createVertexBuffer = function() {
+        return new VertexBuffer(_gl);
+    };
+
+    this.createIndexBuffer = function() {
+        return new IndexBuffer(_gl);
+    };
+
+    this.setUpProgram = function(vertexShaderSource, fragmentShaderSource) {
+        //
+        var webGLVertexShader =
+            loadWebGLShader(ShaderType.VERTEX_SHADER, vertexShaderSource);
+
+        var webGLFragmentShader =
+            loadWebGLShader(ShaderType.FRAGMENT_SHADER, fragmentShaderSource);
+
+        return setUpProgram(webGLVertexShader, webGLFragmentShader);
+    };
+
+    this.setUpProgramFromHtmlElements = function(vertexShaderId, fragmentShaderId) {
+        //
+        var vertexShader =
+            loadWebGLShaderFromHtmlElement(ShaderType.VERTEX_SHADER, vertexShaderId);
+
+        var fragmentShader =
+            loadWebGLShaderFromHtmlElement(ShaderType.FRAGMENT_SHADER, fragmentShaderId);
+
+        return setUpProgram(vertexShader, fragmentShader);
+    };
+
+    this.loadTexture2D = function(imageSourceUrl) {
+        //
+        var image = new Image();
+        var texture = new Texture2D(_gl);
+
+        image.addEventListener('load', function() {
+            handleTextureLoaded(image, texture);
+        });
+
+        image.src = imageSourceUrl;
+
+        function handleTextureLoaded(image, texture) {
+            //
+            _gl.bindTexture (
+                _gl.TEXTURE_2D,
+                texture.webGLTexture
+            );
+
+            _gl.texImage2D (
+                _gl.TEXTURE_2D,    // target
+                0,                 // level
+                _gl.RGBA,          // internalFormat
+                _gl.RGBA,          // format
+                _gl.UNSIGNED_BYTE, // type
+                image              // htmlImageElement
+            );
+
+            if (MathHelper.isPowerOfTwo(image.width) === true &&
+                MathHelper.isPowerOfTwo(image.height) === true) {
+                //
+                _gl.generateMipmap(_gl.TEXTURE_2D);
+                
+                _gl.texParameteri (
+                    _gl.TEXTURE_2D,
+                    _gl.TEXTURE_MIN_FILTER,
+                    _gl.LINEAR_MIPMAP_LINEAR
+                );
+
+            } else {
+                //
+                _gl.texParameteri (
+                    _gl.TEXTURE_2D,
+                    _gl.TEXTURE_MIN_FILTER,
+                    _gl.LINEAR
+                );
+            }
+
+            // TEXTURE_MAG_FILTER only has NEAREST or LINEAR to choose, no
+            // LINEAR_MIPMAP_LINEAR.
+            _gl.texParameteri (
+                _gl.TEXTURE_2D,
+                _gl.TEXTURE_MAG_FILTER,
+                _gl.LINEAR
+            );
+
+            _gl.texParameteri (
+                _gl.TEXTURE_2D,
+                _gl.TEXTURE_WRAP_S,
+                _gl.CLAMP_TO_EDGE
+            );
+
+            _gl.texParameteri (
+                _gl.TEXTURE_2D,
+                _gl.TEXTURE_WRAP_T,
+                _gl.CLAMP_TO_EDGE
+            );
+
+            _gl.bindTexture(_gl.TEXTURE_2D, null);
+
+            texture.width = image.width;
+            texture.height = image.height;
+        }
+
+        return texture;
+    };
+}
+
+Object.freeze(Loader);
+
+//
+// Constructor.
+//
 function Plane() {
     // No contents.
 }
@@ -3383,17 +3380,17 @@ function Xcene(_settings) {
             get: function() { return _settings; }
         });
         
-        var _graphicsManager;
-        var _assetManager;
+        var _renderer;
+        var _loader;
 
-        _graphicsManager = new GraphicsManager(this);
-        Object.defineProperty(this, 'graphicsManager', {
-            get: function() { return _graphicsManager; }
+        _renderer = new Renderer(this);
+        Object.defineProperty(this, 'renderer', {
+            get: function() { return _renderer; }
         });
         
-        _assetManager = new AssetManager(this);
-        Object.defineProperty(this, 'assetManager', {
-            get: function() { return _assetManager; }
+        _loader = new Loader(this);
+        Object.defineProperty(this, 'loader', {
+            get: function() { return _loader; }
         });
 
         // Sets up the timers.
@@ -3530,7 +3527,7 @@ function Fps() {
 
     } catch (e) {
         //
-        console.log('GraphicsManager: '+ e);
+        console.log('Fps: '+ e);
 
         throw e;
     }
@@ -3849,32 +3846,33 @@ Object.freeze(SineEase);
 
 // g2l stands for GorillaGL.
 
-// Assets.
+// Cameras.
 
-exports.PositionColor = PositionColor;
-exports.PositionOnly = PositionOnly;
-exports.PositionTextureCoordinates = PositionTextureCoordinates;
-exports.TransformedPositionColor = TransformedPositionColor;
-exports.TransformedPositionColorTextureCoordinates = TransformedPositionColorTextureCoordinates;
-exports.TransformedPositionTextureCoordinates = TransformedPositionTextureCoordinates;
-exports.AssetManager = AssetManager;
 exports.Camera = Camera;
 exports.CanvasCoordinateHelper = CanvasCoordinateHelper;
 exports.ClearOptions = ClearOptions;
 exports.Color = Color;
 exports.Colors = Colors;
 exports.DepthBufferValues = DepthBufferValues;
-exports.GraphicsManager = GraphicsManager;
+exports.Renderer = Renderer;
 exports.IndexBuffer = IndexBuffer;
 exports.NormalizedDeviceCoordinates = NormalizedDeviceCoordinates;
+exports.PositionColor = PositionColor;
+exports.PositionOnly = PositionOnly;
+exports.PositionTextureCoordinates = PositionTextureCoordinates;
 exports.PrimitiveType = PrimitiveType;
+exports.Program = Program;
 exports.ScreenCoordinateHelper = ScreenCoordinateHelper;
 exports.ShaderType = ShaderType;
 exports.Texture2D = Texture2D;
 exports.TextureCoordinateHelper = TextureCoordinateHelper;
+exports.TransformedPositionColor = TransformedPositionColor;
+exports.TransformedPositionColorTextureCoordinates = TransformedPositionColorTextureCoordinates;
+exports.TransformedPositionTextureCoordinates = TransformedPositionTextureCoordinates;
 exports.VertexBuffer = VertexBuffer;
 exports.ExceptionHelper = ExceptionHelper;
 exports.MouseButton = MouseButton;
+exports.Loader = Loader;
 exports.AxisGroup = AxisGroup;
 exports.MathHelper = MathHelper;
 exports.Vector2D = Vector2D;

@@ -1,16 +1,16 @@
 import { IndexBuffer }  from '../graphics/index-buffer';
 import { MathHelper }   from '../math/helpers/math-helper';
-import { Program }      from '../graphics/fx/program';
-import { ShaderType }   from '../graphics/fx/shader-type';
+import { Program }      from '../graphics/shaders/program';
+import { ShaderType }   from '../graphics/shaders/shader-type';
 import { Texture2D }    from '../graphics/2d-texture';
 import { VertexBuffer } from '../graphics/vertex-buffer';
 
 //
 // Constructor.
 //
-function AssetManager(_xcene) {
+function Loader(_xcene) {
     //
-    var _gl = _xcene.graphicsManager.webGLContext;
+    var _gl = _xcene.renderer.webGLContext;
 
     //
     // Properties.
@@ -243,6 +243,6 @@ function AssetManager(_xcene) {
     };
 }
 
-Object.freeze(AssetManager);
+Object.freeze(Loader);
 
-export { AssetManager };
+export { Loader };

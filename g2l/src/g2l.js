@@ -1,14 +1,5 @@
 // g2l stands for GorillaGL.
 
-// Assets.
-export { PositionColor }                              from './assets/shaders/position-color';
-export { PositionOnly }                               from './assets/shaders/position-only';
-export { PositionTextureCoordinates }                 from './assets/shaders/position-texture-coordinates';
-export { TransformedPositionColor }                   from './assets/shaders/transformed-position-color';
-export { TransformedPositionColorTextureCoordinates } from './assets/shaders/transformed-position-color-texture-coordinates';
-export { TransformedPositionTextureCoordinates }      from './assets/shaders/transformed-position-texture-coordinates';
-export { AssetManager }                               from './assets/asset-manager';
-
 // Cameras.
 export { Camera }                                     from './cameras/camera';
 
@@ -18,19 +9,29 @@ export { ClearOptions }                               from './graphics/clear-opt
 export { Color }                                      from './graphics/color';
 export { Colors }                                     from './graphics/colors';
 export { DepthBufferValues }                          from './graphics/depth-buffer-values';
-export { GraphicsManager }                            from './graphics/graphics-manager';
+export { Renderer }                                   from './graphics/renderer';
 export { IndexBuffer }                                from './graphics/index-buffer';
 export { NormalizedDeviceCoordinates }                from './graphics/normalized-device-coordinates';
+export { PositionColor }                              from './graphics/shaders/position-color';
+export { PositionOnly }                               from './graphics/shaders/position-only';
+export { PositionTextureCoordinates }                 from './graphics/shaders/position-texture-coordinates';
 export { PrimitiveType }                              from './graphics/primitive-type';
+export { Program }                                    from './graphics/shaders/program';
 export { ScreenCoordinateHelper }                     from './graphics/helpers/screen-coordinate-helper';
-export { ShaderType }                                 from './graphics/fx/shader-type';
+export { ShaderType }                                 from './graphics/shaders/shader-type';
 export { Texture2D }                                  from './graphics/2d-texture';
 export { TextureCoordinateHelper }                    from './graphics/helpers/texture-coordinate-helper';
+export { TransformedPositionColor }                   from './graphics/shaders/transformed-position-color';
+export { TransformedPositionColorTextureCoordinates } from './graphics/shaders/transformed-position-color-texture-coordinates';
+export { TransformedPositionTextureCoordinates }      from './graphics/shaders/transformed-position-texture-coordinates';
 export { VertexBuffer }                               from './graphics/vertex-buffer';
 
 // Helpers.
 export { ExceptionHelper }                            from './helpers/exception-helper';
 export { MouseButton }                                from './helpers/mouse-button';
+
+// Loaders.
+export { Loader }                                     from './loaders/loader';
 
 // Math.
 export { AxisGroup }                                  from './math/axis-group';

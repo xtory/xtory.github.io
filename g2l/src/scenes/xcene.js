@@ -1,5 +1,5 @@
-import { AssetManager }    from '../assets/asset-manager';
-import { GraphicsManager } from '../graphics/graphics-manager';
+import { Loader }   from '../loaders/loader';
+import { Renderer } from '../graphics/renderer';
 
 //
 // Constructor.
@@ -18,17 +18,17 @@ function Xcene(_settings) {
             get: function() { return _settings; }
         });
         
-        var _graphicsManager;
-        var _assetManager;
+        var _renderer;
+        var _loader;
 
-        _graphicsManager = new GraphicsManager(this);
-        Object.defineProperty(this, 'graphicsManager', {
-            get: function() { return _graphicsManager; }
+        _renderer = new Renderer(this);
+        Object.defineProperty(this, 'renderer', {
+            get: function() { return _renderer; }
         });
         
-        _assetManager = new AssetManager(this);
-        Object.defineProperty(this, 'assetManager', {
-            get: function() { return _assetManager; }
+        _loader = new Loader(this);
+        Object.defineProperty(this, 'loader', {
+            get: function() { return _loader; }
         });
 
         // Sets up the timers.

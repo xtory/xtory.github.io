@@ -10,16 +10,14 @@ import { ClearOptions  }           from './clear-options';
 import { Color  }                  from './color';
 import { Colors }                  from './colors';
 import { DepthBufferValues }       from './depth-buffer-values';
-// import { IndexBuffer }             from './index-buffer';
 import { MathHelper }              from '../math/helpers/math-helper';
 import { Matrix4x4 }               from '../math/4x4-matrix';
 import { Vector2D }                from '../math/2d-vector';
-// import { VertexBuffer }            from './vertex-buffer';
 
 //
 // Constructor.
 //
-function GraphicsManager(_xcene) {
+function Renderer(_xcene) {
     //
     var _canvas;
     var _gl;
@@ -38,7 +36,7 @@ function GraphicsManager(_xcene) {
 
     } catch (e) {
         //
-        console.log('GraphicsManager: '+ e);
+        console.log('Renderer: '+ e);
 
         throw e;
     }
@@ -129,8 +127,8 @@ function GraphicsManager(_xcene) {
                 'canvas'
             );
 
-            _canvas.width = GraphicsManager.CANVAS_WIDTH;
-            _canvas.height = GraphicsManager.CANVAS_HEIGHT;
+            _canvas.width = Renderer.CANVAS_WIDTH;
+            _canvas.height = Renderer.CANVAS_HEIGHT;
 
             //document.body.appendChild(_canvas);
         }
@@ -194,9 +192,9 @@ function GraphicsManager(_xcene) {
             DepthBufferValues.FAR_CLIP_PLANE   // = 1.0
         );
 
-        _clearColor = GraphicsManager.DEFAULT_CLEAR_COLOR;
-        _clearDepth = GraphicsManager.DEFAULT_CLEAR_DEPTH;;
-        _clearStencil = GraphicsManager.DEFAULT_CLEAR_STENCIL;
+        _clearColor = Renderer.DEFAULT_CLEAR_COLOR;
+        _clearDepth = Renderer.DEFAULT_CLEAR_DEPTH;;
+        _clearStencil = Renderer.DEFAULT_CLEAR_STENCIL;
 
         _gl.clearColor (
             // Part 1.
@@ -350,7 +348,7 @@ function GraphicsManager(_xcene) {
         // There's no _clearOptions.
 
         if (clearOptions === undefined) {
-            clearOptions = GraphicsManager.DEFAULT_CLEAR_OPTIONS;
+            clearOptions = Renderer.DEFAULT_CLEAR_OPTIONS;
         }
 
         _gl.clear(clearOptions);
@@ -426,7 +424,7 @@ function GraphicsManager(_xcene) {
     this.setSampler = function(samplerUniformLocation, texture, unit) {
         //
         if (unit === undefined) {
-            unit = GraphicsManager.DEFAULT_TEXTURE_UNIT;
+            unit = Renderer.DEFAULT_TEXTURE_UNIT;
         }
 
         // Note:
@@ -460,17 +458,17 @@ function GraphicsManager(_xcene) {
 //
 // Static constants (after Object.freeze()).
 //
-GraphicsManager.CANVAS_WIDTH = 1024;
-GraphicsManager.CANVAS_HEIGHT = 1024;
+Renderer.CANVAS_WIDTH = 1024;
+Renderer.CANVAS_HEIGHT = 1024;
 
-GraphicsManager.DEFAULT_CLEAR_OPTIONS =
+Renderer.DEFAULT_CLEAR_OPTIONS =
     ClearOptions.COLOR_BUFFER | ClearOptions.DEPTH_BUFFER;
 
-GraphicsManager.DEFAULT_CLEAR_COLOR   = Colors.DEFAULT_BACKGROUND;
-GraphicsManager.DEFAULT_CLEAR_DEPTH   = 1;
-GraphicsManager.DEFAULT_CLEAR_STENCIL = 0;
-GraphicsManager.DEFAULT_TEXTURE_UNIT  = 0;
+Renderer.DEFAULT_CLEAR_COLOR   = Colors.DEFAULT_BACKGROUND;
+Renderer.DEFAULT_CLEAR_DEPTH   = 1;
+Renderer.DEFAULT_CLEAR_STENCIL = 0;
+Renderer.DEFAULT_TEXTURE_UNIT  = 0;
 
-Object.freeze(GraphicsManager);
+Object.freeze(Renderer);
 
-export { GraphicsManager };
+export { Renderer };

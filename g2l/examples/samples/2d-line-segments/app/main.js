@@ -27,7 +27,7 @@ function main() {
         //     usesDefaultStyles: false
         // });
 
-        gl = scene.graphicsManager.webGLContext;
+        gl = scene.renderer.webGLContext;
 
         document.body.appendChild(gl.canvas);
 
@@ -49,19 +49,19 @@ function main() {
     //
     function setUpShaders() {
         //
-        program = scene.assetManager.setUpProgram (
+        program = scene.loader.setUpProgram (
             g2l.TransformedPositionColor.VERTEX_SHADER_SOURCE,
             g2l.TransformedPositionColor.FRAGMENT_SHADER_SOURCE
         );
 
         attributeLocations = {
             //
-            vertexPosition: scene.graphicsManager.getAttributeLocation (
+            vertexPosition: scene.renderer.getAttributeLocation (
                 program,
                'vertexPosition'
             ),
 
-            vertexColor: scene.graphicsManager.getAttributeLocation (
+            vertexColor: scene.renderer.getAttributeLocation (
                 program,
                'vertexColor'
             )
@@ -79,11 +79,11 @@ function main() {
 
     function drawScene() {
         //
-        scene.graphicsManager.clear();
+        scene.renderer.clear();
 
         // Test:
         /*
-        var viewport = scene.graphicsManager.viewport;
+        var viewport = scene.renderer.viewport;
 
         var p = new g2l.Vector2D (
             viewport.width * 0.5,
@@ -91,7 +91,7 @@ function main() {
         );
         */
 
-        var canvas = scene.graphicsManager.canvas;
+        var canvas = scene.renderer.canvas;
         
         var p = new g2l.Vector2D (
             canvas.clientWidth * 0.5,
@@ -129,19 +129,19 @@ function main() {
             screenThickness
         );
 
-        scene.graphicsManager.program = program;
+        scene.renderer.program = program;
 
-        scene.graphicsManager.setAttribute (
+        scene.renderer.setAttribute (
             attributeLocations.vertexPosition,
             vertexBuffers.position
         );
 
-        scene.graphicsManager.setAttribute (
+        scene.renderer.setAttribute (
             attributeLocations.vertexColor,
             vertexBuffers.color
         );
 
-        scene.graphicsManager.drawPrimitives (
+        scene.renderer.drawPrimitives (
             g2l.PrimitiveType.TRIANGLE_STRIP,
             0,
             4
@@ -155,11 +155,11 @@ function main() {
         screenThickness
     ){
         vertexBuffers = {
-            position: scene.assetManager.createVertexBuffer(),
-            color: scene.assetManager.createVertexBuffer()
+            position: scene.loader.createVertexBuffer(),
+            color: scene.loader.createVertexBuffer()
         };
 
-        var viewport = scene.graphicsManager.viewport;
+        var viewport = scene.renderer.viewport;
 
         //
         // Vertex positions.
