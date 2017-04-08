@@ -4,9 +4,10 @@ function main() {
 
     var g2l = GorillaGL;
 
-    var scene;
-    var gl;
+    var renderer;
+    var loader;
     var camera;
+    var gl;
     var vertexBuffers;
     var program;
     var attributeLocations;
@@ -17,10 +18,11 @@ function main() {
 
     try {
         //
-        scene = new g2l.Scene();
-        gl = scene.renderer.webGLContext;
-
+        renderer = new g2l.Renderer();
+        gl = renderer.webGLContext;
         document.body.appendChild(gl.canvas);
+
+        loader = new g2l.Loader(renderer);
 
         setUpCamera();
 
@@ -32,7 +34,7 @@ function main() {
 
         transform = g2l.Matrix4x4.createIdentityMatrix();
             
-        scene.run(undefined, drawScene);
+        renderer.run(undefined, drawScene);
 
     } catch (e) {
         //
@@ -50,7 +52,7 @@ function main() {
         var origin = new g2l.Vector3D(0, 0, 0);
 
         camera = new g2l.Camera (
-            scene,
+            renderer,
             p,
             g2l.Vector3D.subtractVectors(origin, p)
         );
@@ -59,8 +61,8 @@ function main() {
     function setUpGeometries(x, y, w, h) {
         //
         vertexBuffers = {
-            position: scene.loader.createVertexBuffer(),
-            textureCoordinates: scene.loader.createVertexBuffer()
+            position: loader.createVertexBuffer(),
+            textureCoordinates: loader.createVertexBuffer()
         };
 
         //
@@ -100,27 +102,27 @@ function main() {
     function setUpTextures() {
         //
         var url = '../../assets/images/jeremy-mann/market-street.jpg';
-        texture1 = scene.loader.loadTexture2D(url);
+        texture1 = loader.loadTexture2D(url);
 
         url = '../../assets/images/starburst.jpg';
-        texture2 = scene.loader.loadTexture2D(url);        
+        texture2 = loader.loadTexture2D(url);        
     }
 
     function setUpShaders() {
         //
-        program = scene.loader.setUpProgram (
+        program = loader.setUpProgram (
             Multitexturing.VERTEX_SHADER_SOURCE,
             Multitexturing.FRAGMENT_SHADER_SOURCE
         );
 
         attributeLocations = {
             //
-            vertexPosition: scene.renderer.getAttributeLocation (
+            vertexPosition: renderer.getAttributeLocation (
                 program,
                'vertexPosition'
             ),
 
-            vertexTextureCoordinates: scene.renderer.getAttributeLocation (
+            vertexTextureCoordinates: renderer.getAttributeLocation (
                 program,
                'vertexTextureCoordinates'
             )
@@ -128,17 +130,17 @@ function main() {
 
         uniformLocations = {
             //
-            transform: scene.renderer.getUniformLocation (
+            transform: renderer.getUniformLocation (
                 program,
                'transform'
             ),
 
-            sampler1: scene.renderer.getUniformLocation (
+            sampler1: renderer.getUniformLocation (
                 program,
                'sampler1'
             ),
 
-            sampler2: scene.renderer.getUniformLocation (
+            sampler2: renderer.getUniformLocation (
                 program,
                'sampler2'
             )
@@ -147,40 +149,40 @@ function main() {
     
     function drawScene() {
         //
-        scene.renderer.clear();
+        renderer.clear();
 
-        scene.renderer.program = program;
+        renderer.program = program;
 
-        scene.renderer.setAttribute (
+        renderer.setAttribute (
             attributeLocations.vertexPosition,
             vertexBuffers.position
         );
 
-        scene.renderer.setAttribute (
+        renderer.setAttribute (
             attributeLocations.vertexTextureCoordinates,
             vertexBuffers.textureCoordinates
         );
 
         camera.getTransform(transform);
 
-        scene.renderer.setUniform (
+        renderer.setUniform (
             uniformLocations.transform,
             transform
         );
         
-        scene.renderer.setSampler (
+        renderer.setSampler (
             uniformLocations.sampler1,
             texture1,
             0
         );
 
-        scene.renderer.setSampler (
+        renderer.setSampler (
             uniformLocations.sampler2,
             texture2,
             1
         );
 
-        scene.renderer.drawPrimitives (
+        renderer.drawPrimitives (
             g2l.PrimitiveType.TRIANGLE_STRIP,
             0,
             4

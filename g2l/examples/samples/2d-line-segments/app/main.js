@@ -4,7 +4,8 @@ function main() {
 
     var g2l = GorillaGL;
 
-    var scene;
+    var renderer;
+    var loader;
     var gl;
     var vertexBuffers;
     var program;
@@ -19,23 +20,24 @@ function main() {
 
     try {
         //
-        scene = new g2l.Scene();
+        renderer = new g2l.Renderer();
 
         // var canvas = document.getElementById("canvas");
-        // scene = new g2l.Scene({
+        // renderer = new g2l.Renderer ({
         //     canvas: canvas,
         //     usesDefaultStyles: false
         // });
 
-        gl = scene.renderer.webGLContext;
-
+        gl = renderer.webGLContext;
         document.body.appendChild(gl.canvas);
+
+        loader = new g2l.Loader(renderer);
 
         setUpShaders();
 
         setUpFps();
 
-        scene.run(undefined, drawScene);
+        renderer.run(undefined, drawScene);
 
     } catch (e) {
         //
@@ -49,19 +51,19 @@ function main() {
     //
     function setUpShaders() {
         //
-        program = scene.loader.setUpProgram (
+        program = loader.setUpProgram (
             g2l.TransformedPositionColor.VERTEX_SHADER_SOURCE,
             g2l.TransformedPositionColor.FRAGMENT_SHADER_SOURCE
         );
 
         attributeLocations = {
             //
-            vertexPosition: scene.renderer.getAttributeLocation (
+            vertexPosition: renderer.getAttributeLocation (
                 program,
                'vertexPosition'
             ),
 
-            vertexColor: scene.renderer.getAttributeLocation (
+            vertexColor: renderer.getAttributeLocation (
                 program,
                'vertexColor'
             )
@@ -79,25 +81,14 @@ function main() {
 
     function drawScene() {
         //
-        scene.renderer.clear();
+        renderer.clear();
 
-        // Test:
-        /*
-        var viewport = scene.renderer.viewport;
-
-        var p = new g2l.Vector2D (
-            viewport.width * 0.5,
-            viewport.height * 0.5
-        );
-        */
-
-        var canvas = scene.renderer.canvas;
+        var canvas = renderer.canvas;
         
         var p = new g2l.Vector2D (
             canvas.clientWidth * 0.5,
             canvas.clientHeight * 0.5
         );
-        // :Test
 
         drawLineSegment (
             new g2l.Vector3D(p.x, p.y-200, 0),
@@ -129,19 +120,19 @@ function main() {
             screenThickness
         );
 
-        scene.renderer.program = program;
+        renderer.program = program;
 
-        scene.renderer.setAttribute (
+        renderer.setAttribute (
             attributeLocations.vertexPosition,
             vertexBuffers.position
         );
 
-        scene.renderer.setAttribute (
+        renderer.setAttribute (
             attributeLocations.vertexColor,
             vertexBuffers.color
         );
 
-        scene.renderer.drawPrimitives (
+        renderer.drawPrimitives (
             g2l.PrimitiveType.TRIANGLE_STRIP,
             0,
             4
@@ -155,11 +146,9 @@ function main() {
         screenThickness
     ){
         vertexBuffers = {
-            position: scene.loader.createVertexBuffer(),
-            color: scene.loader.createVertexBuffer()
+            position: loader.createVertexBuffer(),
+            color: loader.createVertexBuffer()
         };
-
-        var viewport = scene.renderer.viewport;
 
         //
         // Vertex positions.

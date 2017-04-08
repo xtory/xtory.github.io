@@ -8,16 +8,9 @@ import { VertexBuffer } from '../graphics/vertex-buffer';
 //
 // Constructor.
 //
-function Loader(_scene) {
+function Loader(_renderer) {
     //
-    var _gl = _scene.renderer.webGLContext;
-
-    //
-    // Properties.
-    //
-    Object.defineProperty(this, 'scene', {
-        get: function() { return _scene; }
-    });
+    var _gl = _renderer.webGLContext;
 
     //
     // Private methods.

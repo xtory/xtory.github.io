@@ -59,19 +59,19 @@
                 "-allow-file-access-from-files"
             ]
         }, {
-            "name": "samples/io",
+            "name": "samples/2d-line-segments",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/g2l/examples/samples/io/index.html",
+            "file": "${workspaceRoot}/g2l/examples/samples/2d-line-segments/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
             ]
         }, {
-            "name": "samples/2d-line-segments",
+            "name": "samples/io",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/g2l/examples/samples/2d-line-segments/index.html",
+            "file": "${workspaceRoot}/g2l/examples/samples/io/index.html",
             "runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
             "runtimeArgs": [
                 "-allow-file-access-from-files"

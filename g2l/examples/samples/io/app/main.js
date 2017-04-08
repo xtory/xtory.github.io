@@ -4,9 +4,10 @@ function main() {
 
     var g2l = GorillaGL;
 
-    var scene;
-    var gl;
+    var renderer;
+    var loader;
     var camera;
+    var gl;
     var vertexBuffers;
     var indexBuffer;
     var program;
@@ -29,17 +30,18 @@ function main() {
 
     try {
         //
-        scene = new g2l.Scene();
+        renderer = new g2l.Renderer();
 
         // var canvas = document.getElementById("canvas");
-        // scene = new g2l.Scene({
+        // renderer = new g2l.Renderer ({
         //     canvas: canvas,
         //     usesDefaultStyles: false
         // });
 
-        gl = scene.renderer.webGLContext;
-
+        gl = renderer.webGLContext;
         document.body.appendChild(gl.canvas);
+
+        loader = new g2l.Loader(renderer);
 
         setUpCamera();
         
@@ -56,7 +58,7 @@ function main() {
 
         backgroundColor = g2l.Colors.DEFAULT_BACKGROUND;
 
-        scene.run(undefined, drawScene);
+        renderer.run(undefined, drawScene);
 
     } catch (e) {
         //
@@ -74,7 +76,7 @@ function main() {
         var origin = new g2l.Vector3D(0, 0, 0);
 
         camera = new g2l.Camera (
-            scene,
+            renderer,
             p,
             g2l.Vector3D.subtractVectors(origin, p)
         );
@@ -83,8 +85,8 @@ function main() {
     function setUpGeometries() {
         //
         vertexBuffers = {
-            position: scene.loader.createVertexBuffer(),
-            color: scene.loader.createVertexBuffer()
+            position: loader.createVertexBuffer(),
+            color: loader.createVertexBuffer()
         };
 
         //
@@ -161,7 +163,7 @@ function main() {
         //
         // Vertex indices.
         //
-        indexBuffer = scene.loader.createIndexBuffer();
+        indexBuffer = loader.createIndexBuffer();
 
         var vertexIndices = [
             //
@@ -195,19 +197,19 @@ function main() {
 
     function setUpShaders() {
         //
-        program = scene.loader.setUpProgram (
+        program = loader.setUpProgram (
             g2l.PositionColor.VERTEX_SHADER_SOURCE,
             g2l.PositionColor.FRAGMENT_SHADER_SOURCE
         );
 
         attributeLocations = {
             //
-            vertexPosition: scene.renderer.getAttributeLocation (
+            vertexPosition: renderer.getAttributeLocation (
                 program,
                'vertexPosition'
             ),
 
-            vertexColor: scene.renderer.getAttributeLocation (
+            vertexColor: renderer.getAttributeLocation (
                 program,
                'vertexColor'
             )
@@ -215,7 +217,7 @@ function main() {
 
         uniformLocations = {
             //
-            transform: scene.renderer.getUniformLocation (
+            transform: renderer.getUniformLocation (
                 program,
                'transform'
             )
@@ -248,19 +250,19 @@ function main() {
 
     function drawScene() {
         //
-        scene.renderer.clear (
+        renderer.clear (
             undefined,
             backgroundColor
         );
 
-        scene.renderer.program = program;
+        renderer.program = program;
         
-        scene.renderer.setAttribute (
+        renderer.setAttribute (
             attributeLocations.vertexPosition,
             vertexBuffers.position
         );
 
-        scene.renderer.setAttribute (
+        renderer.setAttribute (
             attributeLocations.vertexColor,
             vertexBuffers.color
         );
@@ -272,12 +274,12 @@ function main() {
             modelMatrix
         );
 
-        scene.renderer.setUniform (
+        renderer.setUniform (
             uniformLocations.transform,
             transform
         );
         
-        scene.renderer.drawIndexedPrimitives (
+        renderer.drawIndexedPrimitives (
             indexBuffer,
             g2l.PrimitiveType.TRIANGLE_LIST,
             36

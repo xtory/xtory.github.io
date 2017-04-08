@@ -4,7 +4,8 @@ function main() {
 
     var g2l = GorillaGL;
 
-    var scene;
+    var renderer;
+    var loader;
     var gl;
     var vertexBuffers;
     var program;
@@ -14,16 +15,17 @@ function main() {
 
     try {
         //
-        scene = new g2l.Scene();
-        gl = scene.renderer.webGLContext;
-
+        renderer = new g2l.Renderer();
+        gl = renderer.webGLContext;
         document.body.appendChild(gl.canvas);
+
+        loader = new g2l.Loader(renderer);
 
         setUpTextures();
 
         setUpShaders();
 
-        scene.run(undefined, drawScene);
+        renderer.run(undefined, drawScene);
 
     } catch (e) {
         //
@@ -40,29 +42,29 @@ function main() {
         var url = // which is relative to index.html, not main.js
             '../../assets/images/jeremy-mann/market-street.jpg';
 
-        texture = scene.loader.loadTexture2D(url);
+        texture = loader.loadTexture2D(url);
     }
 
     function setUpShaders() {
         //
-        program = scene.loader.setUpProgram (
+        program = loader.setUpProgram (
             g2l.TransformedPositionColorTextureCoordinates.VERTEX_SHADER_SOURCE,
             g2l.TransformedPositionColorTextureCoordinates.FRAGMENT_SHADER_SOURCE
         );
 
         attributeLocations = {
             //
-            vertexPosition: scene.renderer.getAttributeLocation (
+            vertexPosition: renderer.getAttributeLocation (
                 program,
                'vertexPosition'
             ),
 
-            vertexColor: scene.renderer.getAttributeLocation (
+            vertexColor: renderer.getAttributeLocation (
                 program,
                'vertexColor'
             ),
 
-            vertexTextureCoordinates: scene.renderer.getAttributeLocation (
+            vertexTextureCoordinates: renderer.getAttributeLocation (
                 program,
                'vertexTextureCoordinates'
             )
@@ -70,7 +72,7 @@ function main() {
 
         uniformLocations = {
             //
-            sampler: scene.renderer.getUniformLocation (
+            sampler: renderer.getUniformLocation (
                 program,
                'sampler'
             )
@@ -79,7 +81,7 @@ function main() {
 
     function drawScene() {
         //
-        scene.renderer.clear();
+        renderer.clear();
 
         var p = new g2l.Vector2D (
             gl.canvas.clientWidth * 0.5,
@@ -93,29 +95,29 @@ function main() {
 
         setUpGeometries(p.x, p.y, size.x, size.y);
 
-        scene.renderer.program = program;
+        renderer.program = program;
 
-        scene.renderer.setAttribute (
+        renderer.setAttribute (
             attributeLocations.vertexPosition,
             vertexBuffers.position
         );
 
-        scene.renderer.setAttribute (
+        renderer.setAttribute (
             attributeLocations.vertexColor,
             vertexBuffers.color
         );
 
-        scene.renderer.setAttribute (
+        renderer.setAttribute (
             attributeLocations.vertexTextureCoordinates,
             vertexBuffers.textureCoordinates
         );
 
-        scene.renderer.setSampler (
+        renderer.setSampler (
             uniformLocations.sampler,
             texture
         );
 
-        scene.renderer.drawPrimitives (
+        renderer.drawPrimitives (
             g2l.PrimitiveType.TRIANGLE_STRIP,
             0,
             4
@@ -125,12 +127,12 @@ function main() {
     function setUpGeometries(x, y, w, h) {
         //
         vertexBuffers = {
-            position: scene.loader.createVertexBuffer(),
-            color: scene.loader.createVertexBuffer(),
-            textureCoordinates: scene.loader.createVertexBuffer()
+            position: loader.createVertexBuffer(),
+            color: loader.createVertexBuffer(),
+            textureCoordinates: loader.createVertexBuffer()
         };
 
-        var viewport = scene.renderer.viewport;
+        var viewport = renderer.viewport;
 
         //
         // Vertex positions.

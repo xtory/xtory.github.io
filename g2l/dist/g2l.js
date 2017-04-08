@@ -1378,7 +1378,7 @@ Object.freeze(ViewFrustum);
 // Constructor.
 //
 function Camera (
-    _scene,
+    _renderer,
     _position,
     _facingDirection,
     _upDirection,
@@ -1425,7 +1425,7 @@ function Camera (
             _distanceToFarPlane = Camera.MAX_DISTANCE_TO_FAR_PLANE;
         }
 
-        _canvas = _scene.renderer.canvas;
+        _canvas = _renderer.canvas;
 
         _viewFrustum = new ViewFrustum();
 
@@ -1494,7 +1494,7 @@ function Camera (
         // Reference:
         // https://www.youtube.com/watch?v=rfQ8rKGTVlg
         /*
-        var aspectRatio = _scene.renderer.viewport.aspectRatio;
+        var aspectRatio = _renderer.viewport.aspectRatio;
         */
         var aspectRatio = _canvas.clientWidth / _canvas.clientHeight;
         // :Note
@@ -1900,8 +1900,13 @@ Object.freeze(DepthBufferValues);
 //
 // Constructor.
 //
-function Renderer(_scene) {
+function Renderer(_settings) {
     //
+    // Note:
+    // 'settings' include...
+    // - canvas
+    // - usesDefaultStyles
+
     var _canvas;
     var _gl;
     var _program;
@@ -1917,6 +1922,8 @@ function Renderer(_scene) {
 
         setUpWebGLContext();
 
+        setUpTimers();
+
     } catch (e) {
         //
         console.log('g2l.Renderer: '+ e);
@@ -1926,11 +1933,6 @@ function Renderer(_scene) {
 
     //
     // Properties.
-    //
-    Object.defineProperty(this, 'scene', {
-        'get': function() { return _scene; }
-    });
-
     Object.defineProperty(this, 'canvas', {
         'get': function() { return _canvas; }
     });
@@ -1994,10 +1996,10 @@ function Renderer(_scene) {
     //
     function setUpCanvas() {
         //
-        if (_scene.settings !== undefined &&
-            _scene.settings.canvas !== undefined) {
+        if (_settings !== undefined &&
+            _settings.canvas !== undefined) {
             //
-            _canvas = _scene.settings.canvas;
+            _canvas = _settings.canvas;
 
         } else {
             //
@@ -2028,8 +2030,8 @@ function Renderer(_scene) {
         //     display: block; /* prevents scrollbar */
         // }
         //
-        if (_scene.settings !== undefined &&
-            _scene.settings.usesDefaultStyles === false) {
+        if (_settings !== undefined &&
+            _settings.usesDefaultStyles === false) {
             return;
         }
 
@@ -2138,67 +2140,52 @@ function Renderer(_scene) {
         _gl.cullFace(_gl.BACK); // default: BACK.
     }
 
+    function setUpTimers() {
+        //
+        // Note:
+        // Provides requestAnimationFrame in a cross browser way.
+        // @author paulirish / http://paulirish.com/
+
+        if (window.requestAnimationFrame === undefined) {
+            //
+            window.requestAnimationFrame = (function() {
+                //
+                return (
+                    window.webkitRequestAnimationFrame ||
+                    window.mozRequestAnimationFrame ||
+                    window.oRequestAnimationFrame ||
+                    window.msRequestAnimationFrame ||
+                    function (
+                        callback, // function FrameRequestCallback
+                        element   // DOMElement Element
+                    ){
+                        window.setTimeout(callback, 1000/60);
+                    }
+                );
+            })();
+        }
+    }
+
     //
     // Privileged methods.
     //
-    // this.createVertexBuffer = function() {
-    //     return new VertexBuffer(_gl);
-    // };
+    this.run = function(update, draw) {
+        //
+        render();
 
-    // this.createIndexBuffer = function() {
-    //     return new IndexBuffer(_gl);
-    // };
+        function render() {
+            //
+            requestAnimationFrame(render);
 
-    // this.setUpVertexBuffer = function(buffer, items) {
-    //     //
-    //     _gl.bindBuffer (
-    //         _gl.ARRAY_BUFFER,
-    //         buffer.webGLBuffer
-    //     );
-        
-    //     _gl.bufferData (
-    //         _gl.ARRAY_BUFFER,
-    //         new Float32Array(items),
-    //         _gl.STATIC_DRAW
-    //     );
-    // };
+            if (update !== undefined) {
+                update();
+            }
 
-    // this.setUpIndexBuffer = function(buffer, items) {
-    //     //
-    //     _gl.bindBuffer (
-    //         _gl.ELEMENT_ARRAY_BUFFER,
-    //         buffer.webGLBuffer
-    //     );
-
-    //     // Note:
-    //     // DirectX supports 16-bit or 32-bit index buffers. But in this engine,
-    //     // so far, only 16-bit index buffer is supported.
-    //     /*
-    //     if (uses16Bits === true) {
-    //         //
-    //         _gl.bufferData (
-    //             _gl.ELEMENT_ARRAY_BUFFER,
-    //             new Uint16Array(items),
-    //             _gl.STATIC_DRAW
-    //         );
-
-    //     } else {
-    //         //
-    //         _gl.bufferData (
-    //             _gl.ELEMENT_ARRAY_BUFFER,
-    //             new Uint32Array(items),
-    //             _gl.STATIC_DRAW
-    //         );
-    //     }
-    //     */
-
-    //     _gl.bufferData (
-    //         _gl.ELEMENT_ARRAY_BUFFER,
-    //         new Uint16Array(items),
-    //         _gl.STATIC_DRAW
-    //     );
-    //     // :Note
-    // };
+            if (draw !== undefined) {
+                draw();
+            }
+        }
+    };
 
     this.clear = function(clearOptions, color, depth, stencil) {
         //
@@ -3117,16 +3104,9 @@ Object.freeze(MouseButton);
 //
 // Constructor.
 //
-function Loader(_scene) {
+function Loader(_renderer) {
     //
-    var _gl = _scene.renderer.webGLContext;
-
-    //
-    // Properties.
-    //
-    Object.defineProperty(this, 'scene', {
-        get: function() { return _scene; }
-    });
+    var _gl = _renderer.webGLContext;
 
     //
     // Private methods.
@@ -3362,124 +3342,6 @@ function Plane() {
 }
 
 Object.freeze(Plane);
-
-//
-// Constructor.
-//
-function Scene(_settings) {
-    //
-    // Note:
-    // 'settings' include...
-    // - canvas
-    // - usesDefaultStyles
-    // - handlesHDDpiDisplay
-
-    try {
-        //
-        Object.defineProperty(this, 'settings', {
-            get: function() { return _settings; }
-        });
-        
-        var _renderer;
-        var _loader;
-
-        _renderer = new Renderer(this);
-        Object.defineProperty(this, 'renderer', {
-            get: function() { return _renderer; }
-        });
-        
-        _loader = new Loader(this);
-        Object.defineProperty(this, 'loader', {
-            get: function() { return _loader; }
-        });
-
-        // Sets up the timers.
-        setUpTimers();
-
-        // Hooks the events.        
-        hookEvents();
-        
-    } catch (e) {
-        //
-        console.log('g2l.Scene: ' + e);
-        
-        throw e;
-    }
-
-    //
-    // Private methods.
-    //
-    function setUpTimers() {
-        //
-        // Note:
-        // Provides requestAnimationFrame in a cross browser way.
-        // @author paulirish / http://paulirish.com/
-
-        if (window.requestAnimationFrame === undefined) {
-            //
-            window.requestAnimationFrame = (function() {
-                //
-                return (
-                    window.webkitRequestAnimationFrame ||
-                    window.mozRequestAnimationFrame ||
-                    window.oRequestAnimationFrame ||
-                    window.msRequestAnimationFrame ||
-                    function (
-                        callback, // function FrameRequestCallback
-                        element   // DOMElement Element
-                    ){
-                        window.setTimeout(callback, 1000/60);
-                    }
-                );
-            })();
-        }
-    }
-
-    function hookEvents() {
-        //
-        // window.addEventListener('error', onError)
-        // window.addEventListener('beforeunload', onBeforeUnload);
-    }
-
-    //
-    // Event handlers.
-    //
-    // function onError(errorMsg, url, lineNumber) {
-    //     //
-    //     alert (
-    //         'Error: ' + errorMsg +
-    //         ', Script: ' + url +
-    //         ', Line: ' + lineNumber
-    //     );
-    // }
-
-    // function onBeforeUnload() {
-    //     // No contents.
-    // }
-
-    //
-    // Privileged methods.
-    //
-    this.run = function(update, draw) {
-        //
-        render();
-
-        function render() {
-            //
-            requestAnimationFrame(render);
-
-            if (update !== undefined) {
-                update();
-            }
-
-            if (draw !== undefined) {
-                draw();
-            }
-        }
-    };
-}
-
-Object.freeze(Scene);
 
 //
 // Constructor.
@@ -3883,7 +3745,6 @@ exports.CartesianAxis = CartesianAxis;
 exports.Plane = Plane;
 exports.Quaternion = Quaternion;
 exports.ViewFrustum = ViewFrustum;
-exports.Scene = Scene;
 exports.EaseMode = EaseMode;
 exports.Fps = Fps;
 exports.SineEase = SineEase;

@@ -17,8 +17,13 @@ import { Vector2D }                from '../math/2d-vector';
 //
 // Constructor.
 //
-function Renderer(_scene) {
+function Renderer(_settings) {
     //
+    // Note:
+    // 'settings' include...
+    // - canvas
+    // - usesDefaultStyles
+
     var _canvas;
     var _gl;
     var _program;
@@ -34,6 +39,8 @@ function Renderer(_scene) {
 
         setUpWebGLContext();
 
+        setUpTimers();
+
     } catch (e) {
         //
         console.log('g2l.Renderer: '+ e);
@@ -43,11 +50,6 @@ function Renderer(_scene) {
 
     //
     // Properties.
-    //
-    Object.defineProperty(this, 'scene', {
-        'get': function() { return _scene; }
-    });
-
     Object.defineProperty(this, 'canvas', {
         'get': function() { return _canvas; }
     });
@@ -111,10 +113,10 @@ function Renderer(_scene) {
     //
     function setUpCanvas() {
         //
-        if (_scene.settings !== undefined &&
-            _scene.settings.canvas !== undefined) {
+        if (_settings !== undefined &&
+            _settings.canvas !== undefined) {
             //
-            _canvas = _scene.settings.canvas;
+            _canvas = _settings.canvas;
 
         } else {
             //
@@ -145,8 +147,8 @@ function Renderer(_scene) {
         //     display: block; /* prevents scrollbar */
         // }
         //
-        if (_scene.settings !== undefined &&
-            _scene.settings.usesDefaultStyles === false) {
+        if (_settings !== undefined &&
+            _settings.usesDefaultStyles === false) {
             return;
         }
 
@@ -255,67 +257,52 @@ function Renderer(_scene) {
         _gl.cullFace(_gl.BACK); // default: BACK.
     }
 
+    function setUpTimers() {
+        //
+        // Note:
+        // Provides requestAnimationFrame in a cross browser way.
+        // @author paulirish / http://paulirish.com/
+
+        if (window.requestAnimationFrame === undefined) {
+            //
+            window.requestAnimationFrame = (function() {
+                //
+                return (
+                    window.webkitRequestAnimationFrame ||
+                    window.mozRequestAnimationFrame ||
+                    window.oRequestAnimationFrame ||
+                    window.msRequestAnimationFrame ||
+                    function (
+                        callback, // function FrameRequestCallback
+                        element   // DOMElement Element
+                    ){
+                        window.setTimeout(callback, 1000/60);
+                    }
+                );
+            })();
+        }
+    }
+
     //
     // Privileged methods.
     //
-    // this.createVertexBuffer = function() {
-    //     return new VertexBuffer(_gl);
-    // };
+    this.run = function(update, draw) {
+        //
+        render();
 
-    // this.createIndexBuffer = function() {
-    //     return new IndexBuffer(_gl);
-    // };
+        function render() {
+            //
+            requestAnimationFrame(render);
 
-    // this.setUpVertexBuffer = function(buffer, items) {
-    //     //
-    //     _gl.bindBuffer (
-    //         _gl.ARRAY_BUFFER,
-    //         buffer.webGLBuffer
-    //     );
-        
-    //     _gl.bufferData (
-    //         _gl.ARRAY_BUFFER,
-    //         new Float32Array(items),
-    //         _gl.STATIC_DRAW
-    //     );
-    // };
+            if (update !== undefined) {
+                update();
+            }
 
-    // this.setUpIndexBuffer = function(buffer, items) {
-    //     //
-    //     _gl.bindBuffer (
-    //         _gl.ELEMENT_ARRAY_BUFFER,
-    //         buffer.webGLBuffer
-    //     );
-
-    //     // Note:
-    //     // DirectX supports 16-bit or 32-bit index buffers. But in this engine,
-    //     // so far, only 16-bit index buffer is supported.
-    //     /*
-    //     if (uses16Bits === true) {
-    //         //
-    //         _gl.bufferData (
-    //             _gl.ELEMENT_ARRAY_BUFFER,
-    //             new Uint16Array(items),
-    //             _gl.STATIC_DRAW
-    //         );
-
-    //     } else {
-    //         //
-    //         _gl.bufferData (
-    //             _gl.ELEMENT_ARRAY_BUFFER,
-    //             new Uint32Array(items),
-    //             _gl.STATIC_DRAW
-    //         );
-    //     }
-    //     */
-
-    //     _gl.bufferData (
-    //         _gl.ELEMENT_ARRAY_BUFFER,
-    //         new Uint16Array(items),
-    //         _gl.STATIC_DRAW
-    //     );
-    //     // :Note
-    // };
+            if (draw !== undefined) {
+                draw();
+            }
+        }
+    };
 
     this.clear = function(clearOptions, color, depth, stencil) {
         //

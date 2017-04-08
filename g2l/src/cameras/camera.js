@@ -8,7 +8,7 @@ import { ViewFrustum } from '../math/view-frustum';
 // Constructor.
 //
 function Camera (
-    _scene,
+    _renderer,
     _position,
     _facingDirection,
     _upDirection,
@@ -55,7 +55,7 @@ function Camera (
             _distanceToFarPlane = Camera.MAX_DISTANCE_TO_FAR_PLANE;
         }
 
-        _canvas = _scene.renderer.canvas;
+        _canvas = _renderer.canvas;
 
         _viewFrustum = new ViewFrustum();
 
@@ -124,7 +124,7 @@ function Camera (
         // Reference:
         // https://www.youtube.com/watch?v=rfQ8rKGTVlg
         /*
-        var aspectRatio = _scene.renderer.viewport.aspectRatio;
+        var aspectRatio = _renderer.viewport.aspectRatio;
         */
         var aspectRatio = _canvas.clientWidth / _canvas.clientHeight;
         // :Note
