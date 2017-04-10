@@ -1,9 +1,10 @@
 //
 // Constructor.
 //
-function SpriteBatch(_gl) {
+function SpriteBatch(_renderer) {
     //
     var _self;
+    var _gl;
     var _webGLTexture;
     var _width;
     var _height;
@@ -11,12 +12,14 @@ function SpriteBatch(_gl) {
     try {
         //
         _self = this;
+
+        _gl = _renderer.gl;
         
         _webGLTexture = _gl.createTexture();
 
     } catch (e) {
         //
-        console.log('g2l.Texture2D: '+ e);
+        console.log('g2l.SpriteBatch: '+ e);
 
         throw e;
     }

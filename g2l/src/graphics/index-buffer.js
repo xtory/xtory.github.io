@@ -1,13 +1,16 @@
 //
 // Constructor.
 //
-function IndexBuffer(_loader) {
+function IndexBuffer(_bufferLoader) {
     //
+    var _gl;
     var _webGLBuffer;
 
     try {
         //
-        _webGLBuffer = _loader.gl.createBuffer();
+        _gl = _bufferLoader.loader.renderer.gl;
+
+        _webGLBuffer = _gl.createBuffer();
 
     } catch (e) {
         //
@@ -19,8 +22,8 @@ function IndexBuffer(_loader) {
     //
     // Properties.
     //
-    Object.defineProperty(this, 'loader', {
-        'get': function() { return _loader; }
+    Object.defineProperty(this, 'bufferLoader', {
+        'get': function() { return _bufferLoader; }
     });
 
     Object.defineProperty(this, 'webGLBuffer', {
@@ -34,7 +37,7 @@ IndexBuffer.prototype = {
     //
     setItems: function(items) {
         //
-        var gl = this.loader.gl;
+        var gl = this.bufferLoader.loader.renderer.gl;
 
         //_itemCount = items.length;
 
@@ -78,7 +81,7 @@ Object.defineProperty(IndexBuffer.prototype, 'items', {
     //
     'set': function(value) {
         //
-        var gl = this.gl;
+        var gl = this.loader.renderer.gl;
 
         gl.bindBuffer (
             gl.ELEMENT_ARRAY_BUFFER,

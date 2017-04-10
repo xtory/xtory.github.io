@@ -58,7 +58,7 @@ function Renderer(_settings) {
     });
     
     Object.defineProperty(this, 'gl', {
-        get: function() { return _gl; }
+        'get': function() { return _gl; }
     });
 
     // Note:

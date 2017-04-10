@@ -62,30 +62,6 @@ function Camera (
 
         _viewFrustum = new ViewFrustum();
 
-        Object.defineProperty(this, 'position', {
-            'get': function() { return _position; }
-        });
-
-        Object.defineProperty(this, 'facingDirection', {
-            'get': function() { return _facingDirection; }
-        });
-
-        Object.defineProperty(this, 'upDirection', {
-            'get': function() { return _upDirection; }
-        });
-
-        Object.defineProperty(this, 'distanceToNearPlane', {
-            'get': function() { return _distanceToNearPlane; }
-        });
-
-        Object.defineProperty(this, 'distanceToFarPlane', {
-            'get': function() { return _distanceToFarPlane; }
-        });
-
-        Object.defineProperty(this, 'viewFrustum', {
-            'get': function() { return _viewFrustum; }
-        });
-
         _hasToUpdateViewMatrix           = true;
         _hasToUpdateProjectionMatrix     = true;
         _hasToRaiseTransformUpdatedEvent = true;
@@ -96,6 +72,37 @@ function Camera (
 
         throw e;
     }
+
+    //
+    // Properties
+    //
+    Object.defineProperty(this, 'renderer', {
+        'get': function() { return _renderer; }
+    });
+
+    Object.defineProperty(this, 'position', {
+        'get': function() { return _position; }
+    });
+
+    Object.defineProperty(this, 'facingDirection', {
+        'get': function() { return _facingDirection; }
+    });
+
+    Object.defineProperty(this, 'upDirection', {
+        'get': function() { return _upDirection; }
+    });
+
+    Object.defineProperty(this, 'distanceToNearPlane', {
+        'get': function() { return _distanceToNearPlane; }
+    });
+
+    Object.defineProperty(this, 'distanceToFarPlane', {
+        'get': function() { return _distanceToFarPlane; }
+    });
+
+    Object.defineProperty(this, 'viewFrustum', {
+        'get': function() { return _viewFrustum; }
+    });
 
     //
     // Private methods.

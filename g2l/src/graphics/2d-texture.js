@@ -1,15 +1,18 @@
 //
 // Constructor.
 //
-function Texture2D(_loader) {
+function Texture2D(_textureLoader) {
     //
+    var _gl;
     var _webGLTexture;
     var _width;
     var _height;
 
     try {
         //
-        _webGLTexture = _loader.gl.createTexture();
+        _gl = _textureLoader.loader.renderer.gl;
+
+        _webGLTexture = _gl.createTexture();
 
     } catch (e) {
         //

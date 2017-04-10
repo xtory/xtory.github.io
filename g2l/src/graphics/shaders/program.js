@@ -1,13 +1,16 @@
 //
 // Constructor.
 //
-function Program(_loader) {
+function Program(_programLoader) {
     //
+    var _gl;
     var _webGLProgram;
 
     try {
         //
-        _webGLProgram = _loader.gl.createProgram();
+        _gl = _programLoader.loader.renderer.gl;
+
+        _webGLProgram = _gl.createProgram();
 
     } catch (e) {
         //
@@ -19,8 +22,8 @@ function Program(_loader) {
     //
     // Properties.
     //
-    Object.defineProperty(this, 'loader', {
-        'get': function() { return _loader; }
+    Object.defineProperty(this, 'programLoader', {
+        'get': function() { return _programLoader; }
     });
 
     Object.defineProperty(this, 'webGLProgram', {

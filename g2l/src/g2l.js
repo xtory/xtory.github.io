@@ -33,7 +33,9 @@ export { Fps }                                        from './helpers/fps';
 export { MouseButton }                                from './helpers/mouse-button';
 
 // Loaders.
+export { BufferLoader }                               from './loaders/buffer-loader';
 export { Loader }                                     from './loaders/loader';
+export { TextureLoader }                              from './loaders/texture-loader';
 
 // Math.
 export { AxisGroup }                                  from './math/axis-group';

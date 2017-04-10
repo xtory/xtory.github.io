@@ -1432,30 +1432,6 @@ function Camera (
 
         _viewFrustum = new ViewFrustum();
 
-        Object.defineProperty(this, 'position', {
-            'get': function() { return _position; }
-        });
-
-        Object.defineProperty(this, 'facingDirection', {
-            'get': function() { return _facingDirection; }
-        });
-
-        Object.defineProperty(this, 'upDirection', {
-            'get': function() { return _upDirection; }
-        });
-
-        Object.defineProperty(this, 'distanceToNearPlane', {
-            'get': function() { return _distanceToNearPlane; }
-        });
-
-        Object.defineProperty(this, 'distanceToFarPlane', {
-            'get': function() { return _distanceToFarPlane; }
-        });
-
-        Object.defineProperty(this, 'viewFrustum', {
-            'get': function() { return _viewFrustum; }
-        });
-
         _hasToUpdateViewMatrix           = true;
         _hasToUpdateProjectionMatrix     = true;
         _hasToRaiseTransformUpdatedEvent = true;
@@ -1466,6 +1442,37 @@ function Camera (
 
         throw e;
     }
+
+    //
+    // Properties
+    //
+    Object.defineProperty(this, 'renderer', {
+        'get': function() { return _renderer; }
+    });
+
+    Object.defineProperty(this, 'position', {
+        'get': function() { return _position; }
+    });
+
+    Object.defineProperty(this, 'facingDirection', {
+        'get': function() { return _facingDirection; }
+    });
+
+    Object.defineProperty(this, 'upDirection', {
+        'get': function() { return _upDirection; }
+    });
+
+    Object.defineProperty(this, 'distanceToNearPlane', {
+        'get': function() { return _distanceToNearPlane; }
+    });
+
+    Object.defineProperty(this, 'distanceToFarPlane', {
+        'get': function() { return _distanceToFarPlane; }
+    });
+
+    Object.defineProperty(this, 'viewFrustum', {
+        'get': function() { return _viewFrustum; }
+    });
 
     //
     // Private methods.
@@ -1944,7 +1951,7 @@ function Renderer(_settings) {
     });
     
     Object.defineProperty(this, 'gl', {
-        get: function() { return _gl; }
+        'get': function() { return _gl; }
     });
 
     // Note:
@@ -2350,13 +2357,16 @@ Object.freeze(Renderer);
 //
 // Constructor.
 //
-function IndexBuffer(_loader) {
+function IndexBuffer(_bufferLoader) {
     //
+    var _gl;
     var _webGLBuffer;
 
     try {
         //
-        _webGLBuffer = _loader.gl.createBuffer();
+        _gl = _bufferLoader.loader.renderer.gl;
+
+        _webGLBuffer = _gl.createBuffer();
 
     } catch (e) {
         //
@@ -2368,8 +2378,8 @@ function IndexBuffer(_loader) {
     //
     // Properties.
     //
-    Object.defineProperty(this, 'loader', {
-        'get': function() { return _loader; }
+    Object.defineProperty(this, 'bufferLoader', {
+        'get': function() { return _bufferLoader; }
     });
 
     Object.defineProperty(this, 'webGLBuffer', {
@@ -2383,7 +2393,7 @@ IndexBuffer.prototype = {
     //
     setItems: function(items) {
         //
-        var gl = this.loader.gl;
+        var gl = this.bufferLoader.loader.renderer.gl;
 
         //_itemCount = items.length;
 
@@ -2427,7 +2437,7 @@ Object.defineProperty(IndexBuffer.prototype, 'items', {
     //
     'set': function(value) {
         //
-        var gl = this.gl;
+        var gl = this.loader.renderer.gl;
 
         gl.bindBuffer (
             gl.ELEMENT_ARRAY_BUFFER,
@@ -2662,13 +2672,16 @@ Object.freeze(PrimitiveType);
 //
 // Constructor.
 //
-function Program(_loader) {
+function Program(_programLoader) {
     //
+    var _gl;
     var _webGLProgram;
 
     try {
         //
-        _webGLProgram = _loader.gl.createProgram();
+        _gl = _programLoader.loader.renderer.gl;
+
+        _webGLProgram = _gl.createProgram();
 
     } catch (e) {
         //
@@ -2680,8 +2693,8 @@ function Program(_loader) {
     //
     // Properties.
     //
-    Object.defineProperty(this, 'loader', {
-        'get': function() { return _loader; }
+    Object.defineProperty(this, 'programLoader', {
+        'get': function() { return _programLoader; }
     });
 
     Object.defineProperty(this, 'webGLProgram', {
@@ -2774,9 +2787,10 @@ Object.freeze(ShaderType);
 //
 // Constructor.
 //
-function SpriteBatch(_gl) {
+function SpriteBatch(_renderer) {
     //
     var _self;
+    var _gl;
     var _webGLTexture;
     var _width;
     var _height;
@@ -2784,12 +2798,14 @@ function SpriteBatch(_gl) {
     try {
         //
         _self = this;
+
+        _gl = _renderer.gl;
         
         _webGLTexture = _gl.createTexture();
 
     } catch (e) {
         //
-        console.log('g2l.Texture2D: '+ e);
+        console.log('g2l.SpriteBatch: '+ e);
 
         throw e;
     }
@@ -2821,15 +2837,18 @@ Object.freeze(SpriteBatch);
 //
 // Constructor.
 //
-function Texture2D(_loader) {
+function Texture2D(_textureLoader) {
     //
+    var _gl;
     var _webGLTexture;
     var _width;
     var _height;
 
     try {
         //
-        _webGLTexture = _loader.gl.createTexture();
+        _gl = _textureLoader.loader.renderer.gl;
+
+        _webGLTexture = _gl.createTexture();
 
     } catch (e) {
         //
@@ -3046,14 +3065,17 @@ Object.freeze(TransformedPositionTextureCoordinates);
 //
 // Constructor.
 //
-function VertexBuffer(_loader) {
+function VertexBuffer(_bufferLoader) {
     //
+    var _gl;
     var _webGLBuffer;
     var _size; // Number of components per vertex attribute. Must be 1, 2, 3, or 4.
 
     try {
         //
-        _webGLBuffer = _loader.gl.createBuffer();
+        _gl = _bufferLoader.loader.renderer.gl;
+
+        _webGLBuffer = _gl.createBuffer();
 
     } catch (e) {
         //
@@ -3065,8 +3087,8 @@ function VertexBuffer(_loader) {
     //
     // Properties.
     //
-    Object.defineProperty(this, 'loader', {
-        'get': function() { return _loader; }
+    Object.defineProperty(this, 'bufferLoader', {
+        'get': function() { return _bufferLoader; }
     });
 
     Object.defineProperty(this, 'webGLBuffer', {
@@ -3085,7 +3107,7 @@ VertexBuffer.prototype = {
     //
     setItems: function(items, size) {
         //
-        var gl = this.loader.gl;
+        var gl = this.bufferLoader.loader.renderer.gl;
 
         this.size = size;
         //_itemCount = items.length / _itemSize;
@@ -3239,7 +3261,46 @@ Object.freeze(MouseButton);
 //
 // Constructor.
 //
-function Loader(_renderer) {
+function BufferLoader(_loader) {
+    //
+    var _self;
+    var _gl;
+
+    try {
+        //
+        Object.defineProperty(this, 'loader', {
+            'get': function() { return _loader; }
+        });
+
+        _self = this;
+        
+        _gl = _loader.renderer.gl;
+
+    } catch (e) {
+        //
+        console.log('g2l.BufferLoader: '+ e);
+
+        throw e;
+    }
+    
+    //
+    // Privileged methods.
+    //
+    this.createVertexBuffer = function() {
+        return new VertexBuffer(_self);
+    };
+
+    this.createIndexBuffer = function() {
+        return new IndexBuffer(_self);
+    };
+}
+
+Object.freeze(BufferLoader);
+
+//
+// Constructor.
+//
+function ProgramLoader(_loader) {
     //
     var _self;
     var _gl;
@@ -3247,21 +3308,19 @@ function Loader(_renderer) {
     try {
         //
         _self = this;
-        _gl = _renderer.gl;
+        
+        _gl = _loader.renderer.gl;
+
+        Object.defineProperty(this, 'loader', {
+            'get': function() { return _loader; }
+        });
 
     } catch (e) {
         //
-        console.log('g2l.Loader: '+ e);
+        console.log('g2l.ProgramLoader: '+ e);
 
         throw e;
     }
-
-    //
-    // Properties.
-    //
-    Object.defineProperty(this, 'gl', {
-        'get': function() { return _gl; }
-    });
 
     //
     // Private methods.
@@ -3380,14 +3439,6 @@ function Loader(_renderer) {
     //
     // Privileged methods.
     //
-    this.createVertexBuffer = function() {
-        return new VertexBuffer(_self);
-    };
-
-    this.createIndexBuffer = function() {
-        return new IndexBuffer(_self);
-    };
-
     this.setUpProgram = function(vertexShaderSource, fragmentShaderSource) {
         //
         var webGLVertexShader =
@@ -3409,8 +3460,41 @@ function Loader(_renderer) {
 
         return setUpProgram(vertexShader, fragmentShader);
     };
+}
 
-    this.loadTexture2D = function(imageSourceUrl) {
+Object.freeze(ProgramLoader);
+
+//
+// Constructor.
+//
+function TextureLoader(_loader) {
+    //
+    var _self;
+    var _gl;
+
+    try {
+        //
+        _self = this;
+        _gl = _loader.renderer.gl;
+
+    } catch (e) {
+        //
+        console.log('g2l.TextureLoader: '+ e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(this, 'loader', {
+        'get': function() { return _loader; }
+    });
+
+    //
+    // Privileged methods.
+    //
+    this.loadTexture2D = function(url) {
         //
         var image = new Image();
         var texture = new Texture2D(_self);
@@ -3419,7 +3503,7 @@ function Loader(_renderer) {
             handleTextureLoaded(image, texture);
         });
 
-        image.src = imageSourceUrl;
+        image.src = url;
 
         function handleTextureLoaded(image, texture) {
             //
@@ -3484,6 +3568,67 @@ function Loader(_renderer) {
         }
 
         return texture;
+    };
+}
+
+Object.freeze(TextureLoader);
+
+//
+// Constructor.
+//
+function Loader(_renderer) {
+    //
+    var _self;
+    var _gl;
+    var _bufferLoader;
+    var _textureLoader;
+    var _programLoader;
+
+    try {
+        //
+        _self = this;
+        
+        _gl = _renderer.gl;
+
+        Object.defineProperty(this, 'renderer', {
+            'get': function() { return _renderer; }
+        });
+
+        _bufferLoader = new BufferLoader(_self);
+        _textureLoader = new TextureLoader(_self);
+        _programLoader = new ProgramLoader(_self);
+
+    } catch (e) {
+        //
+        console.log('g2l.Loader: '+ e);
+
+        throw e;
+    }
+    
+    //
+    // Privileged methods.
+    //
+    this.createVertexBuffer = function() {
+        return _bufferLoader.createVertexBuffer();
+    };
+
+    this.createIndexBuffer = function() {
+        return _bufferLoader.createIndexBuffer();
+    };
+
+    this.setUpProgram = function(vertexShaderSource, fragmentShaderSource) {
+        //
+        return _programLoader.setUpProgram(vertexShaderSource, fragmentShaderSource);
+    };
+
+    this.setUpProgramFromHtmlElements = function(vertexShaderId, fragmentShaderId) {
+        //
+        return _programLoader.setUpProgram(vertexShaderId, fragmentShaderId);
+    };
+
+    this.loadTexture2D = function(url) {
+        //
+        return _textureLoader.loadTexture2D(url);
     };
 }
 
@@ -3816,7 +3961,9 @@ exports.VertexBuffer = VertexBuffer;
 exports.ExceptionHelper = ExceptionHelper;
 exports.Fps = Fps;
 exports.MouseButton = MouseButton;
+exports.BufferLoader = BufferLoader;
 exports.Loader = Loader;
+exports.TextureLoader = TextureLoader;
 exports.AxisGroup = AxisGroup;
 exports.MathHelper = MathHelper;
 exports.Vector2D = Vector2D;
