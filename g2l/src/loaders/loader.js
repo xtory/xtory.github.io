@@ -10,7 +10,27 @@ import { VertexBuffer } from '../graphics/vertex-buffer';
 //
 function Loader(_renderer) {
     //
-    var _gl = _renderer.webGLContext;
+    var _self;
+    var _gl;
+
+    try {
+        //
+        _self = this;
+        _gl = _renderer.gl;
+
+    } catch (e) {
+        //
+        console.log('g2l.Loader: '+ e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(this, 'gl', {
+        'get': function() { return _gl; }
+    })
 
     //
     // Private methods.
@@ -107,7 +127,7 @@ function Loader(_renderer) {
 
     function setUpProgram(webGLVertexShader, webGLFragmentShader) {
         //
-        var program = new Program(_gl);
+        var program = new Program(_self);
         var webGLProgram = program.webGLProgram;
 
         _gl.attachShader(webGLProgram, webGLVertexShader);
@@ -130,11 +150,11 @@ function Loader(_renderer) {
     // Privileged methods.
     //
     this.createVertexBuffer = function() {
-        return new VertexBuffer(_gl);
+        return new VertexBuffer(_self);
     };
 
     this.createIndexBuffer = function() {
-        return new IndexBuffer(_gl);
+        return new IndexBuffer(_self);
     };
 
     this.setUpProgram = function(vertexShaderSource, fragmentShaderSource) {
@@ -162,7 +182,7 @@ function Loader(_renderer) {
     this.loadTexture2D = function(imageSourceUrl) {
         //
         var image = new Image();
-        var texture = new Texture2D(_gl);
+        var texture = new Texture2D(_self);
 
         image.addEventListener('load', function() {
             handleTextureLoaded(image, texture);

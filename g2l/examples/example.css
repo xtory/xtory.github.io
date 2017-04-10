@@ -71,8 +71,8 @@ html, body {
   border-radius: 10px;
   z-index: 3;
   font-family: 'Consolas';
-  font-weight: bold;
-  /*font-style: italic;*/
+  /*font-weight: bold;*/
+  font-style: italic;
   font-size: large;
   color: rgba(224, 224, 224, 0.75);
   letter-spacing: 1px;

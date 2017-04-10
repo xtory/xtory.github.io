@@ -7,6 +7,7 @@ function Fps() {
     var _totalTime;
     var _timeTable;
     var _timeTableIndex;
+    var _then; // in milliseconds.
     var _average;
 
     try {
@@ -18,6 +19,8 @@ function Fps() {
 
         // where to record next elapsed time.
         _timeTableIndex = 0;
+
+        _then = 0;
 
         _average = 0;
 
@@ -43,16 +46,20 @@ function Fps() {
     //
     // Privileged methods.
     //
-    this.update = function (
-        elapsedTime // in milliseconds.
-    ){
-        var elapsedTime2 = elapsedTime * 0.001;
+    this.update = function() {
+        //
+        var now = (new Date()).getTime(); // in milliseconds.
+
+        var elapsedTime = // in seconds.
+            (now - _then) * 0.001;
+
+        _then = now;
 
         // Keep the total time and total active time for the last N frames.
-        _totalTime += elapsedTime2 - _timeTable[_timeTableIndex];
+        _totalTime += elapsedTime - _timeTable[_timeTableIndex];
 
         // Save off the elapsed time for this frame so we can subtract it later.
-        _timeTable[_timeTableIndex] = elapsedTime2;
+        _timeTable[_timeTableIndex] = elapsedTime;
 
         // Wrap the place to store the next time sample.
         _timeTableIndex++;
@@ -63,7 +70,7 @@ function Fps() {
         _average = Math.floor (
             (1.0 / (_totalTime / Fps.FRAME_COUNT_TO_AVERAGE)) + 0.5
         );
-    };
+    };    
 }
 
 //

@@ -788,7 +788,7 @@ function Quaternion(_x, _y, _z, _w) {
     this.z = _z;
 
     // The scalar part.
-    this.w = _w; // W isn't the rotation angle (in radians).
+    this.w = _w; // which isn't the rotation angle (in radians).
 }
 
 Quaternion.prototype = {
@@ -1385,6 +1385,7 @@ function Camera (
     _distanceToNearPlane,
     _distanceToFarPlane
 ){
+    var _self;
     var _canvas;
     var _viewMatrix;
     var _projectionMatrix;
@@ -1397,6 +1398,8 @@ function Camera (
         
     try {
         //
+        _self = this;
+
         if (_position === undefined) {
             _position = new Vector3D(0, 0, 10000);
         }
@@ -1612,8 +1615,8 @@ function Camera (
             //
             // Temp:
             /*
-            if (this.TransformUpdated != null) {
-                this.TransformUpdated(this, EventArgs.Empty);
+            if (_self.TransformUpdated != null) {
+                _self.TransformUpdated(_self, EventArgs.Empty);
             }
             */
 
@@ -1686,16 +1689,16 @@ Object.freeze(ClearOptions);
 //
 // Constructor.
 //
-function Color(r, g, b, a) {
+function Color(_r, _g, _b, _a) {
     //
-    if (a === undefined) {
-        a = 1.0;
+    if (_a === undefined) {
+        _a = 1.0;
     }
 
-    this.r = r;
-    this.g = g;
-    this.b = b;
-    this.a = a;
+    this.r = _r;
+    this.g = _g;
+    this.b = _b;
+    this.a = _a;
 }
 
 //
@@ -1907,6 +1910,7 @@ function Renderer(_settings) {
     // - canvas
     // - usesDefaultStyles
 
+    var _self;
     var _canvas;
     var _gl;
     var _program;
@@ -1916,6 +1920,8 @@ function Renderer(_settings) {
 
     try {
         //
+        _self = this;
+
         setUpCanvas();
 
         setUpStyles();
@@ -1937,7 +1943,7 @@ function Renderer(_settings) {
         'get': function() { return _canvas; }
     });
     
-    Object.defineProperty(this, 'webGLContext', {
+    Object.defineProperty(this, 'gl', {
         get: function() { return _gl; }
     });
 
@@ -2344,13 +2350,13 @@ Object.freeze(Renderer);
 //
 // Constructor.
 //
-function IndexBuffer(_gl) {
+function IndexBuffer(_loader) {
     //
     var _webGLBuffer;
 
     try {
         //
-        _webGLBuffer = _gl.createBuffer();
+        _webGLBuffer = _loader.gl.createBuffer();
 
     } catch (e) {
         //
@@ -2362,8 +2368,8 @@ function IndexBuffer(_gl) {
     //
     // Properties.
     //
-    Object.defineProperty(this, 'gl', {
-        'get': function() { return _gl; }
+    Object.defineProperty(this, 'loader', {
+        'get': function() { return _loader; }
     });
 
     Object.defineProperty(this, 'webGLBuffer', {
@@ -2377,7 +2383,7 @@ IndexBuffer.prototype = {
     //
     setItems: function(items) {
         //
-        var gl = this.gl;
+        var gl = this.loader.gl;
 
         //_itemCount = items.length;
 
@@ -2656,13 +2662,13 @@ Object.freeze(PrimitiveType);
 //
 // Constructor.
 //
-function Program(_gl) {
+function Program(_loader) {
     //
     var _webGLProgram;
 
     try {
         //
-        _webGLProgram = _gl.createProgram();
+        _webGLProgram = _loader.gl.createProgram();
 
     } catch (e) {
         //
@@ -2674,8 +2680,8 @@ function Program(_gl) {
     //
     // Properties.
     //
-    Object.defineProperty(this, 'gl', {
-        'get': function() { return _gl; }
+    Object.defineProperty(this, 'loader', {
+        'get': function() { return _loader; }
     });
 
     Object.defineProperty(this, 'webGLProgram', {
@@ -2768,14 +2774,17 @@ Object.freeze(ShaderType);
 //
 // Constructor.
 //
-function Texture2D(_gl) {
+function SpriteBatch(_gl) {
     //
+    var _self;
     var _webGLTexture;
     var _width;
     var _height;
 
     try {
         //
+        _self = this;
+        
         _webGLTexture = _gl.createTexture();
 
     } catch (e) {
@@ -2790,6 +2799,50 @@ function Texture2D(_gl) {
     //
     Object.defineProperty(this, 'gl', {
         'get': function() { return _gl; }
+    });
+
+    Object.defineProperty(this, 'webGLTexture', {
+        'get': function() { return _webGLTexture; }
+    });
+
+    Object.defineProperty(this, 'width', {
+        'get': function() { return _width; },
+        'set': function(value) { _width = value; }
+    });
+
+    Object.defineProperty(this, 'height', {
+        'get': function() { return _height; },
+        'set': function(value) { _height = value; }
+    });    
+}
+
+Object.freeze(SpriteBatch);
+
+//
+// Constructor.
+//
+function Texture2D(_loader) {
+    //
+    var _webGLTexture;
+    var _width;
+    var _height;
+
+    try {
+        //
+        _webGLTexture = _loader.gl.createTexture();
+
+    } catch (e) {
+        //
+        console.log('g2l.Texture2D: '+ e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(this, 'loader', {
+        'get': function() { return _loader; }
     });
 
     Object.defineProperty(this, 'webGLTexture', {
@@ -2993,14 +3046,14 @@ Object.freeze(TransformedPositionTextureCoordinates);
 //
 // Constructor.
 //
-function VertexBuffer(_gl) {
+function VertexBuffer(_loader) {
     //
     var _webGLBuffer;
     var _size; // Number of components per vertex attribute. Must be 1, 2, 3, or 4.
 
     try {
         //
-        _webGLBuffer = _gl.createBuffer();
+        _webGLBuffer = _loader.gl.createBuffer();
 
     } catch (e) {
         //
@@ -3012,8 +3065,8 @@ function VertexBuffer(_gl) {
     //
     // Properties.
     //
-    Object.defineProperty(this, 'gl', {
-        'get': function() { return _gl; }
+    Object.defineProperty(this, 'loader', {
+        'get': function() { return _loader; }
     });
 
     Object.defineProperty(this, 'webGLBuffer', {
@@ -3032,7 +3085,7 @@ VertexBuffer.prototype = {
     //
     setItems: function(items, size) {
         //
-        var gl = this.gl;
+        var gl = this.loader.gl;
 
         this.size = size;
         //_itemCount = items.length / _itemSize;
@@ -3085,6 +3138,88 @@ ExceptionHelper.displayMessageOf = function(e) {
 
 Object.freeze(ExceptionHelper);
 
+// Note:
+// Adapted from
+// 'fps.js' by greggman.
+
+function Fps() {
+    //
+    var _totalTime;
+    var _timeTable;
+    var _timeTableIndex;
+    var _then; // in milliseconds.
+    var _average;
+
+    try {
+        // total time spent for last N frames.
+        _totalTime = Fps.FRAME_COUNT_TO_AVERAGE;
+
+        // elapsed time for last N frames.
+        _timeTable = [];
+
+        // where to record next elapsed time.
+        _timeTableIndex = 0;
+
+        _then = 0;
+
+        _average = 0;
+
+        // Initialize the FpsCounter elapsed time history table.
+        for (var i=0; i<Fps.FRAME_COUNT_TO_AVERAGE; i++) {
+            _timeTable[i] = 1.0;
+        }
+
+    } catch (e) {
+        //
+        console.log('g2l.Fps: '+ e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(this, 'average', {
+        get: function() { return _average; }
+    });
+    
+    //
+    // Privileged methods.
+    //
+    this.update = function() {
+        //
+        var now = (new Date()).getTime(); // in milliseconds.
+
+        var elapsedTime = // in seconds.
+            (now - _then) * 0.001;
+
+        _then = now;
+
+        // Keep the total time and total active time for the last N frames.
+        _totalTime += elapsedTime - _timeTable[_timeTableIndex];
+
+        // Save off the elapsed time for this frame so we can subtract it later.
+        _timeTable[_timeTableIndex] = elapsedTime;
+
+        // Wrap the place to store the next time sample.
+        _timeTableIndex++;
+        if (_timeTableIndex === Fps.FRAME_COUNT_TO_AVERAGE) {
+            _timeTableIndex = 0;
+        }
+
+        _average = Math.floor (
+            (1.0 / (_totalTime / Fps.FRAME_COUNT_TO_AVERAGE)) + 0.5
+        );
+    };    
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+Fps.FRAME_COUNT_TO_AVERAGE = 16;
+
+Object.freeze(Fps);
+
 //
 // Constructor.
 //
@@ -3106,7 +3241,27 @@ Object.freeze(MouseButton);
 //
 function Loader(_renderer) {
     //
-    var _gl = _renderer.webGLContext;
+    var _self;
+    var _gl;
+
+    try {
+        //
+        _self = this;
+        _gl = _renderer.gl;
+
+    } catch (e) {
+        //
+        console.log('g2l.Loader: '+ e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(this, 'gl', {
+        'get': function() { return _gl; }
+    });
 
     //
     // Private methods.
@@ -3203,7 +3358,7 @@ function Loader(_renderer) {
 
     function setUpProgram(webGLVertexShader, webGLFragmentShader) {
         //
-        var program = new Program(_gl);
+        var program = new Program(_self);
         var webGLProgram = program.webGLProgram;
 
         _gl.attachShader(webGLProgram, webGLVertexShader);
@@ -3226,11 +3381,11 @@ function Loader(_renderer) {
     // Privileged methods.
     //
     this.createVertexBuffer = function() {
-        return new VertexBuffer(_gl);
+        return new VertexBuffer(_self);
     };
 
     this.createIndexBuffer = function() {
-        return new IndexBuffer(_gl);
+        return new IndexBuffer(_self);
     };
 
     this.setUpProgram = function(vertexShaderSource, fragmentShaderSource) {
@@ -3258,7 +3413,7 @@ function Loader(_renderer) {
     this.loadTexture2D = function(imageSourceUrl) {
         //
         var image = new Image();
-        var texture = new Texture2D(_gl);
+        var texture = new Texture2D(_self);
 
         image.addEventListener('load', function() {
             handleTextureLoaded(image, texture);
@@ -3358,81 +3513,6 @@ EaseMode.EASE_OUT    = 1;
 EaseMode.EASE_IN_OUT = 2;
 
 Object.freeze(EaseMode);
-
-// Note:
-// Adapted from
-// 'fps.js' by greggman.
-
-function Fps() {
-    //
-    var _totalTime;
-    var _timeTable;
-    var _timeTableIndex;
-    var _average;
-
-    try {
-        // total time spent for last N frames.
-        _totalTime = Fps.FRAME_COUNT_TO_AVERAGE;
-
-        // elapsed time for last N frames.
-        _timeTable = [];
-
-        // where to record next elapsed time.
-        _timeTableIndex = 0;
-
-        _average = 0;
-
-        // Initialize the FpsCounter elapsed time history table.
-        for (var i=0; i<Fps.FRAME_COUNT_TO_AVERAGE; i++) {
-            _timeTable[i] = 1.0;
-        }
-
-    } catch (e) {
-        //
-        console.log('g2l.Fps: '+ e);
-
-        throw e;
-    }
-
-    //
-    // Properties.
-    //
-    Object.defineProperty(this, 'average', {
-        get: function() { return _average; }
-    });
-    
-    //
-    // Privileged methods.
-    //
-    this.update = function (
-        elapsedTime // in milliseconds.
-    ){
-        var elapsedTime2 = elapsedTime * 0.001;
-
-        // Keep the total time and total active time for the last N frames.
-        _totalTime += elapsedTime2 - _timeTable[_timeTableIndex];
-
-        // Save off the elapsed time for this frame so we can subtract it later.
-        _timeTable[_timeTableIndex] = elapsedTime2;
-
-        // Wrap the place to store the next time sample.
-        _timeTableIndex++;
-        if (_timeTableIndex === Fps.FRAME_COUNT_TO_AVERAGE) {
-            _timeTableIndex = 0;
-        }
-
-        _average = Math.floor (
-            (1.0 / (_totalTime / Fps.FRAME_COUNT_TO_AVERAGE)) + 0.5
-        );
-    };
-}
-
-//
-// Static constants (after Object.freeze()).
-//
-Fps.FRAME_COUNT_TO_AVERAGE = 16;
-
-Object.freeze(Fps);
 
 // Note:
 // Adapted from
@@ -3726,6 +3806,7 @@ exports.PrimitiveType = PrimitiveType;
 exports.Program = Program;
 exports.ScreenCoordinateHelper = ScreenCoordinateHelper;
 exports.ShaderType = ShaderType;
+exports.SpriteBatch = SpriteBatch;
 exports.Texture2D = Texture2D;
 exports.TextureCoordinateHelper = TextureCoordinateHelper;
 exports.TransformedPositionColor = TransformedPositionColor;
@@ -3733,6 +3814,7 @@ exports.TransformedPositionColorTextureCoordinates = TransformedPositionColorTex
 exports.TransformedPositionTextureCoordinates = TransformedPositionTextureCoordinates;
 exports.VertexBuffer = VertexBuffer;
 exports.ExceptionHelper = ExceptionHelper;
+exports.Fps = Fps;
 exports.MouseButton = MouseButton;
 exports.Loader = Loader;
 exports.AxisGroup = AxisGroup;
@@ -3746,7 +3828,6 @@ exports.Plane = Plane;
 exports.Quaternion = Quaternion;
 exports.ViewFrustum = ViewFrustum;
 exports.EaseMode = EaseMode;
-exports.Fps = Fps;
 exports.SineEase = SineEase;
 exports.Stopwatch = Stopwatch;
 

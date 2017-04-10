@@ -5,16 +5,16 @@
 //
 // Constructor.
 //
-function Color(r, g, b, a) {
+function Color(_r, _g, _b, _a) {
     //
-    if (a === undefined) {
-        a = 1.0;
+    if (_a === undefined) {
+        _a = 1.0;
     }
 
-    this.r = r;
-    this.g = g;
-    this.b = b;
-    this.a = a;
+    this.r = _r;
+    this.g = _g;
+    this.b = _b;
+    this.a = _a;
 }
 
 //

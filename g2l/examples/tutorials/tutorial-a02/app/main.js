@@ -7,7 +7,6 @@ function main() {
     var renderer;
     var loader;
     var camera;
-    var gl;
     var vertexBuffers;
     var program;
     var attributeLocations;
@@ -19,8 +18,7 @@ function main() {
     try {
         //
         renderer = new g2l.Renderer();
-        gl = renderer.webGLContext;
-        document.body.appendChild(gl.canvas);
+        document.body.appendChild(renderer.canvas);
 
         loader = new g2l.Loader(renderer);
 
@@ -32,8 +30,8 @@ function main() {
 
         setUpShaders();
 
-        gl.disable(gl.CULL_FACE);
-
+        setUpStates();
+        
         transform = g2l.Matrix4x4.createIdentityMatrix();
 
         sineEase = new g2l.SineEase(g2l.EaseMode.EASE_IN_OUT, 1500, true);
@@ -144,6 +142,13 @@ function main() {
                'sampler'
             )
         };
+    }
+
+    function setUpStates() {
+        //
+        var gl = renderer.gl;
+
+        gl.disable(gl.CULL_FACE);
     }
 
     function drawScene() {

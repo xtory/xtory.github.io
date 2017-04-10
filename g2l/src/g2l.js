@@ -19,6 +19,7 @@ export { PrimitiveType }                              from './graphics/primitive
 export { Program }                                    from './graphics/shaders/program';
 export { ScreenCoordinateHelper }                     from './graphics/helpers/screen-coordinate-helper';
 export { ShaderType }                                 from './graphics/shaders/shader-type';
+export { SpriteBatch }                                from './graphics/sprite-batch';
 export { Texture2D }                                  from './graphics/2d-texture';
 export { TextureCoordinateHelper }                    from './graphics/helpers/texture-coordinate-helper';
 export { TransformedPositionColor }                   from './graphics/shaders/transformed-position-color';
@@ -28,6 +29,7 @@ export { VertexBuffer }                               from './graphics/vertex-bu
 
 // Helpers.
 export { ExceptionHelper }                            from './helpers/exception-helper';
+export { Fps }                                        from './helpers/fps';
 export { MouseButton }                                from './helpers/mouse-button';
 
 // Loaders.
@@ -47,6 +49,5 @@ export { ViewFrustum }                                from './math/view-frustum'
 
 // Time.
 export { EaseMode }                                   from './time/ease-mode';
-export { Fps }                                        from './time/fps';
 export { SineEase }                                   from './time/sine-ease';
 export { Stopwatch }                                  from './time/stopwatch';

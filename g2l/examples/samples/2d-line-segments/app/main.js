@@ -6,7 +6,6 @@ function main() {
 
     var renderer;
     var loader;
-    var gl;
     var vertexBuffers;
     var program;
     var attributeLocations;
@@ -15,21 +14,18 @@ function main() {
     var leftTexts;
     var fps;
     var then;
-    var lastElapsedMilliseconds;
-    var lastFps;
+    var lastAverageFps;
 
     try {
         //
-        renderer = new g2l.Renderer();
-
         // var canvas = document.getElementById("canvas");
         // renderer = new g2l.Renderer ({
         //     canvas: canvas,
         //     usesDefaultStyles: false
         // });
 
-        gl = renderer.webGLContext;
-        document.body.appendChild(gl.canvas);
+        renderer = new g2l.Renderer();
+        document.body.appendChild(renderer.canvas);
 
         loader = new g2l.Loader(renderer);
 
@@ -37,7 +33,7 @@ function main() {
 
         setUpFps();
 
-        renderer.run(undefined, drawScene);
+        renderer.run(updateScene, drawScene);
 
     } catch (e) {
         //
@@ -73,10 +69,15 @@ function main() {
     function setUpFps() {
         //
         leftTexts = document.getElementById("leftTexts");
+        leftTexts.innerHTML = 'FPS: 0';
         fps = new g2l.Fps();
         then = 0;
-        lastElapsedMilliseconds = 0;
-        lastFps = 0;
+        lastAverageFps = 0;
+    }
+
+    function updateScene() {
+        //
+        fps.update();
     }
 
     function drawScene() {
@@ -219,7 +220,7 @@ function main() {
             var item = vertexPositions[i];
 
             var p = g2l.ScreenCoordinateHelper.toClipSpace (
-                gl.canvas,
+                renderer.canvas,
                 item
             );
 
@@ -245,24 +246,17 @@ function main() {
 
     function drawFps() {
         //
-        // Compute the elapsed time since the last rendered frame in seconds.
         var now = (new Date()).getTime();
-        var elapsedTime = now - then;
-        then = now;
-
-        // Update the FPS counter.
-        fps.update(elapsedTime);
-
-        if (now - lastElapsedMilliseconds < 1000) {
+        if (now - then < 333.33) { // 333.33 = 1000 / 3
             return;
         }
 
-        lastElapsedMilliseconds = now;
+        then = now;
 
-        var fps2 = fps.average;
-        if (fps2 !== lastFps) {
-            leftTexts.innerHTML = 'FPS: ' + fps2;
-            lastFps = fps2;
+        var averageFps = fps.average;
+        if (averageFps !== lastAverageFps) {
+            leftTexts.innerHTML = 'FPS: ' + averageFps;
+            lastAverageFps = averageFps;
         }
     }
 }

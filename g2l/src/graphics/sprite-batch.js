@@ -1,15 +1,18 @@
 //
 // Constructor.
 //
-function Texture2D(_loader) {
+function SpriteBatch(_gl) {
     //
+    var _self;
     var _webGLTexture;
     var _width;
     var _height;
 
     try {
         //
-        _webGLTexture = _loader.gl.createTexture();
+        _self = this;
+        
+        _webGLTexture = _gl.createTexture();
 
     } catch (e) {
         //
@@ -21,8 +24,8 @@ function Texture2D(_loader) {
     //
     // Properties.
     //
-    Object.defineProperty(this, 'loader', {
-        'get': function() { return _loader; }
+    Object.defineProperty(this, 'gl', {
+        'get': function() { return _gl; }
     });
 
     Object.defineProperty(this, 'webGLTexture', {
@@ -40,6 +43,6 @@ function Texture2D(_loader) {
     });    
 }
 
-Object.freeze(Texture2D);
+Object.freeze(SpriteBatch);
 
-export { Texture2D };
+export { SpriteBatch };

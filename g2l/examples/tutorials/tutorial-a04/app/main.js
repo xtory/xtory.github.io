@@ -7,7 +7,6 @@ function main() {
     var renderer;
     var loader;
     var camera;
-    var gl;
     var vertexBuffers;
     var program;
     var attributeLocations;
@@ -19,8 +18,7 @@ function main() {
     try {
         //
         renderer = new g2l.Renderer();
-        gl = renderer.webGLContext;
-        document.body.appendChild(gl.canvas);
+        document.body.appendChild(renderer.canvas);
 
         loader = new g2l.Loader(renderer);
 

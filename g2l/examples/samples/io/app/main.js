@@ -7,7 +7,6 @@ function main() {
     var renderer;
     var loader;
     var camera;
-    var gl;
     var vertexBuffers;
     var indexBuffer;
     var program;
@@ -25,21 +24,18 @@ function main() {
     var leftTexts;
     var fps;
     var then;
-    var lastElapsedMilliseconds;
-    var lastFps;
+    var lastAverageFps;
 
     try {
         //
-        renderer = new g2l.Renderer();
-
         // var canvas = document.getElementById("canvas");
         // renderer = new g2l.Renderer ({
         //     canvas: canvas,
         //     usesDefaultStyles: false
         // });
 
-        gl = renderer.webGLContext;
-        document.body.appendChild(gl.canvas);
+        renderer = new g2l.Renderer();
+        document.body.appendChild(renderer.canvas);
 
         loader = new g2l.Loader(renderer);
 
@@ -58,7 +54,7 @@ function main() {
 
         backgroundColor = g2l.Colors.DEFAULT_BACKGROUND;
 
-        renderer.run(undefined, drawScene);
+        renderer.run(updateScene, drawScene);
 
     } catch (e) {
         //
@@ -227,25 +223,30 @@ function main() {
     function setUpFps() {
         //
         leftTexts = document.getElementById("leftTexts");
+        leftTexts.innerHTML = 'FPS: 0';
         fps = new g2l.Fps();
         then = 0;
-        lastElapsedMilliseconds = 0;
-        lastFps = 0;
+        lastAverageFps = 0;
     }
     
     function hookEvents() {
         //
-        gl.canvas.addEventListener('mousedown',  onMouseDown);
-        gl.canvas.addEventListener('mousemove',  onMouseMove);
-        gl.canvas.addEventListener('mouseup',    onMouseUp);
-        gl.canvas.addEventListener('mousewheel', onMouseWheel);
-        gl.canvas.addEventListener('keydown',    onKeyDown);
-        gl.canvas.addEventListener('keyup',      onKeyUp);
+        renderer.canvas.addEventListener('mousedown',  onMouseDown);
+        renderer.canvas.addEventListener('mousemove',  onMouseMove);
+        renderer.canvas.addEventListener('mouseup',    onMouseUp);
+        renderer.canvas.addEventListener('mousewheel', onMouseWheel);
+        renderer.canvas.addEventListener('keydown',    onKeyDown);
+        renderer.canvas.addEventListener('keyup',      onKeyUp);
 
-        gl.canvas.addEventListener('touchstart',  onTouchStart);
-        gl.canvas.addEventListener('touchmove',   onTouchMove);
-        gl.canvas.addEventListener('touchcancel', onTouchCancel);
-        gl.canvas.addEventListener('touchend',    onTouchEnd);
+        renderer.canvas.addEventListener('touchstart',  onTouchStart);
+        renderer.canvas.addEventListener('touchmove',   onTouchMove);
+        renderer.canvas.addEventListener('touchcancel', onTouchCancel);
+        renderer.canvas.addEventListener('touchend',    onTouchEnd);
+    }
+
+    function updateScene() {
+        //
+        fps.update();
     }
 
     function drawScene() {
@@ -290,24 +291,17 @@ function main() {
 
     function drawFps() {
         //
-        // Compute the elapsed time since the last rendered frame in seconds.
         var now = (new Date()).getTime();
-        var elapsedTime = now - then;
-        then = now;
-
-        // Update the FPS counter.
-        fps.update(elapsedTime);
-
-        if (now - lastElapsedMilliseconds < 1000) {
+        if (now - then < 333.33) { // 333.33 = 1000 / 3
             return;
         }
 
-        lastElapsedMilliseconds = now;
-        
-        var fps2 = fps.average;
-        if (fps2 !== lastFps) {
-            leftTexts.innerHTML = 'FPS: ' + fps2;
-            lastFps = fps2;
+        then = now;
+
+        var averageFps = fps.average;
+        if (averageFps !== lastAverageFps) {
+            leftTexts.innerHTML = 'FPS: ' + averageFps;
+            lastAverageFps = averageFps;
         }
     }
 

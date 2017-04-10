@@ -6,7 +6,6 @@ function main() {
 
     var renderer;
     var loader;
-    var gl;
     var vertexBuffers;
     var program;
     var attributeLocations;
@@ -16,8 +15,7 @@ function main() {
     try {
         //
         renderer = new g2l.Renderer();
-        gl = renderer.webGLContext;
-        document.body.appendChild(gl.canvas);
+        document.body.appendChild(renderer.canvas);
 
         loader = new g2l.Loader(renderer);
 
@@ -84,8 +82,8 @@ function main() {
         renderer.clear();
 
         var p = new g2l.Vector2D (
-            gl.canvas.clientWidth * 0.5,
-            gl.canvas.clientHeight * 0.5
+            renderer.canvas.clientWidth * 0.5,
+            renderer.canvas.clientHeight * 0.5
         );
 
         var size = new g2l.Vector2D (
@@ -153,7 +151,7 @@ function main() {
             var item = vertexPositions[i];
 
             var p = g2l.ScreenCoordinateHelper.toClipSpace (
-                gl.canvas,
+                renderer.canvas,
                 item
             );
 

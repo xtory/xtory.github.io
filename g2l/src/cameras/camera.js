@@ -15,6 +15,7 @@ function Camera (
     _distanceToNearPlane,
     _distanceToFarPlane
 ){
+    var _self;
     var _canvas;
     var _viewMatrix;
     var _projectionMatrix;
@@ -27,6 +28,8 @@ function Camera (
         
     try {
         //
+        _self = this;
+
         if (_position === undefined) {
             _position = new Vector3D(0, 0, 10000);
         }
@@ -242,8 +245,8 @@ function Camera (
             //
             // Temp:
             /*
-            if (this.TransformUpdated != null) {
-                this.TransformUpdated(this, EventArgs.Empty);
+            if (_self.TransformUpdated != null) {
+                _self.TransformUpdated(_self, EventArgs.Empty);
             }
             */
 

@@ -13,7 +13,7 @@ function Quaternion(_x, _y, _z, _w) {
     this.z = _z;
 
     // The scalar part.
-    this.w = _w; // W isn't the rotation angle (in radians).
+    this.w = _w; // which isn't the rotation angle (in radians).
 }
 
 Quaternion.prototype = {

@@ -1,13 +1,13 @@
 //
 // Constructor.
 //
-function IndexBuffer(_gl) {
+function IndexBuffer(_loader) {
     //
     var _webGLBuffer;
 
     try {
         //
-        _webGLBuffer = _gl.createBuffer();
+        _webGLBuffer = _loader.gl.createBuffer();
 
     } catch (e) {
         //
@@ -19,8 +19,8 @@ function IndexBuffer(_gl) {
     //
     // Properties.
     //
-    Object.defineProperty(this, 'gl', {
-        'get': function() { return _gl; }
+    Object.defineProperty(this, 'loader', {
+        'get': function() { return _loader; }
     });
 
     Object.defineProperty(this, 'webGLBuffer', {
@@ -34,7 +34,7 @@ IndexBuffer.prototype = {
     //
     setItems: function(items) {
         //
-        var gl = this.gl;
+        var gl = this.loader.gl;
 
         //_itemCount = items.length;
 

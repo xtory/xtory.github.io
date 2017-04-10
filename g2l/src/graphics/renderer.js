@@ -24,6 +24,7 @@ function Renderer(_settings) {
     // - canvas
     // - usesDefaultStyles
 
+    var _self;
     var _canvas;
     var _gl;
     var _program;
@@ -33,6 +34,8 @@ function Renderer(_settings) {
 
     try {
         //
+        _self = this;
+
         setUpCanvas();
 
         setUpStyles();
@@ -54,7 +57,7 @@ function Renderer(_settings) {
         'get': function() { return _canvas; }
     });
     
-    Object.defineProperty(this, 'webGLContext', {
+    Object.defineProperty(this, 'gl', {
         get: function() { return _gl; }
     });
 

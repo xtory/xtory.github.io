@@ -7,7 +7,6 @@ function main() {
     var renderer;
     var loader;
     var camera;
-    var gl;
     var vertexBuffers;
     var program;
     var attributeLocations;
@@ -18,8 +17,7 @@ function main() {
     try {
         //
         renderer = new g2l.Renderer();
-        gl = renderer.webGLContext;
-        document.body.appendChild(gl.canvas);
+        document.body.appendChild(renderer.canvas);
 
         loader = new g2l.Loader(renderer);
 
@@ -31,13 +29,8 @@ function main() {
 
         setUpShaders();
 
-        gl.enable(gl.BLEND);
-
-        gl.blendFunc (
-            gl.SRC_ALPHA,
-            gl.ONE_MINUS_SRC_ALPHA
-        );
-
+        setUpStates();
+        
         transform = g2l.Matrix4x4.createIdentityMatrix();
             
         renderer.run(undefined, drawScene);
@@ -145,6 +138,18 @@ function main() {
                'sampler'
             )
         };
+    }
+
+    function setUpStates() {
+        //
+        var gl = renderer.gl;
+
+        gl.enable(gl.BLEND);
+
+        gl.blendFunc (
+            gl.SRC_ALPHA,
+            gl.ONE_MINUS_SRC_ALPHA
+        );
     }
 
     function drawScene() {
