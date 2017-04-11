@@ -4204,6 +4204,7 @@ exports.JSHelper = JSHelper;
 exports.MouseButton = MouseButton;
 exports.BufferLoader = BufferLoader;
 exports.Loader = Loader;
+exports.ProgramLoader = ProgramLoader;
 exports.TextureLoader = TextureLoader;
 exports.AxisGroup = AxisGroup;
 exports.MathHelper = MathHelper;

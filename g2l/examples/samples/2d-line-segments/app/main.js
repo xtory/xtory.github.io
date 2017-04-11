@@ -4,6 +4,7 @@ function main() {
 
     var g2l = GorillaGL;
 
+    var title;
     var renderer;
     var loader;
     var vertexBuffers;
@@ -11,13 +12,15 @@ function main() {
     var attributeLocations;
 
     // FPS.
-    var leftTexts;
+    var info;
     var fps;
     var then;
     var lastAverageFps;
 
     try {
         //
+        title = '2D line segments';
+
         // var canvas = document.getElementById('canvas');
         // renderer = new g2l.Renderer ({
         //     canvas: canvas,
@@ -31,7 +34,7 @@ function main() {
 
         setUpShaders();
 
-        setUpFps();
+        setUpInfo();
 
         renderer.run(updateScene, drawScene);
 
@@ -66,10 +69,16 @@ function main() {
         };
     }
 
-    function setUpFps() {
+    function setUpInfo() {
         //
-        leftTexts = document.getElementById('leftTexts');
-        leftTexts.innerHTML = 'FPS: 0';
+        var left = document.getElementById('left');
+        var divs = left.getElementsByTagName('div');
+
+        divs[0].innerHTML = title;
+
+        info = divs[1];
+        info.innerHTML = 'FPS: 0';
+        
         fps = new g2l.Fps();
         then = 0;
         lastAverageFps = 0;
@@ -105,7 +114,7 @@ function main() {
             35
         );
 
-        drawFps();
+        drawInfo();
     }
 
     function drawLineSegment (
@@ -244,7 +253,7 @@ function main() {
         vertexBuffers.color.setItems(vertexColors, 4);
     }
 
-    function drawFps() {
+    function drawInfo() {
         //
         var now = (new Date()).getTime();
         if (now - then < 333.33) { // 333.33 = 1000 / 3
@@ -255,7 +264,7 @@ function main() {
 
         var averageFps = fps.average;
         if (averageFps !== lastAverageFps) {
-            leftTexts.innerHTML = 'FPS: ' + averageFps;
+            info.innerHTML = 'FPS: ' + averageFps;
             lastAverageFps = averageFps;
         }
     }

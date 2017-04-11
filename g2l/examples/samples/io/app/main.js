@@ -4,6 +4,7 @@ function main() {
 
     var g2l = GorillaGL;
 
+    var title;
     var renderer;
     var loader;
     var camera;
@@ -21,13 +22,15 @@ function main() {
     var backgroundColor;
 
     // FPS.
-    var leftTexts;
+    var info;
     var fps;
     var then;
     var lastAverageFps;
 
     try {
         //
+        title = 'IO';
+        
         // var canvas = document.getElementById('canvas');
         // renderer = new g2l.Renderer ({
         //     canvas: canvas,
@@ -45,7 +48,7 @@ function main() {
 
         setUpShaders();
 
-        setUpFps();
+        setUpInfo();
 
         hookEvents();
 
@@ -220,10 +223,16 @@ function main() {
         };
     }
 
-    function setUpFps() {
+    function setUpInfo() {
         //
-        leftTexts = document.getElementById('leftTexts');
-        leftTexts.innerHTML = 'FPS: 0';
+        var left = document.getElementById('left');
+        var divs = left.getElementsByTagName('div');
+
+        divs[0].innerHTML = title;
+
+        info = divs[1];
+        info.innerHTML = 'FPS: 0';
+        
         fps = new g2l.Fps();
         then = 0;
         lastAverageFps = 0;
@@ -231,13 +240,10 @@ function main() {
     
     function hookEvents() {
         //
-        renderer.canvas.addEventListener('mousedown',  onMouseDown);
-        renderer.canvas.addEventListener('mousemove',  onMouseMove);
-        renderer.canvas.addEventListener('mouseup',    onMouseUp);
-        renderer.canvas.addEventListener('mousewheel', onMouseWheel);
-        renderer.canvas.addEventListener('keydown',    onKeyDown);
-        renderer.canvas.addEventListener('keyup',      onKeyUp);
-
+        renderer.canvas.addEventListener('mousedown',   onMouseDown);
+        renderer.canvas.addEventListener('mousemove',   onMouseMove);
+        renderer.canvas.addEventListener('mouseup',     onMouseUp);
+        renderer.canvas.addEventListener('mousewheel',  onMouseWheel);
         renderer.canvas.addEventListener('touchstart',  onTouchStart);
         renderer.canvas.addEventListener('touchmove',   onTouchMove);
         renderer.canvas.addEventListener('touchcancel', onTouchCancel);
@@ -286,10 +292,10 @@ function main() {
             36
         );
 
-        drawFps();
+        drawInfo();
     }
 
-    function drawFps() {
+    function drawInfo() {
         //
         var now = (new Date()).getTime();
         if (now - then < 333.33) { // 333.33 = 1000 / 3
@@ -300,10 +306,29 @@ function main() {
 
         var averageFps = fps.average;
         if (averageFps !== lastAverageFps) {
-            leftTexts.innerHTML = 'FPS: ' + averageFps;
+            info.innerHTML = 'FPS: ' + averageFps;
             lastAverageFps = averageFps;
         }
     }
+
+    function rotateModel(offset) {
+        //
+        modelMatrix = g2l.Matrix4x4.multiplyMatrices (
+            g2l.Matrix4x4.createRotationMatrix (
+                g2l.CartesianAxis.Y,
+                g2l.MathHelper.toRadians(offset.x * 0.5)
+            ),
+            modelMatrix
+        );
+
+        modelMatrix = g2l.Matrix4x4.multiplyMatrices (
+            g2l.Matrix4x4.createRotationMatrix (
+                g2l.CartesianAxis.X,
+                g2l.MathHelper.toRadians(offset.y * 0.5)
+            ),
+            modelMatrix
+        );
+    }    
 
     //
     // Event handlers.
@@ -374,56 +399,12 @@ function main() {
         event.preventDefault();
     }
 
-    function onKeyDown(event) {
-        changeBackground();
-
-        event.preventDefault();
-    }
-
-    function onKeyUp(event) {
-        //
-        // switch (event.key) {
-        //     case 'space': {
-        //         break;
-        //     }
-
-        //     default: {
-        //         break;
-        //     }
-        // }
-        changeBackground();
-
-        event.preventDefault();
-    }
-
-    // function onTouchStart(event) {
-    //     //
-    //     if (event.touches.length < 1) {
-    //         return;
-    //     }
-
-    //     var touch = event.touches[0];
-
-    //     lastTouchPosition =
-    //         new g2l.Vector2D(touch.clientX, touch.clientY);
-    // }
-
     function onTouchStart(event) {
         //
-        // if (event.touches.length < 1) {
-        //     return;
-        // }
-        // if (isTouch1ing === true ||
-        //     isTouch2ing === true) {
-        //     return;
-        // }
-
         switch (event.touches.length) {
             //
             case 1: {
                 //
-                //isTouch1ing = true;
-
                 var touch = event.touches[0];
 
                 lastTouchPosition =
@@ -434,8 +415,6 @@ function main() {
 
             case 2: {
                 //
-                //isTouch2ing = true;
-
                 var touch1 = event.touches[0];
                 var touch2 = event.touches[1];
 
@@ -458,30 +437,8 @@ function main() {
         event.preventDefault();
     }    
 
-    // function onTouchMove(event) {
-    //     //
-    //     if (event.touches.length < 1) {
-    //         return;
-    //     }
-
-    //     var touch = event.touches[0];
-
-    //     event.preventDefault() 
-
-    //     var offset = new g2l.Vector2D (
-    //         event.pageX - lastTouchPosition.x,
-    //         event.pageY - lastTouchPosition.y
-    //     );
-
-    //     lastTouchPosition = new g2l.Vector2D(touch.clientX, touch.clientY);
-    // }
-
     function onTouchMove(event) {
         //
-        // if (event.touches.length < 1) {
-        //     return;
-        // }
-
         switch (event.touches.length) {
             //
             case 1: {
@@ -498,7 +455,6 @@ function main() {
 
                 lastTouchPosition = touchPosition;
                 
-                //rotateModel(g2l.Vector2D.negateVector(offset));
                 rotateModel(offset);
 
                 break;
@@ -538,44 +494,12 @@ function main() {
     }    
 
     function onTouchCancel(event) {
-        //alert('touchcancel!');
-
+        //
         event.preventDefault();
     }    
 
     function onTouchEnd(event) {
-        //alert('touchend!');
-        // isTouch1ing = false;
-        // isTouch2ing = false;
-
-        event.preventDefault();
-    }
-
-    function rotateModel(offset) {
         //
-        modelMatrix = g2l.Matrix4x4.multiplyMatrices (
-            g2l.Matrix4x4.createRotationMatrix (
-                g2l.CartesianAxis.Y,
-                g2l.MathHelper.toRadians(offset.x * 0.5)
-            ),
-            modelMatrix
-        );
-
-        modelMatrix = g2l.Matrix4x4.multiplyMatrices (
-            g2l.Matrix4x4.createRotationMatrix (
-                g2l.CartesianAxis.X,
-                g2l.MathHelper.toRadians(offset.y * 0.5)
-            ),
-            modelMatrix
-        );
-    }
-
-    function changeBackground() {
-        backgroundColor = new g2l.Color (
-            Math.random(),
-            Math.random(),
-            Math.random(),
-            1
-        )
+        event.preventDefault();
     }
 }

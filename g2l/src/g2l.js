@@ -40,6 +40,7 @@ export { MouseButton }                                from './helpers/mouse-butt
 // Loaders.
 export { BufferLoader }                               from './loaders/buffer-loader';
 export { Loader }                                     from './loaders/loader';
+export { ProgramLoader }                              from './loaders/program-loader';
 export { TextureLoader }                              from './loaders/texture-loader';
 
 // Math.
