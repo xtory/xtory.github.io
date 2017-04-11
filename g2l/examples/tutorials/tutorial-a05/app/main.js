@@ -130,8 +130,6 @@ function main() {
             textureCoordinates: loader.createVertexBuffer()
         };
 
-        var viewport = renderer.viewport;
-
         //
         // Vertex positions.
         //

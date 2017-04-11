@@ -17,8 +17,12 @@ export { PositionOnly }                               from './graphics/shaders/p
 export { PositionTextureCoordinates }                 from './graphics/shaders/position-texture-coordinates';
 export { PrimitiveType }                              from './graphics/primitive-type';
 export { Program }                                    from './graphics/shaders/program';
+export { Rect }                                       from './graphics/rect';
 export { ScreenCoordinateHelper }                     from './graphics/helpers/screen-coordinate-helper';
 export { ShaderType }                                 from './graphics/shaders/shader-type';
+export { Size2D }                                     from './graphics/2d-size';
+export { Size3D }                                     from './graphics/3d-size';
+export { Sprite }                                     from './graphics/sprite';
 export { SpriteBatch }                                from './graphics/sprite-batch';
 export { Texture2D }                                  from './graphics/2d-texture';
 export { TextureCoordinateHelper }                    from './graphics/helpers/texture-coordinate-helper';

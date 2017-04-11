@@ -46,13 +46,7 @@ VertexBuffer.prototype = {
     setItems: function(items, size) {
         //
         var gl = this.bufferLoader.loader.renderer.gl;
-
         this.size = size;
-        //_itemCount = items.length / _itemSize;
-
-        // if ((item.length % _itemSize) !== 0) {
-        //     console.log('(item.length % _itemSize) !== 0');
-        // }
 
         gl.bindBuffer (
             gl.ARRAY_BUFFER,

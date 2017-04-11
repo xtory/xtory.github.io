@@ -2677,6 +2677,56 @@ function Program(_programLoader) {
 Object.freeze(Program);
 
 // Note:
+// GDI+'s Rectangle and WPF's Rect are both (left, top, width, height). But cuz
+// OpenGL's texture coordinates is from lower-left (0, 0) to upper-right (1, 1),
+// this engine uses Rect: (left, bottom, width, height).
+
+//
+// Constructor.
+//
+function Rect(_left, _bottom, _width, _height) {
+    //
+    this.left   = _left;
+    this.bottom = _bottom;
+    this.width  = _width;
+    this.height = _height;
+}
+
+//
+// Prototype.
+//
+Rect.prototype = {
+    //
+    // No contents.
+};
+
+Object.defineProperty(Rect.prototype, 'right', {
+    'get': function() { return this.left + this.width; }
+});
+
+Object.defineProperty(Rect.prototype, 'top', {
+    'get': function() { return this.bottom + this.height; }
+});
+
+Object.defineProperty(Rect.prototype, 'center', {
+    //
+    'get': function() {
+        //
+        return new Vector2D (
+            this.left + this.width * 0.5,
+            this.bottom + this.height * 0.5
+        );
+    }
+});
+
+Object.defineProperty(Rect.prototype, 'size', {
+    //
+    'get': function() { return new Vector2D(this.width, this.height); }
+});
+
+Object.freeze(Rect);
+
+// Note:
 // NDC stands for 'normalized device coordinates'.
 
 //
@@ -2759,6 +2809,29 @@ Object.freeze(ShaderType);
 //
 // Constructor.
 //
+function Size2D(_width, _height) {
+    //
+    this.width = _width;
+    this.height = _height;
+}
+
+Object.freeze(Size2D);
+
+//
+// Constructor.
+//
+function Size3D(_width, _height, _depth) {
+    //
+    this.width  = _width;
+    this.height = _height;
+    this.depth  = _depth;
+}
+
+Object.freeze(Size3D);
+
+//
+// Constructor.
+//
 function SpriteBatch(_renderer) {
     //
     var _self;
@@ -2784,7 +2857,110 @@ function SpriteBatch(_renderer) {
     });
 }
 
+SpriteBatch.prototype = {
+    //
+    // No contents.
+};
+
+//
+// Static methods.
+//
+SpriteBatch.createSpriteVertices = function (
+    renderer,
+    p,        // centerScreenPosition,
+    size,     // screenSize,
+    color,    // vertexColor,
+    rect      // sourceTextureCoordinateRect
+){
+    // 1. Positions.
+    var halfWidth = size.width * 0.5;
+    var halfHeight = size.height * 0.5;
+
+    var vertexPositions = [
+        new Vector3D(p.x+halfWidth, p.y-halfHeight, p.z),
+        new Vector3D(p.x+halfWidth, p.y+halfHeight, p.z),
+        new Vector3D(p.x-halfWidth, p.y-halfHeight, p.z),
+        new Vector3D(p.x-halfWidth, p.y+halfHeight, p.z) 
+    ];
+
+    var vertexPositions2 = [];
+    for (var i=0; i<vertexPositions.length; i++) {
+        //
+        var item = vertexPositions[i];
+
+        var p = ScreenCoordinateHelper.toClipSpace (
+            renderer.canvas,
+            item
+        );
+
+        vertexPositions2 = vertexPositions2.concat(p.toArray());
+    }
+
+    // 2. Colors.
+    var vertexColors = [];
+
+    for (var i=0; i<4; i++) {
+        vertexColors = vertexColors.concat(color.toArray());
+    }
+
+    // 3. Texture coordinates.
+    var vertexTextureCoordinates = [
+        rect.right, rect.bottom, // (1.0, 0.0), for instance.
+        rect.right, rect.top,    // (1.0, 1.0),
+        rect.left,  rect.bottom, // (0.0, 0.0),
+        rect.left,  rect.top     // (0.0, 1.0)
+    ];
+
+    return {
+        positions: vertexPositions2,
+        colors: vertexColors,
+        textureCoordinates: vertexTextureCoordinates
+    };
+};
+
 Object.freeze(SpriteBatch);
+
+//
+// Constructor.
+//
+function Sprite (
+    _spriteBatch,
+    _texture,
+    _centerScreenPosition,
+    _screenSize,
+    _vertexColor,
+    _sourceTextureCoordinateRect
+){
+    if (_vertexColor === undefined) {
+        _vertexColor = Colors.WHITE;
+    }
+
+    if (_sourceTextureCoordinateRect === undefined) {
+        _sourceTextureCoordinateRect = new Rect(0, 0, 1, 1);
+    }
+
+    this.texture = _texture;
+
+    var vertices = SpriteBatch.createSpriteVertices (
+        _spriteBatch.renderer,
+        _centerScreenPosition, _screenSize,
+        _vertexColor,
+        _sourceTextureCoordinateRect
+    );
+
+    this.vertexPositions = vertices.positions;
+    this.vertexColors = vertices.colors;
+    this.vertexTextureCoordinates = vertices.textureCoordinates;
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+Sprite.POSITION_SIZE           = 4; // (x, y, z, w)
+Sprite.COLOR_SIZE              = 4; // (r, g, b, a)
+Sprite.TEXTURE_COORDINATE_SIZE = 2; // (s, t)
+
+Object.freeze(Sprite);
 
 //
 // Constructor.
@@ -3063,13 +3239,7 @@ VertexBuffer.prototype = {
     setItems: function(items, size) {
         //
         var gl = this.bufferLoader.loader.renderer.gl;
-
         this.size = size;
-        //_itemCount = items.length / _itemSize;
-
-        // if ((item.length % _itemSize) !== 0) {
-        //     console.log('(item.length % _itemSize) !== 0');
-        // }
 
         gl.bindBuffer (
             gl.ARRAY_BUFFER,
@@ -4015,8 +4185,12 @@ exports.PositionOnly = PositionOnly;
 exports.PositionTextureCoordinates = PositionTextureCoordinates;
 exports.PrimitiveType = PrimitiveType;
 exports.Program = Program;
+exports.Rect = Rect;
 exports.ScreenCoordinateHelper = ScreenCoordinateHelper;
 exports.ShaderType = ShaderType;
+exports.Size2D = Size2D;
+exports.Size3D = Size3D;
+exports.Sprite = Sprite;
 exports.SpriteBatch = SpriteBatch;
 exports.Texture2D = Texture2D;
 exports.TextureCoordinateHelper = TextureCoordinateHelper;
