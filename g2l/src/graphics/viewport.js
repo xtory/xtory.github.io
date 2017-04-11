@@ -32,14 +32,16 @@ function Viewport(_left, _bottom, _width, _height) {
     this.bottom = _bottom;
     this.width  = _width;
     this.height = _height;
-
-    //
-    // Properties.
-    //
-    Object.defineProperty(this, 'aspectRatio', {
-        get: function() { return _width / _height; }
-    });
 }
+
+Viewport.prototype = {
+    //
+    // No contents.
+};
+
+Object.defineProperty(Viewport.prototype, 'aspectRatio', {
+    get: function() { return this.width / this.height; }
+});
 
 Object.freeze(Viewport);
 

@@ -18,11 +18,7 @@ function Loader(_renderer) {
         //
         _self = this;
         
-        _gl = _renderer.gl;
-
-        Object.defineProperty(this, 'renderer', {
-            'get': function() { return _renderer; }
-        })
+        bindRenderer();
 
         _bufferLoader = new BufferLoader(_self);
         _textureLoader = new TextureLoader(_self);
@@ -30,9 +26,21 @@ function Loader(_renderer) {
 
     } catch (e) {
         //
-        console.log('g2l.Loader: '+ e);
+        console.log('g2l.Loader: ' + e);
 
         throw e;
+    }
+
+    //
+    // Private methods.
+    //
+    function bindRenderer() {
+        //
+        _gl = _renderer.gl;
+
+        Object.defineProperty(_self, 'renderer', {
+            'get': function() { return _renderer; }
+        })
     }
     
     //

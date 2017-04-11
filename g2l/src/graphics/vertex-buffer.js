@@ -3,19 +3,21 @@
 //
 function VertexBuffer(_bufferLoader) {
     //
+    var _self;
     var _gl;
     var _webGLBuffer;
     var _size; // Number of components per vertex attribute. Must be 1, 2, 3, or 4.
 
     try {
         //
+        _self = this;
         _gl = _bufferLoader.loader.renderer.gl;
 
         _webGLBuffer = _gl.createBuffer();
 
     } catch (e) {
         //
-        console.log('g2l.VertexBuffer: '+ e);
+        console.log('g2l.VertexBuffer: ' + e);
 
         throw e;
     }
@@ -23,15 +25,15 @@ function VertexBuffer(_bufferLoader) {
     //
     // Properties.
     //
-    Object.defineProperty(this, 'bufferLoader', {
+    Object.defineProperty(_self, 'bufferLoader', {
         'get': function() { return _bufferLoader; }
     });
 
-    Object.defineProperty(this, 'webGLBuffer', {
+    Object.defineProperty(_self, 'webGLBuffer', {
         'get': function() { return _webGLBuffer; }
     });
 
-    Object.defineProperty(this, 'size', {
+    Object.defineProperty(_self, 'size', {
         'get': function() { return _size; },
         'set': function(value) { _size = value; }
     });

@@ -12,19 +12,21 @@ function ProgramLoader(_loader) {
     try {
         //
         _self = this;
-        
         _gl = _loader.renderer.gl;
-
-        Object.defineProperty(this, 'loader', {
-            'get': function() { return _loader; }
-        })
 
     } catch (e) {
         //
-        console.log('g2l.ProgramLoader: '+ e);
+        console.log('g2l.ProgramLoader: ' + e);
 
         throw e;
     }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(_self, 'loader', {
+        'get': function() { return _loader; }
+    })
 
     //
     // Private methods.

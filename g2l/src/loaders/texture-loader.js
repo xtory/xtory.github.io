@@ -1,5 +1,10 @@
-import { MathHelper }   from '../math/helpers/math-helper';
-import { Texture2D }    from '../graphics/2d-texture';
+// Note:
+// DB uses
+// - key: url (string)
+// - value: Texture
+//
+import { MathHelper } from '../math/helpers/math-helper';
+import { Texture2D }  from '../graphics/2d-texture';
 
 //
 // Constructor.
@@ -8,15 +13,17 @@ function TextureLoader(_loader) {
     //
     var _self;
     var _gl;
+    var _db;
 
     try {
         //
         _self = this;
         _gl = _loader.renderer.gl;
+        _db = {};
 
     } catch (e) {
         //
-        console.log('g2l.TextureLoader: '+ e);
+        console.log('g2l.TextureLoader: ' + e);
 
         throw e;
     }
@@ -24,85 +31,107 @@ function TextureLoader(_loader) {
     //
     // Properties.
     //
-    Object.defineProperty(this, 'loader', {
+    Object.defineProperty(_self, 'loader', {
         'get': function() { return _loader; }
-    })
+    });
+
+    //
+    // Private methods.
+    //
+    function createWebGLTexture() {
+        return _gl.createTexture();
+    }
+    
+    function handleTexture2DLoaded(image, webGLTexture) {
+        //
+        _gl.bindTexture (
+            _gl.TEXTURE_2D,
+            webGLTexture
+        );
+
+        _gl.texImage2D (
+            _gl.TEXTURE_2D,    // target
+            0,                 // level
+            _gl.RGBA,          // internalFormat
+            _gl.RGBA,          // format
+            _gl.UNSIGNED_BYTE, // type
+            image              // htmlImageElement
+        );
+
+        if (MathHelper.isPowerOfTwo(image.width) === true &&
+            MathHelper.isPowerOfTwo(image.height) === true) {
+            //
+            _gl.generateMipmap(_gl.TEXTURE_2D);
+            
+            _gl.texParameteri (
+                _gl.TEXTURE_2D,
+                _gl.TEXTURE_MIN_FILTER,
+                _gl.LINEAR_MIPMAP_LINEAR
+            );
+
+        } else {
+            //
+            _gl.texParameteri (
+                _gl.TEXTURE_2D,
+                _gl.TEXTURE_MIN_FILTER,
+                _gl.LINEAR
+            );
+        }
+
+        // TEXTURE_MAG_FILTER only has NEAREST or LINEAR to choose, no LINEAR_
+        // MIPMAP_LINEAR.
+        _gl.texParameteri (
+            _gl.TEXTURE_2D,
+            _gl.TEXTURE_MAG_FILTER,
+            _gl.LINEAR
+        );
+
+        _gl.texParameteri (
+            _gl.TEXTURE_2D,
+            _gl.TEXTURE_WRAP_S,
+            _gl.CLAMP_TO_EDGE
+        );
+
+        _gl.texParameteri (
+            _gl.TEXTURE_2D,
+            _gl.TEXTURE_WRAP_T,
+            _gl.CLAMP_TO_EDGE
+        );
+
+        _gl.bindTexture(_gl.TEXTURE_2D, null);
+    }
 
     //
     // Privileged methods.
     //
     this.loadTexture2D = function(url) {
         //
-        var image = new Image();
+        if (url === undefined) {
+            throw 'An argument-undefined exception raised.';
+        }
+
+        var texture = _db[url];
+        if (texture !== undefined) {
+            return texture;
+        }
+
         var texture = new Texture2D(_self);
+        _db[url] = texture;
+
+        var image = new Image();
 
         image.addEventListener('load', function() {
-            handleTextureLoaded(image, texture);
-        });
-
-        image.src = url;
-
-        function handleTextureLoaded(image, texture) {
             //
-            _gl.bindTexture (
-                _gl.TEXTURE_2D,
-                texture.webGLTexture
-            );
+            var webGLTexture = createWebGLTexture();
 
-            _gl.texImage2D (
-                _gl.TEXTURE_2D,    // target
-                0,                 // level
-                _gl.RGBA,          // internalFormat
-                _gl.RGBA,          // format
-                _gl.UNSIGNED_BYTE, // type
-                image              // htmlImageElement
-            );
-
-            if (MathHelper.isPowerOfTwo(image.width) === true &&
-                MathHelper.isPowerOfTwo(image.height) === true) {
-                //
-                _gl.generateMipmap(_gl.TEXTURE_2D);
-                
-                _gl.texParameteri (
-                    _gl.TEXTURE_2D,
-                    _gl.TEXTURE_MIN_FILTER,
-                    _gl.LINEAR_MIPMAP_LINEAR
-                );
-
-            } else {
-                //
-                _gl.texParameteri (
-                    _gl.TEXTURE_2D,
-                    _gl.TEXTURE_MIN_FILTER,
-                    _gl.LINEAR
-                );
-            }
-
-            // TEXTURE_MAG_FILTER only has NEAREST or LINEAR to choose, no
-            // LINEAR_MIPMAP_LINEAR.
-            _gl.texParameteri (
-                _gl.TEXTURE_2D,
-                _gl.TEXTURE_MAG_FILTER,
-                _gl.LINEAR
-            );
-
-            _gl.texParameteri (
-                _gl.TEXTURE_2D,
-                _gl.TEXTURE_WRAP_S,
-                _gl.CLAMP_TO_EDGE
-            );
-
-            _gl.texParameteri (
-                _gl.TEXTURE_2D,
-                _gl.TEXTURE_WRAP_T,
-                _gl.CLAMP_TO_EDGE
-            );
-
-            _gl.bindTexture(_gl.TEXTURE_2D, null);
+            handleTexture2DLoaded(image, webGLTexture);
 
             texture.width = image.width;
             texture.height = image.height;
-        }
+            texture.webGLTexture = webGLTexture;
+        });
+
+        image.src = url;
 
         return texture;
     };

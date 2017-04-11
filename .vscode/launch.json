@@ -23,6 +23,15 @@
                 "-allow-file-access-from-files"
             ]
         }, {
+            "name": "tutorials/tutorial-a02-2",
+            "type": "chrome",
+            "request": "launch",
+            "file": "${workspaceRoot}/g2l/examples/tutorials/tutorial-a02-2/index.html",
+            //"runtimeExecutable": "${env.USERPROFILE}/AppData/Local/Google/Chrome SxS/Application/chrome.exe",
+            "runtimeArgs": [
+                "-allow-file-access-from-files"
+            ]
+        }, {
             "name": "tutorials/tutorial-a03",
             "type": "chrome",
             "request": "launch",

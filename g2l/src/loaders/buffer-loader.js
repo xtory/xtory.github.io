@@ -11,20 +11,22 @@ function BufferLoader(_loader) {
 
     try {
         //
-        Object.defineProperty(this, 'loader', {
-            'get': function() { return _loader; }
-        });
-
         _self = this;
-        
         _gl = _loader.renderer.gl;
 
     } catch (e) {
         //
-        console.log('g2l.BufferLoader: '+ e);
+        console.log('g2l.BufferLoader: ' + e);
 
         throw e;
     }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(_self, 'loader', {
+        'get': function() { return _loader; }
+    });
     
     //
     // Privileged methods.

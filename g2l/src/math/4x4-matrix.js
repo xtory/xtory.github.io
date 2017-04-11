@@ -29,74 +29,76 @@ function Matrix4x4 (
         _s13, _s23, _s33, _s43,
         _s14, _s24, _s34, _s44
     ];
-
-    //
-    // Properties.
-    //
-    Object.defineProperty(this, 's11', {
-        get: function() { return this.elements[0]; }
-    });
-
-    Object.defineProperty(this, 's12', {
-        get: function() { return this.elements[4]; }
-    });
-
-    Object.defineProperty(this, 's13', {
-        get: function() { return this.elements[8]; }
-    });
-
-    Object.defineProperty(this, 's14', {
-        get: function() { return this.elements[12]; }
-    });
-
-    Object.defineProperty(this, 's21', {
-        get: function() { return this.elements[1]; }
-    });
-
-    Object.defineProperty(this, 's22', {
-        get: function() { return this.elements[5]; }
-    });
-
-    Object.defineProperty(this, 's23', {
-        get: function() { return this.elements[9]; }
-    });
-
-    Object.defineProperty(this, 's24', {
-        get: function() { return this.elements[13]; }
-    });
-
-    Object.defineProperty(this, 's31', {
-        get: function() { return this.elements[2]; }
-    });
-
-    Object.defineProperty(this, 's32', {
-        get: function() { return this.elements[6]; }
-    });
-
-    Object.defineProperty(this, 's33', {
-        get: function() { return this.elements[10]; }
-    });
-
-    Object.defineProperty(this, 's34', {
-        get: function() { return this.elements[14]; }
-    });
-
-    Object.defineProperty(this, 's41', {
-        get: function() { return this.elements[3]; }
-    });
-
-    Object.defineProperty(this, 's42', {
-        get: function() { return this.elements[7]; }
-    });
-
-    Object.defineProperty(this, 's43', {
-        get: function() { return this.elements[11]; }
-    });
-
-    Object.defineProperty(this, 's44', {
-        get: function() { return this.elements[15]; }
-    });
 }
+
+Matrix4x4.prototype = {
+    //
+    // No contents.
+};
+
+Object.defineProperty(Matrix4x4.prototype, 's11', {
+    get: function() { return this.elements[0]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's12', {
+    get: function() { return this.elements[4]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's13', {
+    get: function() { return this.elements[8]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's14', {
+    get: function() { return this.elements[12]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's21', {
+    get: function() { return this.elements[1]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's22', {
+    get: function() { return this.elements[5]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's23', {
+    get: function() { return this.elements[9]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's24', {
+    get: function() { return this.elements[13]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's31', {
+    get: function() { return this.elements[2]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's32', {
+    get: function() { return this.elements[6]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's33', {
+    get: function() { return this.elements[10]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's34', {
+    get: function() { return this.elements[14]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's41', {
+    get: function() { return this.elements[3]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's42', {
+    get: function() { return this.elements[7]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's43', {
+    get: function() { return this.elements[11]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's44', {
+    get: function() { return this.elements[15]; }
+});
 
 //
 // Static constants (after Object.freeze()).

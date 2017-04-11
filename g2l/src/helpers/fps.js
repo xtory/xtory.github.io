@@ -4,6 +4,7 @@
 
 function Fps() {
     //
+    var _self;
     var _totalTime;
     var _timeTable;
     var _timeTableIndex;
@@ -11,6 +12,9 @@ function Fps() {
     var _average;
 
     try {
+        //
+        _self = this;
+
         // total time spent for last N frames.
         _totalTime = Fps.FRAME_COUNT_TO_AVERAGE;
 
@@ -24,14 +28,14 @@ function Fps() {
 
         _average = 0;
 
-        // Initialize the FpsCounter elapsed time history table.
+        // Initialize the elapsed time history table.
         for (var i=0; i<Fps.FRAME_COUNT_TO_AVERAGE; i++) {
             _timeTable[i] = 1.0;
         }
 
     } catch (e) {
         //
-        console.log('g2l.Fps: '+ e);
+        console.log('g2l.Fps: ' + e);
 
         throw e;
     }
@@ -39,7 +43,7 @@ function Fps() {
     //
     // Properties.
     //
-    Object.defineProperty(this, 'average', {
+    Object.defineProperty(_self, 'average', {
         get: function() { return _average; }
     });
     

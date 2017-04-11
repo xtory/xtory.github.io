@@ -7,57 +7,69 @@ import { MathHelper } from '../math/helpers/math-helper';
 //
 function SineEase(_easeMode, _duration, _isLooped) {
     //
+    var _self;
     var _startAngle;
     var _finishAngle;
     var _stopwatch;
 
-    switch (_easeMode)
-    {
-        case EaseMode.EASE_IN: {
+    try {
+        //
+        _self = this;
+        
+        switch (_easeMode) {
             //
-            _startAngle  = -MathHelper.PI_OVER_TWO;
-            _finishAngle =  0;
-            break;
+            case EaseMode.EASE_IN: {
+                //
+                _startAngle  = -MathHelper.PI_OVER_TWO;
+                _finishAngle =  0;
+                break;
+            }
+
+            case EaseMode.EASE_OUT: {
+                //
+                _startAngle  = 0;
+                _finishAngle = MathHelper.PI_OVER_TWO;
+                break;
+            }
+
+            case EaseMode.EASE_IN_OUT: {
+                //
+                _startAngle  = -MathHelper.PI_OVER_TWO;
+                _finishAngle =  MathHelper.PI_OVER_TWO;
+                break;
+            }
+
+            default: {
+                throw 'A not-supported exception raised.';
+            }
         }
 
-        case EaseMode.EASE_OUT: {
-            //
-            _startAngle  = 0;
-            _finishAngle = MathHelper.PI_OVER_TWO;
-            break;
-        }
+        // Creates the stopwatch. But don't start it immediately.
+        _stopwatch = new Stopwatch();
 
-        case EaseMode.EASE_IN_OUT: {
-            //
-            _startAngle  = -MathHelper.PI_OVER_TWO;
-            _finishAngle =  MathHelper.PI_OVER_TWO;
-            break;
-        }
+    } catch (e) {
+        //
+        console.log('g2l.SineEase: ' + e);
 
-        default: {
-            throw 'A not-supported exception raised.';
-        }
+        throw e;
     }
-
-    // Creates the stopwatch. But don't start it immediately.
-    _stopwatch = new Stopwatch();
 
     //
     // Properties.
     //
-    Object.defineProperty(this, 'easeMode', {
+    Object.defineProperty(_self, 'easeMode', {
         get: function() { return _easeMode; }
     });
 
-    Object.defineProperty(this, 'duration', {
+    Object.defineProperty(_self, 'duration', {
         get: function() { return _duration; }
     });
 
-    Object.defineProperty(this, 'sineOfStartAngle', {
+    Object.defineProperty(_self, 'sineOfStartAngle', {
         get: function() { return Math.sin(_startAngle); }
     });
 
-    Object.defineProperty(this, 'sineOfCurrentAngle', {
+    Object.defineProperty(_self, 'sineOfCurrentAngle', {
         //
         get: function() {
             //
@@ -65,12 +77,12 @@ function SineEase(_easeMode, _duration, _isLooped) {
 
             return Math.sin (
                 _startAngle +
-                angleOffset * this.ratioOfCurrentToTotalTimeOffset
+                angleOffset * _self.ratioOfCurrentToTotalTimeOffset
             );
         }
     });
 
-    Object.defineProperty(this, 'sineOfFinishAngle', {
+    Object.defineProperty(_self, 'sineOfFinishAngle', {
         get: function() { return Math.sin(_finishAngle); }
     });
 
@@ -80,15 +92,18 @@ function SineEase(_easeMode, _duration, _isLooped) {
     /// seconds), the duration = 2000 (in milliseconds) => Ratio = 500 / 2000
     /// = 0.25
     /// </summary>
-    Object.defineProperty(this, 'ratioOfCurrentToTotalTimeOffset', {
+    Object.defineProperty(_self, 'ratioOfCurrentToTotalTimeOffset', {
         //
         get: function() {
             //
             if (_isLooped === false) {
                 //
-                if (this.isFinished === true) {
+                if (_self.isFinished === true) {
+                    //
                     return 1;
-                } else { // this.isFinished === false
+
+                } else { // _self.isFinished === false
+                    //
                     return _stopwatch.elapsedMilliseconds / _duration;
                 }
 
@@ -107,25 +122,25 @@ function SineEase(_easeMode, _duration, _isLooped) {
     /// For instance, the current sine-of-angle offset = 0.125, the total sine-
     /// of-angle offset = 1 => Ratio = 0.125 / 1 = 0.125
     /// </summary>
-    Object.defineProperty(this, 'ratioOfCurrentToTotalSineOfAngleOffset', {
+    Object.defineProperty(_self, 'ratioOfCurrentToTotalSineOfAngleOffset', {
         //
         get: function() {
             //
             var currentSineOfAngleOffset =
-                this.sineOfCurrentAngle - this.sineOfStartAngle;
+                _self.sineOfCurrentAngle - _self.sineOfStartAngle;
 
             var totalSineOfAngleOffset =
-                this.sineOfFinishAngle - this.sineOfStartAngle;
+                _self.sineOfFinishAngle - _self.sineOfStartAngle;
 
             return currentSineOfAngleOffset / totalSineOfAngleOffset;
         }
     });
 
-    Object.defineProperty(this, 'isRunning', {
+    Object.defineProperty(_self, 'isRunning', {
         get: function() { return _stopwatch.isRunning; }
     });
 
-    Object.defineProperty(this, 'isFinished', {
+    Object.defineProperty(_self, 'isFinished', {
         //
         get: function() {
             //

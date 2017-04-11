@@ -11,10 +11,6 @@ function Vector3D(_x, _y, _z) {
     this.x = _x;
     this.y = _y;
     this.z = _z;
-
-    // Object.defineProperty(this, 'xy', {
-    //     'get': function() { return new Vector2D(_x, _y); }
-    // });
 }
 
 Vector3D.prototype = {

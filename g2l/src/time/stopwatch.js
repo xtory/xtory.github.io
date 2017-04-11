@@ -7,23 +7,37 @@
 //
 function Stopwatch() {
     //
-    var _startTime = 0; // Time of last start / resume. (0 if not running)
-    var _baseTime = 0; // Time on the clock when last stopped in milliseconds
+    var _self;
+    var _startTime; // Time of last start / resume. (0 if not running)
+    var _baseTime;  // Time on the clock when last stopped in milliseconds
+
+    try {
+        //
+        _self = this;
+        _startTime = 0;
+        _baseTime = 0;
+
+    } catch (e) {
+        //
+        console.log('g2l.Stopwatch: ' + e);
+
+        throw e;
+    }
 
     //
     // Properties.
     //
-    Object.defineProperty(this, 'isRunning', {
+    Object.defineProperty(_self, 'isRunning', {
         get: function() { return (_startTime !== 0) ? true: false; }
     });
 
-    Object.defineProperty(this, 'elapsedMilliseconds', {
+    Object.defineProperty(_self, 'elapsedMilliseconds', {
         //
         get: function() {
             //
             return (
                 _baseTime +
-                (this.isRunning===true) ? now()-_startTime : 0
+                (_self.isRunning===true) ? now()-_startTime : 0
             ); 
         }
     });
@@ -44,7 +58,7 @@ function Stopwatch() {
     // Start or resume
     this.start = function() {
         //_startAt = _startAt ? _startAt : now();
-        _startTime = (this.isRunning===true) ? _startTime : now();
+        _startTime = (_self.isRunning===true) ? _startTime : now();
     }
 
     // Stop or pause
@@ -52,7 +66,7 @@ function Stopwatch() {
         // If running, update elapsed time otherwise keep it
         //_lastDuration = _startAt ? _lastDuration + now() - _startAt : _lastDuration;
         _baseTime = (
-            (this.isRunning === true) ?
+            (_self.isRunning === true) ?
             _baseTime + (now() - _startTime) :
             _baseTime
         );
@@ -71,7 +85,7 @@ function Stopwatch() {
     //     //
     //     return (
     //         _baseTime +
-    //         (this.isRunning===true) ? now()-_startTime : 0
+    //         (_self.isRunning===true) ? now()-_startTime : 0
     //     ); 
     // }
 }

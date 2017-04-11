@@ -18,7 +18,7 @@ function main() {
 
     try {
         //
-        // var canvas = document.getElementById("canvas");
+        // var canvas = document.getElementById('canvas');
         // renderer = new g2l.Renderer ({
         //     canvas: canvas,
         //     usesDefaultStyles: false
@@ -68,7 +68,7 @@ function main() {
 
     function setUpFps() {
         //
-        leftTexts = document.getElementById("leftTexts");
+        leftTexts = document.getElementById('leftTexts');
         leftTexts.innerHTML = 'FPS: 0';
         fps = new g2l.Fps();
         then = 0;

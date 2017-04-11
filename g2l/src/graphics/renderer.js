@@ -46,18 +46,19 @@ function Renderer(_settings) {
 
     } catch (e) {
         //
-        console.log('g2l.Renderer: '+ e);
+        console.log('g2l.Renderer: ' + e);
 
         throw e;
     }
 
     //
     // Properties.
-    Object.defineProperty(this, 'canvas', {
+    //
+    Object.defineProperty(_self, 'canvas', {
         'get': function() { return _canvas; }
     });
     
-    Object.defineProperty(this, 'gl', {
+    Object.defineProperty(_self, 'gl', {
         'get': function() { return _gl; }
     });
 
@@ -67,7 +68,7 @@ function Renderer(_settings) {
     // want to change x, y of the viewport, use gl to change it manually. This
     // engine doesn't handle it for us.
     /*
-    Object.defineProperty(this, 'viewport', {
+    Object.defineProperty(_self, 'viewport', {
         //
         'get': function() {
             //
@@ -93,7 +94,7 @@ function Renderer(_settings) {
     });
     */
     
-    Object.defineProperty(this, 'program', {
+    Object.defineProperty(_self, 'program', {
         //
         get: function() {
             return _program;
@@ -426,7 +427,7 @@ function Renderer(_settings) {
         _gl.activeTexture(_gl.TEXTURE0 + unit);
         _gl.bindTexture(_gl.TEXTURE_2D, texture.webGLTexture);
 
-        this.setUniform(samplerUniformLocation, unit);
+        _self.setUniform(samplerUniformLocation, unit);
     };
 
     this.setUniform = function(uniformLocation, value) {

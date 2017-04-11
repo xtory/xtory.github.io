@@ -62,8 +62,8 @@ function Camera (
 
         _viewFrustum = new ViewFrustum();
 
-        _hasToUpdateViewMatrix           = true;
-        _hasToUpdateProjectionMatrix     = true;
+        _hasToUpdateViewMatrix = true;
+        _hasToUpdateProjectionMatrix = true;
         _hasToRaiseTransformUpdatedEvent = true;
         
     } catch (e) {
@@ -74,33 +74,33 @@ function Camera (
     }
 
     //
-    // Properties
+    // Properties.
     //
-    Object.defineProperty(this, 'renderer', {
+    Object.defineProperty(_self, 'renderer', {
         'get': function() { return _renderer; }
     });
 
-    Object.defineProperty(this, 'position', {
+    Object.defineProperty(_self, 'position', {
         'get': function() { return _position; }
     });
 
-    Object.defineProperty(this, 'facingDirection', {
+    Object.defineProperty(_self, 'facingDirection', {
         'get': function() { return _facingDirection; }
     });
 
-    Object.defineProperty(this, 'upDirection', {
+    Object.defineProperty(_self, 'upDirection', {
         'get': function() { return _upDirection; }
     });
 
-    Object.defineProperty(this, 'distanceToNearPlane', {
+    Object.defineProperty(_self, 'distanceToNearPlane', {
         'get': function() { return _distanceToNearPlane; }
     });
 
-    Object.defineProperty(this, 'distanceToFarPlane', {
+    Object.defineProperty(_self, 'distanceToFarPlane', {
         'get': function() { return _distanceToFarPlane; }
     });
 
-    Object.defineProperty(this, 'viewFrustum', {
+    Object.defineProperty(_self, 'viewFrustum', {
         'get': function() { return _viewFrustum; }
     });
 
@@ -173,9 +173,6 @@ function Camera (
     //
     this.zoom = function(distance) {
         //
-        // _position +=
-        //     Vector3D.calculateUnitVectorOf(_facingDirection) * distance;
-
         var v = Vector3D.multiplyVectorByScalar (
             Vector3D.calculateUnitVectorOf(_facingDirection),
             distance
@@ -187,36 +184,8 @@ function Camera (
     }
 
     //
-    // Privileged methods
-    //
-
-    //
     // Accessors
     //
-    this.getPosition = function() {
-        return _position;
-    }
-
-    this.getFacingDirection = function() {
-        return _facingDirection;
-    }
-
-    this.getUpDirection = function() {
-        return _upDirection;
-    }
-
-    this.getUpDirection = function() {
-        return _upDirection;
-    }
-    
-    this.getDistanceToNearPlane = function(m) {
-        return _distanceToNearPlane;
-    }
-
-    this.getDistanceToFarPlane = function(m) {
-        return _distanceToFarPlane;
-    }
-
     this.getProjectionMatrix = function(m) {
         //
         checkProjectionMatrix();

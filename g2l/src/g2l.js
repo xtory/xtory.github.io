@@ -30,6 +30,7 @@ export { VertexBuffer }                               from './graphics/vertex-bu
 // Helpers.
 export { ExceptionHelper }                            from './helpers/exception-helper';
 export { Fps }                                        from './helpers/fps';
+export { JSHelper }                                   from './helpers/js-helper';
 export { MouseButton }                                from './helpers/mouse-button';
 
 // Loaders.

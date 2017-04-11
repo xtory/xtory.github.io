@@ -338,74 +338,76 @@ function Matrix4x4 (
         _s13, _s23, _s33, _s43,
         _s14, _s24, _s34, _s44
     ];
-
-    //
-    // Properties.
-    //
-    Object.defineProperty(this, 's11', {
-        get: function() { return this.elements[0]; }
-    });
-
-    Object.defineProperty(this, 's12', {
-        get: function() { return this.elements[4]; }
-    });
-
-    Object.defineProperty(this, 's13', {
-        get: function() { return this.elements[8]; }
-    });
-
-    Object.defineProperty(this, 's14', {
-        get: function() { return this.elements[12]; }
-    });
-
-    Object.defineProperty(this, 's21', {
-        get: function() { return this.elements[1]; }
-    });
-
-    Object.defineProperty(this, 's22', {
-        get: function() { return this.elements[5]; }
-    });
-
-    Object.defineProperty(this, 's23', {
-        get: function() { return this.elements[9]; }
-    });
-
-    Object.defineProperty(this, 's24', {
-        get: function() { return this.elements[13]; }
-    });
-
-    Object.defineProperty(this, 's31', {
-        get: function() { return this.elements[2]; }
-    });
-
-    Object.defineProperty(this, 's32', {
-        get: function() { return this.elements[6]; }
-    });
-
-    Object.defineProperty(this, 's33', {
-        get: function() { return this.elements[10]; }
-    });
-
-    Object.defineProperty(this, 's34', {
-        get: function() { return this.elements[14]; }
-    });
-
-    Object.defineProperty(this, 's41', {
-        get: function() { return this.elements[3]; }
-    });
-
-    Object.defineProperty(this, 's42', {
-        get: function() { return this.elements[7]; }
-    });
-
-    Object.defineProperty(this, 's43', {
-        get: function() { return this.elements[11]; }
-    });
-
-    Object.defineProperty(this, 's44', {
-        get: function() { return this.elements[15]; }
-    });
 }
+
+Matrix4x4.prototype = {
+    //
+    // No contents.
+};
+
+Object.defineProperty(Matrix4x4.prototype, 's11', {
+    get: function() { return this.elements[0]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's12', {
+    get: function() { return this.elements[4]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's13', {
+    get: function() { return this.elements[8]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's14', {
+    get: function() { return this.elements[12]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's21', {
+    get: function() { return this.elements[1]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's22', {
+    get: function() { return this.elements[5]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's23', {
+    get: function() { return this.elements[9]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's24', {
+    get: function() { return this.elements[13]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's31', {
+    get: function() { return this.elements[2]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's32', {
+    get: function() { return this.elements[6]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's33', {
+    get: function() { return this.elements[10]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's34', {
+    get: function() { return this.elements[14]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's41', {
+    get: function() { return this.elements[3]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's42', {
+    get: function() { return this.elements[7]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's43', {
+    get: function() { return this.elements[11]; }
+});
+
+Object.defineProperty(Matrix4x4.prototype, 's44', {
+    get: function() { return this.elements[15]; }
+});
 
 //
 // Static constants (after Object.freeze()).
@@ -1187,10 +1189,6 @@ function Vector3D(_x, _y, _z) {
     this.x = _x;
     this.y = _y;
     this.z = _z;
-
-    // Object.defineProperty(this, 'xy', {
-    //     'get': function() { return new Vector2D(_x, _y); }
-    // });
 }
 
 Vector3D.prototype = {
@@ -1432,8 +1430,8 @@ function Camera (
 
         _viewFrustum = new ViewFrustum();
 
-        _hasToUpdateViewMatrix           = true;
-        _hasToUpdateProjectionMatrix     = true;
+        _hasToUpdateViewMatrix = true;
+        _hasToUpdateProjectionMatrix = true;
         _hasToRaiseTransformUpdatedEvent = true;
         
     } catch (e) {
@@ -1444,33 +1442,33 @@ function Camera (
     }
 
     //
-    // Properties
+    // Properties.
     //
-    Object.defineProperty(this, 'renderer', {
+    Object.defineProperty(_self, 'renderer', {
         'get': function() { return _renderer; }
     });
 
-    Object.defineProperty(this, 'position', {
+    Object.defineProperty(_self, 'position', {
         'get': function() { return _position; }
     });
 
-    Object.defineProperty(this, 'facingDirection', {
+    Object.defineProperty(_self, 'facingDirection', {
         'get': function() { return _facingDirection; }
     });
 
-    Object.defineProperty(this, 'upDirection', {
+    Object.defineProperty(_self, 'upDirection', {
         'get': function() { return _upDirection; }
     });
 
-    Object.defineProperty(this, 'distanceToNearPlane', {
+    Object.defineProperty(_self, 'distanceToNearPlane', {
         'get': function() { return _distanceToNearPlane; }
     });
 
-    Object.defineProperty(this, 'distanceToFarPlane', {
+    Object.defineProperty(_self, 'distanceToFarPlane', {
         'get': function() { return _distanceToFarPlane; }
     });
 
-    Object.defineProperty(this, 'viewFrustum', {
+    Object.defineProperty(_self, 'viewFrustum', {
         'get': function() { return _viewFrustum; }
     });
 
@@ -1543,9 +1541,6 @@ function Camera (
     //
     this.zoom = function(distance) {
         //
-        // _position +=
-        //     Vector3D.calculateUnitVectorOf(_facingDirection) * distance;
-
         var v = Vector3D.multiplyVectorByScalar (
             Vector3D.calculateUnitVectorOf(_facingDirection),
             distance
@@ -1557,36 +1552,8 @@ function Camera (
     };
 
     //
-    // Privileged methods
-    //
-
-    //
     // Accessors
     //
-    this.getPosition = function() {
-        return _position;
-    };
-
-    this.getFacingDirection = function() {
-        return _facingDirection;
-    };
-
-    this.getUpDirection = function() {
-        return _upDirection;
-    };
-
-    this.getUpDirection = function() {
-        return _upDirection;
-    };
-    
-    this.getDistanceToNearPlane = function(m) {
-        return _distanceToNearPlane;
-    };
-
-    this.getDistanceToFarPlane = function(m) {
-        return _distanceToFarPlane;
-    };
-
     this.getProjectionMatrix = function(m) {
         //
         checkProjectionMatrix();
@@ -1760,11 +1727,11 @@ Colors.DEFAULT_BACKGROUND = new Color(32/255, 32/255, 32/255, 1);
 //
 // System.
 //
-Colors.BLACK              = new Color(0, 0, 0, 1);
-Colors.WHITE              = new Color(1, 1, 1, 1);
-Colors.TRANSPARENT        = new Color(1, 1, 1, 0);
-Colors.SKY_BLUE           = new Color(135/255, 206/255, 235/255, 1);
-Colors.CADET_BLUE         = new Color(95/255, 158/255, 160/255, 1);
+Colors.BLACK       = new Color(0, 0, 0, 1);
+Colors.WHITE       = new Color(1, 1, 1, 1);
+Colors.TRANSPARENT = new Color(1, 1, 1, 0);
+Colors.SKY_BLUE    = new Color(135/255, 206/255, 235/255, 1);
+Colors.CADET_BLUE  = new Color(95/255, 158/255, 160/255, 1);
 
 //
 // Photoshop
@@ -1939,18 +1906,19 @@ function Renderer(_settings) {
 
     } catch (e) {
         //
-        console.log('g2l.Renderer: '+ e);
+        console.log('g2l.Renderer: ' + e);
 
         throw e;
     }
 
     //
     // Properties.
-    Object.defineProperty(this, 'canvas', {
+    //
+    Object.defineProperty(_self, 'canvas', {
         'get': function() { return _canvas; }
     });
     
-    Object.defineProperty(this, 'gl', {
+    Object.defineProperty(_self, 'gl', {
         'get': function() { return _gl; }
     });
 
@@ -1960,7 +1928,7 @@ function Renderer(_settings) {
     // want to change x, y of the viewport, use gl to change it manually. This
     // engine doesn't handle it for us.
     /*
-    Object.defineProperty(this, 'viewport', {
+    Object.defineProperty(_self, 'viewport', {
         //
         'get': function() {
             //
@@ -1986,7 +1954,7 @@ function Renderer(_settings) {
     });
     */
     
-    Object.defineProperty(this, 'program', {
+    Object.defineProperty(_self, 'program', {
         //
         get: function() {
             return _program;
@@ -2319,7 +2287,7 @@ function Renderer(_settings) {
         _gl.activeTexture(_gl.TEXTURE0 + unit);
         _gl.bindTexture(_gl.TEXTURE_2D, texture.webGLTexture);
 
-        this.setUniform(samplerUniformLocation, unit);
+        _self.setUniform(samplerUniformLocation, unit);
     };
 
     this.setUniform = function(uniformLocation, value) {
@@ -2359,18 +2327,20 @@ Object.freeze(Renderer);
 //
 function IndexBuffer(_bufferLoader) {
     //
+    var _self;
     var _gl;
     var _webGLBuffer;
 
     try {
         //
+        _self = this;
         _gl = _bufferLoader.loader.renderer.gl;
 
         _webGLBuffer = _gl.createBuffer();
 
     } catch (e) {
         //
-        console.log('g2l.IndexBuffer: '+ e);
+        console.log('g2l.IndexBuffer: ' + e);
 
         throw e;
     }
@@ -2378,11 +2348,11 @@ function IndexBuffer(_bufferLoader) {
     //
     // Properties.
     //
-    Object.defineProperty(this, 'bufferLoader', {
+    Object.defineProperty(_self, 'bufferLoader', {
         'get': function() { return _bufferLoader; }
     });
 
-    Object.defineProperty(this, 'webGLBuffer', {
+    Object.defineProperty(_self, 'webGLBuffer', {
         'get': function() { return _webGLBuffer; }
     });
 }
@@ -2674,18 +2644,20 @@ Object.freeze(PrimitiveType);
 //
 function Program(_programLoader) {
     //
+    var _self;
     var _gl;
     var _webGLProgram;
 
     try {
         //
+        _self = this;
         _gl = _programLoader.loader.renderer.gl;
 
         _webGLProgram = _gl.createProgram();
 
     } catch (e) {
         //
-        console.log('g2l.Program: '+ e);
+        console.log('g2l.Program: ' + e);
 
         throw e;
     }
@@ -2693,11 +2665,11 @@ function Program(_programLoader) {
     //
     // Properties.
     //
-    Object.defineProperty(this, 'programLoader', {
+    Object.defineProperty(_self, 'programLoader', {
         'get': function() { return _programLoader; }
     });
 
-    Object.defineProperty(this, 'webGLProgram', {
+    Object.defineProperty(_self, 'webGLProgram', {
         'get': function() { return _webGLProgram; }
     });
 }
@@ -2791,21 +2763,15 @@ function SpriteBatch(_renderer) {
     //
     var _self;
     var _gl;
-    var _webGLTexture;
-    var _width;
-    var _height;
 
     try {
         //
         _self = this;
-
         _gl = _renderer.gl;
-        
-        _webGLTexture = _gl.createTexture();
 
     } catch (e) {
         //
-        console.log('g2l.SpriteBatch: '+ e);
+        console.log('g2l.SpriteBatch: ' + e);
 
         throw e;
     }
@@ -2813,23 +2779,9 @@ function SpriteBatch(_renderer) {
     //
     // Properties.
     //
-    Object.defineProperty(this, 'gl', {
-        'get': function() { return _gl; }
+    Object.defineProperty(_self, 'renderer', {
+        'get': function() { return _renderer; }
     });
-
-    Object.defineProperty(this, 'webGLTexture', {
-        'get': function() { return _webGLTexture; }
-    });
-
-    Object.defineProperty(this, 'width', {
-        'get': function() { return _width; },
-        'set': function(value) { _width = value; }
-    });
-
-    Object.defineProperty(this, 'height', {
-        'get': function() { return _height; },
-        'set': function(value) { _height = value; }
-    });    
 }
 
 Object.freeze(SpriteBatch);
@@ -2839,20 +2791,20 @@ Object.freeze(SpriteBatch);
 //
 function Texture2D(_textureLoader) {
     //
+    var _self;
     var _gl;
-    var _webGLTexture;
     var _width;
     var _height;
+    var _webGLTexture;
 
     try {
         //
+        _self = this;
         _gl = _textureLoader.loader.renderer.gl;
-
-        _webGLTexture = _gl.createTexture();
 
     } catch (e) {
         //
-        console.log('g2l.Texture2D: '+ e);
+        console.log('g2l.Texture2D: ' + e);
 
         throw e;
     }
@@ -2860,23 +2812,24 @@ function Texture2D(_textureLoader) {
     //
     // Properties.
     //
-    Object.defineProperty(this, 'loader', {
+    Object.defineProperty(_self, 'loader', {
         'get': function() { return _loader; }
     });
 
-    Object.defineProperty(this, 'webGLTexture', {
-        'get': function() { return _webGLTexture; }
-    });
-
-    Object.defineProperty(this, 'width', {
+    Object.defineProperty(_self, 'width', {
         'get': function() { return _width; },
         'set': function(value) { _width = value; }
     });
 
-    Object.defineProperty(this, 'height', {
+    Object.defineProperty(_self, 'height', {
         'get': function() { return _height; },
         'set': function(value) { _height = value; }
-    });    
+    });
+
+    Object.defineProperty(_self, 'webGLTexture', {
+        'get': function() { return _webGLTexture; },
+        'set': function(value) { _webGLTexture = value; }
+    });
 }
 
 Object.freeze(Texture2D);
@@ -3067,19 +3020,21 @@ Object.freeze(TransformedPositionTextureCoordinates);
 //
 function VertexBuffer(_bufferLoader) {
     //
+    var _self;
     var _gl;
     var _webGLBuffer;
     var _size; // Number of components per vertex attribute. Must be 1, 2, 3, or 4.
 
     try {
         //
+        _self = this;
         _gl = _bufferLoader.loader.renderer.gl;
 
         _webGLBuffer = _gl.createBuffer();
 
     } catch (e) {
         //
-        console.log('g2l.VertexBuffer: '+ e);
+        console.log('g2l.VertexBuffer: ' + e);
 
         throw e;
     }
@@ -3087,15 +3042,15 @@ function VertexBuffer(_bufferLoader) {
     //
     // Properties.
     //
-    Object.defineProperty(this, 'bufferLoader', {
+    Object.defineProperty(_self, 'bufferLoader', {
         'get': function() { return _bufferLoader; }
     });
 
-    Object.defineProperty(this, 'webGLBuffer', {
+    Object.defineProperty(_self, 'webGLBuffer', {
         'get': function() { return _webGLBuffer; }
     });
 
-    Object.defineProperty(this, 'size', {
+    Object.defineProperty(_self, 'size', {
         'get': function() { return _size; },
         'set': function(value) { _size = value; }
     });
@@ -3166,6 +3121,7 @@ Object.freeze(ExceptionHelper);
 
 function Fps() {
     //
+    var _self;
     var _totalTime;
     var _timeTable;
     var _timeTableIndex;
@@ -3173,6 +3129,9 @@ function Fps() {
     var _average;
 
     try {
+        //
+        _self = this;
+
         // total time spent for last N frames.
         _totalTime = Fps.FRAME_COUNT_TO_AVERAGE;
 
@@ -3186,14 +3145,14 @@ function Fps() {
 
         _average = 0;
 
-        // Initialize the FpsCounter elapsed time history table.
+        // Initialize the elapsed time history table.
         for (var i=0; i<Fps.FRAME_COUNT_TO_AVERAGE; i++) {
             _timeTable[i] = 1.0;
         }
 
     } catch (e) {
         //
-        console.log('g2l.Fps: '+ e);
+        console.log('g2l.Fps: ' + e);
 
         throw e;
     }
@@ -3201,7 +3160,7 @@ function Fps() {
     //
     // Properties.
     //
-    Object.defineProperty(this, 'average', {
+    Object.defineProperty(_self, 'average', {
         get: function() { return _average; }
     });
     
@@ -3245,6 +3204,43 @@ Object.freeze(Fps);
 //
 // Constructor.
 //
+function JSHelper() {
+    // No contents.
+}
+
+//
+// Static methods.
+//
+JSHelper.arrayContainsItem = function(array, item) {
+    //
+    for (var i=0; i<array.length; i++) {
+        //
+        if (array[i] === item) {
+            return true;
+        }
+    }
+    
+    return false;
+};
+
+JSHelper.arrayRemoveItem = function(array, item) {
+    //
+    for (var i=0; i<array.length; i++) {
+        //
+        if (array[i] === item) {
+            array.splice(i, 1);
+            return true;
+        }
+    }
+    
+    return false;
+};
+
+Object.freeze(JSHelper);
+
+//
+// Constructor.
+//
 function MouseButton() {
     // No contents.
 }
@@ -3268,20 +3264,22 @@ function BufferLoader(_loader) {
 
     try {
         //
-        Object.defineProperty(this, 'loader', {
-            'get': function() { return _loader; }
-        });
-
         _self = this;
-        
         _gl = _loader.renderer.gl;
 
     } catch (e) {
         //
-        console.log('g2l.BufferLoader: '+ e);
+        console.log('g2l.BufferLoader: ' + e);
 
         throw e;
     }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(_self, 'loader', {
+        'get': function() { return _loader; }
+    });
     
     //
     // Privileged methods.
@@ -3308,19 +3306,21 @@ function ProgramLoader(_loader) {
     try {
         //
         _self = this;
-        
         _gl = _loader.renderer.gl;
-
-        Object.defineProperty(this, 'loader', {
-            'get': function() { return _loader; }
-        });
 
     } catch (e) {
         //
-        console.log('g2l.ProgramLoader: '+ e);
+        console.log('g2l.ProgramLoader: ' + e);
 
         throw e;
     }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(_self, 'loader', {
+        'get': function() { return _loader; }
+    });
 
     //
     // Private methods.
@@ -3464,6 +3464,11 @@ function ProgramLoader(_loader) {
 
 Object.freeze(ProgramLoader);
 
+// Note:
+// DB uses
+// - key: url (string)
+// - value: Texture
+//
 //
 // Constructor.
 //
@@ -3471,15 +3476,17 @@ function TextureLoader(_loader) {
     //
     var _self;
     var _gl;
+    var _db;
 
     try {
         //
         _self = this;
         _gl = _loader.renderer.gl;
+        _db = {};
 
     } catch (e) {
         //
-        console.log('g2l.TextureLoader: '+ e);
+        console.log('g2l.TextureLoader: ' + e);
 
         throw e;
     }
@@ -3487,85 +3494,107 @@ function TextureLoader(_loader) {
     //
     // Properties.
     //
-    Object.defineProperty(this, 'loader', {
+    Object.defineProperty(_self, 'loader', {
         'get': function() { return _loader; }
     });
+
+    //
+    // Private methods.
+    //
+    function createWebGLTexture() {
+        return _gl.createTexture();
+    }
+    
+    function handleTexture2DLoaded(image, webGLTexture) {
+        //
+        _gl.bindTexture (
+            _gl.TEXTURE_2D,
+            webGLTexture
+        );
+
+        _gl.texImage2D (
+            _gl.TEXTURE_2D,    // target
+            0,                 // level
+            _gl.RGBA,          // internalFormat
+            _gl.RGBA,          // format
+            _gl.UNSIGNED_BYTE, // type
+            image              // htmlImageElement
+        );
+
+        if (MathHelper.isPowerOfTwo(image.width) === true &&
+            MathHelper.isPowerOfTwo(image.height) === true) {
+            //
+            _gl.generateMipmap(_gl.TEXTURE_2D);
+            
+            _gl.texParameteri (
+                _gl.TEXTURE_2D,
+                _gl.TEXTURE_MIN_FILTER,
+                _gl.LINEAR_MIPMAP_LINEAR
+            );
+
+        } else {
+            //
+            _gl.texParameteri (
+                _gl.TEXTURE_2D,
+                _gl.TEXTURE_MIN_FILTER,
+                _gl.LINEAR
+            );
+        }
+
+        // TEXTURE_MAG_FILTER only has NEAREST or LINEAR to choose, no LINEAR_
+        // MIPMAP_LINEAR.
+        _gl.texParameteri (
+            _gl.TEXTURE_2D,
+            _gl.TEXTURE_MAG_FILTER,
+            _gl.LINEAR
+        );
+
+        _gl.texParameteri (
+            _gl.TEXTURE_2D,
+            _gl.TEXTURE_WRAP_S,
+            _gl.CLAMP_TO_EDGE
+        );
+
+        _gl.texParameteri (
+            _gl.TEXTURE_2D,
+            _gl.TEXTURE_WRAP_T,
+            _gl.CLAMP_TO_EDGE
+        );
+
+        _gl.bindTexture(_gl.TEXTURE_2D, null);
+    }
 
     //
     // Privileged methods.
     //
     this.loadTexture2D = function(url) {
         //
-        var image = new Image();
+        if (url === undefined) {
+            throw 'An argument-undefined exception raised.';
+        }
+
+        var texture = _db[url];
+        if (texture !== undefined) {
+            return texture;
+        }
+
         var texture = new Texture2D(_self);
+        _db[url] = texture;
+
+        var image = new Image();
 
         image.addEventListener('load', function() {
-            handleTextureLoaded(image, texture);
-        });
-
-        image.src = url;
-
-        function handleTextureLoaded(image, texture) {
             //
-            _gl.bindTexture (
-                _gl.TEXTURE_2D,
-                texture.webGLTexture
-            );
+            var webGLTexture = createWebGLTexture();
 
-            _gl.texImage2D (
-                _gl.TEXTURE_2D,    // target
-                0,                 // level
-                _gl.RGBA,          // internalFormat
-                _gl.RGBA,          // format
-                _gl.UNSIGNED_BYTE, // type
-                image              // htmlImageElement
-            );
-
-            if (MathHelper.isPowerOfTwo(image.width) === true &&
-                MathHelper.isPowerOfTwo(image.height) === true) {
-                //
-                _gl.generateMipmap(_gl.TEXTURE_2D);
-                
-                _gl.texParameteri (
-                    _gl.TEXTURE_2D,
-                    _gl.TEXTURE_MIN_FILTER,
-                    _gl.LINEAR_MIPMAP_LINEAR
-                );
-
-            } else {
-                //
-                _gl.texParameteri (
-                    _gl.TEXTURE_2D,
-                    _gl.TEXTURE_MIN_FILTER,
-                    _gl.LINEAR
-                );
-            }
-
-            // TEXTURE_MAG_FILTER only has NEAREST or LINEAR to choose, no
-            // LINEAR_MIPMAP_LINEAR.
-            _gl.texParameteri (
-                _gl.TEXTURE_2D,
-                _gl.TEXTURE_MAG_FILTER,
-                _gl.LINEAR
-            );
-
-            _gl.texParameteri (
-                _gl.TEXTURE_2D,
-                _gl.TEXTURE_WRAP_S,
-                _gl.CLAMP_TO_EDGE
-            );
-
-            _gl.texParameteri (
-                _gl.TEXTURE_2D,
-                _gl.TEXTURE_WRAP_T,
-                _gl.CLAMP_TO_EDGE
-            );
-
-            _gl.bindTexture(_gl.TEXTURE_2D, null);
+            handleTexture2DLoaded(image, webGLTexture);
 
             texture.width = image.width;
             texture.height = image.height;
-        }
+            texture.webGLTexture = webGLTexture;
+        });
+
+        image.src = url;
 
         return texture;
     };
@@ -3588,11 +3617,7 @@ function Loader(_renderer) {
         //
         _self = this;
         
-        _gl = _renderer.gl;
-
-        Object.defineProperty(this, 'renderer', {
-            'get': function() { return _renderer; }
-        });
+        bindRenderer();
 
         _bufferLoader = new BufferLoader(_self);
         _textureLoader = new TextureLoader(_self);
@@ -3600,9 +3625,21 @@ function Loader(_renderer) {
 
     } catch (e) {
         //
-        console.log('g2l.Loader: '+ e);
+        console.log('g2l.Loader: ' + e);
 
         throw e;
+    }
+
+    //
+    // Private methods.
+    //
+    function bindRenderer() {
+        //
+        _gl = _renderer.gl;
+
+        Object.defineProperty(_self, 'renderer', {
+            'get': function() { return _renderer; }
+        });
     }
     
     //
@@ -3668,23 +3705,37 @@ Object.freeze(EaseMode);
 //
 function Stopwatch() {
     //
-    var _startTime = 0; // Time of last start / resume. (0 if not running)
-    var _baseTime = 0; // Time on the clock when last stopped in milliseconds
+    var _self;
+    var _startTime; // Time of last start / resume. (0 if not running)
+    var _baseTime;  // Time on the clock when last stopped in milliseconds
+
+    try {
+        //
+        _self = this;
+        _startTime = 0;
+        _baseTime = 0;
+
+    } catch (e) {
+        //
+        console.log('g2l.Stopwatch: ' + e);
+
+        throw e;
+    }
 
     //
     // Properties.
     //
-    Object.defineProperty(this, 'isRunning', {
+    Object.defineProperty(_self, 'isRunning', {
         get: function() { return (_startTime !== 0) ? true: false; }
     });
 
-    Object.defineProperty(this, 'elapsedMilliseconds', {
+    Object.defineProperty(_self, 'elapsedMilliseconds', {
         //
         get: function() {
             //
             return (
                 _baseTime +
-                (this.isRunning===true) ? now()-_startTime : 0
+                (_self.isRunning===true) ? now()-_startTime : 0
             ); 
         }
     });
@@ -3705,7 +3756,7 @@ function Stopwatch() {
     // Start or resume
     this.start = function() {
         //_startAt = _startAt ? _startAt : now();
-        _startTime = (this.isRunning===true) ? _startTime : now();
+        _startTime = (_self.isRunning===true) ? _startTime : now();
     };
 
     // Stop or pause
@@ -3713,7 +3764,7 @@ function Stopwatch() {
         // If running, update elapsed time otherwise keep it
         //_lastDuration = _startAt ? _lastDuration + now() - _startAt : _lastDuration;
         _baseTime = (
-            (this.isRunning === true) ?
+            (_self.isRunning === true) ?
             _baseTime + (now() - _startTime) :
             _baseTime
         );
@@ -3732,7 +3783,7 @@ function Stopwatch() {
     //     //
     //     return (
     //         _baseTime +
-    //         (this.isRunning===true) ? now()-_startTime : 0
+    //         (_self.isRunning===true) ? now()-_startTime : 0
     //     ); 
     // }
 }
@@ -3744,57 +3795,69 @@ Object.freeze(Stopwatch);
 //
 function SineEase(_easeMode, _duration, _isLooped) {
     //
+    var _self;
     var _startAngle;
     var _finishAngle;
     var _stopwatch;
 
-    switch (_easeMode)
-    {
-        case EaseMode.EASE_IN: {
+    try {
+        //
+        _self = this;
+        
+        switch (_easeMode) {
             //
-            _startAngle  = -MathHelper.PI_OVER_TWO;
-            _finishAngle =  0;
-            break;
+            case EaseMode.EASE_IN: {
+                //
+                _startAngle  = -MathHelper.PI_OVER_TWO;
+                _finishAngle =  0;
+                break;
+            }
+
+            case EaseMode.EASE_OUT: {
+                //
+                _startAngle  = 0;
+                _finishAngle = MathHelper.PI_OVER_TWO;
+                break;
+            }
+
+            case EaseMode.EASE_IN_OUT: {
+                //
+                _startAngle  = -MathHelper.PI_OVER_TWO;
+                _finishAngle =  MathHelper.PI_OVER_TWO;
+                break;
+            }
+
+            default: {
+                throw 'A not-supported exception raised.';
+            }
         }
 
-        case EaseMode.EASE_OUT: {
-            //
-            _startAngle  = 0;
-            _finishAngle = MathHelper.PI_OVER_TWO;
-            break;
-        }
+        // Creates the stopwatch. But don't start it immediately.
+        _stopwatch = new Stopwatch();
 
-        case EaseMode.EASE_IN_OUT: {
-            //
-            _startAngle  = -MathHelper.PI_OVER_TWO;
-            _finishAngle =  MathHelper.PI_OVER_TWO;
-            break;
-        }
+    } catch (e) {
+        //
+        console.log('g2l.SineEase: ' + e);
 
-        default: {
-            throw 'A not-supported exception raised.';
-        }
+        throw e;
     }
-
-    // Creates the stopwatch. But don't start it immediately.
-    _stopwatch = new Stopwatch();
 
     //
     // Properties.
     //
-    Object.defineProperty(this, 'easeMode', {
+    Object.defineProperty(_self, 'easeMode', {
         get: function() { return _easeMode; }
     });
 
-    Object.defineProperty(this, 'duration', {
+    Object.defineProperty(_self, 'duration', {
         get: function() { return _duration; }
     });
 
-    Object.defineProperty(this, 'sineOfStartAngle', {
+    Object.defineProperty(_self, 'sineOfStartAngle', {
         get: function() { return Math.sin(_startAngle); }
     });
 
-    Object.defineProperty(this, 'sineOfCurrentAngle', {
+    Object.defineProperty(_self, 'sineOfCurrentAngle', {
         //
         get: function() {
             //
@@ -3802,12 +3865,12 @@ function SineEase(_easeMode, _duration, _isLooped) {
 
             return Math.sin (
                 _startAngle +
-                angleOffset * this.ratioOfCurrentToTotalTimeOffset
+                angleOffset * _self.ratioOfCurrentToTotalTimeOffset
             );
         }
     });
 
-    Object.defineProperty(this, 'sineOfFinishAngle', {
+    Object.defineProperty(_self, 'sineOfFinishAngle', {
         get: function() { return Math.sin(_finishAngle); }
     });
 
@@ -3817,15 +3880,18 @@ function SineEase(_easeMode, _duration, _isLooped) {
     /// seconds), the duration = 2000 (in milliseconds) => Ratio = 500 / 2000
     /// = 0.25
     /// </summary>
-    Object.defineProperty(this, 'ratioOfCurrentToTotalTimeOffset', {
+    Object.defineProperty(_self, 'ratioOfCurrentToTotalTimeOffset', {
         //
         get: function() {
             //
             if (_isLooped === false) {
                 //
-                if (this.isFinished === true) {
+                if (_self.isFinished === true) {
+                    //
                     return 1;
-                } else { // this.isFinished === false
+
+                } else { // _self.isFinished === false
+                    //
                     return _stopwatch.elapsedMilliseconds / _duration;
                 }
 
@@ -3844,25 +3910,25 @@ function SineEase(_easeMode, _duration, _isLooped) {
     /// For instance, the current sine-of-angle offset = 0.125, the total sine-
     /// of-angle offset = 1 => Ratio = 0.125 / 1 = 0.125
     /// </summary>
-    Object.defineProperty(this, 'ratioOfCurrentToTotalSineOfAngleOffset', {
+    Object.defineProperty(_self, 'ratioOfCurrentToTotalSineOfAngleOffset', {
         //
         get: function() {
             //
             var currentSineOfAngleOffset =
-                this.sineOfCurrentAngle - this.sineOfStartAngle;
+                _self.sineOfCurrentAngle - _self.sineOfStartAngle;
 
             var totalSineOfAngleOffset =
-                this.sineOfFinishAngle - this.sineOfStartAngle;
+                _self.sineOfFinishAngle - _self.sineOfStartAngle;
 
             return currentSineOfAngleOffset / totalSineOfAngleOffset;
         }
     });
 
-    Object.defineProperty(this, 'isRunning', {
+    Object.defineProperty(_self, 'isRunning', {
         get: function() { return _stopwatch.isRunning; }
     });
 
-    Object.defineProperty(this, 'isFinished', {
+    Object.defineProperty(_self, 'isFinished', {
         //
         get: function() {
             //
@@ -3960,6 +4026,7 @@ exports.TransformedPositionTextureCoordinates = TransformedPositionTextureCoordi
 exports.VertexBuffer = VertexBuffer;
 exports.ExceptionHelper = ExceptionHelper;
 exports.Fps = Fps;
+exports.JSHelper = JSHelper;
 exports.MouseButton = MouseButton;
 exports.BufferLoader = BufferLoader;
 exports.Loader = Loader;
