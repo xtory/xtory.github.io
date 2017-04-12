@@ -23,7 +23,7 @@ function Sprite (
 
     this.texture = _texture;
 
-    var vertices = SpriteBatch.createSpriteVertices (
+    var vertices = SpriteBatch.createSpriteVertices2 (
         _spriteBatch.renderer,
         _centerScreenPosition, _screenSize,
         _vertexColor,
@@ -38,6 +38,7 @@ function Sprite (
 //
 // Static constants (after Object.freeze()).
 //
+Sprite.VERTEX_COUNT            = 4;
 Sprite.POSITION_SIZE           = 4; // (x, y, z, w)
 Sprite.COLOR_SIZE              = 4; // (r, g, b, a)
 Sprite.TEXTURE_COORDINATE_SIZE = 2; // (s, t)

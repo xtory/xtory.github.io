@@ -64,7 +64,7 @@ function main() {
 
     function setUpSprites() {
         //
-        spriteCount = 1000;
+        spriteCount = 2000;
         spritePositionOffsets = [];
 
         var width = 1000;
@@ -76,7 +76,7 @@ function main() {
                 width * (-0.25 + Math.random() * 0.5), // -0.25 ~ 0.25
                 height * (-0.25 + Math.random() * 0.5)  // -0.25 ~ 0.25
             ));
-        }        
+        }
 
         vertexBuffers = [];
         
@@ -198,11 +198,12 @@ function main() {
 
     function flush() {
         //
-        var w = renderer.canvas.clientWidth;
-        var h = renderer.canvas.clientHeight;
-        var center = new g2l.Vector2D(w * 0.5, h * 0.5);
+        var center = new g2l.Vector2D (
+            renderer.canvas.clientWidth * 0.5,
+            renderer.canvas.clientHeight * 0.5
+        );
 
-        var size = new g2l.Size2D(50, 50);
+        var spriteScreenSize = new g2l.Size2D(50, 50);
 
         for (var i=0; i<spriteCount; i++) {
             //
@@ -218,22 +219,22 @@ function main() {
                 spriteBatch,
                 texture,
                 item2,
-                size
+                spriteScreenSize
             )
 
             var item2 = vertexBuffers[i];
 
-            item2.position.setItems (
+            item2.position.setItems2 (
                 sprite.vertexPositions,
                 g2l.Sprite.POSITION_SIZE
             );
 
-            item2.color.setItems (
+            item2.color.setItems2 (
                 sprite.vertexColors,
                 g2l.Sprite.COLOR_SIZE
             );
 
-            item2.textureCoordinates.setItems (
+            item2.textureCoordinates.setItems2 (
                 sprite.vertexTextureCoordinates,
                 g2l.Sprite.TEXTURE_COORDINATE_SIZE
             );            

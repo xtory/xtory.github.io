@@ -58,6 +58,23 @@ VertexBuffer.prototype = {
             new Float32Array(items),
             gl.STATIC_DRAW
         );
+    },
+
+    setItems2: function(items, size) {
+        //
+        var gl = this.bufferLoader.loader.renderer.gl;
+        this.size = size;
+
+        gl.bindBuffer (
+            gl.ARRAY_BUFFER,
+            this.webGLBuffer
+        );
+        
+        gl.bufferData (
+            gl.ARRAY_BUFFER,
+            items,
+            gl.STATIC_DRAW
+        );
     }
 }
 

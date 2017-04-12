@@ -1,5 +1,6 @@
 import { ScreenCoordinateHelper } from './helpers/screen-coordinate-helper';
-import { Vector3D } from '../math/3d-vector';
+import { Sprite }                 from './sprite';
+import { Vector3D }               from '../math/3d-vector';
 
 //
 // Constructor.
@@ -82,6 +83,73 @@ SpriteBatch.createSpriteVertices = function (
         rect.left,  rect.bottom, // (0.0, 0.0),
         rect.left,  rect.top     // (0.0, 1.0)
     ];
+
+    return {
+        positions: vertexPositions2,
+        colors: vertexColors,
+        textureCoordinates: vertexTextureCoordinates
+    };
+}
+
+SpriteBatch.createSpriteVertices2 = function (
+    renderer, // renderer.
+    p,        // centerScreenPosition,
+    size,     // screenSize,
+    color,    // vertexColor,
+    rect      // sourceTextureCoordinateRect
+){
+    // 1. Positions.
+    var halfWidth = size.width * 0.5;
+    var halfHeight = size.height * 0.5;
+
+    var vertexPositions = [
+        new Vector3D(p.x+halfWidth, p.y-halfHeight, p.z),
+        new Vector3D(p.x+halfWidth, p.y+halfHeight, p.z),
+        new Vector3D(p.x-halfWidth, p.y-halfHeight, p.z),
+        new Vector3D(p.x-halfWidth, p.y+halfHeight, p.z) 
+    ];
+
+    var vertexPositions2 = new Float32Array (
+        Sprite.POSITION_SIZE * Sprite.VERTEX_COUNT
+    );
+
+    var array;
+    for (var i=0; i<Sprite.VERTEX_COUNT; i++) {
+        //
+        var item = vertexPositions[i];
+
+        var p = ScreenCoordinateHelper.toClipSpace (
+            renderer.canvas,
+            item
+        );
+
+        array = p.toArray();
+        for (var j=0; j<Sprite.POSITION_SIZE; j++) {
+            vertexPositions2[Sprite.POSITION_SIZE*i + j] = array[j];
+        }
+    }
+
+    // 2. Colors.
+    var vertexColors = new Float32Array (
+        Sprite.COLOR_SIZE * Sprite.VERTEX_COUNT
+    );
+
+    array = color.toArray();
+    for (var i=0; i<Sprite.VERTEX_COUNT; i++) {
+        //
+        for (var j=0; j<Sprite.COLOR_SIZE; j++) {
+            //
+            vertexColors[Sprite.COLOR_SIZE*i + j] = array[j];
+        }
+    }
+
+    // 3. Texture coordinates.
+    var vertexTextureCoordinates = new Float32Array ([
+        rect.right, rect.bottom, // (1.0, 0.0), for instance.
+        rect.right, rect.top,    // (1.0, 1.0),
+        rect.left,  rect.bottom, // (0.0, 0.0),
+        rect.left,  rect.top     // (0.0, 1.0)
+    ]);
 
     return {
         positions: vertexPositions2,

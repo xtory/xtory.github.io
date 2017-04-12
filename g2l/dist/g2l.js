@@ -2918,6 +2918,73 @@ SpriteBatch.createSpriteVertices = function (
     };
 };
 
+SpriteBatch.createSpriteVertices2 = function (
+    renderer,
+    p,        // centerScreenPosition,
+    size,     // screenSize,
+    color,    // vertexColor,
+    rect      // sourceTextureCoordinateRect
+){
+    // 1. Positions.
+    var halfWidth = size.width * 0.5;
+    var halfHeight = size.height * 0.5;
+
+    var vertexPositions = [
+        new Vector3D(p.x+halfWidth, p.y-halfHeight, p.z),
+        new Vector3D(p.x+halfWidth, p.y+halfHeight, p.z),
+        new Vector3D(p.x-halfWidth, p.y-halfHeight, p.z),
+        new Vector3D(p.x-halfWidth, p.y+halfHeight, p.z) 
+    ];
+
+    var vertexPositions2 = new Float32Array (
+        Sprite.POSITION_SIZE * Sprite.VERTEX_COUNT
+    );
+
+    var array;
+    for (var i=0; i<Sprite.VERTEX_COUNT; i++) {
+        //
+        var item = vertexPositions[i];
+
+        var p = ScreenCoordinateHelper.toClipSpace (
+            renderer.canvas,
+            item
+        );
+
+        array = p.toArray();
+        for (var j=0; j<Sprite.POSITION_SIZE; j++) {
+            vertexPositions2[Sprite.POSITION_SIZE*i + j] = array[j];
+        }
+    }
+
+    // 2. Colors.
+    var vertexColors = new Float32Array (
+        Sprite.COLOR_SIZE * Sprite.VERTEX_COUNT
+    );
+
+    array = color.toArray();
+    for (var i=0; i<Sprite.VERTEX_COUNT; i++) {
+        //
+        for (var j=0; j<Sprite.COLOR_SIZE; j++) {
+            //
+            vertexColors[Sprite.COLOR_SIZE*i + j] = array[j];
+        }
+    }
+
+    // 3. Texture coordinates.
+    var vertexTextureCoordinates = new Float32Array ([
+        rect.right, rect.bottom, // (1.0, 0.0), for instance.
+        rect.right, rect.top,    // (1.0, 1.0),
+        rect.left,  rect.bottom, // (0.0, 0.0),
+        rect.left,  rect.top     // (0.0, 1.0)
+    ]);
+
+    return {
+        positions: vertexPositions2,
+        colors: vertexColors,
+        textureCoordinates: vertexTextureCoordinates
+    };
+};
+
 Object.freeze(SpriteBatch);
 
 //
@@ -2941,7 +3008,7 @@ function Sprite (
 
     this.texture = _texture;
 
-    var vertices = SpriteBatch.createSpriteVertices (
+    var vertices = SpriteBatch.createSpriteVertices2 (
         _spriteBatch.renderer,
         _centerScreenPosition, _screenSize,
         _vertexColor,
@@ -2956,6 +3023,7 @@ function Sprite (
 //
 // Static constants (after Object.freeze()).
 //
+Sprite.VERTEX_COUNT            = 4;
 Sprite.POSITION_SIZE           = 4; // (x, y, z, w)
 Sprite.COLOR_SIZE              = 4; // (r, g, b, a)
 Sprite.TEXTURE_COORDINATE_SIZE = 2; // (s, t)
@@ -3249,6 +3317,23 @@ VertexBuffer.prototype = {
         gl.bufferData (
             gl.ARRAY_BUFFER,
             new Float32Array(items),
+            gl.STATIC_DRAW
+        );
+    },
+
+    setItems2: function(items, size) {
+        //
+        var gl = this.bufferLoader.loader.renderer.gl;
+        this.size = size;
+
+        gl.bindBuffer (
+            gl.ARRAY_BUFFER,
+            this.webGLBuffer
+        );
+        
+        gl.bufferData (
+            gl.ARRAY_BUFFER,
+            items,
             gl.STATIC_DRAW
         );
     }
