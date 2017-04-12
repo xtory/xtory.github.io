@@ -24,6 +24,7 @@ export { Size2D }                                     from './graphics/2d-size';
 export { Size3D }                                     from './graphics/3d-size';
 export { Sprite }                                     from './graphics/sprite';
 export { SpriteBatch }                                from './graphics/sprite-batch';
+export { SpriteCreationOptions }                      from './graphics/sprite-creation-options';
 export { Texture2D }                                  from './graphics/2d-texture';
 export { TextureCoordinateHelper }                    from './graphics/helpers/texture-coordinate-helper';
 export { TransformedPositionColor }                   from './graphics/shaders/transformed-position-color';

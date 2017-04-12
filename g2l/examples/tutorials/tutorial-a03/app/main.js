@@ -33,7 +33,7 @@ function main() {
         
         transform = g2l.Matrix4x4.createIdentityMatrix();
             
-        renderer.run(undefined, drawScene);
+        renderer.run(updateScene, drawScene);
 
     } catch (e) {
         //
@@ -150,6 +150,11 @@ function main() {
             gl.SRC_ALPHA,
             gl.ONE_MINUS_SRC_ALPHA
         );
+    }
+
+    function updateScene() {
+        //
+        // No contents.
     }
 
     function drawScene() {

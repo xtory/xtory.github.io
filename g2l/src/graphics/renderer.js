@@ -292,7 +292,7 @@ function Renderer(_settings) {
     //
     // Privileged methods.
     //
-    this.run = function(update, draw) {
+    this.run = function(updateScene, drawScene) {
         //
         render();
 
@@ -300,12 +300,12 @@ function Renderer(_settings) {
             //
             requestAnimationFrame(render);
 
-            if (update !== undefined) {
-                update();
+            if (updateScene !== undefined) {
+                updateScene();
             }
 
-            if (draw !== undefined) {
-                draw();
+            if (drawScene !== undefined) {
+                drawScene();
             }
         }
     };
@@ -339,7 +339,6 @@ function Renderer(_settings) {
 
         // Note:
         // There's no _clearOptions.
-
         if (clearOptions === undefined) {
             clearOptions = Renderer.DEFAULT_CLEAR_OPTIONS;
         }

@@ -12,7 +12,7 @@ Sprite.VERTEX_SHADER_SOURCE = [
     //
    'precision highp float;', // which is the default vertex shader precision.
 
-   'attribute vec3 vertexScreenPosition;',
+   'attribute vec3 vertexPosition;',
    'attribute vec4 vertexColor;',
    'attribute vec2 vertexTextureCoordinates;',
 
@@ -26,9 +26,9 @@ Sprite.VERTEX_SHADER_SOURCE = [
         // Converts the vertex position from screen space to clip space (not NDC
         // yet).
        'gl_Position = vec4 (',
-           '-1.0 + 2.0 * (vertexScreenPosition.x / canvasClientSize.x),',
-           '-1.0 + 2.0 * (vertexScreenPosition.y / canvasClientSize.y),',
-           'vertexScreenPosition.z,',
+           '-1.0 + 2.0 * (vertexPosition.x / canvasClientSize.x),',
+           '-1.0 + 2.0 * (vertexPosition.y / canvasClientSize.y),',
+           'vertexPosition.z,',
            '1.0',
        ');',
 

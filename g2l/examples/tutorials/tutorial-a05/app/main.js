@@ -23,7 +23,7 @@ function main() {
 
         setUpShaders();
 
-        renderer.run(undefined, drawScene);
+        renderer.run(updateScene, drawScene);
 
     } catch (e) {
         //
@@ -75,6 +75,11 @@ function main() {
                'sampler'
             )
         };
+    }
+
+    function updateScene() {
+        //
+        // No contents.
     }
 
     function drawScene() {

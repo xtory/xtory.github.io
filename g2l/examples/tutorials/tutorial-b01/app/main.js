@@ -36,7 +36,7 @@ function main() {
 
         transform = g2l.Matrix4x4.createIdentityMatrix();
 
-        renderer.run(undefined, drawScene);
+        renderer.run(updateScene, drawScene);
 
     } catch (e) {
         //
@@ -214,7 +214,7 @@ function main() {
         //
         indexBuffer = loader.createIndexBuffer();
 
-        var vertexIndices = [
+        var vertexIndices = new Uint16Array ([
             //
             // Front face.
             0,  1,  2,
@@ -239,7 +239,7 @@ function main() {
             // Left face.
             20, 21, 22,
             20, 22, 23
-        ]
+        ]);
         
         indexBuffer.setItems(vertexIndices);
     }
@@ -313,6 +313,11 @@ function main() {
         );
 
         sineEase2.start();
+    }
+
+    function updateScene() {
+        //
+        // No contents.
     }
 
     function drawScene() {

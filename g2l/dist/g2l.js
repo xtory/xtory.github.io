@@ -2247,7 +2247,6 @@ function Renderer(_settings) {
 
         // Note:
         // There's no _clearOptions.
-
         if (clearOptions === undefined) {
             clearOptions = Renderer.DEFAULT_CLEAR_OPTIONS;
         }
@@ -2910,6 +2909,22 @@ Object.freeze(Size3D);
 //
 // Constructor.
 //
+function SpriteCreationOptions() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+SpriteCreationOptions.VERTEX_POSITIONS           = 0x00000001;
+SpriteCreationOptions.VERTEX_COLORS              = 0x00000002;
+SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES = 0x00000004;
+
+Object.freeze(SpriteCreationOptions);
+
+//
+// Constructor.
+//
 function SpriteBatch(_renderer) {
     //
     var _self;
@@ -2935,75 +2950,28 @@ function SpriteBatch(_renderer) {
     });
 }
 
-SpriteBatch.prototype = {
-    //
-    // No contents.
-};
-
 //
 // Static methods.
 //
-// SpriteBatch.createSpriteVertices = function (
-//     renderer,
-//     p,        // centerScreenPosition,
-//     size,     // screenSize,
-//     color,    // vertexColor,
-//     rect      // sourceTextureCoordinateRect
-// ){
-//     // 1. Positions.
-//     var halfWidth = size.width * 0.5;
-//     var halfHeight = size.height * 0.5;
-
-//     var vertexPositions = [
-//         new Vector3D(p.x+halfWidth, p.y-halfHeight, p.z),
-//         new Vector3D(p.x+halfWidth, p.y+halfHeight, p.z),
-//         new Vector3D(p.x-halfWidth, p.y-halfHeight, p.z),
-//         new Vector3D(p.x-halfWidth, p.y+halfHeight, p.z) 
-//     ];
-
-//     var vertexPositions2 = [];
-//     for (var i=0; i<vertexPositions.length; i++) {
-//         //
-//         var item = vertexPositions[i];
-
-//         var p = ScreenCoordinateHelper.toClipSpace (
-//             renderer.canvas,
-//             item
-//         );
-
-//         vertexPositions2 = vertexPositions2.concat(p.toArray());
-//     }
-
-//     // 2. Colors.
-//     var vertexColors = [];
-
-//     for (var i=0; i<4; i++) {
-//         vertexColors = vertexColors.concat(color.toArray());
-//     }
-
-//     // 3. Texture coordinates.
-//     var vertexTextureCoordinates = [
-//         rect.right, rect.bottom, // (1.0, 0.0), for instance.
-//         rect.right, rect.top,    // (1.0, 1.0),
-//         rect.left,  rect.bottom, // (0.0, 0.0),
-//         rect.left,  rect.top     // (0.0, 1.0)
-//     ];
-
-//     return {
-//         positions: vertexPositions2,
-//         colors: vertexColors,
-//         textureCoordinates: vertexTextureCoordinates
-//     };
-// }
-
+// 
 SpriteBatch.createSpriteVertices = function (
     renderer, // renderer.
+    options,  // spriteCreationOptions,
     p,        // centerScreenPosition,
     size,     // screenSize,
     color,    // vertexColor,
     rect      // sourceTextureCoordinateRect
 ){
+    if (options === undefined) {
+        options = Sprite.DEFAULT_CREATION_OPTIONS;
+    }
+
     // 1. Positions.
+    if ((options & SpriteCreationOptions.VERTEX_POSITIONS) !==
+        SpriteCreationOptions.VERTEX_POSITIONS) {
+        throw 'A sprite-creation exception raised.';
+    }
+
     var halfWidth = size.width * 0.5;
     var halfHeight = size.height * 0.5;
 
@@ -3015,26 +2983,38 @@ SpriteBatch.createSpriteVertices = function (
     ]);
 
     // 2. Colors.
-    var vertexColors = new Float32Array (
-        Sprite.COLOR_SIZE * Sprite.VERTEX_COUNT
-    );
-
-    var array = color.toArray();
-    for (var i=0; i<Sprite.VERTEX_COUNT; i++) {
+    var vertexColors = null;
+    
+    if ((options & SpriteCreationOptions.VERTEX_COLORS) ===
+        SpriteCreationOptions.VERTEX_COLORS) {
         //
-        for (var j=0; j<Sprite.COLOR_SIZE; j++) {
+        vertexColors = new Float32Array (
+            Sprite.COLOR_SIZE * Sprite.VERTEX_COUNT
+        );
+
+        var array = color.toArray();
+        for (var i=0; i<Sprite.VERTEX_COUNT; i++) {
             //
-            vertexColors[Sprite.COLOR_SIZE*i + j] = array[j];
+            for (var j=0; j<Sprite.COLOR_SIZE; j++) {
+                //
+                vertexColors[Sprite.COLOR_SIZE*i + j] = array[j];
+            }
         }
     }
 
     // 3. Texture coordinates.
-    var vertexTextureCoordinates = new Float32Array ([
-        rect.right, rect.bottom, // (1.0, 0.0), for instance.
-        rect.right, rect.top,    // (1.0, 1.0),
-        rect.left,  rect.bottom, // (0.0, 0.0),
-        rect.left,  rect.top     // (0.0, 1.0)
-    ]);
+    var vertexTextureCoordinates = null;
+
+    if ((options & SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES) ===
+        SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES) {
+        //
+        var vertexTextureCoordinates = new Float32Array ([
+            rect.right, rect.bottom, // (1.0, 0.0), for instance.
+            rect.right, rect.top,    // (1.0, 1.0),
+            rect.left,  rect.bottom, // (0.0, 0.0),
+            rect.left,  rect.top     // (0.0, 1.0)
+        ]);
+    }
 
     return {
         positions: vertexPositions,
@@ -3051,6 +3031,7 @@ Object.freeze(SpriteBatch);
 function Sprite (
     _spriteBatch,
     _texture,
+    _creationOptions,
     _centerScreenPosition,
     _screenSize,
     _vertexColor,
@@ -3068,6 +3049,7 @@ function Sprite (
 
     var vertices = SpriteBatch.createSpriteVertices (
         _spriteBatch.renderer,
+        _creationOptions,
         _centerScreenPosition,
         _screenSize,
         _vertexColor,
@@ -3083,10 +3065,31 @@ function Sprite (
 // Static constants (after Object.freeze()).
 //
 Sprite.VERTEX_COUNT            = 4;
-Sprite.POSITION_SIZE           = 4; // (x, y, z, w)
-Sprite.POSITION_SIZE2          = 3; // (x, y, z)
+Sprite.POSITION_SIZE           = 3; // (x, y, z)
 Sprite.COLOR_SIZE              = 4; // (r, g, b, a)
 Sprite.TEXTURE_COORDINATE_SIZE = 2; // (s, t)
+
+Sprite.DEFAULT_CREATION_OPTIONS = (
+    SpriteCreationOptions.VERTEX_POSITIONS |
+    SpriteCreationOptions.VERTEX_COLORS |
+    SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES
+);
+
+Sprite.DEFAULT_VERTEX_COLORS = new Float32Array (
+    [].concat (
+        Colors.WHITE.toArray(),
+        Colors.WHITE.toArray(),
+        Colors.WHITE.toArray(),
+        Colors.WHITE.toArray()
+    )
+);
+
+Sprite.DEFAULT_VERTEX_TEXTURE_COORDINATES = new Float32Array ([
+    1.0, 0.0, // lower-right.
+    1.0, 1.0, // upper-right.
+    0.0, 0.0, // lower-left.
+    0.0, 1.0  // upper-left.
+]);
 
 Object.freeze(Sprite);
 
@@ -4319,6 +4322,7 @@ exports.Size2D = Size2D;
 exports.Size3D = Size3D;
 exports.Sprite = Sprite;
 exports.SpriteBatch = SpriteBatch;
+exports.SpriteCreationOptions = SpriteCreationOptions;
 exports.Texture2D = Texture2D;
 exports.TextureCoordinateHelper = TextureCoordinateHelper;
 exports.TransformedPositionColor = TransformedPositionColor;

@@ -66,11 +66,11 @@ function main() {
 
     function setUpSprites() {
         //
-        spriteCount = 1000;
+        spriteCount = 2000;
         spritePositionOffsets = [];
 
-        var width = 1000;
-        var height = 1000;
+        var width = 1500;
+        var height = 1500;
 
         for (var i=0; i<spriteCount; i++) {
             //
@@ -80,19 +80,27 @@ function main() {
             ));
         }
 
-        vertexBuffers = [];
+        vertexBuffers = {
+            position: [],
+            color: loader.createVertexBuffer(),
+            textureCoordinates: loader.createVertexBuffer()
+        }
         
         for (var i=0; i<spriteCount; i++) {
             //
-            vertexBuffers.push ({
-                screenPosition: loader.createVertexBuffer(),
-                color: loader.createVertexBuffer(),
-                textureCoordinates: loader.createVertexBuffer()
-            });
+            vertexBuffers.position.push(loader.createVertexBuffer());
         }
 
-        flush();
-    }
+        vertexBuffers.color.setItems (
+            g2l.Sprite.DEFAULT_VERTEX_COLORS,
+            g2l.Sprite.COLOR_SIZE
+        );
+
+        vertexBuffers.textureCoordinates.setItems (
+            g2l.Sprite.DEFAULT_VERTEX_TEXTURE_COORDINATES,
+            g2l.Sprite.TEXTURE_COORDINATE_SIZE
+        );
+    }    
     
     function setUpShaders() {
         //
@@ -103,9 +111,9 @@ function main() {
 
         attributeLocations = {
             //
-            vertexScreenPosition: renderer.getAttributeLocation (
+            vertexPosition: renderer.getAttributeLocation (
                 program,
-               'vertexScreenPosition'
+               'vertexPosition'
             ),
 
             vertexColor: renderer.getAttributeLocation (
@@ -164,7 +172,7 @@ function main() {
         //
         renderer.clear();
 
-        //flush();
+        flush();
 
         renderer.program = program;
 
@@ -180,24 +188,34 @@ function main() {
 
         var lastTexture = null;
 
+        renderer.setAttribute (
+            attributeLocations.vertexColor,
+            vertexBuffers.color
+        );
+
+        renderer.setAttribute (
+            attributeLocations.vertexTextureCoordinates,
+            vertexBuffers.textureCoordinates
+        );
+        
         for (var i=0; i<spriteCount; i++) {
             //
-            var item = vertexBuffers[i];
+            var item = vertexBuffers.position[i];
 
             renderer.setAttribute (
-                attributeLocations.vertexScreenPosition,
-                item.screenPosition
+                attributeLocations.vertexPosition,
+                item
             );
 
-            renderer.setAttribute (
-                attributeLocations.vertexColor,
-                item.color
-            );
+            // renderer.setAttribute (
+            //     attributeLocations.vertexColor,
+            //     item.color
+            // );
 
-            renderer.setAttribute (
-                attributeLocations.vertexTextureCoordinates,
-                item.textureCoordinates
-            );
+            // renderer.setAttribute (
+            //     attributeLocations.vertexTextureCoordinates,
+            //     item.textureCoordinates
+            // );
 
             if (lastTexture !== texture) {
                 //
@@ -241,26 +259,17 @@ function main() {
             var sprite = new g2l.Sprite (
                 spriteBatch,
                 texture,
+                g2l.SpriteCreationOptions.VERTEX_POSITIONS,
                 item2,
                 spriteScreenSize
             )
 
-            var item2 = vertexBuffers[i];
+            var vb = vertexBuffers.position[i];
 
-            item2.screenPosition.setItems (
+            vb.setItems (
                 sprite.vertexPositions,
-                g2l.Sprite.POSITION_SIZE2
+                g2l.Sprite.POSITION_SIZE
             );
-
-            item2.color.setItems (
-                sprite.vertexColors,
-                g2l.Sprite.COLOR_SIZE
-            );
-
-            item2.textureCoordinates.setItems (
-                sprite.vertexTextureCoordinates,
-                g2l.Sprite.TEXTURE_COORDINATE_SIZE
-            );            
         }
     }
 
@@ -289,6 +298,6 @@ function main() {
     // Event handlers.
     //
     function onResize(event) {
-        flush();
+        //flush();
     }
 }

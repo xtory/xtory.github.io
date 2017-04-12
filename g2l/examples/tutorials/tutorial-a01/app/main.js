@@ -34,7 +34,7 @@ function main() {
         sineEase = new g2l.SineEase(g2l.EaseMode.EASE_IN_OUT, 1000, true);
         sineEase.start();
         
-        renderer.run(undefined, drawScene);
+        renderer.run(updateScene, drawScene);
 
     } catch (e) {
         //
@@ -123,6 +123,11 @@ function main() {
         var gl = renderer.gl;
         
         gl.disable(gl.CULL_FACE);
+    }
+
+    function updateScene() {
+        //
+        // No contents.
     }
 
     function drawScene() {
