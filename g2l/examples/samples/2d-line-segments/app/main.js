@@ -238,7 +238,7 @@ function main() {
 
         var vertexPositions3 = new Float32Array(vertexPositions2);
 
-        vertexBuffers.position.setItems(vertexPositions3, 4);
+        vertexBuffers.position.setData(vertexPositions3, 4);
 
         //
         // Vertex colors.
@@ -254,7 +254,7 @@ function main() {
 
         var vertexColors2 = new Float32Array(vertexColors);
 
-        vertexBuffers.color.setItems(vertexColors2, 4);
+        vertexBuffers.color.setData(vertexColors2, 4);
     }
 
     function drawInfo() {

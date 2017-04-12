@@ -37,11 +37,9 @@ IndexBuffer.prototype = {
     //
     // Public methods.
     //
-    setItems: function(items) {
+    setData: function(data) {
         //
         var gl = this.bufferLoader.loader.renderer.gl;
-
-        //_itemCount = items.length;
 
         gl.bindBuffer (
             gl.ELEMENT_ARRAY_BUFFER,
@@ -56,7 +54,7 @@ IndexBuffer.prototype = {
             //
             gl.bufferData (
                 gl.ELEMENT_ARRAY_BUFFER,
-                new Uint16Array(items),
+                new Uint16Array(data),
                 gl.STATIC_DRAW
             );
 
@@ -64,68 +62,20 @@ IndexBuffer.prototype = {
             //
             gl.bufferData (
                 gl.ELEMENT_ARRAY_BUFFER,
-                new Uint32Array(items),
+                new Uint32Array(data),
                 gl.STATIC_DRAW
             );
         }
         */
 
-        // gl.bufferData (
-        //     gl.ELEMENT_ARRAY_BUFFER,
-        //     new Uint16Array(items),
-        //     gl.STATIC_DRAW
-        // );
-
         gl.bufferData (
             gl.ELEMENT_ARRAY_BUFFER,
-            items, // which is a Uint16Array.
+            data, // which is already a Uint16Array.
             gl.STATIC_DRAW
         );
         // :Note
     }
 };
-
-Object.defineProperty(IndexBuffer.prototype, 'items', {
-    //
-    'set': function(value) {
-        //
-        var gl = this.loader.renderer.gl;
-
-        gl.bindBuffer (
-            gl.ELEMENT_ARRAY_BUFFER,
-            buffer.webGLBuffer
-        );
-
-        // Note:
-        // DirectX supports 16-bit or 32-bit index buffers. But in this engine,
-        // so far, only 16-bit index buffer is supported.
-        /*
-        if (uses16Bits === true) {
-            //
-            gl.bufferData (
-                gl.ELEMENT_ARRAY_BUFFER,
-                new Uint16Array(items),
-                gl.STATIC_DRAW
-            );
-
-        } else {
-            //
-            gl.bufferData (
-                gl.ELEMENT_ARRAY_BUFFER,
-                new Uint32Array(items),
-                gl.STATIC_DRAW
-            );
-        }
-        */
-
-        gl.bufferData (
-            gl.ELEMENT_ARRAY_BUFFER,
-            new Uint16Array(items),
-            gl.STATIC_DRAW
-        );
-        // :Note
-    }
-});
 
 Object.freeze(IndexBuffer);
 

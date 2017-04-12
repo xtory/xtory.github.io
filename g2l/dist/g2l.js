@@ -2200,7 +2200,7 @@ function Renderer(_settings) {
     //
     // Privileged methods.
     //
-    this.run = function(update, draw) {
+    this.run = function(updateScene, drawScene) {
         //
         render();
 
@@ -2208,12 +2208,12 @@ function Renderer(_settings) {
             //
             requestAnimationFrame(render);
 
-            if (update !== undefined) {
-                update();
+            if (updateScene !== undefined) {
+                updateScene();
             }
 
-            if (draw !== undefined) {
-                draw();
+            if (drawScene !== undefined) {
+                drawScene();
             }
         }
     };
@@ -2428,11 +2428,9 @@ IndexBuffer.prototype = {
     //
     // Public methods.
     //
-    setItems: function(items) {
+    setData: function(data) {
         //
         var gl = this.bufferLoader.loader.renderer.gl;
-
-        //_itemCount = items.length;
 
         gl.bindBuffer (
             gl.ELEMENT_ARRAY_BUFFER,
@@ -2447,7 +2445,7 @@ IndexBuffer.prototype = {
             //
             gl.bufferData (
                 gl.ELEMENT_ARRAY_BUFFER,
-                new Uint16Array(items),
+                new Uint16Array(data),
                 gl.STATIC_DRAW
             );
 
@@ -2455,68 +2453,20 @@ IndexBuffer.prototype = {
             //
             gl.bufferData (
                 gl.ELEMENT_ARRAY_BUFFER,
-                new Uint32Array(items),
+                new Uint32Array(data),
                 gl.STATIC_DRAW
             );
         }
         */
 
-        // gl.bufferData (
-        //     gl.ELEMENT_ARRAY_BUFFER,
-        //     new Uint16Array(items),
-        //     gl.STATIC_DRAW
-        // );
-
         gl.bufferData (
             gl.ELEMENT_ARRAY_BUFFER,
-            items, // which is a Uint16Array.
+            data, // which is already a Uint16Array.
             gl.STATIC_DRAW
         );
         // :Note
     }
 };
-
-Object.defineProperty(IndexBuffer.prototype, 'items', {
-    //
-    'set': function(value) {
-        //
-        var gl = this.loader.renderer.gl;
-
-        gl.bindBuffer (
-            gl.ELEMENT_ARRAY_BUFFER,
-            buffer.webGLBuffer
-        );
-
-        // Note:
-        // DirectX supports 16-bit or 32-bit index buffers. But in this engine,
-        // so far, only 16-bit index buffer is supported.
-        /*
-        if (uses16Bits === true) {
-            //
-            gl.bufferData (
-                gl.ELEMENT_ARRAY_BUFFER,
-                new Uint16Array(items),
-                gl.STATIC_DRAW
-            );
-
-        } else {
-            //
-            gl.bufferData (
-                gl.ELEMENT_ARRAY_BUFFER,
-                new Uint32Array(items),
-                gl.STATIC_DRAW
-            );
-        }
-        */
-
-        gl.bufferData (
-            gl.ELEMENT_ARRAY_BUFFER,
-            new Uint16Array(items),
-            gl.STATIC_DRAW
-        );
-        // :Note
-    }
-});
 
 Object.freeze(IndexBuffer);
 
@@ -2925,6 +2875,140 @@ Object.freeze(SpriteCreationOptions);
 //
 // Constructor.
 //
+function Sprite (
+    _spriteBatch,
+    _texture,
+    _creationOptions,
+    _centerScreenPosition,
+    _screenSize,
+    _vertexColor,
+    _sourceTextureCoordinateRect
+){
+    if (_creationOptions === undefined) {
+        _creationOptions = Sprite.DEFAULT_CREATION_OPTIONS;
+    }
+
+    if (_vertexColor === undefined) {
+        _vertexColor = Sprite.DEFAULT_VERTEX_COLOR;
+    }
+
+    if (_sourceTextureCoordinateRect === undefined) {
+        //
+        _sourceTextureCoordinateRect =
+            Sprite.DEFAULT_SOURCE_TEXTURE_COORDINATE_RECT;
+    }
+
+    this.texture = _texture;
+
+    // 1. Vertex positions.
+    if ((_creationOptions & SpriteCreationOptions.VERTEX_POSITIONS) !==
+        SpriteCreationOptions.VERTEX_POSITIONS) {
+        throw 'A sprite-creation exception raised.';
+    }
+
+    this.vertexPositions = Sprite.createVertexPositions (
+        _centerScreenPosition,
+        _screenSize
+    );
+    
+    // 2. Vertex colors.
+    this.vertexColors = (
+        // Part 1.
+        ((_creationOptions & SpriteCreationOptions.VERTEX_COLORS) ===
+        SpriteCreationOptions.VERTEX_COLORS) ?
+        // Part 2.
+        Sprite.createVertexColors(_vertexColor) :
+        // Part 3.
+        null
+    );
+
+    // 3. Vertex texture coordinates.
+    this.vertexTextureCoordinates = (
+        // Part 1.
+        ((_creationOptions & SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES) ===
+        SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES) ?
+        // Part 2.
+        Sprite.createVertexTextureCoordinates(_sourceTextureCoordinateRect) :
+        // Part 3.
+        null
+    );
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+Sprite.VERTEX_COUNT            = 4;
+Sprite.POSITION_SIZE           = 3; // (x, y, z)
+Sprite.COLOR_SIZE              = 4; // (r, g, b, a)
+Sprite.TEXTURE_COORDINATE_SIZE = 2; // (s, t)
+
+Sprite.DEFAULT_CREATION_OPTIONS = (
+    SpriteCreationOptions.VERTEX_POSITIONS |
+    SpriteCreationOptions.VERTEX_COLORS |
+    SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES
+);
+
+Sprite.DEFAULT_VERTEX_COLOR = Colors.WHITE;
+
+Sprite.DEFAULT_SOURCE_TEXTURE_COORDINATE_RECT = new Rect(0, 0, 1, 1);
+
+Sprite.DEFAULT_VERTEX_COLORS = new Float32Array (
+    [].concat (
+        Sprite.DEFAULT_VERTEX_COLOR.toArray(),
+        Sprite.DEFAULT_VERTEX_COLOR.toArray(),
+        Sprite.DEFAULT_VERTEX_COLOR.toArray(),
+        Sprite.DEFAULT_VERTEX_COLOR.toArray()
+    )
+);
+
+Sprite.DEFAULT_VERTEX_TEXTURE_COORDINATES = new Float32Array ([
+    1.0, 0.0, // lower-right.
+    1.0, 1.0, // upper-right.
+    0.0, 0.0, // lower-left.
+    0.0, 1.0  // upper-left.
+]);
+
+//
+// Static methods.
+// 
+Sprite.createVertexPositions = function(p, size) {
+    //
+    var halfWidth = size.width * 0.5;
+    var halfHeight = size.height * 0.5;
+
+    return new Float32Array ([
+        p.x+halfWidth, p.y-halfHeight, p.z,
+        p.x+halfWidth, p.y+halfHeight, p.z,
+        p.x-halfWidth, p.y-halfHeight, p.z,
+        p.x-halfWidth, p.y+halfHeight, p.z 
+    ]);
+};
+
+Sprite.createVertexColors = function(color) {
+    //
+    return new Float32Array ([
+        color.r, color.g, color.b, color.a,
+        color.r, color.g, color.b, color.a,
+        color.r, color.g, color.b, color.a,
+        color.r, color.g, color.b, color.a
+    ]);
+};
+
+Sprite.createVertexTextureCoordinates = function(rect) {
+    //
+    return new Float32Array ([
+        rect.right, rect.bottom, // lower-right.
+        rect.right, rect.top,    // upper-right.
+        rect.left,  rect.bottom, // lower-left.
+        rect.left,  rect.top     // upper-left.
+    ]);
+};
+
+Object.freeze(Sprite);
+
+//
+// Constructor.
+//
 function SpriteBatch(_renderer) {
     //
     var _self;
@@ -2948,150 +3032,24 @@ function SpriteBatch(_renderer) {
     Object.defineProperty(_self, 'renderer', {
         'get': function() { return _renderer; }
     });
-}
 
-//
-// Static methods.
-//
-// 
-SpriteBatch.createSpriteVertices = function (
-    renderer, // renderer.
-    options,  // spriteCreationOptions,
-    p,        // centerScreenPosition,
-    size,     // screenSize,
-    color,    // vertexColor,
-    rect      // sourceTextureCoordinateRect
-){
-    if (options === undefined) {
-        options = Sprite.DEFAULT_CREATION_OPTIONS;
-    }
+    //
+    // Private methods.
+    //
+    this.begin = function() {
 
-    // 1. Positions.
-    if ((options & SpriteCreationOptions.VERTEX_POSITIONS) !==
-        SpriteCreationOptions.VERTEX_POSITIONS) {
-        throw 'A sprite-creation exception raised.';
-    }
-
-    var halfWidth = size.width * 0.5;
-    var halfHeight = size.height * 0.5;
-
-    var vertexPositions = new Float32Array ([
-        p.x+halfWidth, p.y-halfHeight, p.z,
-        p.x+halfWidth, p.y+halfHeight, p.z,
-        p.x-halfWidth, p.y-halfHeight, p.z,
-        p.x-halfWidth, p.y+halfHeight, p.z 
-    ]);
-
-    // 2. Colors.
-    var vertexColors = null;
-    
-    if ((options & SpriteCreationOptions.VERTEX_COLORS) ===
-        SpriteCreationOptions.VERTEX_COLORS) {
-        //
-        vertexColors = new Float32Array (
-            Sprite.COLOR_SIZE * Sprite.VERTEX_COUNT
-        );
-
-        var array = color.toArray();
-        for (var i=0; i<Sprite.VERTEX_COUNT; i++) {
-            //
-            for (var j=0; j<Sprite.COLOR_SIZE; j++) {
-                //
-                vertexColors[Sprite.COLOR_SIZE*i + j] = array[j];
-            }
-        }
-    }
-
-    // 3. Texture coordinates.
-    var vertexTextureCoordinates = null;
-
-    if ((options & SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES) ===
-        SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES) {
-        //
-        var vertexTextureCoordinates = new Float32Array ([
-            rect.right, rect.bottom, // (1.0, 0.0), for instance.
-            rect.right, rect.top,    // (1.0, 1.0),
-            rect.left,  rect.bottom, // (0.0, 0.0),
-            rect.left,  rect.top     // (0.0, 1.0)
-        ]);
-    }
-
-    return {
-        positions: vertexPositions,
-        colors: vertexColors,
-        textureCoordinates: vertexTextureCoordinates
     };
-};
+
+    this.drawSprite = function() {
+
+    };
+
+    this.end = function() {
+
+    };
+}
 
 Object.freeze(SpriteBatch);
-
-//
-// Constructor.
-//
-function Sprite (
-    _spriteBatch,
-    _texture,
-    _creationOptions,
-    _centerScreenPosition,
-    _screenSize,
-    _vertexColor,
-    _sourceTextureCoordinateRect
-){
-    if (_vertexColor === undefined) {
-        _vertexColor = Colors.WHITE;
-    }
-
-    if (_sourceTextureCoordinateRect === undefined) {
-        _sourceTextureCoordinateRect = new Rect(0, 0, 1, 1);
-    }
-
-    this.texture = _texture;
-
-    var vertices = SpriteBatch.createSpriteVertices (
-        _spriteBatch.renderer,
-        _creationOptions,
-        _centerScreenPosition,
-        _screenSize,
-        _vertexColor,
-        _sourceTextureCoordinateRect
-    );
-
-    this.vertexPositions = vertices.positions;
-    this.vertexColors = vertices.colors;
-    this.vertexTextureCoordinates = vertices.textureCoordinates;
-}
-
-//
-// Static constants (after Object.freeze()).
-//
-Sprite.VERTEX_COUNT            = 4;
-Sprite.POSITION_SIZE           = 3; // (x, y, z)
-Sprite.COLOR_SIZE              = 4; // (r, g, b, a)
-Sprite.TEXTURE_COORDINATE_SIZE = 2; // (s, t)
-
-Sprite.DEFAULT_CREATION_OPTIONS = (
-    SpriteCreationOptions.VERTEX_POSITIONS |
-    SpriteCreationOptions.VERTEX_COLORS |
-    SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES
-);
-
-Sprite.DEFAULT_VERTEX_COLORS = new Float32Array (
-    [].concat (
-        Colors.WHITE.toArray(),
-        Colors.WHITE.toArray(),
-        Colors.WHITE.toArray(),
-        Colors.WHITE.toArray()
-    )
-);
-
-Sprite.DEFAULT_VERTEX_TEXTURE_COORDINATES = new Float32Array ([
-    1.0, 0.0, // lower-right.
-    1.0, 1.0, // upper-right.
-    0.0, 0.0, // lower-left.
-    0.0, 1.0  // upper-left.
-]);
-
-Object.freeze(Sprite);
 
 //
 // Constructor.
@@ -3366,7 +3324,7 @@ VertexBuffer.prototype = {
     //
     // Public methods.
     //
-    setItems: function(items, size) {
+    setData: function(data, size) {
         //
         var gl = this.bufferLoader.loader.renderer.gl;
         this.size = size;
@@ -3378,7 +3336,7 @@ VertexBuffer.prototype = {
         
         gl.bufferData (
             gl.ARRAY_BUFFER,
-            items,
+            data, // which is already a Float32Array.
             gl.STATIC_DRAW
         );
     }

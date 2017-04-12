@@ -130,7 +130,7 @@ function main() {
            -50, -50, -50
         ]);
 
-        vertexBuffers.position.setItems(vertexPositions, 3);
+        vertexBuffers.position.setData(vertexPositions, 3);
 
         //
         // Vertex colors.
@@ -159,7 +159,7 @@ function main() {
 
         var vertexColors2 = new Float32Array(vertexColors);
 
-        vertexBuffers.color.setItems(vertexColors2, 4);
+        vertexBuffers.color.setData(vertexColors2, 4);
 
         //
         // Vertex indices.
@@ -193,7 +193,7 @@ function main() {
             20, 22, 23
         ]);
 
-        indexBuffer.setItems(vertexIndices);
+        indexBuffer.setData(vertexIndices);
     }
 
     function setUpShaders() {

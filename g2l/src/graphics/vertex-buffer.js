@@ -43,7 +43,7 @@ VertexBuffer.prototype = {
     //
     // Public methods.
     //
-    setItems: function(items, size) {
+    setData: function(data, size) {
         //
         var gl = this.bufferLoader.loader.renderer.gl;
         this.size = size;
@@ -55,7 +55,7 @@ VertexBuffer.prototype = {
         
         gl.bufferData (
             gl.ARRAY_BUFFER,
-            items,
+            data, // which is already a Float32Array.
             gl.STATIC_DRAW
         );
     }
