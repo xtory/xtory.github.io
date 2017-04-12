@@ -70,9 +70,15 @@ IndexBuffer.prototype = {
         }
         */
 
+        // gl.bufferData (
+        //     gl.ELEMENT_ARRAY_BUFFER,
+        //     new Uint16Array(items),
+        //     gl.STATIC_DRAW
+        // );
+
         gl.bufferData (
             gl.ELEMENT_ARRAY_BUFFER,
-            new Uint16Array(items),
+            items, // which is a Uint16Array.
             gl.STATIC_DRAW
         );
         // :Note

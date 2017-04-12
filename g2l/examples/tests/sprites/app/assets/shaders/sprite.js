@@ -1,35 +1,44 @@
 //
 // Constructor.
 //
-function TransformedPositionColorTextureCoordinates() {
+function Sprite() {
     // No contents.
 }
 
 //
 // Static constants (after Object.freeze()).
 //
-TransformedPositionColorTextureCoordinates.VERTEX_SHADER_SOURCE = [
+Sprite.VERTEX_SHADER_SOURCE = [
     //
    'precision highp float;', // which is the default vertex shader precision.
 
-   'attribute vec4 vertexPosition;',
+   'attribute vec3 vertexScreenPosition;',
    'attribute vec4 vertexColor;',
    'attribute vec2 vertexTextureCoordinates;',
 
    'varying vec4 color;',
    'varying vec2 textureCoordinates;',
 
+   'uniform vec2 canvasClientSize;',
+
    'void main() {',
         //
-       'gl_Position = vertexPosition;',
-       
+        // Converts the vertex position from screen space to clip space (not NDC
+        // yet).
+       'gl_Position = vec4 (',
+           '-1.0 + 2.0 * (vertexScreenPosition.x / canvasClientSize.x),',
+           '-1.0 + 2.0 * (vertexScreenPosition.y / canvasClientSize.y),',
+           'vertexScreenPosition.z,',
+           '1.0',
+       ');',
+
        'color = vertexColor;',
        'textureCoordinates = vertexTextureCoordinates;',
    '}'
 
 ].join('\n');
 
-TransformedPositionColorTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
+Sprite.FRAGMENT_SHADER_SOURCE = [
     //
    'precision mediump float;', // which is the recommended fragment shader precision.
 
@@ -44,6 +53,4 @@ TransformedPositionColorTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
    
 ].join('\n');
 
-Object.freeze(TransformedPositionColorTextureCoordinates);
-
-export { TransformedPositionColorTextureCoordinates };
+Object.freeze(Sprite);

@@ -189,7 +189,7 @@ function Camera (
     this.getProjectionMatrix = function(m) {
         //
         checkProjectionMatrix();
-        m.elements = _projectionMatrix.elements.slice();
+        m.db = _projectionMatrix.db.slice();
     }
 
     this.getTransform = function(m) {
@@ -214,7 +214,7 @@ function Camera (
             );
         }
 
-        m.elements = _transform.elements.slice();
+        m.db = _transform.db.slice();
 
         // Raises the transform-updated event (if necessary).
         if (_hasToRaiseTransformUpdatedEvent === true) {

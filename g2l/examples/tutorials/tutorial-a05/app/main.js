@@ -156,8 +156,10 @@ function main() {
             vertexPositions2 = vertexPositions2.concat(p.toArray());
         }
 
+        var vertexPositions3 = new Float32Array(vertexPositions2);
+
         vertexBuffers.position.setItems (
-            vertexPositions2,
+            vertexPositions3,
             4
         );
 
@@ -173,20 +175,22 @@ function main() {
             );
         }
 
+        var vertexColors2 = new Float32Array(vertexColors);
+
         vertexBuffers.color.setItems (
-            vertexColors,
+            vertexColors2,
             4
         );
 
         //
         // Vertex texture coordinates.
         //
-        var vertexTextureCoordinates = [
+        var vertexTextureCoordinates = new Float32Array ([
             1.0, 0.0,
             1.0, 1.0,
             0.0, 0.0,
             0.0, 1.0
-        ];
+        ]);
 
         vertexBuffers.textureCoordinates.setItems (
             vertexTextureCoordinates,

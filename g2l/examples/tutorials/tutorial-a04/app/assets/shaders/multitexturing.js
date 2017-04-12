@@ -43,7 +43,7 @@ Multitexturing.FRAGMENT_SHADER_SOURCE = [
        'gl_FragColor = (',
            'texture2D(sampler1, textureCoordinates) +',
            'vec4 (',
-               '(1.0 - color.r) * 0.25,',
+               '(1.0 - color.r) * 0.5,',
                '(1.0 - color.g) * 0.5,',
                '(1.0 - color.b) * 0.5,',
                '0',

@@ -91,7 +91,7 @@ function main() {
         //
         // Vertex positions.
         //
-        var vertexPositions = [
+        var vertexPositions = new Float32Array ([
             //
             // Front face.
             50, -50,  50,
@@ -128,7 +128,7 @@ function main() {
            -50,  50,  50,
            -50,  50, -50,
            -50, -50, -50
-        ];
+        ]);
 
         vertexBuffers.position.setItems(vertexPositions, 3);
 
@@ -157,14 +157,16 @@ function main() {
             }
         }
 
-        vertexBuffers.color.setItems(vertexColors, 4);
+        var vertexColors2 = new Float32Array(vertexColors);
+
+        vertexBuffers.color.setItems(vertexColors2, 4);
 
         //
         // Vertex indices.
         //
         indexBuffer = loader.createIndexBuffer();
 
-        var vertexIndices = [
+        var vertexIndices = new Uint16Array ([
             //
             // Front face.
             0,  1,  2,
@@ -189,7 +191,7 @@ function main() {
             // Left face.
             20, 21, 22,
             20, 22, 23
-        ]
+        ]);
 
         indexBuffer.setItems(vertexIndices);
     }
@@ -281,9 +283,9 @@ function main() {
             modelMatrix
         );
 
-        renderer.setUniform (
+        renderer.setMatrix4x4Uniform (
             uniformLocations.transform,
-            transform
+            transform.db
         );
         
         renderer.drawIndexedPrimitives (

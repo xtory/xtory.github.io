@@ -13,6 +13,8 @@ import { DepthBufferValues }       from './depth-buffer-values';
 import { MathHelper }              from '../math/helpers/math-helper';
 import { Matrix4x4 }               from '../math/4x4-matrix';
 import { Vector2D }                from '../math/2d-vector';
+import { Vector3D }                from '../math/3d-vector';
+import { Vector4D }                from '../math/4d-vector';
 
 //
 // Constructor.
@@ -427,23 +429,41 @@ function Renderer(_settings) {
         _gl.activeTexture(_gl.TEXTURE0 + unit);
         _gl.bindTexture(_gl.TEXTURE_2D, texture.webGLTexture);
 
-        _self.setUniform(samplerUniformLocation, unit);
+        _gl.uniform1i(samplerUniformLocation, unit);
     };
 
-    this.setUniform = function(uniformLocation, value) {
+    this.setVector2DUniform = function(uniformLocation, value) {
         //
-        if ((value instanceof Matrix4x4) === true) {
-            //
-            _gl.uniformMatrix4fv (
-                uniformLocation,
-                false, // which is always false.
-                new Float32Array(value.elements)
-            );
-
-        } else {
-            _gl.uniform1i(uniformLocation, value);
-        }
+        _gl.uniform2fv (
+            uniformLocation,
+            value // which is a Float32Array.
+        );
     };
+
+    this.setVector3DUniform = function(uniformLocation, value) {
+        //
+        _gl.uniform3fv (
+            uniformLocation,
+            value // which is a Float32Array.
+        );
+    };
+
+    this.setVector4DUniform = function(uniformLocation, value) {
+        //
+        _gl.uniform4fv (
+            uniformLocation,
+            value // which is a Float32Array.
+        );
+    };
+
+    this.setMatrix4x4Uniform = function(uniformLocation, value) {
+        //
+        _gl.uniformMatrix4fv (
+            uniformLocation,
+            false, // which is always false.
+            value  // which is a Float32Array.
+        );
+    };    
 }
 
 //

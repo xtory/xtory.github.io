@@ -314,6 +314,49 @@ Object.freeze(CartesianAxis);
 //
 // Constructor.
 //
+// function Matrix4x4 (
+//     _s11, _s12, _s13, _s14,
+//     _s21, _s22, _s23, _s24,
+//     _s31, _s32, _s33, _s34,
+//     _s41, _s42, _s43, _s44
+// ){
+//     // Note:
+//     // When storing matrices in memory, there are two ways of storing their
+//     // elements:
+//     // 1. Stored in the order s11, s12, s13, ..., s43, s44
+//     // => called 'row major' (used by DirectX), or
+//     // 2. Stored in the order s11, s21, s31, ..., s34, s44
+//     // => called 'column major' (used by OpenGL)
+
+//     // Note:
+//     // 'm x n' matrix always means 'm rows, n columns' whether it's row or
+//     // column major.
+
+//     // this.elements = [
+//     //     _s11, _s21, _s31, _s41,
+//     //     _s12, _s22, _s32, _s42,
+//     //     _s13, _s23, _s33, _s43,
+//     //     _s14, _s24, _s34, _s44
+//     // ];
+
+//     this.elements = new Float32Array(Matrix4x4.ELEMENT_COUNT);
+
+//     setUpElements();
+    
+//     //
+//     // Private methods.
+//     //
+//     function setUpElements() {
+//         //
+//         var a = this.elements;
+
+//         a[0]=_s11;    a[4]=_s12;    a[ 8]=_s13;    a[12] = _s14;
+//         a[1]=_s21;    a[5]=_s22;    a[ 9]=_s23;    a[13] = _s24;
+//         a[2]=_s31;    a[6]=_s32;    a[10]=_s33;    a[14] = _s34;
+//         a[3]=_s41;    a[7]=_s42;    a[11]=_s43;    a[15] = _s44;
+//     }
+// }
+
 function Matrix4x4 (
     _s11, _s12, _s13, _s14,
     _s21, _s22, _s23, _s24,
@@ -332,12 +375,19 @@ function Matrix4x4 (
     // 'm x n' matrix always means 'm rows, n columns' whether it's row or
     // column major.
 
-    this.elements = [
-        _s11, _s21, _s31, _s41,
-        _s12, _s22, _s32, _s42,
-        _s13, _s23, _s33, _s43,
-        _s14, _s24, _s34, _s44
-    ];
+    // var _db = [
+    //     _s11, _s21, _s31, _s41,
+    //     _s12, _s22, _s32, _s42,
+    //     _s13, _s23, _s33, _s43,
+    //     _s14, _s24, _s34, _s44
+    // ];
+
+    this.db = new Float32Array(Matrix4x4.ELEMENT_COUNT);
+
+    this.db[0]=_s11;    this.db[4]=_s12;    this.db[ 8]=_s13;    this.db[12]=_s14;
+    this.db[1]=_s21;    this.db[5]=_s22;    this.db[ 9]=_s23;    this.db[13]=_s24;
+    this.db[2]=_s31;    this.db[6]=_s32;    this.db[10]=_s33;    this.db[14]=_s34;
+    this.db[3]=_s41;    this.db[7]=_s42;    this.db[11]=_s43;    this.db[15]=_s44;
 }
 
 Matrix4x4.prototype = {
@@ -346,67 +396,67 @@ Matrix4x4.prototype = {
 };
 
 Object.defineProperty(Matrix4x4.prototype, 's11', {
-    get: function() { return this.elements[0]; }
+    get: function() { return this.db[0]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's12', {
-    get: function() { return this.elements[4]; }
+    get: function() { return this.db[4]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's13', {
-    get: function() { return this.elements[8]; }
+    get: function() { return this.db[8]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's14', {
-    get: function() { return this.elements[12]; }
+    get: function() { return this.db[12]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's21', {
-    get: function() { return this.elements[1]; }
+    get: function() { return this.db[1]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's22', {
-    get: function() { return this.elements[5]; }
+    get: function() { return this.db[5]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's23', {
-    get: function() { return this.elements[9]; }
+    get: function() { return this.db[9]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's24', {
-    get: function() { return this.elements[13]; }
+    get: function() { return this.db[13]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's31', {
-    get: function() { return this.elements[2]; }
+    get: function() { return this.db[2]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's32', {
-    get: function() { return this.elements[6]; }
+    get: function() { return this.db[6]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's33', {
-    get: function() { return this.elements[10]; }
+    get: function() { return this.db[10]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's34', {
-    get: function() { return this.elements[14]; }
+    get: function() { return this.db[14]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's41', {
-    get: function() { return this.elements[3]; }
+    get: function() { return this.db[3]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's42', {
-    get: function() { return this.elements[7]; }
+    get: function() { return this.db[7]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's43', {
-    get: function() { return this.elements[11]; }
+    get: function() { return this.db[11]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's44', {
-    get: function() { return this.elements[15]; }
+    get: function() { return this.db[15]; }
 });
 
 //
@@ -666,8 +716,8 @@ Matrix4x4.createTranslationMatrix = function(v) {
 
 Matrix4x4.multiplyMatrices = function(m1, m2) {
     //
-    var a1 = m1.elements;
-    var a2 = m2.elements;
+    var a1 = m1.db;
+    var a2 = m2.db;
     var a3 = [];
 
     var a11=a1[0], a12=a1[4], a13=a1[ 8], a14=a1[12];
@@ -764,11 +814,11 @@ Matrix4x4.areEqual = function(m1, m2) {
         return false;
     }
 
-    var a1 = m1.elements;
-    var a2 = m2.elements;
+    var a1 = m1.db;
+    var a2 = m2.db;
 
-    for (var i=0; i<Matrix4x4.ELEMENT_COUNT; i++)
-    {
+    for (var i=0; i<Matrix4x4.ELEMENT_COUNT; i++) {
+        //
         if (a1[i] !== a2[i]) {
             return false;
         }
@@ -1557,7 +1607,7 @@ function Camera (
     this.getProjectionMatrix = function(m) {
         //
         checkProjectionMatrix();
-        m.elements = _projectionMatrix.elements.slice();
+        m.db = _projectionMatrix.db.slice();
     };
 
     this.getTransform = function(m) {
@@ -1582,7 +1632,7 @@ function Camera (
             );
         }
 
-        m.elements = _transform.elements.slice();
+        m.db = _transform.db.slice();
 
         // Raises the transform-updated event (if necessary).
         if (_hasToRaiseTransformUpdatedEvent === true) {
@@ -2287,23 +2337,41 @@ function Renderer(_settings) {
         _gl.activeTexture(_gl.TEXTURE0 + unit);
         _gl.bindTexture(_gl.TEXTURE_2D, texture.webGLTexture);
 
-        _self.setUniform(samplerUniformLocation, unit);
+        _gl.uniform1i(samplerUniformLocation, unit);
     };
 
-    this.setUniform = function(uniformLocation, value) {
+    this.setVector2DUniform = function(uniformLocation, value) {
         //
-        if ((value instanceof Matrix4x4) === true) {
-            //
-            _gl.uniformMatrix4fv (
-                uniformLocation,
-                false, // which is always false.
-                new Float32Array(value.elements)
-            );
-
-        } else {
-            _gl.uniform1i(uniformLocation, value);
-        }
+        _gl.uniform2fv (
+            uniformLocation,
+            value // which is a Float32Array.
+        );
     };
+
+    this.setVector3DUniform = function(uniformLocation, value) {
+        //
+        _gl.uniform3fv (
+            uniformLocation,
+            value // which is a Float32Array.
+        );
+    };
+
+    this.setVector4DUniform = function(uniformLocation, value) {
+        //
+        _gl.uniform4fv (
+            uniformLocation,
+            value // which is a Float32Array.
+        );
+    };
+
+    this.setMatrix4x4Uniform = function(uniformLocation, value) {
+        //
+        _gl.uniformMatrix4fv (
+            uniformLocation,
+            false, // which is always false.
+            value  // which is a Float32Array.
+        );
+    };    
 }
 
 //
@@ -2394,9 +2462,15 @@ IndexBuffer.prototype = {
         }
         */
 
+        // gl.bufferData (
+        //     gl.ELEMENT_ARRAY_BUFFER,
+        //     new Uint16Array(items),
+        //     gl.STATIC_DRAW
+        // );
+
         gl.bufferData (
             gl.ELEMENT_ARRAY_BUFFER,
-            new Uint16Array(items),
+            items, // which is a Uint16Array.
             gl.STATIC_DRAW
         );
         // :Note
@@ -2517,13 +2591,14 @@ function PositionColor() {
 PositionColor.VERTEX_SHADER_SOURCE = [
     //
    'precision highp float;', // which is the default vertex shader precision.
-    //
+
    'attribute vec3 vertexPosition;',
    'attribute vec4 vertexColor;',
-   'uniform mat4 transform;',
-    //
+
    'varying vec4 color;',
-    //
+
+   'uniform mat4 transform;',
+
    'void main() {',
        'gl_Position = transform * vec4(vertexPosition, 1.0);',
        'color = vertexColor;',
@@ -2534,9 +2609,9 @@ PositionColor.VERTEX_SHADER_SOURCE = [
 PositionColor.FRAGMENT_SHADER_SOURCE = [
     //
    'precision mediump float;', // which is the recommended fragment shader precision.
-    //
+
    'varying vec4 color;',
-    //
+
    'void main() {',
        'gl_FragColor = color;',
    '}'
@@ -2558,10 +2633,11 @@ function PositionOnly() {
 PositionOnly.VERTEX_SHADER_SOURCE = [
     //
    'precision highp float;', // which is the default vertex shader precision.
-    //
+
    'attribute vec3 vertexPosition;',
+
    'uniform mat4 transform;',
-    //
+
    'void main() {',
        'gl_Position = transform * vec4(vertexPosition, 1.0);',
    '}'
@@ -2571,7 +2647,7 @@ PositionOnly.VERTEX_SHADER_SOURCE = [
 PositionOnly.FRAGMENT_SHADER_SOURCE = [
     //
    'precision mediump float;', // which is the recommended fragment shader precision.
-    //
+
    'void main() {',
        'gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);',
    '}'
@@ -2593,13 +2669,14 @@ function PositionTextureCoordinates() {
 PositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
     //
    'precision highp float;', // which is the default vertex shader precision.
-    //
+
    'attribute vec3 vertexPosition;',
    'attribute vec2 vertexTextureCoordinates;',
-   'uniform mat4 transform;',
-    //
+
    'varying vec2 textureCoordinates;',
-    //
+
+   'uniform mat4 transform;',
+
    'void main() {',
        'gl_Position = transform * vec4(vertexPosition, 1.0);',
        'textureCoordinates = vertexTextureCoordinates;',
@@ -2610,10 +2687,11 @@ PositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
 PositionTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
     //
    'precision mediump float;', // which is the recommended fragment shader precision.
-    //
+
    'varying vec2 textureCoordinates;',
+
    'uniform sampler2D sampler;',
-    //
+
    'void main() {',
        'gl_FragColor = texture2D(sampler, textureCoordinates);',
    '}'
@@ -2865,8 +2943,61 @@ SpriteBatch.prototype = {
 //
 // Static methods.
 //
+// SpriteBatch.createSpriteVertices = function (
+//     renderer,
+//     p,        // centerScreenPosition,
+//     size,     // screenSize,
+//     color,    // vertexColor,
+//     rect      // sourceTextureCoordinateRect
+// ){
+//     // 1. Positions.
+//     var halfWidth = size.width * 0.5;
+//     var halfHeight = size.height * 0.5;
+
+//     var vertexPositions = [
+//         new Vector3D(p.x+halfWidth, p.y-halfHeight, p.z),
+//         new Vector3D(p.x+halfWidth, p.y+halfHeight, p.z),
+//         new Vector3D(p.x-halfWidth, p.y-halfHeight, p.z),
+//         new Vector3D(p.x-halfWidth, p.y+halfHeight, p.z) 
+//     ];
+
+//     var vertexPositions2 = [];
+//     for (var i=0; i<vertexPositions.length; i++) {
+//         //
+//         var item = vertexPositions[i];
+
+//         var p = ScreenCoordinateHelper.toClipSpace (
+//             renderer.canvas,
+//             item
+//         );
+
+//         vertexPositions2 = vertexPositions2.concat(p.toArray());
+//     }
+
+//     // 2. Colors.
+//     var vertexColors = [];
+
+//     for (var i=0; i<4; i++) {
+//         vertexColors = vertexColors.concat(color.toArray());
+//     }
+
+//     // 3. Texture coordinates.
+//     var vertexTextureCoordinates = [
+//         rect.right, rect.bottom, // (1.0, 0.0), for instance.
+//         rect.right, rect.top,    // (1.0, 1.0),
+//         rect.left,  rect.bottom, // (0.0, 0.0),
+//         rect.left,  rect.top     // (0.0, 1.0)
+//     ];
+
+//     return {
+//         positions: vertexPositions2,
+//         colors: vertexColors,
+//         textureCoordinates: vertexTextureCoordinates
+//     };
+// }
+
 SpriteBatch.createSpriteVertices = function (
-    renderer,
+    renderer, // renderer.
     p,        // centerScreenPosition,
     size,     // screenSize,
     color,    // vertexColor,
@@ -2876,92 +3007,19 @@ SpriteBatch.createSpriteVertices = function (
     var halfWidth = size.width * 0.5;
     var halfHeight = size.height * 0.5;
 
-    var vertexPositions = [
-        new Vector3D(p.x+halfWidth, p.y-halfHeight, p.z),
-        new Vector3D(p.x+halfWidth, p.y+halfHeight, p.z),
-        new Vector3D(p.x-halfWidth, p.y-halfHeight, p.z),
-        new Vector3D(p.x-halfWidth, p.y+halfHeight, p.z) 
-    ];
-
-    var vertexPositions2 = [];
-    for (var i=0; i<vertexPositions.length; i++) {
-        //
-        var item = vertexPositions[i];
-
-        var p = ScreenCoordinateHelper.toClipSpace (
-            renderer.canvas,
-            item
-        );
-
-        vertexPositions2 = vertexPositions2.concat(p.toArray());
-    }
-
-    // 2. Colors.
-    var vertexColors = [];
-
-    for (var i=0; i<4; i++) {
-        vertexColors = vertexColors.concat(color.toArray());
-    }
-
-    // 3. Texture coordinates.
-    var vertexTextureCoordinates = [
-        rect.right, rect.bottom, // (1.0, 0.0), for instance.
-        rect.right, rect.top,    // (1.0, 1.0),
-        rect.left,  rect.bottom, // (0.0, 0.0),
-        rect.left,  rect.top     // (0.0, 1.0)
-    ];
-
-    return {
-        positions: vertexPositions2,
-        colors: vertexColors,
-        textureCoordinates: vertexTextureCoordinates
-    };
-};
-
-SpriteBatch.createSpriteVertices2 = function (
-    renderer,
-    p,        // centerScreenPosition,
-    size,     // screenSize,
-    color,    // vertexColor,
-    rect      // sourceTextureCoordinateRect
-){
-    // 1. Positions.
-    var halfWidth = size.width * 0.5;
-    var halfHeight = size.height * 0.5;
-
-    var vertexPositions = [
-        new Vector3D(p.x+halfWidth, p.y-halfHeight, p.z),
-        new Vector3D(p.x+halfWidth, p.y+halfHeight, p.z),
-        new Vector3D(p.x-halfWidth, p.y-halfHeight, p.z),
-        new Vector3D(p.x-halfWidth, p.y+halfHeight, p.z) 
-    ];
-
-    var vertexPositions2 = new Float32Array (
-        Sprite.POSITION_SIZE * Sprite.VERTEX_COUNT
-    );
-
-    var array;
-    for (var i=0; i<Sprite.VERTEX_COUNT; i++) {
-        //
-        var item = vertexPositions[i];
-
-        var p = ScreenCoordinateHelper.toClipSpace (
-            renderer.canvas,
-            item
-        );
-
-        array = p.toArray();
-        for (var j=0; j<Sprite.POSITION_SIZE; j++) {
-            vertexPositions2[Sprite.POSITION_SIZE*i + j] = array[j];
-        }
-    }
+    var vertexPositions = new Float32Array ([
+        p.x+halfWidth, p.y-halfHeight, p.z,
+        p.x+halfWidth, p.y+halfHeight, p.z,
+        p.x-halfWidth, p.y-halfHeight, p.z,
+        p.x-halfWidth, p.y+halfHeight, p.z 
+    ]);
 
     // 2. Colors.
     var vertexColors = new Float32Array (
         Sprite.COLOR_SIZE * Sprite.VERTEX_COUNT
     );
 
-    array = color.toArray();
+    var array = color.toArray();
     for (var i=0; i<Sprite.VERTEX_COUNT; i++) {
         //
         for (var j=0; j<Sprite.COLOR_SIZE; j++) {
@@ -2979,7 +3037,7 @@ SpriteBatch.createSpriteVertices2 = function (
     ]);
 
     return {
-        positions: vertexPositions2,
+        positions: vertexPositions,
         colors: vertexColors,
         textureCoordinates: vertexTextureCoordinates
     };
@@ -3008,9 +3066,10 @@ function Sprite (
 
     this.texture = _texture;
 
-    var vertices = SpriteBatch.createSpriteVertices2 (
+    var vertices = SpriteBatch.createSpriteVertices (
         _spriteBatch.renderer,
-        _centerScreenPosition, _screenSize,
+        _centerScreenPosition,
+        _screenSize,
         _vertexColor,
         _sourceTextureCoordinateRect
     );
@@ -3025,6 +3084,7 @@ function Sprite (
 //
 Sprite.VERTEX_COUNT            = 4;
 Sprite.POSITION_SIZE           = 4; // (x, y, z, w)
+Sprite.POSITION_SIZE2          = 3; // (x, y, z)
 Sprite.COLOR_SIZE              = 4; // (r, g, b, a)
 Sprite.TEXTURE_COORDINATE_SIZE = 2; // (s, t)
 
@@ -3141,16 +3201,14 @@ function TransformedPositionColor() {
 TransformedPositionColor.VERTEX_SHADER_SOURCE = [
     //
    'precision highp float;', // which is the default vertex shader precision.
-    //
+
    'attribute vec4 vertexPosition;',
    'attribute vec4 vertexColor;',
-    //
+
    'varying vec4 color;',
-    //
+
    'void main() {',
-        //
        'gl_Position = vertexPosition;',
-        //
        'color = vertexColor;',
    '}'
 
@@ -3159,9 +3217,9 @@ TransformedPositionColor.VERTEX_SHADER_SOURCE = [
 TransformedPositionColor.FRAGMENT_SHADER_SOURCE = [
     //
    'precision mediump float;', // which is the recommended fragment shader precision.
-    //
+
    'varying vec4 color;',
-    //
+
    'void main() {',
        'gl_FragColor = color;',
    '}'
@@ -3183,18 +3241,18 @@ function TransformedPositionColorTextureCoordinates() {
 TransformedPositionColorTextureCoordinates.VERTEX_SHADER_SOURCE = [
     //
    'precision highp float;', // which is the default vertex shader precision.
-    //
+
    'attribute vec4 vertexPosition;',
    'attribute vec4 vertexColor;',
    'attribute vec2 vertexTextureCoordinates;',
-    //
+
    'varying vec4 color;',
    'varying vec2 textureCoordinates;',
-    //
+
    'void main() {',
         //
        'gl_Position = vertexPosition;',
-        //
+       
        'color = vertexColor;',
        'textureCoordinates = vertexTextureCoordinates;',
    '}'
@@ -3204,12 +3262,12 @@ TransformedPositionColorTextureCoordinates.VERTEX_SHADER_SOURCE = [
 TransformedPositionColorTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
     //
    'precision mediump float;', // which is the recommended fragment shader precision.
-    //
+
    'varying vec4 color;',
    'varying vec2 textureCoordinates;',
-    //
+
    'uniform sampler2D sampler;',
-    //
+
    'void main() {',
        'gl_FragColor = color * texture2D(sampler, textureCoordinates);',
    '}'
@@ -3231,12 +3289,12 @@ function TransformedPositionTextureCoordinates() {
 TransformedPositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
     //
    'precision highp float;', // which is the default vertex shader precision.
-    //
+
    'attribute vec4 vertexPosition;',
    'attribute vec2 vertexTextureCoordinates;',
-    //
+
    'varying vec2 textureCoordinates;',
-    //
+
    'void main() {',
        'gl_Position = vertexPosition;',
        'textureCoordinates = vertexTextureCoordinates;',
@@ -3247,10 +3305,11 @@ TransformedPositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
 TransformedPositionTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
     //
    'precision mediump float;', // which is the recommended fragment shader precision.
-    //
+
    'varying vec2 textureCoordinates;',
+
    'uniform sampler2D sampler;',
-    //
+
    'void main() {',
        'gl_FragColor = texture2D(sampler, textureCoordinates);',
    '}'
@@ -3305,23 +3364,6 @@ VertexBuffer.prototype = {
     // Public methods.
     //
     setItems: function(items, size) {
-        //
-        var gl = this.bufferLoader.loader.renderer.gl;
-        this.size = size;
-
-        gl.bindBuffer (
-            gl.ARRAY_BUFFER,
-            this.webGLBuffer
-        );
-        
-        gl.bufferData (
-            gl.ARRAY_BUFFER,
-            new Float32Array(items),
-            gl.STATIC_DRAW
-        );
-    },
-
-    setItems2: function(items, size) {
         //
         var gl = this.bufferLoader.loader.renderer.gl;
         this.size = size;

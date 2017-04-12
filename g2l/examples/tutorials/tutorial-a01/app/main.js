@@ -68,21 +68,23 @@ function main() {
         //
         // Vertex positions.
         //
-        var vertexPositions = [
+        var vertexPositions = new Float32Array ([
               0,  225, 0,
            -250, -150, 0,
             250, -150, 0
-        ];
+        ]);
 
         vertexBuffers.position.setItems(vertexPositions, 3);
 
         //
         // Vertex colors.
         //
-        var vertexColors = [].concat (
-            g2l.Colors.PHOTOSHOP_DARK_RED.toArray(),
-            g2l.Colors.PHOTOSHOP_DARK_GREEN.toArray(),
-            g2l.Colors.PHOTOSHOP_DARK_BLUE.toArray()
+        var vertexColors = new Float32Array (
+            [].concat (
+                g2l.Colors.PHOTOSHOP_DARK_RED.toArray(),
+                g2l.Colors.PHOTOSHOP_DARK_GREEN.toArray(),
+                g2l.Colors.PHOTOSHOP_DARK_BLUE.toArray()
+            )
         );
 
         vertexBuffers.color.setItems(vertexColors, 4);
@@ -165,9 +167,9 @@ function main() {
             rotation.toMatrix4x4()
         );
 
-        renderer.setUniform (
+        renderer.setMatrix4x4Uniform (
             uniformLocations.transform,
-            transform
+            transform.db
         );
     }    
 }

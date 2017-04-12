@@ -42,6 +42,8 @@ function main() {
 
         setUpInfo();
 
+        hookEvents();
+
         renderer.run(updateScene, drawScene);
 
     } catch (e) {
@@ -64,7 +66,7 @@ function main() {
 
     function setUpSprites() {
         //
-        spriteCount = 2000;
+        spriteCount = 1000;
         spritePositionOffsets = [];
 
         var width = 1000;
@@ -83,25 +85,27 @@ function main() {
         for (var i=0; i<spriteCount; i++) {
             //
             vertexBuffers.push ({
-                position: loader.createVertexBuffer(),
+                screenPosition: loader.createVertexBuffer(),
                 color: loader.createVertexBuffer(),
                 textureCoordinates: loader.createVertexBuffer()
             });
         }
+
+        flush();
     }
     
     function setUpShaders() {
         //
         program = loader.setUpProgram (
-            g2l.TransformedPositionColorTextureCoordinates.VERTEX_SHADER_SOURCE,
-            g2l.TransformedPositionColorTextureCoordinates.FRAGMENT_SHADER_SOURCE
+            Sprite.VERTEX_SHADER_SOURCE,
+            Sprite.FRAGMENT_SHADER_SOURCE
         );
 
         attributeLocations = {
             //
-            vertexPosition: renderer.getAttributeLocation (
+            vertexScreenPosition: renderer.getAttributeLocation (
                 program,
-               'vertexPosition'
+               'vertexScreenPosition'
             ),
 
             vertexColor: renderer.getAttributeLocation (
@@ -117,6 +121,11 @@ function main() {
 
         uniformLocations = {
             //
+            canvasClientSize: renderer.getUniformLocation (
+                program,
+               'canvasClientSize'
+            ),
+
             sampler: renderer.getUniformLocation (
                 program,
                'sampler'
@@ -142,6 +151,10 @@ function main() {
         lastAverageFps = 0;
     }
 
+    function hookEvents() {
+        window.addEventListener('resize', onResize);
+    }
+
     function updateScene() {
         //
         fps.update();
@@ -151,9 +164,19 @@ function main() {
         //
         renderer.clear();
 
-        flush();
+        //flush();
 
         renderer.program = program;
+
+        renderer.setVector2DUniform (
+            // Part 1.
+            uniformLocations.canvasClientSize,
+            // Part 2.
+            new Float32Array ([
+                renderer.canvas.clientWidth,
+                renderer.canvas.clientHeight            
+            ])
+        );
 
         var lastTexture = null;
 
@@ -162,8 +185,8 @@ function main() {
             var item = vertexBuffers[i];
 
             renderer.setAttribute (
-                attributeLocations.vertexPosition,
-                item.position
+                attributeLocations.vertexScreenPosition,
+                item.screenPosition
             );
 
             renderer.setAttribute (
@@ -224,17 +247,17 @@ function main() {
 
             var item2 = vertexBuffers[i];
 
-            item2.position.setItems2 (
+            item2.screenPosition.setItems (
                 sprite.vertexPositions,
-                g2l.Sprite.POSITION_SIZE
+                g2l.Sprite.POSITION_SIZE2
             );
 
-            item2.color.setItems2 (
+            item2.color.setItems (
                 sprite.vertexColors,
                 g2l.Sprite.COLOR_SIZE
             );
 
-            item2.textureCoordinates.setItems2 (
+            item2.textureCoordinates.setItems (
                 sprite.vertexTextureCoordinates,
                 g2l.Sprite.TEXTURE_COORDINATE_SIZE
             );            
@@ -260,5 +283,12 @@ function main() {
 
             lastAverageFps = averageFps;
         }
+    }
+
+    //
+    // Event handlers.
+    //
+    function onResize(event) {
+        flush();
     }
 }

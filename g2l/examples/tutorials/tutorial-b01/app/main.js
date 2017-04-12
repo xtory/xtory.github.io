@@ -71,7 +71,7 @@ function main() {
         //
         // Vertex positions.
         //
-        var vertexPositions = [
+        var vertexPositions = new Float32Array ([
             //
             // Front face.
             50, -50,  50,
@@ -108,7 +108,7 @@ function main() {
            -50,  50,  50,
            -50,  50, -50,
            -50, -50, -50
-        ];
+        ]);
 
         vertexBuffers.position.setItems (
             vertexPositions,
@@ -118,7 +118,7 @@ function main() {
         // 
         // Vertex normals.
         //
-        var vertexNormals = [
+        var vertexNormals = new Float32Array ([
             //
             // Front face.
             0.0,  0.0,  1.0,
@@ -155,7 +155,7 @@ function main() {
            -1.0,  0.0,  0.0,
            -1.0,  0.0,  0.0,
            -1.0,  0.0,  0.0
-        ];
+        ]);
 
         vertexBuffers.normal.setItems (
             vertexNormals,
@@ -165,7 +165,7 @@ function main() {
         //
         // Vertex texture coordinates.
         //
-        var vertexTextureCoordinates = [
+        var vertexTextureCoordinates = new Float32Array ([
             //
             // Front face.
             1.0,  0.0,
@@ -202,7 +202,7 @@ function main() {
             1.0,  1.0,
             0.0,  1.0,
             0.0,  0.0,
-        ];
+        ]);
 
         vertexBuffers.textureCoordinates.setItems (
             vertexTextureCoordinates,
@@ -377,9 +377,9 @@ function main() {
         transposeOfInverseOfModelMatrix =
             g2l.Matrix4x4.transposeMatrix(transposeOfInverseOfModelMatrix);
         
-        renderer.setUniform (
+        renderer.setMatrix4x4Uniform (
             uniformLocations.transposeOfInverseOfModelMatrix,
-            transposeOfInverseOfModelMatrix
+            transposeOfInverseOfModelMatrix.db
         );
 
         camera.getTransform(transform);
@@ -389,9 +389,9 @@ function main() {
             modelMatrix
         );
 
-        renderer.setUniform (
+        renderer.setMatrix4x4Uniform (
             uniformLocations.transform,
-            transform
+            transform.db
         );
     }
 }

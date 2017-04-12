@@ -74,12 +74,12 @@ function main() {
         var halfWidth = w * 0.5;
         var halfHeight = h * 0.5;
 
-        var vertexPositions = [
+        var vertexPositions = new Float32Array ([
             x+halfWidth, y-halfHeight, 0,
             x+halfWidth, y+halfHeight, 0,
             x-halfWidth, y-halfHeight, 0,
             x-halfWidth, y+halfHeight, 0
-        ];        
+        ]);
 
         vertexBuffers.position.setItems (
             vertexPositions,
@@ -89,12 +89,12 @@ function main() {
         //
         // Vertex texture coordinates.
         //
-        var vertexTextureCoordinates = [
+        var vertexTextureCoordinates = new Float32Array ([
             1.0, 0.0,
             1.0, 1.0,
             0.0, 0.0,
             0.0, 1.0
-        ];
+        ]);
 
         vertexBuffers.textureCoordinates.setItems (
             vertexTextureCoordinates,
@@ -198,9 +198,9 @@ function main() {
             rotation.toMatrix4x4()
         );
 
-        renderer.setUniform (
+        renderer.setMatrix4x4Uniform (
             uniformLocations.transform,
-            transform
+            transform.db
         );
     } 
 }

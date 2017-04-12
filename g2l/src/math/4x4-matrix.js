@@ -5,6 +5,49 @@ import { Vector3D }      from './3d-vector';
 //
 // Constructor.
 //
+// function Matrix4x4 (
+//     _s11, _s12, _s13, _s14,
+//     _s21, _s22, _s23, _s24,
+//     _s31, _s32, _s33, _s34,
+//     _s41, _s42, _s43, _s44
+// ){
+//     // Note:
+//     // When storing matrices in memory, there are two ways of storing their
+//     // elements:
+//     // 1. Stored in the order s11, s12, s13, ..., s43, s44
+//     // => called 'row major' (used by DirectX), or
+//     // 2. Stored in the order s11, s21, s31, ..., s34, s44
+//     // => called 'column major' (used by OpenGL)
+
+//     // Note:
+//     // 'm x n' matrix always means 'm rows, n columns' whether it's row or
+//     // column major.
+
+//     // this.elements = [
+//     //     _s11, _s21, _s31, _s41,
+//     //     _s12, _s22, _s32, _s42,
+//     //     _s13, _s23, _s33, _s43,
+//     //     _s14, _s24, _s34, _s44
+//     // ];
+
+//     this.elements = new Float32Array(Matrix4x4.ELEMENT_COUNT);
+
+//     setUpElements();
+    
+//     //
+//     // Private methods.
+//     //
+//     function setUpElements() {
+//         //
+//         var a = this.elements;
+
+//         a[0]=_s11;    a[4]=_s12;    a[ 8]=_s13;    a[12] = _s14;
+//         a[1]=_s21;    a[5]=_s22;    a[ 9]=_s23;    a[13] = _s24;
+//         a[2]=_s31;    a[6]=_s32;    a[10]=_s33;    a[14] = _s34;
+//         a[3]=_s41;    a[7]=_s42;    a[11]=_s43;    a[15] = _s44;
+//     }
+// }
+
 function Matrix4x4 (
     _s11, _s12, _s13, _s14,
     _s21, _s22, _s23, _s24,
@@ -23,12 +66,19 @@ function Matrix4x4 (
     // 'm x n' matrix always means 'm rows, n columns' whether it's row or
     // column major.
 
-    this.elements = [
-        _s11, _s21, _s31, _s41,
-        _s12, _s22, _s32, _s42,
-        _s13, _s23, _s33, _s43,
-        _s14, _s24, _s34, _s44
-    ];
+    // var _db = [
+    //     _s11, _s21, _s31, _s41,
+    //     _s12, _s22, _s32, _s42,
+    //     _s13, _s23, _s33, _s43,
+    //     _s14, _s24, _s34, _s44
+    // ];
+
+    this.db = new Float32Array(Matrix4x4.ELEMENT_COUNT);
+
+    this.db[0]=_s11;    this.db[4]=_s12;    this.db[ 8]=_s13;    this.db[12]=_s14;
+    this.db[1]=_s21;    this.db[5]=_s22;    this.db[ 9]=_s23;    this.db[13]=_s24;
+    this.db[2]=_s31;    this.db[6]=_s32;    this.db[10]=_s33;    this.db[14]=_s34;
+    this.db[3]=_s41;    this.db[7]=_s42;    this.db[11]=_s43;    this.db[15]=_s44;
 }
 
 Matrix4x4.prototype = {
@@ -37,67 +87,67 @@ Matrix4x4.prototype = {
 };
 
 Object.defineProperty(Matrix4x4.prototype, 's11', {
-    get: function() { return this.elements[0]; }
+    get: function() { return this.db[0]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's12', {
-    get: function() { return this.elements[4]; }
+    get: function() { return this.db[4]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's13', {
-    get: function() { return this.elements[8]; }
+    get: function() { return this.db[8]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's14', {
-    get: function() { return this.elements[12]; }
+    get: function() { return this.db[12]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's21', {
-    get: function() { return this.elements[1]; }
+    get: function() { return this.db[1]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's22', {
-    get: function() { return this.elements[5]; }
+    get: function() { return this.db[5]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's23', {
-    get: function() { return this.elements[9]; }
+    get: function() { return this.db[9]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's24', {
-    get: function() { return this.elements[13]; }
+    get: function() { return this.db[13]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's31', {
-    get: function() { return this.elements[2]; }
+    get: function() { return this.db[2]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's32', {
-    get: function() { return this.elements[6]; }
+    get: function() { return this.db[6]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's33', {
-    get: function() { return this.elements[10]; }
+    get: function() { return this.db[10]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's34', {
-    get: function() { return this.elements[14]; }
+    get: function() { return this.db[14]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's41', {
-    get: function() { return this.elements[3]; }
+    get: function() { return this.db[3]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's42', {
-    get: function() { return this.elements[7]; }
+    get: function() { return this.db[7]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's43', {
-    get: function() { return this.elements[11]; }
+    get: function() { return this.db[11]; }
 });
 
 Object.defineProperty(Matrix4x4.prototype, 's44', {
-    get: function() { return this.elements[15]; }
+    get: function() { return this.db[15]; }
 });
 
 //
@@ -357,8 +407,8 @@ Matrix4x4.createTranslationMatrix = function(v) {
 
 Matrix4x4.multiplyMatrices = function(m1, m2) {
     //
-    var a1 = m1.elements;
-    var a2 = m2.elements;
+    var a1 = m1.db;
+    var a2 = m2.db;
     var a3 = [];
 
     var a11=a1[0], a12=a1[4], a13=a1[ 8], a14=a1[12];
@@ -455,11 +505,11 @@ Matrix4x4.areEqual = function(m1, m2) {
         return false;
     }
 
-    var a1 = m1.elements;
-    var a2 = m2.elements;
+    var a1 = m1.db;
+    var a2 = m2.db;
 
-    for (var i=0; i<Matrix4x4.ELEMENT_COUNT; i++)
-    {
+    for (var i=0; i<Matrix4x4.ELEMENT_COUNT; i++) {
+        //
         if (a1[i] !== a2[i]) {
             return false;
         }
