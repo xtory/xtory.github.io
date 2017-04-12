@@ -69,10 +69,10 @@
                 "-allow-file-access-from-files"
             ]
         }, {
-            "name": "samples/sprites",
+            "name": "tests/sprites",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/g2l/examples/samples/sprites/index.html",
+            "file": "${workspaceRoot}/g2l/examples/tests/sprites/index.html",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
             ]
