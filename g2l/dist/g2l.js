@@ -2535,7 +2535,694 @@ function DepthBufferValues() {
 DepthBufferValues.NEAR_CLIP_PLANE = 0.0; // = default zNear of gl.getParameter(gl.DEPTH_RANGE).
 DepthBufferValues.FAR_CLIP_PLANE  = 1.0; // = default zFar of gl.getParameter(gl.DEPTH_RANGE).
 
+//
+// Static methods.
+//
+DepthBufferValues.isDepthOutOfRange = function(depth) {
+    //
+    if (// Part 1.
+        MathHelper.isScalar1LessThanScalar2 (
+            depth,
+            DepthBufferValues.NEAR_CLIP_PLANE // = 0.0
+        ) === true ||
+        // Part 2.
+        MathHelper.isScalar1LessThanScalar2 (
+            DepthBufferValues.FAR_CLIP_PLANE, // = 1.0
+            depth
+        ) === true) {
+        //
+        return true;
+
+    } else {
+        //
+        return false;
+    }
+};
+
 Object.freeze(DepthBufferValues);
+
+//
+// Constructor.
+//
+function IndexBuffer(_bufferLoader) {
+    //
+    var _self;
+    var _gl;
+    var _webGLBuffer;
+
+    try {
+        //
+        _self = this;
+        _gl = _bufferLoader.loader.renderer.gl;
+
+        _webGLBuffer = _gl.createBuffer();
+
+    } catch (e) {
+        //
+        console.log('g2l.IndexBuffer: ' + e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(_self, 'bufferLoader', {
+        'get': function() { return _bufferLoader; }
+    });
+
+    Object.defineProperty(_self, 'webGLBuffer', {
+        'get': function() { return _webGLBuffer; }
+    });
+}
+
+IndexBuffer.prototype = {
+    //
+    // Public methods.
+    //
+    loadData: function(data) {
+        //
+        var gl = this.bufferLoader.loader.renderer.gl;
+
+        gl.bindBuffer (
+            gl.ELEMENT_ARRAY_BUFFER,
+            this.webGLBuffer
+        );
+
+        // Note:
+        // DirectX supports 16-bit or 32-bit index buffers. But in this engine,
+        // so far, only 16-bit index buffer is supported.
+        /*
+        if (uses16Bits === true) {
+            //
+            gl.bufferData (
+                gl.ELEMENT_ARRAY_BUFFER,
+                new Uint16Array(data),
+                gl.STATIC_DRAW
+            );
+
+        } else {
+            //
+            gl.bufferData (
+                gl.ELEMENT_ARRAY_BUFFER,
+                new Uint32Array(data),
+                gl.STATIC_DRAW
+            );
+        }
+        */
+
+        gl.bufferData (
+            gl.ELEMENT_ARRAY_BUFFER,
+            data, // which is already a Uint16Array.
+            gl.STATIC_DRAW
+        );
+        // :Note
+    }
+};
+
+Object.freeze(IndexBuffer);
+
+//
+// Constructor.
+//
+function VertexBuffer(_bufferLoader) {
+    //
+    var _self;
+    var _gl;
+    var _webGLBuffer;
+    var _size; // Number of components per vertex attribute. Must be 1, 2, 3, or 4.
+
+    try {
+        //
+        _self = this;
+        _gl = _bufferLoader.loader.renderer.gl;
+
+        _webGLBuffer = _gl.createBuffer();
+
+    } catch (e) {
+        //
+        console.log('g2l.VertexBuffer: ' + e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(_self, 'bufferLoader', {
+        'get': function() { return _bufferLoader; }
+    });
+
+    Object.defineProperty(_self, 'webGLBuffer', {
+        'get': function() { return _webGLBuffer; }
+    });
+
+    Object.defineProperty(_self, 'size', {
+        'get': function() { return _size; },
+        'set': function(value) { _size = value; }
+    });
+}
+
+VertexBuffer.prototype = {
+    //
+    // Public methods.
+    //
+    loadData: function(data, size) {
+        //
+        var gl = this.bufferLoader.loader.renderer.gl;
+        this.size = size;
+
+        gl.bindBuffer (
+            gl.ARRAY_BUFFER,
+            this.webGLBuffer
+        );
+        
+        gl.bufferData (
+            gl.ARRAY_BUFFER,
+            data, // which is already a Float32Array.
+            gl.STATIC_DRAW
+        );
+    }
+};
+
+Object.freeze(VertexBuffer);
+
+//
+// Constructor.
+//
+function BufferLoader(_loader) {
+    //
+    var _self;
+    var _gl;
+
+    try {
+        //
+        _self = this;
+        _gl = _loader.renderer.gl;
+
+    } catch (e) {
+        //
+        console.log('g2l.BufferLoader: ' + e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(_self, 'loader', {
+        'get': function() { return _loader; }
+    });
+    
+    //
+    // Privileged methods.
+    //
+    this.createVertexBuffer = function() {
+        return new VertexBuffer(_self);
+    };
+
+    this.createIndexBuffer = function() {
+        return new IndexBuffer(_self);
+    };
+}
+
+Object.freeze(BufferLoader);
+
+//
+// Constructor.
+//
+function Program(_programLoader) {
+    //
+    var _self;
+    var _gl;
+    var _webGLProgram;
+
+    try {
+        //
+        _self = this;
+        _gl = _programLoader.loader.renderer.gl;
+
+        _webGLProgram = _gl.createProgram();
+
+    } catch (e) {
+        //
+        console.log('g2l.Program: ' + e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(_self, 'programLoader', {
+        'get': function() { return _programLoader; }
+    });
+
+    Object.defineProperty(_self, 'webGLProgram', {
+        'get': function() { return _webGLProgram; }
+    });
+}
+
+Object.freeze(Program);
+
+//
+// Constructor.
+//
+function ShaderType() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+ShaderType.VERTEX_SHADER = 0;
+ShaderType.FRAGMENT_SHADER = 1;
+
+Object.freeze(ShaderType);
+
+//
+// Constructor.
+//
+function ProgramLoader(_loader) {
+    //
+    var _self;
+    var _gl;
+
+    try {
+        //
+        _self = this;
+        _gl = _loader.renderer.gl;
+
+    } catch (e) {
+        //
+        console.log('g2l.ProgramLoader: ' + e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(_self, 'loader', {
+        'get': function() { return _loader; }
+    });
+
+    //
+    // Private methods.
+    //
+    function loadWebGLShader(shaderType, shaderSource) {
+        //
+        var webGLShader;
+
+        if (shaderType === ShaderType.VERTEX_SHADER) {
+            webGLShader = _gl.createShader(_gl.VERTEX_SHADER);
+        } else if (
+            shaderType === ShaderType.FRAGMENT_SHADER
+        ){
+            webGLShader = _gl.createShader(_gl.FRAGMENT_SHADER);
+        } else {
+            return null; // Unknown shader type.
+        }        
+
+        // Send the source to the shader object
+        _gl.shaderSource(webGLShader, shaderSource);
+
+        // Compile the shader program
+        _gl.compileShader(webGLShader);
+
+        // See if it compiled successfully
+        if (_gl.getShaderParameter(webGLShader, _gl.COMPILE_STATUS) === false) {
+            //
+            var log = _gl.getShaderInfoLog(webGLShader);
+            _gl.deleteShader(webGLShader);
+
+            throw 'An error occurred compiling the shaders: ' + log;
+        }
+
+        return webGLShader;
+    }
+
+    function loadWebGLShaderFromHtmlElement(id) {
+        //
+        var shaderScript = document.getElementById(id);
+
+        // Didn't find an element with the specified ID; abort.
+
+        if (shaderScript === null) {
+            return null;
+        }
+
+        // Walk through the source element's children, building the
+        // shader source string.
+
+        var shaderSource = '';
+        var currentChild = shaderScript.firstChild;
+
+        while (currentChild !== null) {
+            //
+            if (currentChild.nodeType === Node.TEXT_NODE) {
+                shaderSource += currentChild.textContent;
+            }
+
+            currentChild = currentChild.nextSibling;
+        }
+
+        // Now figure out what type of shader script we have,
+        // based on its MIME type.
+
+        var webGLShader;
+
+        if (shaderScript.type === 'x-shader/x-vertex') {
+            webGLShader = _gl.createShader(_gl.VERTEX_SHADER);
+        } else if (
+            shaderScript.type === 'x-shader/x-fragment'
+        ){
+            webGLShader = _gl.createShader(_gl.FRAGMENT_SHADER);
+        } else {
+            return null; // Unknown shader type.
+        }
+
+        // Send the source to the shader object
+        _gl.shaderSource(webGLShader, shaderSource);
+
+        // Compile the shader program
+        _gl.compileShader(webGLShader);
+
+        // See if it compiled successfully
+        if (_gl.getShaderParameter(webGLShader, _gl.COMPILE_STATUS) === false) {
+            //
+            var log = _gl.getShaderInfoLog(webGLShader);
+            _gl.deleteShader(webGLShader);
+
+            throw 'An error occurred compiling the shaders: ' + log;
+        }
+
+        return webGLShader;
+    }
+
+    function setUpProgram(webGLVertexShader, webGLFragmentShader) {
+        //
+        var program = new Program(_self);
+        var webGLProgram = program.webGLProgram;
+
+        _gl.attachShader(webGLProgram, webGLVertexShader);
+        _gl.attachShader(webGLProgram, webGLFragmentShader);
+
+        _gl.linkProgram(webGLProgram);
+
+        if (_gl.getProgramParameter(webGLProgram, _gl.LINK_STATUS) === false) {
+            //
+            var log = _gl.getProgramInfoLog(webGLProgram);
+            _gl.deleteProgram(webGLProgram);
+
+            throw 'Unable to initialize the (shader) program: ' + log;
+        }
+        
+        return program;
+    }
+    
+    //
+    // Privileged methods.
+    //
+    this.setUpProgram = function(vertexShaderSource, fragmentShaderSource) {
+        //
+        var webGLVertexShader =
+            loadWebGLShader(ShaderType.VERTEX_SHADER, vertexShaderSource);
+
+        var webGLFragmentShader =
+            loadWebGLShader(ShaderType.FRAGMENT_SHADER, fragmentShaderSource);
+
+        return setUpProgram(webGLVertexShader, webGLFragmentShader);
+    };
+
+    this.setUpProgramFromHtmlElements = function(vertexShaderId, fragmentShaderId) {
+        //
+        var vertexShader =
+            loadWebGLShaderFromHtmlElement(ShaderType.VERTEX_SHADER, vertexShaderId);
+
+        var fragmentShader =
+            loadWebGLShaderFromHtmlElement(ShaderType.FRAGMENT_SHADER, fragmentShaderId);
+
+        return setUpProgram(vertexShader, fragmentShader);
+    };
+}
+
+Object.freeze(ProgramLoader);
+
+//
+// Constructor.
+//
+function Texture2D(_textureLoader) {
+    //
+    var _self;
+    var _gl;
+    var _width;
+    var _height;
+    var _webGLTexture;
+
+    try {
+        //
+        _self = this;
+        _gl = _textureLoader.loader.renderer.gl;
+
+    } catch (e) {
+        //
+        console.log('g2l.Texture2D: ' + e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(_self, 'loader', {
+        'get': function() { return _loader; }
+    });
+
+    Object.defineProperty(_self, 'width', {
+        'get': function() { return _width; },
+        'set': function(value) { _width = value; }
+    });
+
+    Object.defineProperty(_self, 'height', {
+        'get': function() { return _height; },
+        'set': function(value) { _height = value; }
+    });
+
+    Object.defineProperty(_self, 'webGLTexture', {
+        'get': function() { return _webGLTexture; },
+        'set': function(value) { _webGLTexture = value; }
+    });
+}
+
+Object.freeze(Texture2D);
+
+// Note:
+// DB uses
+// - key: url (string)
+// - value: Texture
+//
+//
+// Constructor.
+//
+function TextureLoader(_loader) {
+    //
+    var _self;
+    var _gl;
+    var _db;
+
+    try {
+        //
+        _self = this;
+        _gl = _loader.renderer.gl;
+        _db = {};
+
+    } catch (e) {
+        //
+        console.log('g2l.TextureLoader: ' + e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(_self, 'loader', {
+        'get': function() { return _loader; }
+    });
+
+    //
+    // Private methods.
+    //
+    function createWebGLTexture() {
+        return _gl.createTexture();
+    }
+    
+    function handleTexture2DLoaded(image, webGLTexture) {
+        //
+        _gl.bindTexture (
+            _gl.TEXTURE_2D,
+            webGLTexture
+        );
+
+        _gl.texImage2D (
+            _gl.TEXTURE_2D,    // target
+            0,                 // level
+            _gl.RGBA,          // internalFormat
+            _gl.RGBA,          // format
+            _gl.UNSIGNED_BYTE, // type
+            image              // htmlImageElement
+        );
+
+        if (MathHelper.isPowerOfTwo(image.width) === true &&
+            MathHelper.isPowerOfTwo(image.height) === true) {
+            //
+            _gl.generateMipmap(_gl.TEXTURE_2D);
+            
+            _gl.texParameteri (
+                _gl.TEXTURE_2D,
+                _gl.TEXTURE_MIN_FILTER,
+                _gl.LINEAR_MIPMAP_LINEAR
+            );
+
+        } else {
+            //
+            _gl.texParameteri (
+                _gl.TEXTURE_2D,
+                _gl.TEXTURE_MIN_FILTER,
+                _gl.LINEAR
+            );
+        }
+
+        // TEXTURE_MAG_FILTER only has NEAREST or LINEAR to choose, no LINEAR_
+        // MIPMAP_LINEAR.
+        _gl.texParameteri (
+            _gl.TEXTURE_2D,
+            _gl.TEXTURE_MAG_FILTER,
+            _gl.LINEAR
+        );
+
+        _gl.texParameteri (
+            _gl.TEXTURE_2D,
+            _gl.TEXTURE_WRAP_S,
+            _gl.CLAMP_TO_EDGE
+        );
+
+        _gl.texParameteri (
+            _gl.TEXTURE_2D,
+            _gl.TEXTURE_WRAP_T,
+            _gl.CLAMP_TO_EDGE
+        );
+
+        _gl.bindTexture(_gl.TEXTURE_2D, null);
+    }
+
+    //
+    // Privileged methods.
+    //
+    this.loadTexture2D = function(url) {
+        //
+        if (url === undefined) {
+            throw 'An argument-undefined exception raised.';
+        }
+
+        var texture = _db[url];
+        if (texture !== undefined) {
+            return texture;
+        }
+
+        var texture = new Texture2D(_self);
+        _db[url] = texture;
+
+        var image = new Image();
+
+        image.addEventListener('load', function() {
+            //
+            var webGLTexture = createWebGLTexture();
+
+            handleTexture2DLoaded(image, webGLTexture);
+
+            texture.width = image.width;
+            texture.height = image.height;
+            texture.webGLTexture = webGLTexture;
+        });
+
+        image.src = url;
+
+        return texture;
+    };
+}
+
+Object.freeze(TextureLoader);
+
+//
+// Constructor.
+//
+function Loader(_renderer) {
+    //
+    var _self;
+    var _gl;
+    var _bufferLoader;
+    var _textureLoader;
+    var _programLoader;
+
+    try {
+        //
+        _self = this;
+        
+        bindRenderer();
+
+        _bufferLoader = new BufferLoader(_self);
+        _textureLoader = new TextureLoader(_self);
+        _programLoader = new ProgramLoader(_self);
+
+    } catch (e) {
+        //
+        console.log('g2l.Loader: ' + e);
+
+        throw e;
+    }
+
+    //
+    // Private methods.
+    //
+    function bindRenderer() {
+        //
+        _gl = _renderer.gl;
+
+        Object.defineProperty(_self, 'renderer', {
+            'get': function() { return _renderer; }
+        });
+    }
+    
+    //
+    // Privileged methods.
+    //
+    this.createVertexBuffer = function() {
+        return _bufferLoader.createVertexBuffer();
+    };
+
+    this.createIndexBuffer = function() {
+        return _bufferLoader.createIndexBuffer();
+    };
+
+    this.setUpProgram = function(vertexShaderSource, fragmentShaderSource) {
+        //
+        return _programLoader.setUpProgram(vertexShaderSource, fragmentShaderSource);
+    };
+
+    this.setUpProgramFromHtmlElements = function(vertexShaderId, fragmentShaderId) {
+        //
+        return _programLoader.setUpProgram(vertexShaderId, fragmentShaderId);
+    };
+
+    this.loadTexture2D = function(url) {
+        //
+        return _textureLoader.loadTexture2D(url);
+    };
+}
+
+Object.freeze(Loader);
 
 // Note:
 // This engine doesn't handle window's resize event anymore. See the article...
@@ -2557,6 +3244,7 @@ function Renderer(_settings) {
     var _self;
     var _canvas;
     var _gl;
+    var _loader;
     var _program;
     var _clearColor;
     var _clearDepth;
@@ -2624,6 +3312,18 @@ function Renderer(_settings) {
     });
     */
     
+    Object.defineProperty(_self, 'loader', {
+        //
+        get: function() {
+            //
+            if (_loader === undefined) {
+                _loader = new Loader(_self);
+            }
+
+            return _loader;
+        }
+    });
+
     Object.defineProperty(_self, 'program', {
         //
         get: function() {
@@ -3009,87 +3709,6 @@ Renderer.DEFAULT_TEXTURE_UNIT  = 0;
 
 Object.freeze(Renderer);
 
-//
-// Constructor.
-//
-function IndexBuffer(_bufferLoader) {
-    //
-    var _self;
-    var _gl;
-    var _webGLBuffer;
-
-    try {
-        //
-        _self = this;
-        _gl = _bufferLoader.loader.renderer.gl;
-
-        _webGLBuffer = _gl.createBuffer();
-
-    } catch (e) {
-        //
-        console.log('g2l.IndexBuffer: ' + e);
-
-        throw e;
-    }
-
-    //
-    // Properties.
-    //
-    Object.defineProperty(_self, 'bufferLoader', {
-        'get': function() { return _bufferLoader; }
-    });
-
-    Object.defineProperty(_self, 'webGLBuffer', {
-        'get': function() { return _webGLBuffer; }
-    });
-}
-
-IndexBuffer.prototype = {
-    //
-    // Public methods.
-    //
-    loadData: function(data) {
-        //
-        var gl = this.bufferLoader.loader.renderer.gl;
-
-        gl.bindBuffer (
-            gl.ELEMENT_ARRAY_BUFFER,
-            this.webGLBuffer
-        );
-
-        // Note:
-        // DirectX supports 16-bit or 32-bit index buffers. But in this engine,
-        // so far, only 16-bit index buffer is supported.
-        /*
-        if (uses16Bits === true) {
-            //
-            gl.bufferData (
-                gl.ELEMENT_ARRAY_BUFFER,
-                new Uint16Array(data),
-                gl.STATIC_DRAW
-            );
-
-        } else {
-            //
-            gl.bufferData (
-                gl.ELEMENT_ARRAY_BUFFER,
-                new Uint32Array(data),
-                gl.STATIC_DRAW
-            );
-        }
-        */
-
-        gl.bufferData (
-            gl.ELEMENT_ARRAY_BUFFER,
-            data, // which is already a Uint16Array.
-            gl.STATIC_DRAW
-        );
-        // :Note
-    }
-};
-
-Object.freeze(IndexBuffer);
-
 // Note:
 // NDC stands for 'normalized device coordinates'.
 
@@ -3286,43 +3905,6 @@ PrimitiveType.TRIANGLE_STRIP = 5; // = gl.TRIANGLE_STRIP
 
 Object.freeze(PrimitiveType);
 
-//
-// Constructor.
-//
-function Program(_programLoader) {
-    //
-    var _self;
-    var _gl;
-    var _webGLProgram;
-
-    try {
-        //
-        _self = this;
-        _gl = _programLoader.loader.renderer.gl;
-
-        _webGLProgram = _gl.createProgram();
-
-    } catch (e) {
-        //
-        console.log('g2l.Program: ' + e);
-
-        throw e;
-    }
-
-    //
-    // Properties.
-    //
-    Object.defineProperty(_self, 'programLoader', {
-        'get': function() { return _programLoader; }
-    });
-
-    Object.defineProperty(_self, 'webGLProgram', {
-        'get': function() { return _webGLProgram; }
-    });
-}
-
-Object.freeze(Program);
-
 // Note:
 // GDI+'s Rectangle and WPF's Rect are both (left, top, width, height). But cuz
 // OpenGL's texture coordinates is from lower-left (0, 0) to upper-right (1, 1),
@@ -3441,21 +4023,6 @@ Object.freeze(ScreenCoordinateHelper);
 //
 // Constructor.
 //
-function ShaderType() {
-    // No contents.
-}
-
-//
-// Static constants (after Object.freeze()).
-//
-ShaderType.VERTEX_SHADER = 0;
-ShaderType.FRAGMENT_SHADER = 1;
-
-Object.freeze(ShaderType);
-
-//
-// Constructor.
-//
 function Size2D(_width, _height) {
     //
     this.width = _width;
@@ -3507,6 +4074,8 @@ function Sprite (
     if (_creationOptions === undefined) {
         _creationOptions = Sprite.DEFAULT_CREATION_OPTIONS;
     }
+
+    this.creationOptions = _creationOptions;
 
     if (_vertexColor === undefined) {
         _vertexColor = Sprite.DEFAULT_VERTEX_COLOR;
@@ -3562,10 +4131,16 @@ Sprite.POSITION_SIZE           = 3; // (x, y, z)
 Sprite.COLOR_SIZE              = 4; // (r, g, b, a)
 Sprite.TEXTURE_COORDINATE_SIZE = 2; // (s, t)
 
+// Note:
+/*
 Sprite.DEFAULT_CREATION_OPTIONS = (
     SpriteCreationOptions.VERTEX_POSITIONS |
     SpriteCreationOptions.VERTEX_COLORS |
     SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES
+);
+*/
+Sprite.DEFAULT_CREATION_OPTIONS = (
+    SpriteCreationOptions.VERTEX_POSITIONS
 );
 
 Sprite.DEFAULT_VERTEX_COLOR = Colors.WHITE;
@@ -3626,18 +4201,66 @@ Sprite.createVertexTextureCoordinates = function(rect) {
 
 Object.freeze(Sprite);
 
+// Note:
+// SpriteBatch, in this engine, only supports vertex buffers, no index buffers.
+
+// Note:
+// LineSegment2D/3D do support vertex/index buffers depends on what value areDb-
+// FrequentlyChanged is in the constructors.
+
+// Note:
+// XNA SpriteBatch uses vertex/index buffers, and besides, it can draw more than
+// one deferred item at once if those items use the same texture. Maybe someday
+// I'll implement this feature, so this engine keeps areDbFrequentlyChanged in the
+// constructor (but not uses it).
+
 //
 // Constructor.
 //
-function SpriteBatch(_renderer) {
+function SpriteBatch(_renderer, _settings) {
     //
     var _self;
     var _gl;
+    var _db;
+    var _isBegun;
+    var _isOkToAddItem;
+
+    var _program;
+    var _attributeLocations;
+    var _uniformLocations;
+
+    var _vertexBuffers;
+    var _clearsDbAfterDrawing;
+    var _areDbFrequentlyChanged;
+
+    var _defaultVertexBuffers;
 
     try {
         //
         _self = this;
         _gl = _renderer.gl;
+
+        if (_settings !== undefined) {
+            _clearsDbAfterDrawing = _settings.clearsDbAfterDrawing;
+            _areDbFrequentlyChanged = _settings.areDbFrequentlyChanged;
+        }
+
+        if (_clearsDbAfterDrawing === undefined) {
+            _clearsDbAfterDrawing = SpriteBatch.DEFAULT_OF_IF_CLEARS_DB_AFTER_DRAWING;
+        }
+
+        if (_areDbFrequentlyChanged === undefined) {
+            _areDbFrequentlyChanged = SpriteBatch.DEFAULT_OF_IF_DB_FREQUENTLY_CHANGED;
+        }
+
+        _db = [];
+
+        setUpVertexBuffers();
+
+        setUpShaders();
+
+        _isBegun = false;
+        _isOkToAddItem = true;
 
     } catch (e) {
         //
@@ -3656,68 +4279,332 @@ function SpriteBatch(_renderer) {
     //
     // Private methods.
     //
-    this.begin = function() {
-
-    };
-
-    this.drawSprite = function() {
-
-    };
-
-    this.end = function() {
-
-    };
-}
-
-Object.freeze(SpriteBatch);
-
-//
-// Constructor.
-//
-function Texture2D(_textureLoader) {
-    //
-    var _self;
-    var _gl;
-    var _width;
-    var _height;
-    var _webGLTexture;
-
-    try {
+    function setUpVertexBuffers() {
         //
-        _self = this;
-        _gl = _textureLoader.loader.renderer.gl;
+        _vertexBuffers = {
+            position: [],
+            color: [],
+            textureCoordinates: []
+        };
 
-    } catch (e) {
+        _defaultVertexBuffers = {
+            color: _renderer.loader.createVertexBuffer(),
+            textureCoordinates: _renderer.loader.createVertexBuffer()
+        };
+
+        _defaultVertexBuffers.color.loadData (
+            Sprite.DEFAULT_VERTEX_COLORS,
+            Sprite.COLOR_SIZE
+        );
+
+        _defaultVertexBuffers.textureCoordinates.loadData (
+            Sprite.DEFAULT_VERTEX_TEXTURE_COORDINATES,
+            Sprite.TEXTURE_COORDINATE_SIZE
+        );
+    }
+
+    function setUpShaders() {
         //
-        console.log('g2l.Texture2D: ' + e);
+        _program = _renderer.loader.setUpProgram (
+            SpriteBatch.VERTEX_SHADER_SOURCE,
+            SpriteBatch.FRAGMENT_SHADER_SOURCE
+        );
 
-        throw e;
+        _attributeLocations = {
+            //
+            vertexPosition: _renderer.getAttributeLocation (
+                _program,
+               'vertexPosition'
+            ),
+
+            vertexColor: _renderer.getAttributeLocation (
+                _program,
+               'vertexColor'
+            ),
+
+            vertexTextureCoordinates: _renderer.getAttributeLocation (
+                _program,
+               'vertexTextureCoordinates'
+            )
+        };
+
+        _uniformLocations = {
+            //
+            canvasClientSize: _renderer.getUniformLocation (
+                _program,
+               'canvasClientSize'
+            ),
+
+            sampler: _renderer.getUniformLocation (
+                _program,
+               'sampler'
+            )
+        };
+    }
+
+    function flush() {
+        //
+        _renderer.program = _program;
+
+        _renderer.setVector2DUniform (
+            // Part 1.
+            _uniformLocations.canvasClientSize,
+            // Part 2.
+            new Float32Array ([
+                _renderer.canvas.clientWidth,
+                _renderer.canvas.clientHeight            
+            ])
+        );        
+
+        var vb = null;
+        var lastTexture = null;
+        
+        for (var i=0; i<_db.length; i++) {
+            //
+            var item = _db[i];
+
+            vb = _vertexBuffers.position[i];
+
+            _renderer.setAttribute (
+                _attributeLocations.vertexPosition,
+                vb
+            );
+
+            if ((item.creationOptions & SpriteCreationOptions.VERTEX_COLORS) ===
+                SpriteCreationOptions.VERTEX_COLORS) {
+                //
+                vb = _vertexBuffers.color[i];
+
+            } else {
+                vb = _defaultVertexBuffers.color;
+            }
+
+            _renderer.setAttribute (
+                _attributeLocations.vertexColor,
+                vb
+            );
+
+            if ((item.creationOptions & SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES) ===
+                SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES) {
+                //
+                vb = _vertexBuffers.textureCoordinates[i];
+
+            } else {
+                vb = _defaultVertexBuffers.textureCoordinates;
+            }
+
+            _renderer.setAttribute (
+                _attributeLocations.vertexTextureCoordinates,
+                vb
+            );
+
+            if (lastTexture !== item.texture) {
+                //
+                _renderer.setSampler (
+                    _uniformLocations.sampler,
+                    item.texture
+                );
+
+                lastTexture = item.texture;
+            }
+
+            _renderer.drawPrimitives (
+                PrimitiveType.TRIANGLE_STRIP,
+                0,
+                4
+            );
+        }
+    }
+
+    function clear() {
+        //
+        _db = [];
+
+        if (_clearsDbAfterDrawing === false) {
+            _isOkToAddItem = true;
+        }
     }
 
     //
-    // Properties.
+    // Priviledged methods.
     //
-    Object.defineProperty(_self, 'loader', {
-        'get': function() { return _loader; }
-    });
+    this.begin = function() {
+        //
+        _isBegun = true;
+    };
 
-    Object.defineProperty(_self, 'width', {
-        'get': function() { return _width; },
-        'set': function(value) { _width = value; }
-    });
+    this.drawSprite = function (
+        texture,
+        creationOptions,
+        centerScreenPosition,
+        screenSize,
+        vertexColor,
+        sourceTextureCoordinateRect
+    ){
+        if (_clearsDbAfterDrawing === false &&
+            _isOkToAddItem === false) {
+            return;
+        }
 
-    Object.defineProperty(_self, 'height', {
-        'get': function() { return _height; },
-        'set': function(value) { _height = value; }
-    });
+        if (_isBegun === false) {
+            throw 'A begin-not-called-before-drawing exception raised.';
+        }
 
-    Object.defineProperty(_self, 'webGLTexture', {
-        'get': function() { return _webGLTexture; },
-        'set': function(value) { _webGLTexture = value; }
-    });
+        if (DepthBufferValues.isDepthOutOfRange(centerScreenPosition.z) === true) {
+            return;
+        }
+
+        var sprite = new Sprite (
+            _self,
+            texture,
+            creationOptions,
+            centerScreenPosition,
+            screenSize,
+            vertexColor,
+            sourceTextureCoordinateRect
+        );
+
+        var vb;
+        var index = _db.length;
+        
+        // 1. Vertex positions.
+        if (_vertexBuffers.position.length - 1 < index) {
+            //
+            vb = _renderer.loader.createVertexBuffer();
+            _vertexBuffers.position.push(vb);
+        } else {
+            vb = _vertexBuffers.position[index];
+        }
+
+        vb.loadData (
+            sprite.vertexPositions,
+            Sprite.POSITION_SIZE
+        );
+
+        // 2. Vertex colors.
+        if (_vertexBuffers.color.length - 1 < index) {
+            //
+            vb = _renderer.loader.createVertexBuffer();
+            _vertexBuffers.color.push(vb);
+        } else {
+            vb = _vertexBuffers.color[index];
+        }
+
+        if ((sprite.creationOptions & SpriteCreationOptions.VERTEX_COLORS) ===
+            SpriteCreationOptions.VERTEX_COLORS) {
+            //
+            vb.loadData (
+                sprite.vertexColors,
+                Sprite.COLOR_SIZE
+            );
+        }
+
+        // 3. Vertex texture coordinates.
+        if (_vertexBuffers.textureCoordinates.length - 1 < index) {
+            //
+            vb = _renderer.loader.createVertexBuffer();
+            _vertexBuffers.textureCoordinates.push(vb);
+        } else {
+            vb = _vertexBuffers.textureCoordinates[index];
+        }
+
+        if ((sprite.creationOptions & SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES) ===
+            SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES) {
+            //
+            vb.loadData (
+                sprite.vertexTextureCoordinates,
+                Sprite.TEXTURE_COORDINATE_SIZE
+            );
+        }
+
+        _db.push(sprite);
+    };
+
+    this.end = function() {
+        //
+        if (_isBegun === false) {
+            throw 'A begin-not-called-before-drawing exception raised.';
+        }
+
+        if (0 < _db.length) {
+            //
+            if (// Part 1.
+                _clearsDbAfterDrawing === true || 
+                // Part 2.
+               (_clearsDbAfterDrawing === false &&
+                _isOkToAddItem === true)) {
+                //
+                if (_clearsDbAfterDrawing === false) {
+                    _isOkToAddItem = false;
+                }
+            }
+
+            // Flushes the deferred items.
+            flush();
+
+            if (_clearsDbAfterDrawing === true) {
+                //
+                // Clears the deferred items.
+                clear();
+            }
+        }
+
+        _isBegun = false;
+    };
 }
 
-Object.freeze(Texture2D);
+//
+// Static constants (after Object.freeze()).
+//
+SpriteBatch.VERTEX_SHADER_SOURCE = [
+    //
+   'precision highp float;', // which is the default vertex shader precision.
+
+   'attribute vec3 vertexPosition;',
+   'attribute vec4 vertexColor;',
+   'attribute vec2 vertexTextureCoordinates;',
+
+   'varying vec4 color;',
+   'varying vec2 textureCoordinates;',
+
+   'uniform vec2 canvasClientSize;',
+
+   'void main() {',
+        //
+        // Converts the vertex position from screen space to clip space (not NDC
+        // yet).
+       'gl_Position = vec4 (',
+           '-1.0 + 2.0 * (vertexPosition.x / canvasClientSize.x),',
+           '-1.0 + 2.0 * (vertexPosition.y / canvasClientSize.y),',
+           'vertexPosition.z,',
+           '1.0',
+       ');',
+
+       'color = vertexColor;',
+       'textureCoordinates = vertexTextureCoordinates;',
+   '}'
+
+].join('\n');
+
+SpriteBatch.FRAGMENT_SHADER_SOURCE = [
+    //
+   'precision mediump float;', // which is the recommended fragment shader precision.
+
+   'varying vec4 color;',
+   'varying vec2 textureCoordinates;',
+
+   'uniform sampler2D sampler;',
+
+   'void main() {',
+       'gl_FragColor = color * texture2D(sampler, textureCoordinates);',
+   '}'
+   
+].join('\n');
+
+SpriteBatch.DEFAULT_OF_IF_CLEARS_DB_AFTER_DRAWING = true;
+SpriteBatch.DEFAULT_OF_IF_DB_FREQUENTLY_CHANGED = true;
+
+Object.freeze(SpriteBatch);
 
 // Note:
 // Texture Coordinates.
@@ -3902,71 +4789,6 @@ Object.freeze(TransformedPositionTextureCoordinates);
 //
 // Constructor.
 //
-function VertexBuffer(_bufferLoader) {
-    //
-    var _self;
-    var _gl;
-    var _webGLBuffer;
-    var _size; // Number of components per vertex attribute. Must be 1, 2, 3, or 4.
-
-    try {
-        //
-        _self = this;
-        _gl = _bufferLoader.loader.renderer.gl;
-
-        _webGLBuffer = _gl.createBuffer();
-
-    } catch (e) {
-        //
-        console.log('g2l.VertexBuffer: ' + e);
-
-        throw e;
-    }
-
-    //
-    // Properties.
-    //
-    Object.defineProperty(_self, 'bufferLoader', {
-        'get': function() { return _bufferLoader; }
-    });
-
-    Object.defineProperty(_self, 'webGLBuffer', {
-        'get': function() { return _webGLBuffer; }
-    });
-
-    Object.defineProperty(_self, 'size', {
-        'get': function() { return _size; },
-        'set': function(value) { _size = value; }
-    });
-}
-
-VertexBuffer.prototype = {
-    //
-    // Public methods.
-    //
-    loadData: function(data, size) {
-        //
-        var gl = this.bufferLoader.loader.renderer.gl;
-        this.size = size;
-
-        gl.bindBuffer (
-            gl.ARRAY_BUFFER,
-            this.webGLBuffer
-        );
-        
-        gl.bufferData (
-            gl.ARRAY_BUFFER,
-            data, // which is already a Float32Array.
-            gl.STATIC_DRAW
-        );
-    }
-};
-
-Object.freeze(VertexBuffer);
-
-//
-// Constructor.
-//
 function ExceptionHelper() {
     // No contents.
 }
@@ -4094,423 +4916,6 @@ MouseButton.MIDDLE = 1;
 MouseButton.RIGHT  = 2;
  
 Object.freeze(MouseButton);
-
-//
-// Constructor.
-//
-function BufferLoader(_loader) {
-    //
-    var _self;
-    var _gl;
-
-    try {
-        //
-        _self = this;
-        _gl = _loader.renderer.gl;
-
-    } catch (e) {
-        //
-        console.log('g2l.BufferLoader: ' + e);
-
-        throw e;
-    }
-
-    //
-    // Properties.
-    //
-    Object.defineProperty(_self, 'loader', {
-        'get': function() { return _loader; }
-    });
-    
-    //
-    // Privileged methods.
-    //
-    this.createVertexBuffer = function() {
-        return new VertexBuffer(_self);
-    };
-
-    this.createIndexBuffer = function() {
-        return new IndexBuffer(_self);
-    };
-}
-
-Object.freeze(BufferLoader);
-
-//
-// Constructor.
-//
-function ProgramLoader(_loader) {
-    //
-    var _self;
-    var _gl;
-
-    try {
-        //
-        _self = this;
-        _gl = _loader.renderer.gl;
-
-    } catch (e) {
-        //
-        console.log('g2l.ProgramLoader: ' + e);
-
-        throw e;
-    }
-
-    //
-    // Properties.
-    //
-    Object.defineProperty(_self, 'loader', {
-        'get': function() { return _loader; }
-    });
-
-    //
-    // Private methods.
-    //
-    function loadWebGLShader(shaderType, shaderSource) {
-        //
-        var webGLShader;
-
-        if (shaderType === ShaderType.VERTEX_SHADER) {
-            webGLShader = _gl.createShader(_gl.VERTEX_SHADER);
-        } else if (
-            shaderType === ShaderType.FRAGMENT_SHADER
-        ){
-            webGLShader = _gl.createShader(_gl.FRAGMENT_SHADER);
-        } else {
-            return null; // Unknown shader type.
-        }        
-
-        // Send the source to the shader object
-        _gl.shaderSource(webGLShader, shaderSource);
-
-        // Compile the shader program
-        _gl.compileShader(webGLShader);
-
-        // See if it compiled successfully
-        if (_gl.getShaderParameter(webGLShader, _gl.COMPILE_STATUS) === false) {
-            //
-            var log = _gl.getShaderInfoLog(webGLShader);
-            _gl.deleteShader(webGLShader);
-
-            throw 'An error occurred compiling the shaders: ' + log;
-        }
-
-        return webGLShader;
-    }
-
-    function loadWebGLShaderFromHtmlElement(id) {
-        //
-        var shaderScript = document.getElementById(id);
-
-        // Didn't find an element with the specified ID; abort.
-
-        if (shaderScript === null) {
-            return null;
-        }
-
-        // Walk through the source element's children, building the
-        // shader source string.
-
-        var shaderSource = '';
-        var currentChild = shaderScript.firstChild;
-
-        while (currentChild !== null) {
-            //
-            if (currentChild.nodeType === Node.TEXT_NODE) {
-                shaderSource += currentChild.textContent;
-            }
-
-            currentChild = currentChild.nextSibling;
-        }
-
-        // Now figure out what type of shader script we have,
-        // based on its MIME type.
-
-        var webGLShader;
-
-        if (shaderScript.type === 'x-shader/x-vertex') {
-            webGLShader = _gl.createShader(_gl.VERTEX_SHADER);
-        } else if (
-            shaderScript.type === 'x-shader/x-fragment'
-        ){
-            webGLShader = _gl.createShader(_gl.FRAGMENT_SHADER);
-        } else {
-            return null; // Unknown shader type.
-        }
-
-        // Send the source to the shader object
-        _gl.shaderSource(webGLShader, shaderSource);
-
-        // Compile the shader program
-        _gl.compileShader(webGLShader);
-
-        // See if it compiled successfully
-        if (_gl.getShaderParameter(webGLShader, _gl.COMPILE_STATUS) === false) {
-            //
-            var log = _gl.getShaderInfoLog(webGLShader);
-            _gl.deleteShader(webGLShader);
-
-            throw 'An error occurred compiling the shaders: ' + log;
-        }
-
-        return webGLShader;
-    }
-
-    function setUpProgram(webGLVertexShader, webGLFragmentShader) {
-        //
-        var program = new Program(_self);
-        var webGLProgram = program.webGLProgram;
-
-        _gl.attachShader(webGLProgram, webGLVertexShader);
-        _gl.attachShader(webGLProgram, webGLFragmentShader);
-
-        _gl.linkProgram(webGLProgram);
-
-        if (_gl.getProgramParameter(webGLProgram, _gl.LINK_STATUS) === false) {
-            //
-            var log = _gl.getProgramInfoLog(webGLProgram);
-            _gl.deleteProgram(webGLProgram);
-
-            throw 'Unable to initialize the (shader) program: ' + log;
-        }
-        
-        return program;
-    }
-    
-    //
-    // Privileged methods.
-    //
-    this.setUpProgram = function(vertexShaderSource, fragmentShaderSource) {
-        //
-        var webGLVertexShader =
-            loadWebGLShader(ShaderType.VERTEX_SHADER, vertexShaderSource);
-
-        var webGLFragmentShader =
-            loadWebGLShader(ShaderType.FRAGMENT_SHADER, fragmentShaderSource);
-
-        return setUpProgram(webGLVertexShader, webGLFragmentShader);
-    };
-
-    this.setUpProgramFromHtmlElements = function(vertexShaderId, fragmentShaderId) {
-        //
-        var vertexShader =
-            loadWebGLShaderFromHtmlElement(ShaderType.VERTEX_SHADER, vertexShaderId);
-
-        var fragmentShader =
-            loadWebGLShaderFromHtmlElement(ShaderType.FRAGMENT_SHADER, fragmentShaderId);
-
-        return setUpProgram(vertexShader, fragmentShader);
-    };
-}
-
-Object.freeze(ProgramLoader);
-
-// Note:
-// DB uses
-// - key: url (string)
-// - value: Texture
-//
-//
-// Constructor.
-//
-function TextureLoader(_loader) {
-    //
-    var _self;
-    var _gl;
-    var _db;
-
-    try {
-        //
-        _self = this;
-        _gl = _loader.renderer.gl;
-        _db = {};
-
-    } catch (e) {
-        //
-        console.log('g2l.TextureLoader: ' + e);
-
-        throw e;
-    }
-
-    //
-    // Properties.
-    //
-    Object.defineProperty(_self, 'loader', {
-        'get': function() { return _loader; }
-    });
-
-    //
-    // Private methods.
-    //
-    function createWebGLTexture() {
-        return _gl.createTexture();
-    }
-    
-    function handleTexture2DLoaded(image, webGLTexture) {
-        //
-        _gl.bindTexture (
-            _gl.TEXTURE_2D,
-            webGLTexture
-        );
-
-        _gl.texImage2D (
-            _gl.TEXTURE_2D,    // target
-            0,                 // level
-            _gl.RGBA,          // internalFormat
-            _gl.RGBA,          // format
-            _gl.UNSIGNED_BYTE, // type
-            image              // htmlImageElement
-        );
-
-        if (MathHelper.isPowerOfTwo(image.width) === true &&
-            MathHelper.isPowerOfTwo(image.height) === true) {
-            //
-            _gl.generateMipmap(_gl.TEXTURE_2D);
-            
-            _gl.texParameteri (
-                _gl.TEXTURE_2D,
-                _gl.TEXTURE_MIN_FILTER,
-                _gl.LINEAR_MIPMAP_LINEAR
-            );
-
-        } else {
-            //
-            _gl.texParameteri (
-                _gl.TEXTURE_2D,
-                _gl.TEXTURE_MIN_FILTER,
-                _gl.LINEAR
-            );
-        }
-
-        // TEXTURE_MAG_FILTER only has NEAREST or LINEAR to choose, no LINEAR_
-        // MIPMAP_LINEAR.
-        _gl.texParameteri (
-            _gl.TEXTURE_2D,
-            _gl.TEXTURE_MAG_FILTER,
-            _gl.LINEAR
-        );
-
-        _gl.texParameteri (
-            _gl.TEXTURE_2D,
-            _gl.TEXTURE_WRAP_S,
-            _gl.CLAMP_TO_EDGE
-        );
-
-        _gl.texParameteri (
-            _gl.TEXTURE_2D,
-            _gl.TEXTURE_WRAP_T,
-            _gl.CLAMP_TO_EDGE
-        );
-
-        _gl.bindTexture(_gl.TEXTURE_2D, null);
-    }
-
-    //
-    // Privileged methods.
-    //
-    this.loadTexture2D = function(url) {
-        //
-        if (url === undefined) {
-            throw 'An argument-undefined exception raised.';
-        }
-
-        var texture = _db[url];
-        if (texture !== undefined) {
-            return texture;
-        }
-
-        var texture = new Texture2D(_self);
-        _db[url] = texture;
-
-        var image = new Image();
-
-        image.addEventListener('load', function() {
-            //
-            var webGLTexture = createWebGLTexture();
-
-            handleTexture2DLoaded(image, webGLTexture);
-
-            texture.width = image.width;
-            texture.height = image.height;
-            texture.webGLTexture = webGLTexture;
-        });
-
-        image.src = url;
-
-        return texture;
-    };
-}
-
-Object.freeze(TextureLoader);
-
-//
-// Constructor.
-//
-function Loader(_renderer) {
-    //
-    var _self;
-    var _gl;
-    var _bufferLoader;
-    var _textureLoader;
-    var _programLoader;
-
-    try {
-        //
-        _self = this;
-        
-        bindRenderer();
-
-        _bufferLoader = new BufferLoader(_self);
-        _textureLoader = new TextureLoader(_self);
-        _programLoader = new ProgramLoader(_self);
-
-    } catch (e) {
-        //
-        console.log('g2l.Loader: ' + e);
-
-        throw e;
-    }
-
-    //
-    // Private methods.
-    //
-    function bindRenderer() {
-        //
-        _gl = _renderer.gl;
-
-        Object.defineProperty(_self, 'renderer', {
-            'get': function() { return _renderer; }
-        });
-    }
-    
-    //
-    // Privileged methods.
-    //
-    this.createVertexBuffer = function() {
-        return _bufferLoader.createVertexBuffer();
-    };
-
-    this.createIndexBuffer = function() {
-        return _bufferLoader.createIndexBuffer();
-    };
-
-    this.setUpProgram = function(vertexShaderSource, fragmentShaderSource) {
-        //
-        return _programLoader.setUpProgram(vertexShaderSource, fragmentShaderSource);
-    };
-
-    this.setUpProgramFromHtmlElements = function(vertexShaderId, fragmentShaderId) {
-        //
-        return _programLoader.setUpProgram(vertexShaderId, fragmentShaderId);
-    };
-
-    this.loadTexture2D = function(url) {
-        //
-        return _textureLoader.loadTexture2D(url);
-    };
-}
-
-Object.freeze(Loader);
 
 //
 // Constructor.

@@ -10,6 +10,7 @@ import { ClearOptions  }           from './clear-options';
 import { Color  }                  from './color';
 import { Colors }                  from './colors';
 import { DepthBufferValues }       from './depth-buffer-values';
+import { Loader }                  from '../loaders/loader';
 import { MathHelper }              from '../math/helpers/math-helper';
 import { Matrix4x4 }               from '../math/4x4-matrix';
 import { Vector2D }                from '../math/2d-vector';
@@ -29,6 +30,7 @@ function Renderer(_settings) {
     var _self;
     var _canvas;
     var _gl;
+    var _loader;
     var _program;
     var _clearColor;
     var _clearDepth;
@@ -96,6 +98,18 @@ function Renderer(_settings) {
     });
     */
     
+    Object.defineProperty(_self, 'loader', {
+        //
+        get: function() {
+            //
+            if (_loader === undefined) {
+                _loader = new Loader(_self);
+            }
+
+            return _loader;
+        }
+    });
+
     Object.defineProperty(_self, 'program', {
         //
         get: function() {

@@ -22,7 +22,7 @@ function main() {
         renderer = new g2l.Renderer();
         document.body.appendChild(renderer.canvas);
 
-        loader = new g2l.Loader(renderer);
+        loader = renderer.loader;
 
         setUpCamera();
 

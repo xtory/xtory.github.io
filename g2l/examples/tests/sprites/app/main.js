@@ -7,11 +7,11 @@ function main() {
     var title;
     var renderer;
     var loader;
+
+    // Sprites.
     var spriteBatch;
-    var vertexBuffers;
-    var program;
-    var attributeLocations;
-    var uniformLocations;
+    var spriteCount;
+    var spritePositionOffsets;
     var texture;
 
     // FPS.
@@ -20,9 +20,6 @@ function main() {
     var then;
     var lastAverageFps;
 
-    var spriteCount;
-    var spritePositionOffsets;
-
     try {
         //
         title = 'Sprites';
@@ -30,15 +27,13 @@ function main() {
         renderer = new g2l.Renderer();
         document.body.appendChild(renderer.canvas);
 
-        loader = new g2l.Loader(renderer);
+        loader = renderer.loader;
 
         spriteBatch = new g2l.SpriteBatch(renderer);
 
         setUpTextures();
 
         setUpSprites();
-
-        setUpShaders();
 
         setUpInfo();
 
@@ -69,8 +64,8 @@ function main() {
         spriteCount = 2000;
         spritePositionOffsets = [];
 
-        var width = 1500;
-        var height = 1500;
+        var width = 1250;
+        var height = 1250;
 
         for (var i=0; i<spriteCount; i++) {
             //
@@ -79,68 +74,8 @@ function main() {
                 height * (-0.25 + Math.random() * 0.5)  // -0.25 ~ 0.25
             ));
         }
-
-        vertexBuffers = {
-            position: [],
-            color: loader.createVertexBuffer(),
-            textureCoordinates: loader.createVertexBuffer()
-        }
-        
-        for (var i=0; i<spriteCount; i++) {
-            //
-            vertexBuffers.position.push(loader.createVertexBuffer());
-        }
-
-        vertexBuffers.color.loadData (
-            g2l.Sprite.DEFAULT_VERTEX_COLORS,
-            g2l.Sprite.COLOR_SIZE
-        );
-
-        vertexBuffers.textureCoordinates.loadData (
-            g2l.Sprite.DEFAULT_VERTEX_TEXTURE_COORDINATES,
-            g2l.Sprite.TEXTURE_COORDINATE_SIZE
-        );
-    }    
-    
-    function setUpShaders() {
-        //
-        program = loader.setUpProgram (
-            Sprite.VERTEX_SHADER_SOURCE,
-            Sprite.FRAGMENT_SHADER_SOURCE
-        );
-
-        attributeLocations = {
-            //
-            vertexPosition: renderer.getAttributeLocation (
-                program,
-               'vertexPosition'
-            ),
-
-            vertexColor: renderer.getAttributeLocation (
-                program,
-               'vertexColor'
-            ),
-
-            vertexTextureCoordinates: renderer.getAttributeLocation (
-                program,
-               'vertexTextureCoordinates'
-            )
-        };
-
-        uniformLocations = {
-            //
-            canvasClientSize: renderer.getUniformLocation (
-                program,
-               'canvasClientSize'
-            ),
-
-            sampler: renderer.getUniformLocation (
-                program,
-               'sampler'
-            )
-        };
     }
-
+    
     function setUpInfo() {
         //
         var left = document.getElementById('left');
@@ -160,6 +95,7 @@ function main() {
     }
 
     function hookEvents() {
+        //
         window.addEventListener('resize', onResize);
     }
 
@@ -172,76 +108,15 @@ function main() {
         //
         renderer.clear();
 
-        flush();
-
-        renderer.program = program;
-
-        renderer.setAttribute (
-            attributeLocations.vertexColor,
-            vertexBuffers.color // The one and only vertex color buffer.
-        );
-
-        renderer.setAttribute (
-            attributeLocations.vertexTextureCoordinates,
-            vertexBuffers.textureCoordinates // The one and only vertex texture-coordinate buffer.
-        );
-        
-        renderer.setVector2DUniform (
-            // Part 1.
-            uniformLocations.canvasClientSize,
-            // Part 2.
-            new Float32Array ([
-                renderer.canvas.clientWidth,
-                renderer.canvas.clientHeight            
-            ])
-        );
-        
-        var lastTexture = null;
-
-        for (var i=0; i<spriteCount; i++) {
-            //
-            var item = vertexBuffers.position[i];
-
-            renderer.setAttribute (
-                attributeLocations.vertexPosition,
-                item
-            );
-
-            // Test:
-            /*
-            renderer.setAttribute (
-                attributeLocations.vertexColor,
-                item.color
-            );
-
-            renderer.setAttribute (
-                attributeLocations.vertexTextureCoordinates,
-                item.textureCoordinates
-            );
-            */
-
-            if (lastTexture !== texture) {
-                //
-                renderer.setSampler (
-                    uniformLocations.sampler,
-                    texture
-                );
-
-                lastTexture = texture;
-            }
-
-            renderer.drawPrimitives (
-                g2l.PrimitiveType.TRIANGLE_STRIP,
-                0,
-                4
-            );
-        }
+        drawSprites();
 
         drawInfo();
     }
 
-    function flush() {
+    function drawSprites() {
         //
+        spriteBatch.begin();
+
         var center = new g2l.Vector2D (
             renderer.canvas.clientWidth * 0.5,
             renderer.canvas.clientHeight * 0.5
@@ -259,19 +134,15 @@ function main() {
                 0
             );
 
-            var sprite = new g2l.Sprite (
-                spriteBatch,
+            spriteBatch.drawSprite (
                 texture,
-                g2l.SpriteCreationOptions.VERTEX_POSITIONS,
+                g2l.SpriteCreationOptions.VERTEX_POSITIONS, //undefined,
                 p,
                 size
             );
-
-            vertexBuffers.position[i].loadData (
-                sprite.vertexPositions,
-                g2l.Sprite.POSITION_SIZE
-            );
         }
+
+        spriteBatch.end();
     }
 
     function drawInfo() {
@@ -299,6 +170,7 @@ function main() {
     // Event handlers.
     //
     function onResize(event) {
+        //
         //flush();
     }
 }

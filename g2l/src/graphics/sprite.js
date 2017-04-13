@@ -18,6 +18,8 @@ function Sprite (
         _creationOptions = Sprite.DEFAULT_CREATION_OPTIONS;
     }
 
+    this.creationOptions = _creationOptions;
+
     if (_vertexColor === undefined) {
         _vertexColor = Sprite.DEFAULT_VERTEX_COLOR;
     }
@@ -72,10 +74,16 @@ Sprite.POSITION_SIZE           = 3; // (x, y, z)
 Sprite.COLOR_SIZE              = 4; // (r, g, b, a)
 Sprite.TEXTURE_COORDINATE_SIZE = 2; // (s, t)
 
+// Note:
+/*
 Sprite.DEFAULT_CREATION_OPTIONS = (
     SpriteCreationOptions.VERTEX_POSITIONS |
     SpriteCreationOptions.VERTEX_COLORS |
     SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES
+);
+*/
+Sprite.DEFAULT_CREATION_OPTIONS = (
+    SpriteCreationOptions.VERTEX_POSITIONS
 );
 
 Sprite.DEFAULT_VERTEX_COLOR = Colors.WHITE;
