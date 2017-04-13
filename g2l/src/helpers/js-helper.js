@@ -5,6 +5,18 @@ function JSHelper() {
     // No contents.
 }
 
+JSHelper.inherit = function(subobject, superobject) {
+    //
+    var helper = function() {
+        //
+        // No contents.
+    };
+
+    helper.prototype = superobject.prototype;
+    
+    subobject.prototype = new helper();
+};
+
 //
 // Static methods.
 //
@@ -18,7 +30,7 @@ JSHelper.arrayContainsItem = function(array, item) {
     }
     
     return false;
-}
+};
 
 JSHelper.arrayRemoveItem = function(array, item) {
     //
@@ -31,7 +43,7 @@ JSHelper.arrayRemoveItem = function(array, item) {
     }
     
     return false;
-}
+};
 
 Object.freeze(JSHelper);
 

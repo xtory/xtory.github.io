@@ -43,7 +43,7 @@ VertexBuffer.prototype = {
     //
     // Public methods.
     //
-    setData: function(data, size) {
+    loadData: function(data, size) {
         //
         var gl = this.bufferLoader.loader.renderer.gl;
         this.size = size;

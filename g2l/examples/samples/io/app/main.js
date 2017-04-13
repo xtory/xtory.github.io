@@ -74,7 +74,7 @@ function main() {
         var p = new g2l.Vector3D(200, 200, 325);
         var origin = new g2l.Vector3D(0, 0, 0);
 
-        camera = new g2l.Camera (
+        camera = new g2l.SmoothCamera (
             renderer,
             p,
             g2l.Vector3D.subtractVectors(origin, p)
@@ -130,7 +130,7 @@ function main() {
            -50, -50, -50
         ]);
 
-        vertexBuffers.position.setData(vertexPositions, 3);
+        vertexBuffers.position.loadData(vertexPositions, 3);
 
         //
         // Vertex colors.
@@ -159,7 +159,7 @@ function main() {
 
         var vertexColors2 = new Float32Array(vertexColors);
 
-        vertexBuffers.color.setData(vertexColors2, 4);
+        vertexBuffers.color.loadData(vertexColors2, 4);
 
         //
         // Vertex indices.
@@ -193,7 +193,7 @@ function main() {
             20, 22, 23
         ]);
 
-        indexBuffer.setData(vertexIndices);
+        indexBuffer.loadData(vertexIndices);
     }
 
     function setUpShaders() {
@@ -254,6 +254,8 @@ function main() {
 
     function updateScene() {
         //
+        camera.update();
+
         fps.update();
     }
 
@@ -396,7 +398,12 @@ function main() {
     
     function onMouseWheel(event) {
         //
-        camera.zoom(event.wheelDelta);
+        if (event.wheelDelta === 0) {
+            return;
+        }
+
+        var zoomOffset = 250.0;
+        camera.zoom((event.wheelDelta<0) ? -zoomOffset : zoomOffset);
 
         event.preventDefault();
     }

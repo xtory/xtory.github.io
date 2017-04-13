@@ -2,6 +2,10 @@
 
 // Cameras.
 export { Camera }                                     from './cameras/camera';
+export { CameraState }                                from './cameras/states/camera-state';
+export { CameraStateStill }                           from './cameras/states/camera-state-still';
+export { CameraStateZooming }                         from './cameras/states/camera-state-zooming';
+export { SmoothCamera }                               from './cameras/smooth-camera';
 
 // Graphics.
 export { CanvasCoordinateHelper }                     from './graphics/helpers/canvas-coordinate-helper';

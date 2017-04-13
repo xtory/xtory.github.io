@@ -74,7 +74,7 @@ function main() {
             250, -150, 0
         ]);
 
-        vertexBuffers.position.setData(vertexPositions, 3);
+        vertexBuffers.position.loadData(vertexPositions, 3);
 
         //
         // Vertex colors.
@@ -87,7 +87,7 @@ function main() {
             )
         );
 
-        vertexBuffers.color.setData(vertexColors, 4);
+        vertexBuffers.color.loadData(vertexColors, 4);
     }
 
     function setUpShaders() {

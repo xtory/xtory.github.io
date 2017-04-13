@@ -163,7 +163,7 @@ function main() {
 
         var vertexPositions3 = new Float32Array(vertexPositions2);
 
-        vertexBuffers.position.setData (
+        vertexBuffers.position.loadData (
             vertexPositions3,
             4
         );
@@ -182,7 +182,7 @@ function main() {
 
         var vertexColors2 = new Float32Array(vertexColors);
 
-        vertexBuffers.color.setData (
+        vertexBuffers.color.loadData (
             vertexColors2,
             4
         );
@@ -197,7 +197,7 @@ function main() {
             0.0, 1.0
         ]);
 
-        vertexBuffers.textureCoordinates.setData (
+        vertexBuffers.textureCoordinates.loadData (
             vertexTextureCoordinates,
             2
         );

@@ -91,12 +91,12 @@ function main() {
             vertexBuffers.position.push(loader.createVertexBuffer());
         }
 
-        vertexBuffers.color.setData (
+        vertexBuffers.color.loadData (
             g2l.Sprite.DEFAULT_VERTEX_COLORS,
             g2l.Sprite.COLOR_SIZE
         );
 
-        vertexBuffers.textureCoordinates.setData (
+        vertexBuffers.textureCoordinates.loadData (
             g2l.Sprite.DEFAULT_VERTEX_TEXTURE_COORDINATES,
             g2l.Sprite.TEXTURE_COORDINATE_SIZE
         );
@@ -267,7 +267,7 @@ function main() {
                 size
             );
 
-            vertexBuffers.position[i].setData (
+            vertexBuffers.position[i].loadData (
                 sprite.vertexPositions,
                 g2l.Sprite.POSITION_SIZE
             );

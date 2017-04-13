@@ -110,7 +110,7 @@ function main() {
            -50, -50, -50
         ]);
 
-        vertexBuffers.position.setData (
+        vertexBuffers.position.loadData (
             vertexPositions,
             3
         );
@@ -157,7 +157,7 @@ function main() {
            -1.0,  0.0,  0.0
         ]);
 
-        vertexBuffers.normal.setData (
+        vertexBuffers.normal.loadData (
             vertexNormals,
             3
         );
@@ -204,7 +204,7 @@ function main() {
             0.0,  0.0,
         ]);
 
-        vertexBuffers.textureCoordinates.setData (
+        vertexBuffers.textureCoordinates.loadData (
             vertexTextureCoordinates,
             2
         );
@@ -241,7 +241,7 @@ function main() {
             20, 22, 23
         ]);
         
-        indexBuffer.setData(vertexIndices);
+        indexBuffer.loadData(vertexIndices);
     }
 
     function setUpTextures() {

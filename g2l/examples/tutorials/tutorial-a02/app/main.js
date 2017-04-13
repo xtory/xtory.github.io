@@ -81,7 +81,7 @@ function main() {
             x-halfWidth, y+halfHeight, 0
         ]);
 
-        vertexBuffers.position.setData (
+        vertexBuffers.position.loadData (
             vertexPositions,
             3
         );
@@ -96,7 +96,7 @@ function main() {
             0.0, 1.0
         ]);
 
-        vertexBuffers.textureCoordinates.setData (
+        vertexBuffers.textureCoordinates.loadData (
             vertexTextureCoordinates,
             2
         );

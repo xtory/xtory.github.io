@@ -81,23 +81,28 @@ function Camera (
     });
 
     Object.defineProperty(_self, 'position', {
-        'get': function() { return _position; }
+        'get': function() { return _position; },
+        'set': function(value) { _position = value; }
     });
 
     Object.defineProperty(_self, 'facingDirection', {
-        'get': function() { return _facingDirection; }
+        'get': function() { return _facingDirection; },
+        'set': function(value) { _facingDirection = value; }
     });
 
     Object.defineProperty(_self, 'upDirection', {
-        'get': function() { return _upDirection; }
+        'get': function() { return _upDirection; },
+        'set': function(value) { _upDirection = value; }
     });
 
     Object.defineProperty(_self, 'distanceToNearPlane', {
-        'get': function() { return _distanceToNearPlane; }
+        'get': function() { return _distanceToNearPlane; },
+        'set': function(value) { _distanceToNearPlane = value; }
     });
 
     Object.defineProperty(_self, 'distanceToFarPlane', {
-        'get': function() { return _distanceToFarPlane; }
+        'get': function() { return _distanceToFarPlane; },
+        'set': function(value) { _distanceToFarPlane = value; }
     });
 
     Object.defineProperty(_self, 'viewFrustum', {
@@ -171,17 +176,25 @@ function Camera (
     //
     // Privileged methods.
     //
-    this.zoom = function(distance) {
-        //
-        var v = Vector3D.multiplyVectorByScalar (
-            Vector3D.calculateUnitVectorOf(_facingDirection),
-            distance
-        );
+    // this.zoom = function(distance) {
+    //     //
+    //     var v = Vector3D.multiplyVectorByScalar (
+    //         Vector3D.calculateUnitVectorOf(_facingDirection),
+    //         distance
+    //     );
 
-        _position = Vector3D.addVectors(_position, v);
+    //     _position = Vector3D.addVectors(_position, v);
 
+    //     _hasToUpdateViewMatrix = true;
+    // };
+
+    this.invalidateViewMatrix = function() {
         _hasToUpdateViewMatrix = true;
-    }
+    };
+
+    this.invalidateProjectionMatrix = function() {
+        _hasToUpdateProjectionMatrix = true;
+    };
 
     //
     // Accessors
@@ -190,7 +203,7 @@ function Camera (
         //
         checkProjectionMatrix();
         m.db = _projectionMatrix.db.slice();
-    }
+    };
 
     this.getTransform = function(m) {
         //
@@ -228,8 +241,29 @@ function Camera (
 
             _hasToRaiseTransformUpdatedEvent = false;
         }
+    };
+}
+
+//
+// Prototype.
+//
+Camera.prototype = {
+    //
+    // Public methods.
+    //
+    zoom: function(distance) {
+        //
+        var v = Vector3D.multiplyVectorByScalar (
+            Vector3D.calculateUnitVectorOf(this.facingDirection),
+            distance
+        );
+
+        this.position = Vector3D.addVectors(this.position, v);
+
+        //_hasToUpdateViewMatrix = true;
+        this.invalidateViewMatrix();
     }
-}   
+};
 
 //
 // Static constants (after Object.freeze()).

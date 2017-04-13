@@ -37,7 +37,7 @@ IndexBuffer.prototype = {
     //
     // Public methods.
     //
-    setData: function(data) {
+    loadData: function(data) {
         //
         var gl = this.bufferLoader.loader.renderer.gl;
 

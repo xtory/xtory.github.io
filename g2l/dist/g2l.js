@@ -1499,23 +1499,28 @@ function Camera (
     });
 
     Object.defineProperty(_self, 'position', {
-        'get': function() { return _position; }
+        'get': function() { return _position; },
+        'set': function(value) { _position = value; }
     });
 
     Object.defineProperty(_self, 'facingDirection', {
-        'get': function() { return _facingDirection; }
+        'get': function() { return _facingDirection; },
+        'set': function(value) { _facingDirection = value; }
     });
 
     Object.defineProperty(_self, 'upDirection', {
-        'get': function() { return _upDirection; }
+        'get': function() { return _upDirection; },
+        'set': function(value) { _upDirection = value; }
     });
 
     Object.defineProperty(_self, 'distanceToNearPlane', {
-        'get': function() { return _distanceToNearPlane; }
+        'get': function() { return _distanceToNearPlane; },
+        'set': function(value) { _distanceToNearPlane = value; }
     });
 
     Object.defineProperty(_self, 'distanceToFarPlane', {
-        'get': function() { return _distanceToFarPlane; }
+        'get': function() { return _distanceToFarPlane; },
+        'set': function(value) { _distanceToFarPlane = value; }
     });
 
     Object.defineProperty(_self, 'viewFrustum', {
@@ -1589,16 +1594,24 @@ function Camera (
     //
     // Privileged methods.
     //
-    this.zoom = function(distance) {
-        //
-        var v = Vector3D.multiplyVectorByScalar (
-            Vector3D.calculateUnitVectorOf(_facingDirection),
-            distance
-        );
+    // this.zoom = function(distance) {
+    //     //
+    //     var v = Vector3D.multiplyVectorByScalar (
+    //         Vector3D.calculateUnitVectorOf(_facingDirection),
+    //         distance
+    //     );
 
-        _position = Vector3D.addVectors(_position, v);
+    //     _position = Vector3D.addVectors(_position, v);
 
+    //     _hasToUpdateViewMatrix = true;
+    // };
+
+    this.invalidateViewMatrix = function() {
         _hasToUpdateViewMatrix = true;
+    };
+
+    this.invalidateProjectionMatrix = function() {
+        _hasToUpdateProjectionMatrix = true;
     };
 
     //
@@ -1647,7 +1660,28 @@ function Camera (
             _hasToRaiseTransformUpdatedEvent = false;
         }
     };
-}   
+}
+
+//
+// Prototype.
+//
+Camera.prototype = {
+    //
+    // Public methods.
+    //
+    zoom: function(distance) {
+        //
+        var v = Vector3D.multiplyVectorByScalar (
+            Vector3D.calculateUnitVectorOf(this.facingDirection),
+            distance
+        );
+
+        this.position = Vector3D.addVectors(this.position, v);
+
+        //_hasToUpdateViewMatrix = true;
+        this.invalidateViewMatrix();
+    }
+};
 
 //
 // Static constants (after Object.freeze()).
@@ -1661,6 +1695,592 @@ Camera.DEFAULT_DISTANCE_TO_NEAR_PLANE = Camera.MIN_DISTANCE_TO_NEAR_PLANE; // = 
 Camera.DEFAULT_DISTANCE_TO_FAR_PLANE  = 100000;                            // = 10^5
 
 Object.freeze(Camera);
+
+//
+// Constructor.
+//
+function CameraState(_camera) {
+    //
+    this.camera = _camera;
+}
+
+CameraState.prototype = {
+    //
+    // Public methods.
+    //
+    update: function() {
+        //
+        // No contents.
+    }
+};
+
+Object.freeze(CameraState);
+
+//
+// Constructor.
+//
+function JSHelper() {
+    // No contents.
+}
+
+JSHelper.inherit = function(subobject, superobject) {
+    //
+    var helper = function() {
+        //
+        // No contents.
+    };
+
+    helper.prototype = superobject.prototype;
+    
+    subobject.prototype = new helper();
+};
+
+//
+// Static methods.
+//
+JSHelper.arrayContainsItem = function(array, item) {
+    //
+    for (var i=0; i<array.length; i++) {
+        //
+        if (array[i] === item) {
+            return true;
+        }
+    }
+    
+    return false;
+};
+
+JSHelper.arrayRemoveItem = function(array, item) {
+    //
+    for (var i=0; i<array.length; i++) {
+        //
+        if (array[i] === item) {
+            array.splice(i, 1);
+            return true;
+        }
+    }
+    
+    return false;
+};
+
+Object.freeze(JSHelper);
+
+//
+// Constructor.
+//
+function CameraStateStill(_camera) {
+    //
+    CameraState.call(this, _camera);
+}
+
+JSHelper.inherit(CameraStateStill, CameraState);
+
+Object.freeze(CameraStateStill);
+
+//
+// Constructor.
+//
+function EaseMode() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+EaseMode.EASE_IN     = 0;
+EaseMode.EASE_OUT    = 1;
+EaseMode.EASE_IN_OUT = 2;
+
+Object.freeze(EaseMode);
+
+// Note:
+// Adapted from
+// https://gist.github.com/electricg/4372563
+
+//
+// Constructor.
+//
+function Stopwatch() {
+    //
+    var _self;
+    var _startTime; // Time of last start / resume. (0 if not running)
+    var _baseTime;  // Time on the clock when last stopped in milliseconds
+
+    try {
+        //
+        _self = this;
+        _startTime = 0;
+        _baseTime = 0;
+
+    } catch (e) {
+        //
+        console.log('g2l.Stopwatch: ' + e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(_self, 'isRunning', {
+        get: function() { return (_startTime !== 0) ? true: false; }
+    });
+
+    Object.defineProperty(_self, 'elapsedMilliseconds', {
+        //
+        get: function() {
+            //
+            return (
+                _baseTime +
+                (_self.isRunning===true) ? now()-_startTime : 0
+            ); 
+        }
+    });
+
+    //
+    // Private methods.
+    //
+    // var now = function() {
+    //     return (new Date()).getTime();
+    // };        
+    function now() {
+        return (new Date()).getTime();
+    }
+
+    //
+    // Privileged methods.
+    //
+    // Start or resume
+    this.start = function() {
+        //_startAt = _startAt ? _startAt : now();
+        _startTime = (_self.isRunning===true) ? _startTime : now();
+    };
+
+    // Stop or pause
+    this.stop = function() {
+        // If running, update elapsed time otherwise keep it
+        //_lastDuration = _startAt ? _lastDuration + now() - _startAt : _lastDuration;
+        _baseTime = (
+            (_self.isRunning === true) ?
+            _baseTime + (now() - _startTime) :
+            _baseTime
+        );
+
+        _startTime = 0; // Paused
+    };
+
+    // Reset
+    this.reset = function() {
+        _startTime = 0;
+        _baseTime = 0;
+    };
+
+    // // Duration
+    // this.elapsedMilliseconds = function() {
+    //     //
+    //     return (
+    //         _baseTime +
+    //         (_self.isRunning===true) ? now()-_startTime : 0
+    //     ); 
+    // }
+}
+
+Object.freeze(Stopwatch);
+
+//
+// Constructor.
+//
+function SineEase(_easeMode, _duration, _isLooped) {
+    //
+    var _self;
+    var _startAngle;
+    var _finishAngle;
+    var _stopwatch;
+
+    try {
+        //
+        _self = this;
+        
+        switch (_easeMode) {
+            //
+            case EaseMode.EASE_IN: {
+                //
+                _startAngle  = -MathHelper.PI_OVER_TWO;
+                _finishAngle =  0;
+                break;
+            }
+
+            case EaseMode.EASE_OUT: {
+                //
+                _startAngle  = 0;
+                _finishAngle = MathHelper.PI_OVER_TWO;
+                break;
+            }
+
+            case EaseMode.EASE_IN_OUT: {
+                //
+                _startAngle  = -MathHelper.PI_OVER_TWO;
+                _finishAngle =  MathHelper.PI_OVER_TWO;
+                break;
+            }
+
+            default: {
+                throw 'A not-supported exception raised.';
+            }
+        }
+
+        // Creates the stopwatch. But don't start it immediately.
+        _stopwatch = new Stopwatch();
+
+    } catch (e) {
+        //
+        console.log('g2l.SineEase: ' + e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(_self, 'easeMode', {
+        get: function() { return _easeMode; }
+    });
+
+    Object.defineProperty(_self, 'duration', {
+        get: function() { return _duration; }
+    });
+
+    Object.defineProperty(_self, 'sineOfStartAngle', {
+        get: function() { return Math.sin(_startAngle); }
+    });
+
+    Object.defineProperty(_self, 'sineOfCurrentAngle', {
+        //
+        get: function() {
+            //
+            var angleOffset = _finishAngle - _startAngle;
+
+            return Math.sin (
+                _startAngle +
+                angleOffset * _self.ratioOfCurrentToTotalTimeOffset
+            );
+        }
+    });
+
+    Object.defineProperty(_self, 'sineOfFinishAngle', {
+        get: function() { return Math.sin(_finishAngle); }
+    });
+
+    /// <summary>
+    /// Ratio of 'current time offset' to 'total time offset (that is, the
+    /// duration)'. For instance, the current time offset = 500 (in milli-
+    /// seconds), the duration = 2000 (in milliseconds) => Ratio = 500 / 2000
+    /// = 0.25
+    /// </summary>
+    Object.defineProperty(_self, 'ratioOfCurrentToTotalTimeOffset', {
+        //
+        get: function() {
+            //
+            if (_isLooped === false) {
+                //
+                if (_self.isFinished === true) {
+                    //
+                    return 1;
+
+                } else { // _self.isFinished === false
+                    //
+                    return _stopwatch.elapsedMilliseconds / _duration;
+                }
+
+            } else { // _isLooped === true
+                //
+                var elapsedMilliseconds =
+                    _stopwatch.elapsedMilliseconds % _duration;
+
+                return elapsedMilliseconds / _duration;
+            }
+        }
+    });
+
+    /// <summary>
+    /// Ratio of 'current sine-of-angle offset' to 'total sine-of-angle offset'.
+    /// For instance, the current sine-of-angle offset = 0.125, the total sine-
+    /// of-angle offset = 1 => Ratio = 0.125 / 1 = 0.125
+    /// </summary>
+    Object.defineProperty(_self, 'ratioOfCurrentToTotalSineOfAngleOffset', {
+        //
+        get: function() {
+            //
+            var currentSineOfAngleOffset =
+                _self.sineOfCurrentAngle - _self.sineOfStartAngle;
+
+            var totalSineOfAngleOffset =
+                _self.sineOfFinishAngle - _self.sineOfStartAngle;
+
+            return currentSineOfAngleOffset / totalSineOfAngleOffset;
+        }
+    });
+
+    Object.defineProperty(_self, 'isRunning', {
+        get: function() { return _stopwatch.isRunning; }
+    });
+
+    Object.defineProperty(_self, 'isFinished', {
+        //
+        get: function() {
+            //
+            if (_isLooped === true) {
+                return false;
+            }
+
+            var isFinished = (
+                (_duration <= _stopwatch.elapsedMilliseconds) ?
+                true :
+                false
+            );
+
+            if (isFinished === true) {
+                _stopwatch.stop();
+            }
+
+            return isFinished;
+        }
+    });
+
+    //
+    // Privileged methods.
+    //
+    this.start = function() {
+        //
+        if (_stopwatch.isRunning === true) {
+            return;
+        }
+
+        _stopwatch.start();
+    };
+
+    this.pause = function() {
+        //
+        if (_stopwatch.isRunning === false) {
+            return;
+        }
+
+        // Note:
+        // Stopwatch's stop() is like media player's pause(). After calling
+        // Stopwatch's start(), the playing continues.
+
+        _stopwatch.stop();
+    };
+
+    this.resume = function() {
+        //
+        if (_stopwatch.isRunning === true) {
+            return;
+        }
+
+        _stopwatch.start();
+    };
+
+    this.stop = function() {
+        //
+        // Note:
+        // Stopwatch's reset() is like media player's stop(). After calling
+        // Stopwatch.reset(), everything resets, and this is what we want for
+        // SineEase's stop().
+
+        _stopwatch.reset();
+    };
+}
+
+Object.freeze(SineEase);
+
+//
+// Constructor.
+//
+function CameraStateZooming (
+    _camera,
+    _distance,
+    _duration,
+    _updatingCallback,
+    _finishingCallback
+){
+    CameraState.call(this, _camera);
+
+    var _self;
+    var _sineEase;
+    var _zoomedDistance;
+
+    try {
+        //
+        _self = this;
+        _zoomedDistance = 0;
+
+        _sineEase = new SineEase(EaseMode.EASE_OUT, _duration, false);
+        _sineEase.start();
+
+    } catch (e) {
+        //
+        console.log('g2l.CameraStateZooming: ', e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(_self, 'sineEase', {
+        'get': function() { return _sineEase; }
+    });
+
+    Object.defineProperty(_self, 'distance', {
+        'get': function() { return _distance; }
+    });
+
+    Object.defineProperty(_self, 'zoomedDistance', {
+        'get': function() { return _zoomedDistance; },
+        'set': function(value) { _zoomedDistance = value; }
+    });
+
+    Object.defineProperty(_self, 'updatingCallback', {
+        'get': function() { return _updatingCallback; }
+    });
+
+    Object.defineProperty(_self, 'finishingCallback', {
+        'get': function() { return _finishingCallback; }
+    });
+}
+
+JSHelper.inherit(CameraStateZooming, CameraState);
+
+//
+// Prototype.
+//
+CameraStateZooming.prototype.update = function() {
+    //
+    var sineEase = this.sineEase;
+
+    var isFinished = sineEase.isFinished;
+    var ratio = sineEase.ratioOfCurrentToTotalSineOfAngleOffset;
+
+    if (this.updatingCallback !== undefined) {
+        this.updatingCallback(sineEase.ratioOfCurrentToTotalTimeOffset);
+    }
+
+    var distance = this.distance * ratio;
+    this.camera.baseZoom(distance - this.zoomedDistance);
+
+    this.zoomedDistance = distance;
+
+    if (isFinished === true) {
+        //
+        if (this.finishingCallback !== undefined) {
+            this.finishingCallback();
+        }
+
+        this.camera.state = new CameraStateStill(this.camera);
+    }
+};
+
+Object.freeze(CameraStateZooming);
+
+//
+// Constructor.
+//
+function SmoothCamera (
+    _renderer,
+    _position,
+    _facingDirection,
+    _upDirection,
+    _distanceToNearPlane,
+    _distanceToFarPlane
+){
+    Camera.call (
+        this,
+        _renderer,
+        _position, _facingDirection, _upDirection,
+        _distanceToNearPlane, _distanceToFarPlane
+    );
+
+    var _self;
+    var _state;
+    var _zoomingDuration;
+        
+    try {
+        //
+        _self = this;
+
+        _state = new CameraStateStill(_self);
+
+        _zoomingDuration = SmoothCamera.DEFAULT_ZOOM_DURATION;
+        
+    } catch (e) {
+        //
+        console.log('g2l.SmoothCamera: ', e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(_self, 'state', {
+        //
+       'get': function() {
+            return _state;
+        },
+
+       'set': function(value) {
+            //
+            if (value === _state) {
+                return;
+            }
+
+            // ...
+
+            _state = value;
+        }
+    });
+
+    Object.defineProperty(_self, 'zoomingDuration', {
+       'get': function() { return _zoomingDuration; },
+       'set': function(value) { _zoomingDuration = value; }
+    });
+
+    //
+    // Priviledged methods.
+    //
+    this.update = function() {
+        //
+        _state.update();
+    };
+
+    this.zoom = function(distance) {
+        //
+        if ((_state instanceof CameraStateZooming) === true) {
+            return;
+        }
+
+        _self.state = new CameraStateZooming (
+            _self,
+            distance,
+            _zoomingDuration
+        );
+    };
+
+    this.baseZoom = function(distance) {
+        //
+        Camera.prototype.zoom.call(_self, distance);
+    };
+}
+
+JSHelper.inherit(SmoothCamera, Camera);
+
+//
+// Static constants (after Object.freeze()).
+//
+SmoothCamera.DEFAULT_ZOOM_DURATION = 250; // milliseconds.
+
+Object.freeze(SmoothCamera);
 
 //
 // Constructor.
@@ -2428,7 +3048,7 @@ IndexBuffer.prototype = {
     //
     // Public methods.
     //
-    setData: function(data) {
+    loadData: function(data) {
         //
         var gl = this.bufferLoader.loader.renderer.gl;
 
@@ -3324,7 +3944,7 @@ VertexBuffer.prototype = {
     //
     // Public methods.
     //
-    setData: function(data, size) {
+    loadData: function(data, size) {
         //
         var gl = this.bufferLoader.loader.renderer.gl;
         this.size = size;
@@ -3458,43 +4078,6 @@ function Fps() {
 Fps.FRAME_COUNT_TO_AVERAGE = 16;
 
 Object.freeze(Fps);
-
-//
-// Constructor.
-//
-function JSHelper() {
-    // No contents.
-}
-
-//
-// Static methods.
-//
-JSHelper.arrayContainsItem = function(array, item) {
-    //
-    for (var i=0; i<array.length; i++) {
-        //
-        if (array[i] === item) {
-            return true;
-        }
-    }
-    
-    return false;
-};
-
-JSHelper.arrayRemoveItem = function(array, item) {
-    //
-    for (var i=0; i<array.length; i++) {
-        //
-        if (array[i] === item) {
-            array.splice(i, 1);
-            return true;
-        }
-    }
-    
-    return false;
-};
-
-Object.freeze(JSHelper);
 
 //
 // Constructor.
@@ -3938,328 +4521,15 @@ function Plane() {
 
 Object.freeze(Plane);
 
-//
-// Constructor.
-//
-function EaseMode() {
-    // No contents.
-}
-
-//
-// Static constants (after Object.freeze()).
-//
-EaseMode.EASE_IN     = 0;
-EaseMode.EASE_OUT    = 1;
-EaseMode.EASE_IN_OUT = 2;
-
-Object.freeze(EaseMode);
-
-// Note:
-// Adapted from
-// https://gist.github.com/electricg/4372563
-
-//
-// Constructor.
-//
-function Stopwatch() {
-    //
-    var _self;
-    var _startTime; // Time of last start / resume. (0 if not running)
-    var _baseTime;  // Time on the clock when last stopped in milliseconds
-
-    try {
-        //
-        _self = this;
-        _startTime = 0;
-        _baseTime = 0;
-
-    } catch (e) {
-        //
-        console.log('g2l.Stopwatch: ' + e);
-
-        throw e;
-    }
-
-    //
-    // Properties.
-    //
-    Object.defineProperty(_self, 'isRunning', {
-        get: function() { return (_startTime !== 0) ? true: false; }
-    });
-
-    Object.defineProperty(_self, 'elapsedMilliseconds', {
-        //
-        get: function() {
-            //
-            return (
-                _baseTime +
-                (_self.isRunning===true) ? now()-_startTime : 0
-            ); 
-        }
-    });
-
-    //
-    // Private methods.
-    //
-    // var now = function() {
-    //     return (new Date()).getTime();
-    // };        
-    function now() {
-        return (new Date()).getTime();
-    }
-
-    //
-    // Privileged methods.
-    //
-    // Start or resume
-    this.start = function() {
-        //_startAt = _startAt ? _startAt : now();
-        _startTime = (_self.isRunning===true) ? _startTime : now();
-    };
-
-    // Stop or pause
-    this.stop = function() {
-        // If running, update elapsed time otherwise keep it
-        //_lastDuration = _startAt ? _lastDuration + now() - _startAt : _lastDuration;
-        _baseTime = (
-            (_self.isRunning === true) ?
-            _baseTime + (now() - _startTime) :
-            _baseTime
-        );
-
-        _startTime = 0; // Paused
-    };
-
-    // Reset
-    this.reset = function() {
-        _startTime = 0;
-        _baseTime = 0;
-    };
-
-    // // Duration
-    // this.elapsedMilliseconds = function() {
-    //     //
-    //     return (
-    //         _baseTime +
-    //         (_self.isRunning===true) ? now()-_startTime : 0
-    //     ); 
-    // }
-}
-
-Object.freeze(Stopwatch);
-
-//
-// Constructor.
-//
-function SineEase(_easeMode, _duration, _isLooped) {
-    //
-    var _self;
-    var _startAngle;
-    var _finishAngle;
-    var _stopwatch;
-
-    try {
-        //
-        _self = this;
-        
-        switch (_easeMode) {
-            //
-            case EaseMode.EASE_IN: {
-                //
-                _startAngle  = -MathHelper.PI_OVER_TWO;
-                _finishAngle =  0;
-                break;
-            }
-
-            case EaseMode.EASE_OUT: {
-                //
-                _startAngle  = 0;
-                _finishAngle = MathHelper.PI_OVER_TWO;
-                break;
-            }
-
-            case EaseMode.EASE_IN_OUT: {
-                //
-                _startAngle  = -MathHelper.PI_OVER_TWO;
-                _finishAngle =  MathHelper.PI_OVER_TWO;
-                break;
-            }
-
-            default: {
-                throw 'A not-supported exception raised.';
-            }
-        }
-
-        // Creates the stopwatch. But don't start it immediately.
-        _stopwatch = new Stopwatch();
-
-    } catch (e) {
-        //
-        console.log('g2l.SineEase: ' + e);
-
-        throw e;
-    }
-
-    //
-    // Properties.
-    //
-    Object.defineProperty(_self, 'easeMode', {
-        get: function() { return _easeMode; }
-    });
-
-    Object.defineProperty(_self, 'duration', {
-        get: function() { return _duration; }
-    });
-
-    Object.defineProperty(_self, 'sineOfStartAngle', {
-        get: function() { return Math.sin(_startAngle); }
-    });
-
-    Object.defineProperty(_self, 'sineOfCurrentAngle', {
-        //
-        get: function() {
-            //
-            var angleOffset = _finishAngle - _startAngle;
-
-            return Math.sin (
-                _startAngle +
-                angleOffset * _self.ratioOfCurrentToTotalTimeOffset
-            );
-        }
-    });
-
-    Object.defineProperty(_self, 'sineOfFinishAngle', {
-        get: function() { return Math.sin(_finishAngle); }
-    });
-
-    /// <summary>
-    /// Ratio of 'current time offset' to 'total time offset (that is, the
-    /// duration)'. For instance, the current time offset = 500 (in milli-
-    /// seconds), the duration = 2000 (in milliseconds) => Ratio = 500 / 2000
-    /// = 0.25
-    /// </summary>
-    Object.defineProperty(_self, 'ratioOfCurrentToTotalTimeOffset', {
-        //
-        get: function() {
-            //
-            if (_isLooped === false) {
-                //
-                if (_self.isFinished === true) {
-                    //
-                    return 1;
-
-                } else { // _self.isFinished === false
-                    //
-                    return _stopwatch.elapsedMilliseconds / _duration;
-                }
-
-            } else { // _isLooped === true
-                //
-                var elapsedMilliseconds =
-                    _stopwatch.elapsedMilliseconds % _duration;
-
-                return elapsedMilliseconds / _duration;
-            }
-        }
-    });
-
-    /// <summary>
-    /// Ratio of 'current sine-of-angle offset' to 'total sine-of-angle offset'.
-    /// For instance, the current sine-of-angle offset = 0.125, the total sine-
-    /// of-angle offset = 1 => Ratio = 0.125 / 1 = 0.125
-    /// </summary>
-    Object.defineProperty(_self, 'ratioOfCurrentToTotalSineOfAngleOffset', {
-        //
-        get: function() {
-            //
-            var currentSineOfAngleOffset =
-                _self.sineOfCurrentAngle - _self.sineOfStartAngle;
-
-            var totalSineOfAngleOffset =
-                _self.sineOfFinishAngle - _self.sineOfStartAngle;
-
-            return currentSineOfAngleOffset / totalSineOfAngleOffset;
-        }
-    });
-
-    Object.defineProperty(_self, 'isRunning', {
-        get: function() { return _stopwatch.isRunning; }
-    });
-
-    Object.defineProperty(_self, 'isFinished', {
-        //
-        get: function() {
-            //
-            if (_isLooped === true) {
-                return false;
-            }
-
-            var isFinished = (
-                (_duration <= _stopwatch.elapsedMilliseconds) ?
-                true :
-                false
-            );
-
-            if (isFinished === true) {
-                _stopwatch.stop();
-            }
-
-            return isFinished;
-        }
-    });
-
-    //
-    // Privileged methods.
-    //
-    this.start = function() {
-        //
-        if (_stopwatch.isRunning === true) {
-            return;
-        }
-
-        _stopwatch.start();
-    };
-
-    this.pause = function() {
-        //
-        if (_stopwatch.isRunning === false) {
-            return;
-        }
-
-        // Note:
-        // Stopwatch's stop() is like media player's pause(). After calling
-        // Stopwatch's start(), the playing continues.
-
-        _stopwatch.stop();
-    };
-
-    this.resume = function() {
-        //
-        if (_stopwatch.isRunning === true) {
-            return;
-        }
-
-        _stopwatch.start();
-    };
-
-    this.stop = function() {
-        //
-        // Note:
-        // Stopwatch's reset() is like media player's stop(). After calling
-        // Stopwatch.reset(), everything resets, and this is what we want for
-        // SineEase's stop().
-
-        _stopwatch.reset();
-    };
-}
-
-Object.freeze(SineEase);
-
 // g2l stands for GorillaGL.
 
 // Cameras.
 
 exports.Camera = Camera;
+exports.CameraState = CameraState;
+exports.CameraStateStill = CameraStateStill;
+exports.CameraStateZooming = CameraStateZooming;
+exports.SmoothCamera = SmoothCamera;
 exports.CanvasCoordinateHelper = CanvasCoordinateHelper;
 exports.ClearOptions = ClearOptions;
 exports.Color = Color;
