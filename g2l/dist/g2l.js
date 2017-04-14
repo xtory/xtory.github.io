@@ -4257,7 +4257,6 @@ function Sprite2 (
         throw 'A sprite-creation exception raised.';
     }
 
-    //this.vertexPositions = Sprite2.createVertexPositions (
     this.vertexPositions = Sprite2.createVertexPositions2 (
         _centerScreenPosition,
         _screenSize
@@ -4269,7 +4268,6 @@ function Sprite2 (
         ((_creationOptions & SpriteCreationOptions.VERTEX_COLORS) ===
         SpriteCreationOptions.VERTEX_COLORS) ?
         // Part 2.
-        //Sprite2.createVertexColors(_vertexColor) :
         Sprite2.createVertexColors2(_vertexColor) :
         // Part 3.
         Sprite2.DEFAULT_VERTEX_COLORS2 //null
@@ -4281,7 +4279,6 @@ function Sprite2 (
         ((_creationOptions & SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES) ===
         SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES) ?
         // Part 2.
-        //Sprite2.createVertexTextureCoordinates(_sourceTextureCoordinateRect) :
         Sprite2.createVertexTextureCoordinates2(_sourceTextureCoordinateRect) :
         // Part 3.
         Sprite2.DEFAULT_VERTEX_TEXTURE_COORDINATES2 //null
@@ -5177,19 +5174,10 @@ function SpriteBatch2(_renderer, _settings) {
             sourceTextureCoordinateRect
         );
 
-        // var base = (
-        //     Sprite2.VERTEX_COUNT *
-        //     (_vertexPositions.length / Sprite2.VERTEX_COUNT)
-        // );
         var spriteCount = (
             _vertexPositions.length /
             (Sprite2.POSITION_SIZE * Sprite2.VERTEX_COUNT)
         );
-
-        // var base = (
-        //     Sprite2.VERTEX_COUNT *
-        //     (_vertexPositions.length / Sprite2.VERTEX_COUNT)
-        // );
         
         var base = Sprite2.VERTEX_COUNT * spriteCount;
 
@@ -5486,6 +5474,330 @@ Object.freeze(TransformedPositionTextureCoordinates);
 //
 // Constructor.
 //
+function World2DLayerName() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+World2DLayerName.BACKGROUND                                                   =  0;
+World2DLayerName.RESERVED_ITEMS_BETWEEN_BACKGROUND_AND_FARTHEST_LINE_SEGMENTS =  1;
+World2DLayerName.LINE_SEGMENTS_BELOW_FAR_IMAGES                               =  2;
+World2DLayerName.FAR_IMAGES                                                   =  3;
+World2DLayerName.LINE_SEGMENTS_BELOW_MIDDLE_IMAGES                            =  4;
+World2DLayerName.MIDDLE_IMAGES                                                =  5;
+World2DLayerName.LINE_SEGMENTS_ABOVE_MIDDLE_IMAGES                            =  6;
+World2DLayerName.NEAR_IMAGES                                                  =  7;
+World2DLayerName.LINE_SEGMENTS_ABOVE_NEAR_IMAGES                              =  8;
+World2DLayerName.RESERVED_ITEMS_BETWEEN_NEAREST_LINE_SEGMENTS_AND_TEXT        =  9;
+World2DLayerName.TEXT                                                         = 10;
+World2DLayerName.RESERVED_ITEMS_BETWEEN_TEXT_AND_UI                           = 11;
+World2DLayerName.UI                                                           = 12;
+World2DLayerName.NEAREST_RESERVED_ITEMS                                       = 13;
+
+//
+// Helpers.
+//
+World2DLayerName.FarthestItems = World2DLayerName.Background;
+World2DLayerName.NearestItems  = World2DLayerName.NearestReservedItems;
+
+Object.freeze(World2DLayerName);
+
+//
+// Constructor.
+//
+function World2D(_renderer, _style) {
+    //
+    var _self;
+    var _spriteBatch;
+
+    //
+    // Bounds.
+    //
+    // Note:
+    // 'CenterPosition' here means: the center position of this canvas 'in world
+    // space'.
+    var _centerPosition; // which will be set before continuing.
+
+    // Note:
+    // 'Size' here means: the size of this canvas 'in world space'.
+    var _size; // which will be set before continuing.
+
+    // Note:
+    // The scale factor of world to screen.
+    var _worldToScreenScaleFactor;
+
+    var _layers;
+
+    var _hasToUpdateItems;
+    var _drawnImageCount;
+    var _drawnLineSegmentCount;
+    var _lastDrawnItem;
+
+    try {
+        //
+        _self = this;
+
+        _worldToScreenScaleFactor = 1.0;
+
+        _hasToUpdateItems = false;
+
+    } catch (e) {
+        //
+        console.log('g2l.World2D: ' + e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(_self, 'renderer', {
+        'get': function() { return _renderer; }
+    });
+
+    //
+    // Priviledged methods.
+    //
+    this.invalidateItems = function() {
+        //
+        _hasToUpdateItems = true;
+    };
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+World2D.DEFAULT_LINE_SEGMENT_LAYER_INDEX = World2DLayerName.LINE_SEGMENTS_BELOW_FAR_IMAGES;
+World2D.DEFAULT_IMAGE_LAYER_INDEX = World2DLayerName.MIDDLE_IMAGES;
+
+Object.freeze(World2D);
+
+//
+// Constructor.
+//
+function World2DItem(_world) {
+    //
+    var _self;
+    var _isEnabled;
+    var _isVisible;
+    var _isSelected;
+    var _isOutOfBound;
+    var _tag;
+
+    try {
+        //
+        _self = this;
+
+    } catch (e) {
+        //
+        console.log('g2l.World2DItem: ' + e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(_self, 'world', {
+        'get': function() { return _world; }
+    });
+
+    Object.defineProperty(_self, 'isEnabled', {
+        //
+        'get': function() {
+            return _isEnabled;
+        },
+
+        'set': function(value) {
+            //
+            if (value === _isEnabled) {
+                return;
+            }
+
+            _isEnabled = value;
+
+            if (_isEnabled === true) {
+                //
+                _world.invalidateItems();
+            }
+        }
+    });
+
+    Object.defineProperty(_self, 'isVisible', {
+        //
+        'get': function() {
+            //
+            return _isVisible;
+        },
+
+        'set': function(value) {
+            //
+            if (value === _isVisible) {
+                return;
+            }
+
+            _isVisible = value;
+
+            // Note:
+            // We don't have to check if updating items is needed (like what Is-
+            // Enabled does) because whether this item is visible or not, we have
+            // to update it.
+            /*
+            if (_isVisible === true) {
+                //
+                _world.invalidateItems();
+            }
+            */
+        }
+    });
+
+    Object.defineProperty(_self, 'isSelected', {
+        //
+        'get': function() {
+            //
+            return _isSelected;
+        },
+
+        'set': function(value) {
+            //
+            if (value === _isSelected) {
+                return;
+            }
+
+            _isSelected = value;
+
+            // ...
+        }
+    });
+
+    Object.defineProperty(_self, 'isOutOfBound', {
+        //
+        'get': function() {
+            //
+            if (_hasToCheckBounds === true) {
+                //
+                checkIfOutOfBounds();
+
+                _hasToCheckBounds = false;
+            }
+
+            return _isOutOfBounds;
+        },
+
+        'set': function(value) {
+            //
+            if (value === _isOutOfBounds) {
+                return;
+            }
+
+            _isOutOfBounds = value;
+
+            // ...
+        }
+    });
+
+    Object.defineProperty(_self, 'tag', {
+        'get': function() { return _tag; },
+        'set': function(value) { _tag = value; }
+    });
+}
+
+Object.freeze(World2DItem);
+
+//
+// Constructor.
+//
+function World2DImage (
+    _world,
+    _texture,
+    _centerPosition, // in world space.
+    _size            // in world space.
+){
+    World2DItem.call(this, _world);
+
+    var _self;
+
+    try {
+        //
+        _self = this;
+
+    } catch (e) {
+        //
+        console.log('g2l.World2DImage: ' + e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(_self, 'texture', {
+        'get': function() { return _texture; },
+        'set': function(value) { _texture = value; }
+    });
+
+    // Note:
+    // 'centerPosition' here means the center position of this image "in world
+    // space".
+    Object.defineProperty(_self, 'centerPosition', {
+        //
+        'get': function() {
+            //
+            return _centerPosition;
+        },
+
+        'set': function(value) {
+            //
+            if (Vector2D.areEqual(value, _centerPosition) === true) {
+                return;
+            }
+
+            _centerPosition = value;
+
+            // Calculates the center position in screen space as well.
+            _centerScreenPosition = _self.world.toScreenSpace(_centerPosition);
+
+            // Test:
+            _self.world.invalidateBounds();
+            // :Test
+        }
+    });
+}
+
+JSHelper.inherit(World2DImage, World2DItem);
+
+Object.freeze(World2DImage);
+
+//
+// Constructor.
+//
+function World2DLineSegment(_world) {
+    //
+    World2DItem.call(this, _world);
+
+    var _self;
+
+    try {
+        //
+        _self = this;
+
+    } catch (e) {
+        //
+        console.log('g2l.World2DLineSegment: ' + e);
+
+        throw e;
+    }
+}
+
+JSHelper.inherit(World2DLineSegment, World2DItem);
+
+Object.freeze(World2DLineSegment);
+
+//
+// Constructor.
+//
 function ExceptionHelper() {
     // No contents.
 }
@@ -5661,6 +5973,11 @@ exports.TransformedPositionColor = TransformedPositionColor;
 exports.TransformedPositionColorTextureCoordinates = TransformedPositionColorTextureCoordinates;
 exports.TransformedPositionTextureCoordinates = TransformedPositionTextureCoordinates;
 exports.VertexBuffer = VertexBuffer;
+exports.World2D = World2D;
+exports.World2DImage = World2DImage;
+exports.World2DItem = World2DItem;
+exports.World2DLineSegment = World2DLineSegment;
+exports.World2DLayerName = World2DLayerName;
 exports.ExceptionHelper = ExceptionHelper;
 exports.Fps = Fps;
 exports.JSHelper = JSHelper;

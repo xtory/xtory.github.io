@@ -38,7 +38,6 @@ function Sprite2 (
         throw 'A sprite-creation exception raised.';
     }
 
-    //this.vertexPositions = Sprite2.createVertexPositions (
     this.vertexPositions = Sprite2.createVertexPositions2 (
         _centerScreenPosition,
         _screenSize
@@ -50,7 +49,6 @@ function Sprite2 (
         ((_creationOptions & SpriteCreationOptions.VERTEX_COLORS) ===
         SpriteCreationOptions.VERTEX_COLORS) ?
         // Part 2.
-        //Sprite2.createVertexColors(_vertexColor) :
         Sprite2.createVertexColors2(_vertexColor) :
         // Part 3.
         Sprite2.DEFAULT_VERTEX_COLORS2 //null
@@ -62,7 +60,6 @@ function Sprite2 (
         ((_creationOptions & SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES) ===
         SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES) ?
         // Part 2.
-        //Sprite2.createVertexTextureCoordinates(_sourceTextureCoordinateRect) :
         Sprite2.createVertexTextureCoordinates2(_sourceTextureCoordinateRect) :
         // Part 3.
         Sprite2.DEFAULT_VERTEX_TEXTURE_COORDINATES2 //null

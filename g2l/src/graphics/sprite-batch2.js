@@ -355,19 +355,10 @@ function SpriteBatch2(_renderer, _settings) {
             sourceTextureCoordinateRect
         );
 
-        // var base = (
-        //     Sprite2.VERTEX_COUNT *
-        //     (_vertexPositions.length / Sprite2.VERTEX_COUNT)
-        // );
         var spriteCount = (
             _vertexPositions.length /
             (Sprite2.POSITION_SIZE * Sprite2.VERTEX_COUNT)
         );
-
-        // var base = (
-        //     Sprite2.VERTEX_COUNT *
-        //     (_vertexPositions.length / Sprite2.VERTEX_COUNT)
-        // );
         
         var base = Sprite2.VERTEX_COUNT * spriteCount;
 
