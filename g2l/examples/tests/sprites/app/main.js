@@ -12,7 +12,7 @@ function main() {
     var spriteBatch;
     var spriteCount;
     var spritePositionOffsets;
-    var texture;
+    var textures;
 
     // FPS.
     var info;
@@ -37,6 +37,8 @@ function main() {
 
         setUpInfo();
 
+        setUpStates();
+
         hookEvents();
 
         renderer.run(updateScene, drawScene);
@@ -53,15 +55,24 @@ function main() {
     //
     function setUpTextures() {
         //
-        var url = // which is relative to index.html, not main.js
-            '../../assets/images/jeremy-mann/market-street.jpg';
+        textures = [];
 
-        texture = loader.loadTexture2D(url);
+        var urls = [
+            '../../assets/images/i2/common/male.png',
+            '../../assets/images/i2/common/female.png',
+            '../../assets/images/i2/common/car.png',
+            '../../assets/images/i2/common/cellPhone.png',
+            '../../assets/images/i2/common/creditCard.png'
+        ];
+
+        for (var i=0; i<urls.length; i++) {
+            textures.push(loader.loadTexture2D(urls[i]));
+        }
     }
 
     function setUpSprites() {
         //
-        spriteCount = 2000;
+        spriteCount = 1000;
         spritePositionOffsets = [];
 
         var width = 1250;
@@ -94,6 +105,18 @@ function main() {
         lastAverageFps = 0;
     }
 
+    function setUpStates() {
+        //
+        var gl = renderer.gl;
+
+        gl.enable(gl.BLEND);
+
+        gl.blendFunc (
+            gl.SRC_ALPHA,
+            gl.ONE_MINUS_SRC_ALPHA
+        );
+    }
+
     function hookEvents() {
         //
         window.addEventListener('resize', onResize);
@@ -106,7 +129,10 @@ function main() {
 
     function drawScene() {
         //
-        renderer.clear();
+        renderer.clear (
+            g2l.ClearOptions.COLOR_BUFFER,
+            new g2l.Color(0.25, 0.25, 0.25, 1) //g2l.Colors.WHITE 
+        );
 
         drawSprites();
 
@@ -122,8 +148,6 @@ function main() {
             renderer.canvas.clientHeight * 0.5
         );
 
-        var size = new g2l.Size2D(50, 50);
-
         for (var i=0; i<spriteCount; i++) {
             //
             var item = spritePositionOffsets[i];
@@ -134,11 +158,13 @@ function main() {
                 0
             );
 
+            var texture = textures[i % textures.length];
+
             spriteBatch.drawSprite (
                 texture,
                 g2l.SpriteCreationOptions.VERTEX_POSITIONS, //undefined,
                 p,
-                size
+                new g2l.Size2D(texture.width*0.5, texture.height*0.5) //size
             );
         }
 
