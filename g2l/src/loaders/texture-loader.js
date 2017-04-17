@@ -122,13 +122,30 @@ function TextureLoader(_loader) {
 
         image.addEventListener('load', function() {
             //
-            var webGLTexture = createWebGLTexture();
+            try {
+                //
+                var webGLTexture = createWebGLTexture();
 
-            handleTexture2DLoaded(image, webGLTexture);
+                handleTexture2DLoaded(image, webGLTexture);
 
-            texture.width = image.width;
-            texture.height = image.height;
-            texture.webGLTexture = webGLTexture;
+                texture.width = image.width;
+                texture.height = image.height;
+                texture.webGLTexture = webGLTexture;
+
+            } catch (e) {
+                //
+                console.log('g2l.TextureLoader.loadTexture2D(): ' + e);
+
+                throw e;
+            }
+        });
+
+        image.addEventListener('error', function() {
+            //
+            console.log (
+                'g2l.TextureLoader.loadTexture2D() could not load image: ' +
+                url
+            );
         });
 
         image.src = url;

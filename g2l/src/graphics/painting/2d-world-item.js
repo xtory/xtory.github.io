@@ -14,6 +14,8 @@ function World2DItem(_world) {
         //
         _self = this;
 
+        _self.hookEvents();
+
     } catch (e) {
         //
         console.log('g2l.World2DItem: ' + e);
@@ -127,6 +129,31 @@ function World2DItem(_world) {
         'set': function(value) { _tag = value; }
     });
 }
+
+//
+// Prototype.
+//
+World2DItem.prototype = {
+    //
+    // Public methods.
+    //
+    hookEvents: function() {
+        _world.addBoundsChangedEventListener(this.invalidate);
+    },
+
+    invalidate: function() {
+        _hasToCheckBounds = true;
+    },
+
+    unhookEvents: function() {
+        _world.removeBoundsChangedEventListener(this.invalidate);
+    },
+
+    dispose: function() {
+        //
+        unhookEvents();
+    }
+};
 
 Object.freeze(World2DItem);
 

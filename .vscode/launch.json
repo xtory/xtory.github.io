@@ -61,18 +61,18 @@
                 "-allow-file-access-from-files"
             ]
         }, {
-            "name": "samples/io",
+            "name": "tests/painting",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/g2l/examples/samples/io/index.html",
+            "file": "${workspaceRoot}/g2l/examples/tests/painting/index.html",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
             ]
         }, {
-            "name": "tests/sprites",
+            "name": "tests/io",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/g2l/examples/tests/sprites/index.html",
+            "file": "${workspaceRoot}/g2l/examples/tests/io/index.html",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
             ]

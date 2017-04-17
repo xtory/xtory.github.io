@@ -3138,13 +3138,30 @@ function TextureLoader(_loader) {
 
         image.addEventListener('load', function() {
             //
-            var webGLTexture = createWebGLTexture();
+            try {
+                //
+                var webGLTexture = createWebGLTexture();
 
-            handleTexture2DLoaded(image, webGLTexture);
+                handleTexture2DLoaded(image, webGLTexture);
 
-            texture.width = image.width;
-            texture.height = image.height;
-            texture.webGLTexture = webGLTexture;
+                texture.width = image.width;
+                texture.height = image.height;
+                texture.webGLTexture = webGLTexture;
+
+            } catch (e) {
+                //
+                console.log('g2l.TextureLoader.loadTexture2D(): ' + e);
+
+                throw e;
+            }
+        });
+
+        image.addEventListener('error', function() {
+            //
+            console.log (
+                'g2l.TextureLoader.loadTexture2D() could not load image: ' +
+                url
+            );
         });
 
         image.src = url;
@@ -4023,13 +4040,13 @@ Object.freeze(ScreenCoordinateHelper);
 //
 // Constructor.
 //
-function Size2D(_width, _height) {
+function Size2D$1(_width, _height) {
     //
     this.width = _width;
     this.height = _height;
 }
 
-Object.freeze(Size2D);
+Object.freeze(Size2D$1);
 
 //
 // Constructor.
@@ -5535,13 +5552,28 @@ function World2D(_renderer, _style) {
     var _drawnLineSegmentCount;
     var _lastDrawnItem;
 
+    // Test:
+    var _eventListeners;
+    //var _boundsChangedEventHandlers; // event arg: (isCenterPositionChanged, isSizeChanged)
+    // :Test
+
     try {
         //
         _self = this;
 
+        _spriteBatch = new SpriteBatch(_renderer);
+
+        _centerPosition = new Vector2D(0, 0);
         _worldToScreenScaleFactor = 1.0;
 
+        resetSize();
+
         _hasToUpdateItems = false;
+
+        //_boundsChangedEventHandlers = [];
+        _eventListeners = {
+            'boundsChanged': []
+        };
 
     } catch (e) {
         //
@@ -5558,8 +5590,95 @@ function World2D(_renderer, _style) {
     });
 
     //
+    // Private methods.
+    //
+    function addEventListener(type, listener) {
+        //
+        if (_eventListeners[type] === undefined) {
+            //
+            _eventListeners[type] = [ listener ];
+
+        } else {
+            //
+            _eventListeners[type].push(listener);
+        }
+    }
+
+    function removeEventListener(type, listener) {
+        //
+        var el = _eventListeners[type];
+        if (el === undefined) {
+            //
+            return;
+
+        } else {
+            //
+            for (var i=0; i<el.length; i++) {
+                //
+                if (el[i] === listener) {
+                    el.splice(i, 1);
+                    break;
+                }
+            }
+        }
+    }
+
+    this.addBoundsChangedEventListener = function(listener) {
+        //
+        addEventListener('boundsChanged', listener);
+    };
+
+    this.removeBoundsChangedEventListener = function(listener) {
+        //
+        removeEventListener('boundsChanged', listener);
+    };
+
+    //
     // Priviledged methods.
     //
+    this.resetSize = function() {
+        //
+        // Note:
+        // This method could be called when window resizing occurs, that is,
+        // viewport changes (and hence _size changes as well). But the world's
+        // center position remains unchanged.
+
+        var screenToWorldScaleFactor = 1.0 / _worldToScreenScaleFactor;
+
+        // Test:
+        /*
+        var viewport = _scene.GraphicsDevice.Viewport;
+
+        _size = new Size2D (
+            viewport.Width  * screenToWorldScaleFactor,
+            viewport.Height * screenToWorldScaleFactor
+        );
+        */
+
+        _size = new Size2D (
+            _renderer.canvas.clientWidth * screenToWorldScaleFactor,
+            _renderer.canvas.clientHeight * screenToWorldScaleFactor
+        );
+        // :Test
+
+        _hasToUpdateItems = true;
+
+        // Test:
+        /*
+        if (this.boundsChanged !== null) {
+            this.boundsChanged (
+                this,
+                new BoundsChangedEventArgs(false, true)
+            );
+        }
+        */
+        var el = _eventListeners['boundsChanged'];
+        for (var i=0; i<el.length; i++) {
+            el[i](false, true);
+        }
+        // :Test
+    };
+
     this.invalidateItems = function() {
         //
         _hasToUpdateItems = true;
@@ -5589,6 +5708,8 @@ function World2DItem(_world) {
     try {
         //
         _self = this;
+
+        _self.hookEvents();
 
     } catch (e) {
         //
@@ -5703,6 +5824,31 @@ function World2DItem(_world) {
         'set': function(value) { _tag = value; }
     });
 }
+
+//
+// Prototype.
+//
+World2DItem.prototype = {
+    //
+    // Public methods.
+    //
+    hookEvents: function() {
+        _world.addBoundsChangedEventListener(this.invalidate);
+    },
+
+    invalidate: function() {
+        _hasToCheckBounds = true;
+    },
+
+    unhookEvents: function() {
+        _world.removeBoundsChangedEventListener(this.invalidate);
+    },
+
+    dispose: function() {
+        //
+        unhookEvents();
+    }
+};
 
 Object.freeze(World2DItem);
 
@@ -5960,7 +6106,7 @@ exports.Program = Program;
 exports.Rect = Rect;
 exports.ScreenCoordinateHelper = ScreenCoordinateHelper;
 exports.ShaderType = ShaderType;
-exports.Size2D = Size2D;
+exports.Size2D = Size2D$1;
 exports.Size3D = Size3D;
 exports.Sprite = Sprite;
 exports.Sprite2 = Sprite2;

@@ -22,7 +22,7 @@ function main() {
 
     try {
         //
-        title = 'Sprites';
+        title = 'Painting';
 
         renderer = new g2l.Renderer();
         document.body.appendChild(renderer.canvas);
@@ -62,7 +62,12 @@ function main() {
             '../../assets/images/i2/common/female.png',
             '../../assets/images/i2/common/car.png',
             '../../assets/images/i2/common/cellPhone.png',
-            '../../assets/images/i2/common/creditCard.png'
+            '../../assets/images/i2/common/creditCard.png',
+            '../../assets/images/i2/individuals/officer.png',
+            '../../assets/images/i2/individuals/spy.png',
+            '../../assets/images/i2/transport/airplane.png',
+            '../../assets/images/i2/transport/cruiser.png',
+            '../../assets/images/i2/transport/motorcycle.png'
         ];
 
         for (var i=0; i<urls.length; i++) {
