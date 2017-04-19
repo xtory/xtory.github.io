@@ -247,7 +247,7 @@ function main() {
         renderer.canvas.addEventListener('mousedown',   onMouseDown);
         renderer.canvas.addEventListener('mousemove',   onMouseMove);
         renderer.canvas.addEventListener('mouseup',     onMouseUp);
-        renderer.canvas.addEventListener('mousewheel',  onMouseWheel);
+        renderer.canvas.addEventListener('wheel',       onWheel);
         renderer.canvas.addEventListener('touchstart',  onTouchStart);
         renderer.canvas.addEventListener('touchmove',   onTouchMove);
         renderer.canvas.addEventListener('touchcancel', onTouchCancel);
@@ -400,14 +400,14 @@ function main() {
         event.preventDefault();
     }
     
-    function onMouseWheel(event) {
+    function onWheel(event) {
         //
-        if (event.wheelDelta === 0) {
+        if (event.deltaY === 0) {
             return;
         }
 
-        var zoomOffset = 250.0;
-        camera.zoom((event.wheelDelta<0) ? -zoomOffset : zoomOffset);
+        var distance = (event.deltaY<0) ? 250 : -250;
+        camera.zoom(distance);
 
         event.preventDefault();
     }

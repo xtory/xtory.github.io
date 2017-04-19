@@ -161,7 +161,7 @@ function main() {
         renderer.canvas.addEventListener('mousedown',  onMouseDown);
         renderer.canvas.addEventListener('mousemove',  onMouseMove);
         renderer.canvas.addEventListener('mouseup',    onMouseUp);
-        renderer.canvas.addEventListener('mousewheel', onMouseWheel);
+        renderer.canvas.addEventListener('wheel',      onWheel);
     }
 
     function updateScene() {
@@ -265,10 +265,10 @@ function main() {
 
         //event.preventDefault();
     }
-    
-    function onMouseWheel(event) {
+
+    function onWheel(event) {
         //
-        if (event.wheelDelta === 0) {
+        if (event.deltaY === 0) {
             return;
         }
 
@@ -278,16 +278,18 @@ function main() {
 
         isZooming = true;
 
+        var delta = (event.deltaY < 0) ? 100 : -100;
+
         world2D.zoomAt (
             new g2l.Vector2D (
                 event.clientX,
                 renderer.canvas.clientHeight - event.clientY
             ),
-            event.wheelDelta,
+            delta,
             undefined,
             function() {
                 isZooming = false;
             }
         );
-    }    
+    }
 }
