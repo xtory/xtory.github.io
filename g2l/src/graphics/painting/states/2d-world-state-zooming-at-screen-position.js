@@ -77,7 +77,7 @@ World2DStateZoomingAtScreenPosition.prototype.update = function() {
     
     var size = ( // in world space.
         // Part 1.
-        (isFinished == false) ?
+        (isFinished === false) ?
         // Part 2.
         Size2D.addSizes (
             this.oldSize,

@@ -13,6 +13,7 @@ import { DepthBufferValues }       from './depth-buffer-values';
 import { Loader }                  from '../loaders/loader';
 import { MathHelper }              from '../math/helpers/math-helper';
 import { Matrix4x4 }               from '../math/4x4-matrix';
+import { RendererSettings }        from './renderer-settings';
 import { Vector2D }                from '../math/2d-vector';
 import { Vector3D }                from '../math/3d-vector';
 import { Vector4D }                from '../math/4d-vector';
@@ -39,6 +40,10 @@ function Renderer(_settings) {
     try {
         //
         _self = this;
+
+        if (_settings === undefined) {
+            _settings = new RendererSettings();
+        }
 
         setUpCanvas();
 
@@ -133,8 +138,7 @@ function Renderer(_settings) {
     //
     function setUpCanvas() {
         //
-        if (_settings !== undefined &&
-            _settings.canvas !== undefined) {
+        if (_settings.canvas !== null) {
             //
             _canvas = _settings.canvas;
 
@@ -167,8 +171,7 @@ function Renderer(_settings) {
         //     display: block; /* prevents scrollbar */
         // }
         //
-        if (_settings !== undefined &&
-            _settings.usesDefaultStyles === false) {
+        if (_settings.usesDefaultStyles === false) {
             return;
         }
 

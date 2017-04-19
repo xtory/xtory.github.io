@@ -2647,6 +2647,289 @@ IndexBuffer.prototype = {
 
 Object.freeze(IndexBuffer);
 
+// Note:
+// NDC stands for 'normalized device coordinates'.
+
+// Note:
+// Projection transform converts positions from view space to 'clip space'. OpenGL
+// and Direct3D have slightly different rules for clip space. In OpenGL, everything
+// that is viewable must be within an axis-aligned cube such that the x, y, and
+// z components of its clip-space position are <= its corresponding w component.
+// This implies that -w <= x <= w, -w <= y <= w, -w <= z <= w. Direct3D has the
+// same clipping requirement for x and y, but the z requirement is 0 <= z <= w.
+
+// Note:
+// Clip coordinates are in the homogenous form of <x, y, z, w>, but we need to
+// compute a 2D position (an x and y pair) along with a depth value. Dividing x,
+// y, and z by w (, which is called 'perspective division') accomplishes this.
+// The resulting coordinates are called 'normalized device coordinates'. Now all
+// the visible geometric data lies in a cube with positions between <-1, -1, -1>
+// and <1, 1, 1> in OpenGL, and between <-1, -1, 0> and <1, 1, 1> in Direct3D.
+
+// Note:
+// We don't have to do perspective division ourselves, Direct3D/OpenGL do it for
+// us automatically in the pipeline. Besides, Direct3D/OpenGL converts positions
+// from NDC to screen space by 'viewport transform' automatically in the pipeline
+// as well.
+
+// Note:
+// For instance, the values we pass to gl_Position are not divided by w yet. OpenGL
+// takes care of 'perspective division' for us later in the pipeline.
+
+// Note:
+// Direct3D uses viewport transform; OpenGL uses viewport transform plus depth-
+// range transform to convert positions from NDC to screen space.
+
+// Note:
+// Conventionally, Direct3D and OpenGL's depth buffers both use 0.0 to represent
+// positions on the near clip plane; 1.0 to represent positions on the far clip
+// plane, as default values.
+
+//
+// Constructor.
+//
+function NormalizedDeviceCoordinates() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+NormalizedDeviceCoordinates.MIN_X = -1; // Left.
+NormalizedDeviceCoordinates.MAX_X =  1; // Right.
+NormalizedDeviceCoordinates.MIN_Y = -1; // Bottom.
+NormalizedDeviceCoordinates.MAX_Y =  1; // Top.
+NormalizedDeviceCoordinates.MIN_Z = -1; // Near.
+NormalizedDeviceCoordinates.MAX_Z =  1; // Far.
+
+Object.freeze(NormalizedDeviceCoordinates);
+
+//
+// Constructor.
+//
+function PositionColor() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+PositionColor.VERTEX_SHADER_SOURCE = [
+    //
+   'precision highp float;', // which is the default vertex shader precision.
+
+   'attribute vec3 vertexPosition;',
+   'attribute vec4 vertexColor;',
+
+   'varying vec4 color;',
+
+   'uniform mat4 transform;',
+
+   'void main() {',
+       'gl_Position = transform * vec4(vertexPosition, 1.0);',
+       'color = vertexColor;',
+   '}'
+
+].join('\n');
+
+PositionColor.FRAGMENT_SHADER_SOURCE = [
+    //
+   'precision mediump float;', // which is the recommended fragment shader precision.
+
+   'varying vec4 color;',
+
+   'void main() {',
+       'gl_FragColor = color;',
+   '}'
+
+].join('\n');
+
+Object.freeze(PositionColor);
+
+//
+// Constructor.
+//
+function PositionOnly() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+PositionOnly.VERTEX_SHADER_SOURCE = [
+    //
+   'precision highp float;', // which is the default vertex shader precision.
+
+   'attribute vec3 vertexPosition;',
+
+   'uniform mat4 transform;',
+
+   'void main() {',
+       'gl_Position = transform * vec4(vertexPosition, 1.0);',
+   '}'
+   
+].join('\n');
+
+PositionOnly.FRAGMENT_SHADER_SOURCE = [
+    //
+   'precision mediump float;', // which is the recommended fragment shader precision.
+
+   'void main() {',
+       'gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);',
+   '}'
+
+].join('\n');
+
+Object.freeze(PositionOnly);
+
+//
+// Constructor.
+//
+function PositionTextureCoordinates() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+PositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
+    //
+   'precision highp float;', // which is the default vertex shader precision.
+
+   'attribute vec3 vertexPosition;',
+   'attribute vec2 vertexTextureCoordinates;',
+
+   'varying vec2 textureCoordinates;',
+
+   'uniform mat4 transform;',
+
+   'void main() {',
+       'gl_Position = transform * vec4(vertexPosition, 1.0);',
+       'textureCoordinates = vertexTextureCoordinates;',
+   '}'
+
+].join('\n');
+
+PositionTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
+    //
+   'precision mediump float;', // which is the recommended fragment shader precision.
+
+   'varying vec2 textureCoordinates;',
+
+   'uniform sampler2D sampler;',
+
+   'void main() {',
+       'gl_FragColor = texture2D(sampler, textureCoordinates);',
+   '}'
+   
+].join('\n');
+
+Object.freeze(PositionTextureCoordinates);
+
+//
+// Constructor.
+//
+function PrimitiveType() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+PrimitiveType.LINE_LIST      = 1; // = gl.LINES
+PrimitiveType.LINE_STRIP     = 3; // = gl.LINE_STRIP
+PrimitiveType.TRIANGLE_LIST  = 4; // = gl.TRIANGLES
+PrimitiveType.TRIANGLE_STRIP = 5; // = gl.TRIANGLE_STRIP
+
+Object.freeze(PrimitiveType);
+
+//
+// Constructor.
+//
+function Program(_programLoader) {
+    //
+    var _self;
+    var _gl;
+    var _webGLProgram;
+
+    try {
+        //
+        _self = this;
+        _gl = _programLoader.loader.renderer.gl;
+
+        _webGLProgram = _gl.createProgram();
+
+    } catch (e) {
+        //
+        console.log('g2l.Program: ' + e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(_self, 'programLoader', {
+        'get': function() { return _programLoader; }
+    });
+
+    Object.defineProperty(_self, 'webGLProgram', {
+        'get': function() { return _webGLProgram; }
+    });
+}
+
+Object.freeze(Program);
+
+// Note:
+// GDI+'s Rectangle and WPF's Rect are both (left, top, width, height). But cuz
+// OpenGL's texture coordinates is from lower-left (0, 0) to upper-right (1, 1),
+// this engine uses Rect: (left, bottom, width, height).
+
+//
+// Constructor.
+//
+function Rect(_left, _bottom, _width, _height) {
+    //
+    this.left   = _left;
+    this.bottom = _bottom;
+    this.width  = _width;
+    this.height = _height;
+}
+
+//
+// Prototype.
+//
+Rect.prototype = {
+    //
+    // No contents.
+};
+
+Object.defineProperty(Rect.prototype, 'right', {
+    'get': function() { return this.left + this.width; }
+});
+
+Object.defineProperty(Rect.prototype, 'top', {
+    'get': function() { return this.bottom + this.height; }
+});
+
+Object.defineProperty(Rect.prototype, 'center', {
+    //
+    'get': function() {
+        //
+        return new Vector2D (
+            this.left + this.width * 0.5,
+            this.bottom + this.height * 0.5
+        );
+    }
+});
+
+Object.defineProperty(Rect.prototype, 'size', {
+    //
+    'get': function() { return new Vector2D(this.width, this.height); }
+});
+
+Object.freeze(Rect);
+
 //
 // Constructor.
 //
@@ -2752,43 +3035,6 @@ function BufferLoader(_loader) {
 }
 
 Object.freeze(BufferLoader);
-
-//
-// Constructor.
-//
-function Program(_programLoader) {
-    //
-    var _self;
-    var _gl;
-    var _webGLProgram;
-
-    try {
-        //
-        _self = this;
-        _gl = _programLoader.loader.renderer.gl;
-
-        _webGLProgram = _gl.createProgram();
-
-    } catch (e) {
-        //
-        console.log('g2l.Program: ' + e);
-
-        throw e;
-    }
-
-    //
-    // Properties.
-    //
-    Object.defineProperty(_self, 'programLoader', {
-        'get': function() { return _programLoader; }
-    });
-
-    Object.defineProperty(_self, 'webGLProgram', {
-        'get': function() { return _webGLProgram; }
-    });
-}
-
-Object.freeze(Program);
 
 //
 // Constructor.
@@ -3246,6 +3492,17 @@ function Loader(_renderer) {
 
 Object.freeze(Loader);
 
+//
+// Constructor.
+//
+function RendererSettings() {
+    //
+    this.canvas = null;
+    this.usesDefaultStyles = true;
+}
+
+Object.freeze(RendererSettings);
+
 // Note:
 // This engine doesn't handle window's resize event anymore. See the article...
 // https://webglfundamentals.org/webgl/lessons/webgl-anti-patterns.html
@@ -3275,6 +3532,10 @@ function Renderer(_settings) {
     try {
         //
         _self = this;
+
+        if (_settings === undefined) {
+            _settings = new RendererSettings();
+        }
 
         setUpCanvas();
 
@@ -3369,8 +3630,7 @@ function Renderer(_settings) {
     //
     function setUpCanvas() {
         //
-        if (_settings !== undefined &&
-            _settings.canvas !== undefined) {
+        if (_settings.canvas !== null) {
             //
             _canvas = _settings.canvas;
 
@@ -3403,8 +3663,7 @@ function Renderer(_settings) {
         //     display: block; /* prevents scrollbar */
         // }
         //
-        if (_settings !== undefined &&
-            _settings.usesDefaultStyles === false) {
+        if (_settings.usesDefaultStyles === false) {
             return;
         }
 
@@ -3730,252 +3989,6 @@ Renderer.DEFAULT_CLEAR_STENCIL = 0;
 Renderer.DEFAULT_TEXTURE_UNIT  = 0;
 
 Object.freeze(Renderer);
-
-// Note:
-// NDC stands for 'normalized device coordinates'.
-
-// Note:
-// Projection transform converts positions from view space to 'clip space'. OpenGL
-// and Direct3D have slightly different rules for clip space. In OpenGL, everything
-// that is viewable must be within an axis-aligned cube such that the x, y, and
-// z components of its clip-space position are <= its corresponding w component.
-// This implies that -w <= x <= w, -w <= y <= w, -w <= z <= w. Direct3D has the
-// same clipping requirement for x and y, but the z requirement is 0 <= z <= w.
-
-// Note:
-// Clip coordinates are in the homogenous form of <x, y, z, w>, but we need to
-// compute a 2D position (an x and y pair) along with a depth value. Dividing x,
-// y, and z by w (, which is called 'perspective division') accomplishes this.
-// The resulting coordinates are called 'normalized device coordinates'. Now all
-// the visible geometric data lies in a cube with positions between <-1, -1, -1>
-// and <1, 1, 1> in OpenGL, and between <-1, -1, 0> and <1, 1, 1> in Direct3D.
-
-// Note:
-// We don't have to do perspective division ourselves, Direct3D/OpenGL do it for
-// us automatically in the pipeline. Besides, Direct3D/OpenGL converts positions
-// from NDC to screen space by 'viewport transform' automatically in the pipeline
-// as well.
-
-// Note:
-// For instance, the values we pass to gl_Position are not divided by w yet. OpenGL
-// takes care of 'perspective division' for us later in the pipeline.
-
-// Note:
-// Direct3D uses viewport transform; OpenGL uses viewport transform plus depth-
-// range transform to convert positions from NDC to screen space.
-
-// Note:
-// Conventionally, Direct3D and OpenGL's depth buffers both use 0.0 to represent
-// positions on the near clip plane; 1.0 to represent positions on the far clip
-// plane, as default values.
-
-//
-// Constructor.
-//
-function NormalizedDeviceCoordinates() {
-    // No contents.
-}
-
-//
-// Static constants (after Object.freeze()).
-//
-NormalizedDeviceCoordinates.MIN_X = -1; // Left.
-NormalizedDeviceCoordinates.MAX_X =  1; // Right.
-NormalizedDeviceCoordinates.MIN_Y = -1; // Bottom.
-NormalizedDeviceCoordinates.MAX_Y =  1; // Top.
-NormalizedDeviceCoordinates.MIN_Z = -1; // Near.
-NormalizedDeviceCoordinates.MAX_Z =  1; // Far.
-
-Object.freeze(NormalizedDeviceCoordinates);
-
-//
-// Constructor.
-//
-function PositionColor() {
-    // No contents.
-}
-
-//
-// Static constants (after Object.freeze()).
-//
-PositionColor.VERTEX_SHADER_SOURCE = [
-    //
-   'precision highp float;', // which is the default vertex shader precision.
-
-   'attribute vec3 vertexPosition;',
-   'attribute vec4 vertexColor;',
-
-   'varying vec4 color;',
-
-   'uniform mat4 transform;',
-
-   'void main() {',
-       'gl_Position = transform * vec4(vertexPosition, 1.0);',
-       'color = vertexColor;',
-   '}'
-
-].join('\n');
-
-PositionColor.FRAGMENT_SHADER_SOURCE = [
-    //
-   'precision mediump float;', // which is the recommended fragment shader precision.
-
-   'varying vec4 color;',
-
-   'void main() {',
-       'gl_FragColor = color;',
-   '}'
-
-].join('\n');
-
-Object.freeze(PositionColor);
-
-//
-// Constructor.
-//
-function PositionOnly() {
-    // No contents.
-}
-
-//
-// Static constants (after Object.freeze()).
-//
-PositionOnly.VERTEX_SHADER_SOURCE = [
-    //
-   'precision highp float;', // which is the default vertex shader precision.
-
-   'attribute vec3 vertexPosition;',
-
-   'uniform mat4 transform;',
-
-   'void main() {',
-       'gl_Position = transform * vec4(vertexPosition, 1.0);',
-   '}'
-   
-].join('\n');
-
-PositionOnly.FRAGMENT_SHADER_SOURCE = [
-    //
-   'precision mediump float;', // which is the recommended fragment shader precision.
-
-   'void main() {',
-       'gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);',
-   '}'
-
-].join('\n');
-
-Object.freeze(PositionOnly);
-
-//
-// Constructor.
-//
-function PositionTextureCoordinates() {
-    // No contents.
-}
-
-//
-// Static constants (after Object.freeze()).
-//
-PositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
-    //
-   'precision highp float;', // which is the default vertex shader precision.
-
-   'attribute vec3 vertexPosition;',
-   'attribute vec2 vertexTextureCoordinates;',
-
-   'varying vec2 textureCoordinates;',
-
-   'uniform mat4 transform;',
-
-   'void main() {',
-       'gl_Position = transform * vec4(vertexPosition, 1.0);',
-       'textureCoordinates = vertexTextureCoordinates;',
-   '}'
-
-].join('\n');
-
-PositionTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
-    //
-   'precision mediump float;', // which is the recommended fragment shader precision.
-
-   'varying vec2 textureCoordinates;',
-
-   'uniform sampler2D sampler;',
-
-   'void main() {',
-       'gl_FragColor = texture2D(sampler, textureCoordinates);',
-   '}'
-   
-].join('\n');
-
-Object.freeze(PositionTextureCoordinates);
-
-//
-// Constructor.
-//
-function PrimitiveType() {
-    // No contents.
-}
-
-//
-// Static constants (after Object.freeze()).
-//
-PrimitiveType.LINE_LIST      = 1; // = gl.LINES
-PrimitiveType.LINE_STRIP     = 3; // = gl.LINE_STRIP
-PrimitiveType.TRIANGLE_LIST  = 4; // = gl.TRIANGLES
-PrimitiveType.TRIANGLE_STRIP = 5; // = gl.TRIANGLE_STRIP
-
-Object.freeze(PrimitiveType);
-
-// Note:
-// GDI+'s Rectangle and WPF's Rect are both (left, top, width, height). But cuz
-// OpenGL's texture coordinates is from lower-left (0, 0) to upper-right (1, 1),
-// this engine uses Rect: (left, bottom, width, height).
-
-//
-// Constructor.
-//
-function Rect(_left, _bottom, _width, _height) {
-    //
-    this.left   = _left;
-    this.bottom = _bottom;
-    this.width  = _width;
-    this.height = _height;
-}
-
-//
-// Prototype.
-//
-Rect.prototype = {
-    //
-    // No contents.
-};
-
-Object.defineProperty(Rect.prototype, 'right', {
-    'get': function() { return this.left + this.width; }
-});
-
-Object.defineProperty(Rect.prototype, 'top', {
-    'get': function() { return this.bottom + this.height; }
-});
-
-Object.defineProperty(Rect.prototype, 'center', {
-    //
-    'get': function() {
-        //
-        return new Vector2D (
-            this.left + this.width * 0.5,
-            this.bottom + this.height * 0.5
-        );
-    }
-});
-
-Object.defineProperty(Rect.prototype, 'size', {
-    //
-    'get': function() { return new Vector2D(this.width, this.height); }
-});
-
-Object.freeze(Rect);
 
 // Note:
 // NDC stands for 'normalized device coordinates'.
@@ -5753,7 +5766,7 @@ World2DStateZoomingAtScreenPosition.prototype.update = function() {
     
     var size = ( // in world space.
         // Part 1.
-        (isFinished == false) ?
+        (isFinished === false) ?
         // Part 2.
         Size2D.addSizes (
             this.oldSize,
@@ -5802,6 +5815,7 @@ Object.freeze(World2DStateZoomingAtScreenPosition);
 // Constructor.
 //
 function World2DStyle() {
+    //
     this.backgroundColor = Colors.WHITE;
     this.zoomDuration = 250; // in milliseconds.
     this.zoomScaleFactor = 2.0;
@@ -7175,7 +7189,6 @@ exports.ClearOptions = ClearOptions;
 exports.Color = Color;
 exports.Colors = Colors;
 exports.DepthBufferValues = DepthBufferValues;
-exports.Renderer = Renderer;
 exports.IndexBuffer = IndexBuffer;
 exports.NormalizedDeviceCoordinates = NormalizedDeviceCoordinates;
 exports.PositionColor = PositionColor;
@@ -7184,6 +7197,8 @@ exports.PositionTextureCoordinates = PositionTextureCoordinates;
 exports.PrimitiveType = PrimitiveType;
 exports.Program = Program;
 exports.Rect = Rect;
+exports.Renderer = Renderer;
+exports.RendererSettings = RendererSettings;
 exports.ScreenCoordinateHelper = ScreenCoordinateHelper;
 exports.ShaderType = ShaderType;
 exports.Size2D = Size2D;

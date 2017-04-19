@@ -7,7 +7,6 @@ function main() {
     var title;
     var renderer;
     var loader;
-
     var world2D;
 
     var textures;
@@ -15,7 +14,7 @@ function main() {
     var world2DImageCount;
     var world2DLineSegments;
 
-    // FPS.
+    // Info.
     var info;
     var fps;
     var then;
@@ -146,6 +145,7 @@ function main() {
         info.fps.innerHTML = 'FPS: 0';
 
         info.more.innerHTML = (
+            'World-to-screen scale factor: 1<br>' +
             'Drawn image count: 0<br>' +
             'Drawn line segment count: 0'
         );        
@@ -190,6 +190,7 @@ function main() {
         info.fps.innerHTML = 'FPS: ' + fps.average;
 
         info.more.innerHTML = (
+            'World-to-screen scale factor: '+ world2D.worldToScreenScaleFactor.toFixed(5) + '<br>' +
             'Drawn image count: ' + world2D.drawnImageCount + '<br>' +
             'Drawn line segment count: ' + world2D.drawnLineSegmentCount
         );

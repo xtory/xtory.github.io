@@ -22,7 +22,7 @@ html, body {
     font-weight: bold;
     font-style: italic;
     font-size: medium;
-    color: #9B869C; /*rgba(155, 134, 156, 0.75);*/
+    color: rgba(155, 134, 156, 1); /*#9B869C*/
     letter-spacing: 1px;
 
     pointer-events:        none;
@@ -37,11 +37,11 @@ html, body {
 .title {
     margin-bottom: 5px;
     font-size: x-large;
-    color: #FF9800;
+    color: rgba(255, 152, 0, 1); /*#FF9800;*/
 }
 
 .fps {
     margin-bottom: 15px;
     font-size: large;
-    color: rgba(255, 255, 255, 0.75); /*white;*/
+    color: rgba(224, 224, 224, 1); /*white;*/
 }

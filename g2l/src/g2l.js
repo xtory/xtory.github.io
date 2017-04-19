@@ -13,7 +13,6 @@ export { ClearOptions }                               from './graphics/clear-opt
 export { Color }                                      from './graphics/color';
 export { Colors }                                     from './graphics/colors';
 export { DepthBufferValues }                          from './graphics/depth-buffer-values';
-export { Renderer }                                   from './graphics/renderer';
 export { IndexBuffer }                                from './graphics/index-buffer';
 export { NormalizedDeviceCoordinates }                from './graphics/normalized-device-coordinates';
 export { PositionColor }                              from './graphics/shaders/position-color';
@@ -22,6 +21,8 @@ export { PositionTextureCoordinates }                 from './graphics/shaders/p
 export { PrimitiveType }                              from './graphics/primitive-type';
 export { Program }                                    from './graphics/shaders/program';
 export { Rect }                                       from './graphics/rect';
+export { Renderer }                                   from './graphics/renderer';
+export { RendererSettings }                           from './graphics/renderer-settings';
 export { ScreenCoordinateHelper }                     from './graphics/helpers/screen-coordinate-helper';
 export { ShaderType }                                 from './graphics/shaders/shader-type';
 export { Size2D }                                     from './graphics/2d-size';

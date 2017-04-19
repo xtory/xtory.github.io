@@ -21,7 +21,7 @@ function main() {
     var lastTouchDistanceSqured;
     var backgroundColor;
 
-    // FPS.
+    // Info.
     var info;
     var fps;
     var then;
@@ -30,12 +30,6 @@ function main() {
     try {
         //
         title = 'IO';
-        
-        // var canvas = document.getElementById('canvas');
-        // renderer = new g2l.Renderer ({
-        //     canvas: canvas,
-        //     usesDefaultStyles: false
-        // });
 
         renderer = new g2l.Renderer();
         document.body.appendChild(renderer.canvas);

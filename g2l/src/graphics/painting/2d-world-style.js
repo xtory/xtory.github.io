@@ -3,6 +3,7 @@ import { Colors } from '../colors';
 // Constructor.
 //
 function World2DStyle() {
+    //
     this.backgroundColor = Colors.WHITE;
     this.zoomDuration = 250; // in milliseconds.
     this.zoomScaleFactor = 2.0;

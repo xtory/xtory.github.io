@@ -11,7 +11,7 @@ function main() {
     var program;
     var attributeLocations;
 
-    // FPS.
+    // Info.
     var info;
     var fps;
     var then;
@@ -22,10 +22,11 @@ function main() {
         title = '2D line segments';
 
         // var canvas = document.getElementById('canvas');
-        // renderer = new g2l.Renderer ({
-        //     canvas: canvas,
-        //     usesDefaultStyles: false
-        // });
+
+        // var rendererSettings = new g2l.RendererSettings();
+        // rendererSettings.canvas = canvas;
+        // rendererSettings.usesDefaultStyles = false;
+        // renderer = new g2l.Renderer(rendererSettings);
 
         renderer = new g2l.Renderer();
         document.body.appendChild(renderer.canvas);
