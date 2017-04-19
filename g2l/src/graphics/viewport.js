@@ -3,7 +3,8 @@
 // DirectX viewport's (X, Y) means the upper-left corner.
 
 // Note:
-// DirectX uses Viewport to set { left, top, width, height, minDepth(near), maxDepth(far) }
+// DirectX uses Viewport to set
+// { left, top, width, height, minDepth(near), maxDepth(far) }
 // OpenGL uses gl.viewport() to set { left, bottom, width, height }
 // and gl.depthRange() to set { nearDepth, farDepth }
 

@@ -28,7 +28,7 @@ Vector2D.ELEMENT_COUNT = 2;
 //
 Vector2D.fromArray = function(a) {
     return new Vector2D(a[0], a[1]);
-}
+};
 
 Vector2D.calculateUnitVectorOf = function(v) {
     //
@@ -55,35 +55,35 @@ Vector2D.calculateUnitVectorOf = function(v) {
         var s = 1.0 / sqrt;
         return new Vector2D(v.x*s, v.y*s);
     }
-}
+};
 
 Vector2D.negateVector = function (v) {
     return new Vector2D(-v.x, -v.y);
-}
+};
 
 Vector2D.addVectors = function(v1, v2) {
     return new Vector2D(v1.x+v2.x, v1.y+v2.y);
-}
+};
 
 Vector2D.subtractVectors = function(v1, v2) {
     return new Vector2D(v1.x-v2.x, v1.y-v2.y);
-}
+};
 
 Vector2D.multiplyVectorByScalar = function(v, s) {
     return new Vector2D(v.x*s, v.y*s);
-}
+};
 
 Vector2D.calculateLengthOf = function(v) {
     return Math.sqrt(v.x*v.x + v.y*v.y);
-}
+};
 
 Vector2D.calculateLengthSquaredOf = function(v) {
     return v.x*v.x + v.y*v.y;
-}
+};
 
 Vector2D.calculateDotProductOf = function(v1, v2) {
     return v1.x*v2.x + v1.y*v2.y;
-}
+};
 
 Vector2D.calculatePerpendicularVectorOf = function(v) {
     //
@@ -95,7 +95,7 @@ Vector2D.calculatePerpendicularVectorOf = function(v) {
     // degrees.
     //
     return new Vector2D(-v.y, v.x);
-}
+};
 
 Vector2D.calculatePerpendicularDotProductOf = function(v1, v2) {
     //
@@ -109,7 +109,7 @@ Vector2D.calculatePerpendicularDotProductOf = function(v1, v2) {
 
     return -v1.y*v2.x + v1.x*v2.y;
     // :Optimization
-}
+};
 
 Vector2D.areEqual = function(v1, v2) {
     //
@@ -120,11 +120,14 @@ Vector2D.areEqual = function(v1, v2) {
 
     if (v1.x !== v2.x ||
         v1.y !== v2.y) {
+        //
         return false;
+
     } else {
+        //
         return true;
     }
-}
+};
 
 Object.freeze(Vector2D);
 

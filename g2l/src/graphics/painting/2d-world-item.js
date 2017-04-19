@@ -7,14 +7,24 @@ function World2DItem(_world) {
     var _isEnabled;
     var _isVisible;
     var _isSelected;
-    var _isOutOfBound;
+    var _isOutOfBounds;
     var _tag;
+
+    //
+    // Helpers.
+    //
+    var _hasToCheckBounds;
 
     try {
         //
         _self = this;
 
-        _self.hookEvents();
+        _isEnabled     = true;
+        _isVisible     = true;
+        _isSelected    = false;
+        _isOutOfBounds = false;
+
+        _hasToCheckBounds = true;
 
     } catch (e) {
         //
@@ -128,6 +138,11 @@ function World2DItem(_world) {
         'get': function() { return _tag; },
         'set': function(value) { _tag = value; }
     });
+
+    Object.defineProperty(_self, 'hasToCheckBounds', {
+        'get': function() { return _hasToCheckBounds; },
+        'set': function(value) { _hasToCheckBounds = value; }
+    });
 }
 
 //
@@ -137,21 +152,26 @@ World2DItem.prototype = {
     //
     // Public methods.
     //
-    hookEvents: function() {
-        _world.addBoundsChangedEventListener(this.invalidate);
-    },
-
-    invalidate: function() {
-        _hasToCheckBounds = true;
-    },
-
-    unhookEvents: function() {
-        _world.removeBoundsChangedEventListener(this.invalidate);
-    },
-
-    dispose: function() {
+    update: function() {
         //
-        unhookEvents();
+        // No contents.
+    },
+
+    draw: function() {
+        //
+        // No contents.
+    },
+
+    invalidateBounds: function() {
+        this.hasToCheckBounds = true;
+    },
+
+    //
+    // Helpers
+    //
+    checkIfOutOfBounds: function() {
+        //
+        // No contents.
     }
 };
 

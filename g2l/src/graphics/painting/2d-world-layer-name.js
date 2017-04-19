@@ -26,8 +26,8 @@ World2DLayerName.NEAREST_RESERVED_ITEMS                                       = 
 //
 // Helpers.
 //
-World2DLayerName.FarthestItems = World2DLayerName.Background;
-World2DLayerName.NearestItems  = World2DLayerName.NearestReservedItems;
+World2DLayerName.FARTHEST_ITEMS = World2DLayerName.BACKGROUND;
+World2DLayerName.NEAREST_ITEMS  = World2DLayerName.NEAREST_RESERVED_ITEMS;
 
 Object.freeze(World2DLayerName);
 

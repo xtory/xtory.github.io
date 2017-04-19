@@ -166,7 +166,7 @@ Matrix4x4.fromArray = function(a) {
         a[2], a[6], a[10], a[14],
         a[3], a[7], a[11], a[15]
     );
-}
+};
 
 Matrix4x4.createIdentityMatrix = function() {
     //
@@ -176,7 +176,7 @@ Matrix4x4.createIdentityMatrix = function() {
         0, 0, 1, 0,
         0, 0, 0, 1
     );
-}
+};
 
 Matrix4x4.createViewMatrix = function (
     cameraPosition,
@@ -241,7 +241,7 @@ Matrix4x4.createViewMatrix = function (
         s31, s32, s33, s34,
         s41, s42, s43, s44
     );
-}
+};
 
 Matrix4x4.createProjectionMatrix = function (
     fovY,        // fieldOfViewY
@@ -301,7 +301,7 @@ Matrix4x4.createProjectionMatrix = function (
     a[15] = 0;
 
     return Matrix4x4.fromArray(a);
-}
+};
 
 Matrix4x4.createScaleMatrix = function(v) {
     //
@@ -311,7 +311,7 @@ Matrix4x4.createScaleMatrix = function(v) {
         0,   0,   v.z, 0,
         0,   0,   0,   1
     );
-}
+};
 
 Matrix4x4.createRotationMatrix = function (
     cartesianAxis,
@@ -393,7 +393,7 @@ Matrix4x4.createRotationMatrix = function (
             break;
         }
     }
-}
+};
 
 Matrix4x4.createTranslationMatrix = function(v) {
     //
@@ -403,7 +403,7 @@ Matrix4x4.createTranslationMatrix = function(v) {
         0, 0, 1, v.z,
         0, 0, 0,   1
     );
-}
+};
 
 Matrix4x4.multiplyMatrices = function(m1, m2) {
     //
@@ -442,7 +442,7 @@ Matrix4x4.multiplyMatrices = function(m1, m2) {
     a3[15] = a41*b14 + a42*b24 + a43*b34 + a44*b44;
 
     return Matrix4x4.fromArray(a3);
-}
+};
 
 Matrix4x4.transposeMatrix = function(m) {
     //
@@ -452,7 +452,7 @@ Matrix4x4.transposeMatrix = function(m) {
         m.s13, m.s23, m.s33, m.s43,
         m.s14, m.s24, m.s34, m.s44
     );
-}
+};
 
 Matrix4x4.invertMatrix = function(m) {
     //
@@ -496,7 +496,7 @@ Matrix4x4.invertMatrix = function(m) {
         (s14*s22*s31 - s12*s24*s31 - s14*s21*s32 + s11*s24*s32 + s12*s21*s34 - s11*s22*s34) * s,
         (s12*s23*s31 - s13*s22*s31 + s13*s21*s32 - s11*s23*s32 - s12*s21*s33 + s11*s22*s33) * s
     ]);
-}
+};
 
 Matrix4x4.areEqual = function(m1, m2) {
     //
@@ -516,7 +516,7 @@ Matrix4x4.areEqual = function(m1, m2) {
     }
 
     return true;
-}
+};
 
 Object.freeze(Matrix4x4);
 

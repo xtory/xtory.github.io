@@ -76,7 +76,7 @@ MathHelper.toRadians = function(degrees) {
     }
 
     return MathHelper.PI_OVER_ONE_EIGHTY * degrees;
-}
+};
 
 MathHelper.toDegrees = function(radians) {
     //
@@ -89,7 +89,7 @@ MathHelper.toDegrees = function(radians) {
     }
 
     return MathHelper.ONE_EIGHTY_OVER_PI * radians;
-}
+};
 
 //
 // Epsilon.
@@ -106,7 +106,7 @@ MathHelper.isZero = function(s) {
     } else { // -MathHelper.EPSILON < s < MathHelper.EPSILON
         return true;
     }
-}
+};
 
 MathHelper.areEqual = function(s1, s2) {
     //
@@ -139,7 +139,7 @@ MathHelper.areEqual = function(s1, s2) {
     }
 
 //#endif // DEBUG
-}
+};
 
 MathHelper.isScalar1LessThanScalar2 = function(s1, s2) {
     //
@@ -168,7 +168,7 @@ MathHelper.isScalar1LessThanScalar2 = function(s1, s2) {
 
         return false;
     }
-}
+};
 
 MathHelper.isScalar1LessThanOrEqualToScalar2 = function(s1, s2) {
     //
@@ -197,7 +197,7 @@ MathHelper.isScalar1LessThanOrEqualToScalar2 = function(s1, s2) {
 
         return false;
     }
-}
+};
 
 MathHelper.isScalar1GreaterThanScalar2 = function(s1, s2) {
     //
@@ -226,7 +226,7 @@ MathHelper.isScalar1GreaterThanScalar2 = function(s1, s2) {
 
         return false;
     }
-}
+};
 
 MathHelper.isScalar1GreaterThanOrEqualToScalar2 = function(s1, s2) {
     //
@@ -255,7 +255,7 @@ MathHelper.isScalar1GreaterThanOrEqualToScalar2 = function(s1, s2) {
 
         return false;
     }
-}
+};
 
 //
 // Textures.
@@ -288,7 +288,7 @@ MathHelper.isPowerOfTwo = function(s) {
     } else {
         return false;
     }
-}
+};
 
 Object.freeze(MathHelper);
 

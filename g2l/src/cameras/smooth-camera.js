@@ -46,11 +46,11 @@ function SmoothCamera (
     //
     Object.defineProperty(_self, 'state', {
         //
-       'get': function() {
+        'get': function() {
             return _state;
         },
 
-       'set': function(value) {
+        'set': function(value) {
             //
             if (value === _state) {
                 return;
@@ -68,7 +68,7 @@ function SmoothCamera (
     });
 
     //
-    // Priviledged methods.
+    // Privileged methods.
     //
     this.update = function() {
         //

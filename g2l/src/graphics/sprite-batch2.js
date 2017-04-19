@@ -308,7 +308,7 @@ function SpriteBatch2(_renderer, _settings) {
     }
 
     //
-    // Priviledged methods.
+    // Privileged methods.
     //
     this.begin = function() {
         //

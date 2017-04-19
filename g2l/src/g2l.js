@@ -42,10 +42,15 @@ export { World2DImage }                               from './graphics/painting/
 export { World2DItem }                                from './graphics/painting/2d-world-item';
 export { World2DLineSegment }                         from './graphics/painting/2d-world-line-segment';
 export { World2DLayerName }                           from './graphics/painting/2d-world-layer-name';
+export { World2DState }                               from './graphics/painting/states/2d-world-state';
+export { World2DStateNormal }                         from './graphics/painting/states/2d-world-state-normal';
+export { World2DStateZoomingAtScreenPosition }        from './graphics/painting/states/2d-world-state-zooming-at-screen-position';
 
 // Helpers.
+export { ArrayHelper }                                from './helpers/array-helper';
 export { ExceptionHelper }                            from './helpers/exception-helper';
 export { Fps }                                        from './helpers/fps';
+export { IndexHelper }                                from './helpers/index-helper';
 export { JSHelper }                                   from './helpers/js-helper';
 export { MouseButton }                                from './helpers/mouse-button';
 

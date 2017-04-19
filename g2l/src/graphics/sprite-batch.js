@@ -78,6 +78,10 @@ function SpriteBatch(_renderer, _settings) {
         'get': function() { return _renderer; }
     });
 
+    Object.defineProperty(_self, 'isBegun', {
+        'get': function() { return _isBegun; }
+    });
+
     //
     // Private methods.
     //
@@ -228,7 +232,7 @@ function SpriteBatch(_renderer, _settings) {
     }
 
     //
-    // Priviledged methods.
+    // Privileged methods.
     //
     this.begin = function() {
         //
@@ -274,7 +278,9 @@ function SpriteBatch(_renderer, _settings) {
             //
             vb = _renderer.loader.createVertexBuffer();
             _vertexBuffers.position.push(vb);
+
         } else {
+            //
             vb = _vertexBuffers.position[index];
         }
 
@@ -288,7 +294,9 @@ function SpriteBatch(_renderer, _settings) {
             //
             vb = _renderer.loader.createVertexBuffer();
             _vertexBuffers.color.push(vb);
+
         } else {
+            //
             vb = _vertexBuffers.color[index];
         }
 
@@ -306,7 +314,9 @@ function SpriteBatch(_renderer, _settings) {
             //
             vb = _renderer.loader.createVertexBuffer();
             _vertexBuffers.textureCoordinates.push(vb);
+
         } else {
+            //
             vb = _vertexBuffers.textureCoordinates[index];
         }
 

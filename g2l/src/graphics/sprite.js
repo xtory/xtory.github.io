@@ -1,4 +1,5 @@
 import { Colors }                from './colors';
+import { DepthBufferValues }     from './depth-buffer-values';
 import { Rect }                  from './rect';
 import { SpriteCreationOptions } from './sprite-creation-options';
 
@@ -86,6 +87,10 @@ Sprite.DEFAULT_CREATION_OPTIONS = (
 Sprite.DEFAULT_CREATION_OPTIONS = (
     SpriteCreationOptions.VERTEX_POSITIONS
 );
+// :Note
+
+Sprite.DEFAULT_SCREEN_POSITION_DEPTH =
+    DepthBufferValues.NEAR_CLIP_PLANE;
 
 Sprite.DEFAULT_VERTEX_COLOR = Colors.WHITE;
 

@@ -36,7 +36,7 @@ Vector3D.ELEMENT_COUNT = 3;
 //
 Vector3D.fromArray = function(a) {
     return new Vector3D(a[0], a[1], a[2]);
-}
+};
 
 Vector3D.calculateUnitVectorOf = function(v) {
     //
@@ -63,35 +63,35 @@ Vector3D.calculateUnitVectorOf = function(v) {
         var s = 1.0 / sqrt;
         return new Vector3D(v.x*s, v.y*s, v.z*s);
     }
-}
+};
 
 Vector3D.negateVector = function (v) {
     return new Vector3D(-v.x, -v.y, -v.z);
-}
+};
 
 Vector3D.addVectors = function(v1, v2) {
     return new Vector3D(v1.x+v2.x, v1.y+v2.y, v1.z+v2.z);
-}
+};
 
 Vector3D.subtractVectors = function(v1, v2) {
     return new Vector3D(v1.x-v2.x, v1.y-v2.y, v1.z-v2.z);
-}
+};
 
 Vector3D.multiplyVectorByScalar = function(v, s) {
     return new Vector3D(v.x*s, v.y*s, v.z*s);
-}
+};
 
 Vector3D.calculateLengthOf = function(v) {
     return Math.sqrt(v.x*v.x + v.y*v.y + v.z*v.z);
-}
+};
 
 Vector3D.calculateLengthSquaredOf = function(v) {
     return v.x*v.x + v.y*v.y + v.z*v.z;
-}
+};
 
 Vector3D.calculateDotProductOf = function(v1, v2) {
     return v1.x*v2.x + v1.y*v2.y + v1.z*v2.z;
-}
+};
 
 Vector3D.calculateCrossProductOf = function(v1, v2) {
     //
@@ -100,7 +100,7 @@ Vector3D.calculateCrossProductOf = function(v1, v2) {
         v1.z*v2.x - v1.x*v2.z,
         v1.x*v2.y - v1.y*v2.x
     );
-}
+};
 
 Vector3D.transformPoint = function(m, p) {
     //
@@ -109,7 +109,7 @@ Vector3D.transformPoint = function(m, p) {
 
     var s = 1 / v2.w;
     return new Vector3D(v2.x*s, v2.y*s, v2.z*s);
-}
+};
 
 Vector3D.transformVector = function(m, v) {
     //
@@ -117,7 +117,7 @@ Vector3D.transformVector = function(m, v) {
     v = Vector4D.Transform(m, v2);
 
     return new Vector3D(v.x, v.y, v.z);
-}
+};
 
 Vector3D.transform = function(v1, q) {
     //
@@ -149,7 +149,7 @@ Vector3D.transform = function(v1, q) {
         (v1.X*s4 + v1.Y*s5) + v1.Z*s6,
         (v1.X*s7 + v1.Y*s8) + v1.Z*s9
     );
-}
+};
 
 Vector3D.areEqual = function(v1, v2) {
     //
@@ -161,11 +161,14 @@ Vector3D.areEqual = function(v1, v2) {
     if (v1.x !== v2.x ||
         v1.y !== v2.y ||
         v1.z !== v2.z) {
+        //
         return false;
+
     } else {
+        //
         return true;
     }
-}
+};
 
 Object.freeze(Vector3D);
 

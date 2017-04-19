@@ -110,15 +110,15 @@ Quaternion.fromAxisAngle = function(axis, angle) {
         axis.z * sin,
         cos
     );
-}
+};
 
 Quaternion.fromArray = function(a) {
     return new Quaternion(a[0], a[1], a[2], a[3]);
-}
+};
 
 Quaternion.createIdentityQuaternion = function() {
     return new Quaternion(0, 0, 0, 1);
-}
+};
 
 Quaternion.calculateUnitQuaternionOf = function(q) {
     //
@@ -140,7 +140,7 @@ Quaternion.calculateUnitQuaternionOf = function(q) {
 
         return new Quaternion(q.x*s, q.y*s, q.z*s, q.w*s);
     }
-}
+};
 
 Quaternion.areEqual = function(q1, q2) {
     //
@@ -157,7 +157,7 @@ Quaternion.areEqual = function(q1, q2) {
     } else {
         return true;
     }
-}
+};
 
 Object.freeze(Quaternion);
 
