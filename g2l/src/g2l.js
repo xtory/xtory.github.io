@@ -28,9 +28,7 @@ export { ShaderType }                                 from './graphics/shaders/s
 export { Size2D }                                     from './graphics/2d-size';
 export { Size3D }                                     from './graphics/3d-size';
 export { Sprite }                                     from './graphics/sprite';
-export { Sprite2 }                                    from './graphics/sprite2';
 export { SpriteBatch }                                from './graphics/sprite-batch';
-export { SpriteBatch2 }                               from './graphics/sprite-batch2';
 export { SpriteCreationOptions }                      from './graphics/sprite-creation-options';
 export { Texture2D }                                  from './graphics/2d-texture';
 export { TextureCoordinateHelper }                    from './graphics/helpers/texture-coordinate-helper';

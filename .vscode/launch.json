@@ -3,52 +3,52 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "tutorials/tutorial-a01",
+    "configurations": [{
+        //
+            "name": "tutorials/a01-colored-triangles",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/g2l/examples/tutorials/tutorial-a01/index.html",
+            "file": "${workspaceRoot}/g2l/examples/tutorials/a01-colored-triangles/index.html",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
             ]
         }, {
-            "name": "tutorials/tutorial-a02",
+            "name": "tutorials/a02-texturing",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/g2l/examples/tutorials/tutorial-a02/index.html",
+            "file": "${workspaceRoot}/g2l/examples/tutorials/a02-texturing/index.html",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
             ]
         }, {
-            "name": "tutorials/tutorial-a03",
+            "name": "tutorials/a03-alpha-blending",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/g2l/examples/tutorials/tutorial-a03/index.html",
+            "file": "${workspaceRoot}/g2l/examples/tutorials/a03-alpha-blending/index.html",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
             ]
         }, {
-            "name": "tutorials/tutorial-a04",
+            "name": "tutorials/a04-multitexturing",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/g2l/examples/tutorials/tutorial-a04/index.html",
+            "file": "${workspaceRoot}/g2l/examples/tutorials/a04-multitexturing/index.html",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
             ]
         }, {
-            "name": "tutorials/tutorial-a05",
+            "name": "tutorials/a05-sprites",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/g2l/examples/tutorials/tutorial-a05/index.html",
+            "file": "${workspaceRoot}/g2l/examples/tutorials/a05-sprites/index.html",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
             ]
         }, {
-            "name": "tutorials/tutorial-b01",
+            "name": "tutorials/b01-lighting",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/g2l/examples/tutorials/tutorial-b01/index.html",
+            "file": "${workspaceRoot}/g2l/examples/tutorials/b01-lighting/index.html",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
             ]

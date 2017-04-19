@@ -163,6 +163,7 @@ World2DItem.prototype = {
     },
 
     invalidateBounds: function() {
+        //
         this.hasToCheckBounds = true;
     },
 
