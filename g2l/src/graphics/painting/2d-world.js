@@ -5,14 +5,17 @@
 // And screen space follows the viewport's rule, that is, (0, 0) means the lower-
 // left corner, not the upper-left corner.
 //
-import { ArrayHelper }        from '../../helpers/array-helper';
-import { ClearOptions }       from '../clear-options';
-import { IndexHelper }        from '../../helpers/index-helper';
-import { Size2D }             from '../2d-size';
-import { SpriteBatch }        from '../sprite-batch';
-import { Vector2D }           from '../../math/2d-vector';
-import { World2DLayerName }   from './2d-world-layer-name';
-import { World2DStateNormal } from './states/2d-world-state-normal';
+import { ArrayHelper }                         from '../../helpers/array-helper';
+import { ClearOptions }                        from '../clear-options';
+import { IndexHelper }                         from '../../helpers/index-helper';
+import { MathHelper }                          from '../../math/helpers/math-helper';
+import { Size2D }                              from '../2d-size';
+import { SpriteBatch }                         from '../sprite-batch';
+import { Vector2D }                            from '../../math/2d-vector';
+import { World2DLayerName }                    from './2d-world-layer-name';
+import { World2DStateNormal }                  from './states/2d-world-state-normal';
+import { World2DStateZoomingAtScreenPosition } from './states/2d-world-state-zooming-at-screen-position';
+import { World2DStyle }                        from './2d-world-style';
 
 //
 // Constructor.
@@ -54,6 +57,10 @@ function World2D(_renderer, _style) {
         //
         _self = this;
 
+        if (_style === undefined) {
+            _style = new World2DStyle();
+        }
+
         _state = new World2DStateNormal(_self);
 
         _spriteBatch = new SpriteBatch(_renderer);
@@ -88,6 +95,24 @@ function World2D(_renderer, _style) {
     //
     Object.defineProperty(_self, 'renderer', {
         'get': function() { return _renderer; }
+    });
+
+    Object.defineProperty(_self, 'style', {
+        //
+        'get': function() {
+            return _style;
+        },
+
+        'set': function(value) {
+            //
+            if (value === _style) {
+                return;
+            }
+
+            // ...
+
+            _style = value;
+        }
     });
 
     Object.defineProperty(_self, 'state', {
@@ -411,6 +436,32 @@ function World2D(_renderer, _style) {
         // :Test
     };
 
+    this.zoomAt = function(screenPosition, delta, updatingCallback, finishingCallback) {
+        //
+        if (delta === 0) {
+            return;
+        }
+        
+        var size = (
+            (delta < 0) ?
+            Size2D.multiplySizeByScalar(_size, _style.zoomScaleFactor) :
+            Size2D.multiplySizeByScalar(_size, 1.0/_style.zoomScaleFactor)
+        );
+
+        this.state = new World2DStateZoomingAtScreenPosition (
+            this,
+            screenPosition,
+            size,
+            _style.zoomDuration,
+            updatingCallback,
+            finishingCallback
+        );
+
+        // Note:
+        // The Zooming state will set _hasToUpdateItems to true every time the state
+        // is called, so we don't have to set it here.
+    }
+
     //this.resetSize = function() {
 
     this.resetSize = function() {
@@ -423,6 +474,90 @@ function World2D(_renderer, _style) {
     };
 
     //
+    // Accessors.
+    //
+    this.setBounds = function(centerPosition, size) {
+        //
+        // 1. Sets the new center position in world space.
+        var isCenterPositionChanged;
+
+        if (centerPosition === _centerPosition) {
+            //
+            isCenterPositionChanged = false;
+
+        } else { // centerPosition !== _centerPosition
+            //
+            _centerPosition = centerPosition;
+            isCenterPositionChanged = true;
+        }
+
+        var isSizeChanged;
+
+        if (size === _size) {
+            //
+            isSizeChanged = false;
+
+        } else { // size !== _size
+            //
+            // 2-1. Checks if the aspect ratios of before and after are the same.
+            var oldAspectRatio = _size.width / _size.height;
+            var newAspectRatio =  size.width /  size.height;
+
+            // 2-2. Then zooms in or out with the same center world position.
+
+            if (MathHelper.areEqual(oldAspectRatio, newAspectRatio) === true) {
+                //
+                _worldToScreenScaleFactor *= _size.width / size.width;
+
+            } else {
+                //
+                // Note:
+                // The difference between the old and new aspect ratios is
+                // supposed to be smaller then the epsilon, or an exception
+                // is thrown. But later, I found this insistence isn't nece-
+                // ssary and the chart still works when those aspect ratio
+                // are different. So I changed how to modify _worldToScreen-
+                // ScaleFactor (as shown below) and kept going.
+                /*
+                throw 'An invalid-operation-exception raised.';
+                */
+
+                if (oldAspectRatio <= newAspectRatio) {
+                    //
+                    _worldToScreenScaleFactor *= _size.jeight / size.jeight;
+
+                } else {
+                    //
+                    _worldToScreenScaleFactor *= _size.width / size.width;
+                }
+                // :Note
+            }
+
+            _size = size;
+
+            isSizeChanged = true;
+        }
+
+        _hasToUpdateItems = true;
+
+        // Test:
+        /*
+        if (this.BoundsChanged != null)
+        {
+            this.BoundsChanged (
+                this,
+                new BoundsChangedEventArgs (
+                    isCenterPositionChanged,
+                    isSizeChanged
+                )
+            );
+        }
+        */
+        onBoundsChanged(isCenterPositionChanged, isSizeChanged);
+        // :Test
+    };
+
+    //
     // Helpers
     //
     this.drawsItem = function(item) {
@@ -431,6 +566,7 @@ function World2D(_renderer, _style) {
             item.isOutOfBounds === true) {
             //
             return false;
+            
         } else {
             //
             return true;

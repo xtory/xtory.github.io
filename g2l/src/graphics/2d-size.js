@@ -10,6 +10,14 @@ function Size2D(_width, _height) {
 //
 // Static methods.
 //
+Size2D.addSizes = function(size1, size2) {
+    return new Size2D(size1.width+size2.width, size1.height+size2.height);
+};
+
+Size2D.subtractSizes = function(size1, size2) {
+    return new Size2D(size1.width-size2.width, size1.height-size2.height);
+};
+
 Size2D.multiplySizeByScalar = function(size, s) {
     return new Size2D(size.width*s, size.height*s);
 };

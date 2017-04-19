@@ -10,23 +10,20 @@ function main() {
 
     var world2D;
 
-    // Sprites.
-    //var spriteBatch;
-    // var spriteCount;
-    // var spritePositionOffsets;
-
     var textures;
     var world2DImages;
+    var world2DImageCount;
     var world2DLineSegments;
 
     // FPS.
     var info;
     var fps;
     var then;
-    var lastAverageFps;
 
-    var isMouseLeftButtonPressed = false;
+    // Helpers.
+    var isMouseLeftButtonPressed;
     var lastMouseScreenPosition;
+    var isZooming;
 
     try {
         //
@@ -37,11 +34,7 @@ function main() {
 
         loader = renderer.loader;
 
-        world2D = new g2l.World2D(renderer, {
-            'backgroundColor': new g2l.Color(0.5, 0.25, 0.25, 1)
-        });
-
-        //spriteBatch = new g2l.SpriteBatch(renderer);
+        setUpWorld2D();
 
         setUpTextures();
 
@@ -49,13 +42,11 @@ function main() {
 
         setUpWorld2DLineSegments();
 
-        //setUpSprites();
-
         setUpInfo();
 
+        isMouseLeftButtonPressed = false;
         lastMouseScreenPosition = new g2l.Vector2D(0, 0);
-
-        //setUpStates();
+        isZooming = false;
 
         hookEvents();
 
@@ -71,6 +62,14 @@ function main() {
     //
     // Functions.
     //
+    function setUpWorld2D() {
+        //
+        var worldStyle = new g2l.World2DStyle();
+        worldStyle.backgroundColor = g2l.Color.DEFAULT_BACKGROUND_COLOR; //new g2l.Color(0.25, 0.25, 0.25, 1);
+
+        world2D = new g2l.World2D(renderer, worldStyle);
+    }
+
     function setUpTextures() {
         //
         textures = [];
@@ -93,54 +92,35 @@ function main() {
         }
     }
 
-    // function setUpSprites() {
-    //     //
-    //     spriteCount = 1000;
-    //     spritePositionOffsets = [];
-
-    //     var width = 1250;
-    //     var height = 1250;
-
-    //     for (var i=0; i<spriteCount; i++) {
-    //         //
-    //         spritePositionOffsets.push(new g2l.Vector2D (
-    //             width * (-0.25 + Math.random() * 0.5), // -0.25 ~ 0.25
-    //             height * (-0.25 + Math.random() * 0.5)  // -0.25 ~ 0.25
-    //         ));
-    //     }
-    // }
-
     function setUpWorld2DImages() {
         //
-        // spriteCount = 1000;
-        // spritePositionOffsets = [];
-
-        // var width = 1250;
-        // var height = 1250;
-
-        // for (var i=0; i<spriteCount; i++) {
-        //     //
-        //     spritePositionOffsets.push(new g2l.Vector2D (
-        //         width * (-0.25 + Math.random() * 0.5), // -0.25 ~ 0.25
-        //         height * (-0.25 + Math.random() * 0.5)  // -0.25 ~ 0.25
-        //     ));
-        // }
-
         world2DImages = [];
+        world2DImageCount = 1000;
 
-        var world2DImage = new g2l.World2DImage (
-            world2D,
-            textures[0],
-            new g2l.Vector2D(0, 0),
-            new g2l.Size2D(100, 100)
-        );
+        var world2DImageSize = new g2l.Size2D(64, 64);
 
-        world2D.addItem (
-            g2l.World2DLayerName.MIDDLE_IMAGES,
-            world2DImage
-        );
+        var halfLength = 5000;
+        for (var i=0; i<world2DImageCount; i++) {
+            //
+            var p = new g2l.Vector2D (
+                halfLength * (-0.5 + Math.random()), // -length/2 ~ length/2
+                halfLength * (-0.5 + Math.random())  // -length/2 ~ length/2
+            );
 
-        world2DImages.push(world2DImage);
+            var world2DImage = new g2l.World2DImage (
+                world2D,
+                textures[i % textures.length],
+                p,
+                world2DImageSize
+            );
+
+            world2D.addItem (
+                g2l.World2DLayerName.MIDDLE_IMAGES,
+                world2DImage
+            );
+
+            world2DImages.push(world2DImage);            
+        }
     }
 
     function setUpWorld2DLineSegments() {
@@ -149,34 +129,30 @@ function main() {
     
     function setUpInfo() {
         //
-        var left = document.getElementById('left');
-        var divs = left.getElementsByTagName('div');
+        var divs = (
+            document.
+            getElementById('info').
+            getElementsByTagName('div')
+        );
 
-        divs[0].innerHTML = title;
+        info = {
+            'title': divs[0],
+            'fps':   divs[1],
+            'more':  divs[2]
+        };
 
-        info = divs[1];
-        // info.innerHTML = (
-        //     'FPS: 0' + '<br>' +
-        //     'Sprite count: ' + spriteCount
-        // );
-        info.innerHTML = 'FPS: 0';
+        info.title.innerHTML = title;
+
+        info.fps.innerHTML = 'FPS: 0';
+
+        info.more.innerHTML = (
+            'Drawn image count: 0<br>' +
+            'Drawn line segment count: 0'
+        );        
         
         fps = new g2l.Fps();
         then = 0;
-        lastAverageFps = 0;
     }
-
-    // function setUpStates() {
-    //     //
-    //     var gl = renderer.gl;
-
-    //     gl.enable(gl.BLEND);
-
-    //     gl.blendFunc (
-    //         gl.SRC_ALPHA,
-    //         gl.ONE_MINUS_SRC_ALPHA
-    //     );
-    // }
 
     function hookEvents() {
         //
@@ -197,70 +173,26 @@ function main() {
 
     function drawScene() {
         //
-        // renderer.clear (
-        //     g2l.ClearOptions.COLOR_BUFFER,
-        //     new g2l.Color(0.25, 0.25, 0.25, 1) //g2l.Colors.WHITE 
-        // );
-
-        // drawSprites();
         world2D.draw();
 
         drawInfo();
     }
 
-    function drawSprites() {
-        //
-        spriteBatch.begin();
-
-        var center = new g2l.Vector2D (
-            renderer.canvas.clientWidth * 0.5,
-            renderer.canvas.clientHeight * 0.5
-        );
-
-        for (var i=0; i<spriteCount; i++) {
-            //
-            var item = spritePositionOffsets[i];
-
-            var p = new g2l.Vector3D (
-                center.x + item.x,
-                center.y + item.y,
-                0
-            );
-
-            var texture = textures[i % textures.length];
-
-            spriteBatch.drawSprite (
-                texture,
-                g2l.SpriteCreationOptions.VERTEX_POSITIONS, //undefined,
-                p,
-                new g2l.Size2D(texture.width*0.5, texture.height*0.5) //size
-            );
-        }
-
-        spriteBatch.end();
-    }
-
     function drawInfo() {
         //
         var now = (new Date()).getTime();
-        // if (now - then < 333.33) { // 333.33 = 1000 / 3
-        //     return;
-        // }
+        if (now - then < 333.33) { // 333.33 = 1000 / 3
+            return;
+        }
 
         then = now;
 
-        var averageFps = fps.average;
-        //if (averageFps !== lastAverageFps) {
-            //
-            var world2DImage = world2DImages[0];
+        info.fps.innerHTML = 'FPS: ' + fps.average;
 
-            info.innerHTML = (
-                'FPS: ' + averageFps + '<br>' +
-                'SP: (' + world2DImage.centerScreenPosition.x + ', ' + world2DImage.centerScreenPosition.y + ')'
-            );
-
-            lastAverageFps = averageFps;
-        //}
+        info.more.innerHTML = (
+            'Drawn image count: ' + world2D.drawnImageCount + '<br>' +
+            'Drawn line segment count: ' + world2D.drawnLineSegmentCount
+        );
     }
 
     //
@@ -274,8 +206,12 @@ function main() {
                 //
                 isMouseLeftButtonPressed = true;
 
-                lastMouseScreenPosition =
-                    new g2l.Vector2D(event.clientX, -event.clientY);
+                // lastMouseScreenPosition =
+                //     new g2l.Vector2D(event.clientX, -event.clientY);
+                lastMouseScreenPosition = new g2l.Vector2D (
+                    event.clientX,
+                    renderer.canvas.clientHeight - event.clientY
+                );
 
                 break;
             }
@@ -292,8 +228,10 @@ function main() {
         //
         if (isMouseLeftButtonPressed === true) {
             //
-            var mouseScreenPosition =
-                new g2l.Vector2D(event.clientX, -event.clientY);
+            var mouseScreenPosition = new g2l.Vector2D (
+                event.clientX,
+                renderer.canvas.clientHeight - event.clientY
+            );
 
             var offset = g2l.Vector2D.subtractVectors (
                 mouseScreenPosition,
@@ -333,9 +271,22 @@ function main() {
             return;
         }
 
-        // var zoomOffset = 250.0;
-        // camera.zoom((event.wheelDelta<0) ? -zoomOffset : zoomOffset);
+        if (isZooming === true) {
+            return;
+        }
 
-        //event.preventDefault();
+        isZooming = true;
+
+        world2D.zoomAt (
+            new g2l.Vector2D (
+                event.clientX,
+                renderer.canvas.clientHeight - event.clientY
+            ),
+            event.wheelDelta,
+            undefined,
+            function() {
+                isZooming = false;
+            }
+        );
     }    
 }

@@ -45,6 +45,7 @@ export { World2DLayerName }                           from './graphics/painting/
 export { World2DState }                               from './graphics/painting/states/2d-world-state';
 export { World2DStateNormal }                         from './graphics/painting/states/2d-world-state-normal';
 export { World2DStateZoomingAtScreenPosition }        from './graphics/painting/states/2d-world-state-zooming-at-screen-position';
+export { World2DStyle }                               from './graphics/painting/2d-world-style';
 
 // Helpers.
 export { ArrayHelper }                                from './helpers/array-helper';

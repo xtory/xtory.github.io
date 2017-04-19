@@ -108,13 +108,13 @@ function World2DItem(_world) {
         }
     });
 
-    Object.defineProperty(_self, 'isOutOfBound', {
+    Object.defineProperty(_self, 'isOutOfBounds', {
         //
         'get': function() {
             //
             if (_hasToCheckBounds === true) {
                 //
-                checkIfOutOfBounds();
+                _self.checkIfOutOfBounds();
 
                 _hasToCheckBounds = false;
             }

@@ -227,13 +227,21 @@ function main() {
 
     function setUpInfo() {
         //
-        var left = document.getElementById('left');
-        var divs = left.getElementsByTagName('div');
+        var divs = (
+            document.
+            getElementById('info').
+            getElementsByTagName('div')
+        );
 
-        divs[0].innerHTML = title;
+        info = {
+            'title': divs[0],
+            'fps':   divs[1],
+            'more':  divs[2]
+        };
 
-        info = divs[1];
-        info.innerHTML = 'FPS: 0';
+        info.title.innerHTML = title;
+
+        info.fps.innerHTML = 'FPS: 0';
         
         fps = new g2l.Fps();
         then = 0;
@@ -310,7 +318,9 @@ function main() {
 
         var averageFps = fps.average;
         if (averageFps !== lastAverageFps) {
-            info.innerHTML = 'FPS: ' + averageFps;
+            //
+            info.fps.innerHTML = 'FPS: ' + fps.average;
+
             lastAverageFps = averageFps;
         }
     }

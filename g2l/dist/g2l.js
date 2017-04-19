@@ -126,8 +126,11 @@ MathHelper.areEqual = function(s1, s2) {
 //#if DEBUG
     /*
     if (MathHelper.IsZero(s) == false) {
+        //
         return false;
+
     } else { // MathHelper.IsZero(s) == true
+        //
         return true;
     }
     */
@@ -136,8 +139,11 @@ MathHelper.areEqual = function(s1, s2) {
 
     if (s <= -MathHelper.EPSILON ||
         MathHelper.EPSILON <= s) {
+        //
         return false;
+
     } else { // -MathHelper.EPSILON < s < MathHelper.EPSILON
+        //
         return true;
     }
 
@@ -4048,6 +4054,14 @@ function Size2D(_width, _height) {
 //
 // Static methods.
 //
+Size2D.addSizes = function(size1, size2) {
+    return new Size2D(size1.width+size2.width, size1.height+size2.height);
+};
+
+Size2D.subtractSizes = function(size1, size2) {
+    return new Size2D(size1.width-size2.width, size1.height-size2.height);
+};
+
 Size2D.multiplySizeByScalar = function(size, s) {
     return new Size2D(size.width*s, size.height*s);
 };
@@ -5668,6 +5682,135 @@ JSHelper.inherit(World2DStateNormal, World2DState);
 
 Object.freeze(World2DStateNormal);
 
+//
+// Constructor.
+//
+function World2DStateZoomingAtScreenPosition (
+    _world,
+    _screenPosition,
+    _newSize,  // in world space.
+    _duration, // in milliseconds.
+    _updatingCallback,
+    _finishingCallback
+){
+    World2DState.call(this, _world);
+
+    var _self;
+    var _sineEase;
+    var _oldSize; // in world space.
+
+    try {
+        //
+        _self = this;
+
+        Object.defineProperty(_self, 'screenPosition', {
+            'get': function() { return _screenPosition; }
+        });
+
+        _oldSize = _world.size;
+
+        Object.defineProperty(_self, 'oldSize', {
+            'get': function() { return _oldSize; }
+        });
+
+        Object.defineProperty(_self, 'newSize', {
+            'get': function() { return _newSize; }
+        });
+
+        Object.defineProperty(_self, 'updatingCallback', {
+            'get': function() { return _updatingCallback; }
+        });
+
+        Object.defineProperty(_self, 'finishingCallback', {
+            'get': function() { return _finishingCallback; }
+        });
+
+        _sineEase = new SineEase(EaseMode.EASE_OUT, _duration, false);
+        _sineEase.start();
+
+        Object.defineProperty(_self, 'sineEase', {
+            'get': function() { return _sineEase; }
+        });
+
+    } catch (e) {
+        //
+        console.log('g2l.World2DStateZoomingAtScreenPosition: ', e);
+
+        throw e;
+    }
+}
+
+JSHelper.inherit(World2DStateZoomingAtScreenPosition, World2DState);
+
+World2DStateZoomingAtScreenPosition.prototype.update = function() {
+    //
+    var isFinished = this.sineEase.isFinished;
+    var ratio = this.sineEase.ratioOfCurrentToTotalSineOfAngleOffset;
+
+    if (this.updateCallback !== undefined) {
+        this.updatingCallback(_sineEase.ratioOfCurrentToTotalTimeOffset);
+    }
+    
+    var size = ( // in world space.
+        // Part 1.
+        (isFinished == false) ?
+        // Part 2.
+        Size2D.addSizes (
+            this.oldSize,
+            Size2D.multiplySizeByScalar (
+                Size2D.subtractSizes(this.newSize, this.oldSize),
+                ratio
+            )
+         ) : 
+         // Part 3.
+        this.newSize
+    );
+
+    var canvasCenterPosition = // in world space.
+        this.world.centerPosition; //base.Canvas.CenterPosition;
+
+    //var p = base.Canvas.ToWorldSpace(this.screenPosition);
+    var p = this.world.convertPositionFromScreenToWorldSpace(this.screenPosition);
+
+    //base.Canvas.SetBounds(canvasCenterPosition, size);
+    this.world.setBounds(canvasCenterPosition, size);
+
+    var positionOffset = Vector2D.subtractVectors (
+        this.world.convertPositionFromScreenToWorldSpace(this.screenPosition),
+        p
+    );
+
+    //canvasCenterPosition -= positionOffset;
+    canvasCenterPosition =
+        Vector2D.subtractVectors(canvasCenterPosition, positionOffset);
+
+    this.world.setBounds(canvasCenterPosition, size);
+    
+    if (isFinished === true) {
+        //
+        if (this.finishingCallback !== undefined) {
+            this.finishingCallback();
+        }
+
+        this.world.state = new World2DStateNormal(this.world);
+    }
+};
+
+Object.freeze(World2DStateZoomingAtScreenPosition);
+
+//
+// Constructor.
+//
+function World2DStyle() {
+    this.backgroundColor = Colors.WHITE;
+    this.zoomDuration = 250; // in milliseconds.
+    this.zoomScaleFactor = 2.0;
+    this.hitLineSegmentScreenThicknessTimes = 5.0;
+    this.viewMargin = 125; // in world space.
+}
+
+Object.freeze(World2DStyle);
+
 // Note:
 // OpenGL viewport's (X, Y) means the lower-left corner.
 // DirectX viewport's (X, Y) means the upper-left corner.
@@ -5715,6 +5858,10 @@ function World2D(_renderer, _style) {
         //
         _self = this;
 
+        if (_style === undefined) {
+            _style = new World2DStyle();
+        }
+
         _state = new World2DStateNormal(_self);
 
         _spriteBatch = new SpriteBatch(_renderer);
@@ -5749,6 +5896,24 @@ function World2D(_renderer, _style) {
     //
     Object.defineProperty(_self, 'renderer', {
         'get': function() { return _renderer; }
+    });
+
+    Object.defineProperty(_self, 'style', {
+        //
+        'get': function() {
+            return _style;
+        },
+
+        'set': function(value) {
+            //
+            if (value === _style) {
+                return;
+            }
+
+            // ...
+
+            _style = value;
+        }
     });
 
     Object.defineProperty(_self, 'state', {
@@ -6072,6 +6237,32 @@ function World2D(_renderer, _style) {
         // :Test
     };
 
+    this.zoomAt = function(screenPosition, delta, updatingCallback, finishingCallback) {
+        //
+        if (delta === 0) {
+            return;
+        }
+        
+        var size = (
+            (delta < 0) ?
+            Size2D.multiplySizeByScalar(_size, _style.zoomScaleFactor) :
+            Size2D.multiplySizeByScalar(_size, 1.0/_style.zoomScaleFactor)
+        );
+
+        this.state = new World2DStateZoomingAtScreenPosition (
+            this,
+            screenPosition,
+            size,
+            _style.zoomDuration,
+            updatingCallback,
+            finishingCallback
+        );
+
+        // Note:
+        // The Zooming state will set _hasToUpdateItems to true every time the state
+        // is called, so we don't have to set it here.
+    };
+
     //this.resetSize = function() {
 
     this.resetSize = function() {
@@ -6084,6 +6275,90 @@ function World2D(_renderer, _style) {
     };
 
     //
+    // Accessors.
+    //
+    this.setBounds = function(centerPosition, size) {
+        //
+        // 1. Sets the new center position in world space.
+        var isCenterPositionChanged;
+
+        if (centerPosition === _centerPosition) {
+            //
+            isCenterPositionChanged = false;
+
+        } else { // centerPosition !== _centerPosition
+            //
+            _centerPosition = centerPosition;
+            isCenterPositionChanged = true;
+        }
+
+        var isSizeChanged;
+
+        if (size === _size) {
+            //
+            isSizeChanged = false;
+
+        } else { // size !== _size
+            //
+            // 2-1. Checks if the aspect ratios of before and after are the same.
+            var oldAspectRatio = _size.width / _size.height;
+            var newAspectRatio =  size.width /  size.height;
+
+            // 2-2. Then zooms in or out with the same center world position.
+
+            if (MathHelper.areEqual(oldAspectRatio, newAspectRatio) === true) {
+                //
+                _worldToScreenScaleFactor *= _size.width / size.width;
+
+            } else {
+                //
+                // Note:
+                // The difference between the old and new aspect ratios is
+                // supposed to be smaller then the epsilon, or an exception
+                // is thrown. But later, I found this insistence isn't nece-
+                // ssary and the chart still works when those aspect ratio
+                // are different. So I changed how to modify _worldToScreen-
+                // ScaleFactor (as shown below) and kept going.
+                /*
+                throw 'An invalid-operation-exception raised.';
+                */
+
+                if (oldAspectRatio <= newAspectRatio) {
+                    //
+                    _worldToScreenScaleFactor *= _size.jeight / size.jeight;
+
+                } else {
+                    //
+                    _worldToScreenScaleFactor *= _size.width / size.width;
+                }
+                // :Note
+            }
+
+            _size = size;
+
+            isSizeChanged = true;
+        }
+
+        _hasToUpdateItems = true;
+
+        // Test:
+        /*
+        if (this.BoundsChanged != null)
+        {
+            this.BoundsChanged (
+                this,
+                new BoundsChangedEventArgs (
+                    isCenterPositionChanged,
+                    isSizeChanged
+                )
+            );
+        }
+        */
+        onBoundsChanged(isCenterPositionChanged, isSizeChanged);
+        // :Test
+    };
+
+    //
     // Helpers
     //
     this.drawsItem = function(item) {
@@ -6092,6 +6367,7 @@ function World2D(_renderer, _style) {
             item.isOutOfBounds === true) {
             //
             return false;
+            
         } else {
             //
             return true;
@@ -6323,13 +6599,13 @@ function World2DItem(_world) {
         }
     });
 
-    Object.defineProperty(_self, 'isOutOfBound', {
+    Object.defineProperty(_self, 'isOutOfBounds', {
         //
         'get': function() {
             //
             if (_hasToCheckBounds === true) {
                 //
-                checkIfOutOfBounds();
+                _self.checkIfOutOfBounds();
 
                 _hasToCheckBounds = false;
             }
@@ -6748,18 +7024,6 @@ Object.freeze(World2DImage);
 //
 // Constructor.
 //
-function World2DStateZoomingAtScreenPosition(_world) {
-    //
-    World2DState.call(this, _world);
-}
-
-JSHelper.inherit(World2DStateZoomingAtScreenPosition, World2DState);
-
-Object.freeze(World2DStateZoomingAtScreenPosition);
-
-//
-// Constructor.
-//
 function ExceptionHelper() {
     // No contents.
 }
@@ -6943,6 +7207,7 @@ exports.World2DLayerName = World2DLayerName;
 exports.World2DState = World2DState;
 exports.World2DStateNormal = World2DStateNormal;
 exports.World2DStateZoomingAtScreenPosition = World2DStateZoomingAtScreenPosition;
+exports.World2DStyle = World2DStyle;
 exports.ArrayHelper = ArrayHelper;
 exports.ExceptionHelper = ExceptionHelper;
 exports.Fps = Fps;

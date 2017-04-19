@@ -123,8 +123,11 @@ MathHelper.areEqual = function(s1, s2) {
 //#if DEBUG
     /*
     if (MathHelper.IsZero(s) == false) {
+        //
         return false;
+
     } else { // MathHelper.IsZero(s) == true
+        //
         return true;
     }
     */
@@ -133,8 +136,11 @@ MathHelper.areEqual = function(s1, s2) {
 
     if (s <= -MathHelper.EPSILON ||
         MathHelper.EPSILON <= s) {
+        //
         return false;
+
     } else { // -MathHelper.EPSILON < s < MathHelper.EPSILON
+        //
         return true;
     }
 

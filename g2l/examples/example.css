@@ -8,7 +8,7 @@ html, body {
     overflow: hidden;
 }
 
-#left {
+.text {
     position: absolute;
     left: 10px;
     top: 10px;
@@ -19,16 +19,29 @@ html, body {
     border-radius: 10px;
     z-index: 3;
     font-family: 'Consolas';
-    /*font-weight: bold;*/
+    font-weight: bold;
     font-style: italic;
-    font-size: large;
-    color: rgba(224, 224, 224, 0.75);
+    font-size: medium;
+    color: #9B869C; /*rgba(155, 134, 156, 0.75);*/
     letter-spacing: 1px;
+
+    pointer-events:        none;
+    user-select:           none; /* Non-prefixed version, currently supported by Chrome and Opera */
+    -moz-user-select:      none; /* Firefox */
+    -webkit-user-select:   none; /* Safari */
+    -webkit-touch-callout: none; /* iOS Safari */
+    -ms-user-select:       none; /* Internet Explorer/Edge */
+    -khtml-user-select:    none; /* Konqueror HTML */
 }
 
 .title {
     margin-bottom: 5px;
-    font-weight: bold;
     font-size: x-large;
-    color: rgba(255, 152, 0, 1);
+    color: #FF9800;
+}
+
+.fps {
+    margin-bottom: 15px;
+    font-size: large;
+    color: rgba(255, 255, 255, 0.75); /*white;*/
 }
