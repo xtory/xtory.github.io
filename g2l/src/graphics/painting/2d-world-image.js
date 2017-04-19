@@ -12,15 +12,17 @@ import { World2DLineSegment } from './2d-world-line-segment';
 function World2DImage (
     _world,
     _texture,
+    _creationOptions,
     _centerPosition, // in world space.
-    _size            // in world space.
+    _size,           // in world space.
+    _vertexColor,
+    _sourceTextureCoordinateRect
 ){
     World2DItem.call(this, _world);
 
     var _self;
     var _centerScreenPosition;
     var _screenSize;
-    var _sourceTextureCoordinateRect;
 
     //
     // Styles.
@@ -47,6 +49,10 @@ function World2DImage (
         Object.defineProperty(_self, 'texture', {
             'get': function() { return _texture; },
             'set': function(value) { _texture = value; }
+        });
+
+        Object.defineProperty(_self, 'creationOptions', {
+            'get': function() { return _creationOptions; },
         });
 
         // Note:
@@ -123,6 +129,19 @@ function World2DImage (
             'set': function(value) { _screenSize = value; }
             // :Test
         });
+
+        if (_vertexColor === undefined) {
+            _vertexColor = World2DImage.DEFAULT_VERTEX_COLOR;
+        }
+
+        Object.defineProperty(_self, 'vertexColor', {
+            'get': function() { return _vertexColor; },
+            'set': function(value) { _vertexColor = value; }
+        });
+
+        if (_sourceTextureCoordinateRect === undefined) {
+            _sourceTextureCoordinateRect = World2DImage.DEFAULT_SOURCE_TEXTURE_COORDINATE_RECT;
+        }
 
         Object.defineProperty(_self, 'sourceTextureCoordinateRect', {
             'get': function() { return _sourceTextureCoordinateRect; },
@@ -227,14 +246,14 @@ World2DImage.prototype.draw = function() {
     
     world.spriteBatch.drawSprite (
         this.texture,
-        undefined,
+        this.creationOptions,
         new Vector3D (
             this.centerScreenPosition.x,
             this.centerScreenPosition.y,
             Sprite.DEFAULT_SCREEN_POSITION_DEPTH
         ),
         this.screenSize,
-        Sprite.DEFAULT_VERTEX_COLOR,
+        this.vertexColor,
         this.sourceTextureCoordinateRect
     );
 
@@ -329,6 +348,9 @@ World2DImage.prototype.beginSpriteBatch = function() {
 //
 // Static constants (after Object.freeze()).
 //
+World2DImage.DEFAULT_VERTEX_COLOR =
+    Sprite.DEFAULT_VERTEX_COLOR;
+
 World2DImage.DEFAULT_SOURCE_TEXTURE_COORDINATE_RECT =
     Sprite.DEFAULT_SOURCE_TEXTURE_COORDINATE_RECT;
 

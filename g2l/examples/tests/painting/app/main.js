@@ -109,6 +109,7 @@ function main() {
             var world2DImage = new g2l.World2DImage (
                 world2D,
                 textures[i % textures.length],
+                undefined,
                 p,
                 world2DImageSize
             );

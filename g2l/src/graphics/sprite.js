@@ -74,7 +74,6 @@ Sprite.VERTEX_COUNT            = 4;
 Sprite.POSITION_SIZE           = 3; // (x, y, z)
 Sprite.COLOR_SIZE              = 4; // (r, g, b, a)
 Sprite.TEXTURE_COORDINATE_SIZE = 2; // (s, t)
-Sprite.INDEX_COUNT             = 6; // (0, 1, 2, 2, 1, 3)
 
 // Note:
 /*
@@ -84,17 +83,18 @@ Sprite.DEFAULT_CREATION_OPTIONS = (
     SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES
 );
 */
-Sprite.DEFAULT_CREATION_OPTIONS = (
-    SpriteCreationOptions.VERTEX_POSITIONS
-);
+Sprite.DEFAULT_CREATION_OPTIONS =
+    SpriteCreationOptions.VERTEX_POSITIONS;
 // :Note
 
 Sprite.DEFAULT_SCREEN_POSITION_DEPTH =
     DepthBufferValues.NEAR_CLIP_PLANE;
 
-Sprite.DEFAULT_VERTEX_COLOR = Colors.WHITE;
+Sprite.DEFAULT_VERTEX_COLOR =
+    Colors.WHITE;
 
-Sprite.DEFAULT_SOURCE_TEXTURE_COORDINATE_RECT = new Rect(0, 0, 1, 1);
+Sprite.DEFAULT_SOURCE_TEXTURE_COORDINATE_RECT =
+    new Rect(0, 0, 1, 1);
 
 Sprite.DEFAULT_VERTEX_COLORS = new Float32Array (
     [].concat (
@@ -105,30 +105,11 @@ Sprite.DEFAULT_VERTEX_COLORS = new Float32Array (
     )
 );
 
-Sprite.DEFAULT_VERTEX_COLORS2 = [].concat (
-    Sprite.DEFAULT_VERTEX_COLOR.toArray(),
-    Sprite.DEFAULT_VERTEX_COLOR.toArray(),
-    Sprite.DEFAULT_VERTEX_COLOR.toArray(),
-    Sprite.DEFAULT_VERTEX_COLOR.toArray()
-);
-
 Sprite.DEFAULT_VERTEX_TEXTURE_COORDINATES = new Float32Array ([
     1.0, 0.0, // lower-right.
     1.0, 1.0, // upper-right.
     0.0, 0.0, // lower-left.
     0.0, 1.0  // upper-left.
-]);
-
-Sprite.DEFAULT_VERTEX_TEXTURE_COORDINATES2 = [
-    1.0, 0.0, // lower-right.
-    1.0, 1.0, // upper-right.
-    0.0, 0.0, // lower-left.
-    0.0, 1.0  // upper-left.
-];
-
-Sprite.DEFAULT_INDICES = new Uint16Array ([
-    0, 1, 2,
-    2, 1, 3
 ]);
 
 //

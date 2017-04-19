@@ -12,6 +12,7 @@ import { MathHelper }                          from '../../math/helpers/math-hel
 import { Size2D }                              from '../2d-size';
 import { SpriteBatch }                         from '../sprite-batch';
 import { Vector2D }                            from '../../math/2d-vector';
+import { World2DBoundsChangedEvent }           from './2d-world-bounds-changed-event';
 import { World2DLayerName }                    from './2d-world-layer-name';
 import { World2DStateNormal }                  from './states/2d-world-state-normal';
 import { World2DStateZoomingAtScreenPosition } from './states/2d-world-state-zooming-at-screen-position';
@@ -44,6 +45,7 @@ function World2D(_renderer, _style) {
 
     var _layers;
 
+    // Helpers
     var _hasToUpdateItems;
     var _drawnImageCount;
     var _drawnLineSegmentCount;
@@ -72,10 +74,10 @@ function World2D(_renderer, _style) {
 
         // Test:
         /*
-        this.resetSize();
+        this.resize();
         */
         _lastCanvasClientSize = new Size2D(0, 0);
-        resetSize();
+        resize();
         // :Test
 
         _hasToUpdateItems = false;
@@ -170,7 +172,7 @@ function World2D(_renderer, _style) {
     //
     // Private methods.
     //
-    function resetSize() {
+    function resize() {
         //
         var canvasClientSize = new Size2D (
             _renderer.canvas.clientWidth,
@@ -206,7 +208,10 @@ function World2D(_renderer, _style) {
             );
         }
         */
-        onBoundsChanged(false, true);
+        //onBoundsChanged(false, true);
+        onBoundsChanged (
+            new World2DBoundsChangedEvent(false, true)
+        );
         // :Test
     };
 
@@ -372,8 +377,8 @@ function World2D(_renderer, _style) {
 
     this.draw = function() {
         //
-        // Resets the size (if necessary).
-        resetSize();
+        // Resizes (if necessary).
+        resize();
 
         _drawnImageCount = 0;
         _drawnLineSegmentCount = 0;
@@ -432,7 +437,9 @@ function World2D(_renderer, _style) {
             );
         }
         */
-        onBoundsChanged();
+        onBoundsChanged (
+            new World2DBoundsChangedEvent(true, false)
+        );
         // :Test
     };
 
@@ -462,10 +469,8 @@ function World2D(_renderer, _style) {
         // is called, so we don't have to set it here.
     }
 
-    //this.resetSize = function() {
-
-    this.resetSize = function() {
-        resetSize();
+    this.resize = function() {
+        resize();
     };
 
     this.invalidateItems = function() {
@@ -479,23 +484,21 @@ function World2D(_renderer, _style) {
     this.setBounds = function(centerPosition, size) {
         //
         // 1. Sets the new center position in world space.
-        var isCenterPositionChanged;
-
+        var isMoved;
         if (centerPosition === _centerPosition) {
             //
-            isCenterPositionChanged = false;
+            isMoved = false;
 
         } else { // centerPosition !== _centerPosition
             //
             _centerPosition = centerPosition;
-            isCenterPositionChanged = true;
+            isMoved = true;
         }
 
-        var isSizeChanged;
-
+        var isResized;
         if (size === _size) {
             //
-            isSizeChanged = false;
+            isResized = false;
 
         } else { // size !== _size
             //
@@ -535,15 +538,15 @@ function World2D(_renderer, _style) {
 
             _size = size;
 
-            isSizeChanged = true;
+            isResized = true;
         }
 
         _hasToUpdateItems = true;
 
         // Test:
         /*
-        if (this.BoundsChanged != null)
-        {
+        if (this.BoundsChanged != null) {
+            //
             this.BoundsChanged (
                 this,
                 new BoundsChangedEventArgs (
@@ -553,7 +556,9 @@ function World2D(_renderer, _style) {
             );
         }
         */
-        onBoundsChanged(isCenterPositionChanged, isSizeChanged);
+        onBoundsChanged (
+            new World2DBoundsChangedEvent(isMoved, isResized)
+        );
         // :Test
     };
 

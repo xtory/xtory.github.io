@@ -4198,7 +4198,6 @@ Sprite.VERTEX_COUNT            = 4;
 Sprite.POSITION_SIZE           = 3; // (x, y, z)
 Sprite.COLOR_SIZE              = 4; // (r, g, b, a)
 Sprite.TEXTURE_COORDINATE_SIZE = 2; // (s, t)
-Sprite.INDEX_COUNT             = 6; // (0, 1, 2, 2, 1, 3)
 
 // Note:
 /*
@@ -4208,17 +4207,18 @@ Sprite.DEFAULT_CREATION_OPTIONS = (
     SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES
 );
 */
-Sprite.DEFAULT_CREATION_OPTIONS = (
-    SpriteCreationOptions.VERTEX_POSITIONS
-);
+Sprite.DEFAULT_CREATION_OPTIONS =
+    SpriteCreationOptions.VERTEX_POSITIONS;
 // :Note
 
 Sprite.DEFAULT_SCREEN_POSITION_DEPTH =
     DepthBufferValues.NEAR_CLIP_PLANE;
 
-Sprite.DEFAULT_VERTEX_COLOR = Colors.WHITE;
+Sprite.DEFAULT_VERTEX_COLOR =
+    Colors.WHITE;
 
-Sprite.DEFAULT_SOURCE_TEXTURE_COORDINATE_RECT = new Rect(0, 0, 1, 1);
+Sprite.DEFAULT_SOURCE_TEXTURE_COORDINATE_RECT =
+    new Rect(0, 0, 1, 1);
 
 Sprite.DEFAULT_VERTEX_COLORS = new Float32Array (
     [].concat (
@@ -4229,30 +4229,11 @@ Sprite.DEFAULT_VERTEX_COLORS = new Float32Array (
     )
 );
 
-Sprite.DEFAULT_VERTEX_COLORS2 = [].concat (
-    Sprite.DEFAULT_VERTEX_COLOR.toArray(),
-    Sprite.DEFAULT_VERTEX_COLOR.toArray(),
-    Sprite.DEFAULT_VERTEX_COLOR.toArray(),
-    Sprite.DEFAULT_VERTEX_COLOR.toArray()
-);
-
 Sprite.DEFAULT_VERTEX_TEXTURE_COORDINATES = new Float32Array ([
     1.0, 0.0, // lower-right.
     1.0, 1.0, // upper-right.
     0.0, 0.0, // lower-left.
     0.0, 1.0  // upper-left.
-]);
-
-Sprite.DEFAULT_VERTEX_TEXTURE_COORDINATES2 = [
-    1.0, 0.0, // lower-right.
-    1.0, 1.0, // upper-right.
-    0.0, 0.0, // lower-left.
-    0.0, 1.0  // upper-left.
-];
-
-Sprite.DEFAULT_INDICES = new Uint16Array ([
-    0, 1, 2,
-    2, 1, 3
 ]);
 
 //
@@ -4950,6 +4931,17 @@ Object.freeze(IndexHelper);
 //
 // Constructor.
 //
+function World2DBoundsChangedEvent(_isMoved, _isResized) {
+    //
+    this.isMoved = _isMoved;
+    this.isResized = _isResized;
+}
+
+Object.freeze(World2DBoundsChangedEvent);
+
+//
+// Constructor.
+//
 function World2DLayerName() {
     // No contents.
 }
@@ -5194,6 +5186,7 @@ function World2D(_renderer, _style) {
 
     var _layers;
 
+    // Helpers
     var _hasToUpdateItems;
     var _drawnImageCount;
     var _drawnLineSegmentCount;
@@ -5222,10 +5215,10 @@ function World2D(_renderer, _style) {
 
         // Test:
         /*
-        this.resetSize();
+        this.resize();
         */
         _lastCanvasClientSize = new Size2D(0, 0);
-        resetSize();
+        resize();
         // :Test
 
         _hasToUpdateItems = false;
@@ -5320,7 +5313,7 @@ function World2D(_renderer, _style) {
     //
     // Private methods.
     //
-    function resetSize() {
+    function resize() {
         //
         var canvasClientSize = new Size2D (
             _renderer.canvas.clientWidth,
@@ -5356,7 +5349,10 @@ function World2D(_renderer, _style) {
             );
         }
         */
-        onBoundsChanged(false, true);
+        //onBoundsChanged(false, true);
+        onBoundsChanged (
+            new World2DBoundsChangedEvent(false, true)
+        );
         // :Test
     }
 
@@ -5522,8 +5518,8 @@ function World2D(_renderer, _style) {
 
     this.draw = function() {
         //
-        // Resets the size (if necessary).
-        resetSize();
+        // Resizes (if necessary).
+        resize();
 
         _drawnImageCount = 0;
         _drawnLineSegmentCount = 0;
@@ -5582,7 +5578,9 @@ function World2D(_renderer, _style) {
             );
         }
         */
-        onBoundsChanged();
+        onBoundsChanged (
+            new World2DBoundsChangedEvent(true, false)
+        );
         // :Test
     };
 
@@ -5612,10 +5610,8 @@ function World2D(_renderer, _style) {
         // is called, so we don't have to set it here.
     };
 
-    //this.resetSize = function() {
-
-    this.resetSize = function() {
-        resetSize();
+    this.resize = function() {
+        resize();
     };
 
     this.invalidateItems = function() {
@@ -5629,23 +5625,21 @@ function World2D(_renderer, _style) {
     this.setBounds = function(centerPosition, size) {
         //
         // 1. Sets the new center position in world space.
-        var isCenterPositionChanged;
-
+        var isMoved;
         if (centerPosition === _centerPosition) {
             //
-            isCenterPositionChanged = false;
+            isMoved = false;
 
         } else { // centerPosition !== _centerPosition
             //
             _centerPosition = centerPosition;
-            isCenterPositionChanged = true;
+            isMoved = true;
         }
 
-        var isSizeChanged;
-
+        var isResized;
         if (size === _size) {
             //
-            isSizeChanged = false;
+            isResized = false;
 
         } else { // size !== _size
             //
@@ -5685,15 +5679,15 @@ function World2D(_renderer, _style) {
 
             _size = size;
 
-            isSizeChanged = true;
+            isResized = true;
         }
 
         _hasToUpdateItems = true;
 
         // Test:
         /*
-        if (this.BoundsChanged != null)
-        {
+        if (this.BoundsChanged != null) {
+            //
             this.BoundsChanged (
                 this,
                 new BoundsChangedEventArgs (
@@ -5703,7 +5697,9 @@ function World2D(_renderer, _style) {
             );
         }
         */
-        onBoundsChanged(isCenterPositionChanged, isSizeChanged);
+        onBoundsChanged (
+            new World2DBoundsChangedEvent(isMoved, isResized)
+        );
         // :Test
     };
 
@@ -6049,15 +6045,17 @@ Object.freeze(World2DLineSegment);
 function World2DImage (
     _world,
     _texture,
+    _creationOptions,
     _centerPosition, // in world space.
-    _size            // in world space.
+    _size,           // in world space.
+    _vertexColor,
+    _sourceTextureCoordinateRect
 ){
     World2DItem.call(this, _world);
 
     var _self;
     var _centerScreenPosition;
     var _screenSize;
-    var _sourceTextureCoordinateRect;
 
     //
     // Styles.
@@ -6084,6 +6082,10 @@ function World2DImage (
         Object.defineProperty(_self, 'texture', {
             'get': function() { return _texture; },
             'set': function(value) { _texture = value; }
+        });
+
+        Object.defineProperty(_self, 'creationOptions', {
+            'get': function() { return _creationOptions; },
         });
 
         // Note:
@@ -6160,6 +6162,19 @@ function World2DImage (
             'set': function(value) { _screenSize = value; }
             // :Test
         });
+
+        if (_vertexColor === undefined) {
+            _vertexColor = World2DImage.DEFAULT_VERTEX_COLOR;
+        }
+
+        Object.defineProperty(_self, 'vertexColor', {
+            'get': function() { return _vertexColor; },
+            'set': function(value) { _vertexColor = value; }
+        });
+
+        if (_sourceTextureCoordinateRect === undefined) {
+            _sourceTextureCoordinateRect = World2DImage.DEFAULT_SOURCE_TEXTURE_COORDINATE_RECT;
+        }
 
         Object.defineProperty(_self, 'sourceTextureCoordinateRect', {
             'get': function() { return _sourceTextureCoordinateRect; },
@@ -6264,14 +6279,14 @@ World2DImage.prototype.draw = function() {
     
     world.spriteBatch.drawSprite (
         this.texture,
-        undefined,
+        this.creationOptions,
         new Vector3D (
             this.centerScreenPosition.x,
             this.centerScreenPosition.y,
             Sprite.DEFAULT_SCREEN_POSITION_DEPTH
         ),
         this.screenSize,
-        Sprite.DEFAULT_VERTEX_COLOR,
+        this.vertexColor,
         this.sourceTextureCoordinateRect
     );
 
@@ -6366,6 +6381,9 @@ World2DImage.prototype.beginSpriteBatch = function() {
 //
 // Static constants (after Object.freeze()).
 //
+World2DImage.DEFAULT_VERTEX_COLOR =
+    Sprite.DEFAULT_VERTEX_COLOR;
+
 World2DImage.DEFAULT_SOURCE_TEXTURE_COORDINATE_RECT =
     Sprite.DEFAULT_SOURCE_TEXTURE_COORDINATE_RECT;
 
@@ -6549,6 +6567,7 @@ exports.TransformedPositionColorTextureCoordinates = TransformedPositionColorTex
 exports.TransformedPositionTextureCoordinates = TransformedPositionTextureCoordinates;
 exports.VertexBuffer = VertexBuffer;
 exports.World2D = World2D;
+exports.World2DBoundsChangedEvent = World2DBoundsChangedEvent;
 exports.World2DImage = World2DImage;
 exports.World2DItem = World2DItem;
 exports.World2DLineSegment = World2DLineSegment;

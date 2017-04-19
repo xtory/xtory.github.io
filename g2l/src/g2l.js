@@ -37,6 +37,7 @@ export { TransformedPositionColorTextureCoordinates } from './graphics/shaders/t
 export { TransformedPositionTextureCoordinates }      from './graphics/shaders/transformed-position-texture-coordinates';
 export { VertexBuffer }                               from './graphics/vertex-buffer';
 export { World2D }                                    from './graphics/painting/2d-world';
+export { World2DBoundsChangedEvent }                  from './graphics/painting/2d-world-bounds-changed-event';
 export { World2DImage }                               from './graphics/painting/2d-world-image';
 export { World2DItem }                                from './graphics/painting/2d-world-item';
 export { World2DLineSegment }                         from './graphics/painting/2d-world-line-segment';
