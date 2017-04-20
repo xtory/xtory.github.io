@@ -21,14 +21,18 @@ function main() {
         //
         title = '2D line segments';
 
-        // var canvas = document.getElementById('canvas');
+        // Test:
+        /*
+        var canvas = document.getElementById('canvas');
 
-        // var rendererSettings = new g2l.RendererSettings();
-        // rendererSettings.canvas = canvas;
-        // rendererSettings.usesDefaultStyles = false;
-        // renderer = new g2l.Renderer(rendererSettings);
+        var rendererStyle = new g2l.RendererStyle();
+        rendererStyle.canvasUsesDefaultStyle = false;
+        renderer = new g2l.Renderer(canvas, rendererStyle);
+        */
 
         renderer = new g2l.Renderer();
+        // :Test
+
         document.body.appendChild(renderer.canvas);
 
         loader = renderer.loader;

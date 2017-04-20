@@ -2647,6 +2647,64 @@ IndexBuffer.prototype = {
 
 Object.freeze(IndexBuffer);
 
+//
+// Constructor.
+//
+function LineSegmentBatch(_renderer, _style) {
+    //
+    var _self;
+    var _gl;
+    var _db;
+    var _isBegun;
+
+    try {
+        //
+        _self = this;
+        _gl = _bufferLoader.loader.renderer.gl;
+
+        
+
+    } catch (e) {
+        //
+        console.log('g2l.LineSegmentBatch: ' + e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(_self, 'renderer', {
+        'get': function() { return _renderer; }
+    });
+
+    Object.defineProperty(_self, 'isBegun', {
+        'get': function() { return _isBegun; }
+    });
+}
+
+LineSegmentBatch.prototype = {
+    //
+    // Public methods.
+    //
+    
+};
+
+Object.freeze(LineSegmentBatch);
+
+// Note:
+// Sees the notes in the beginning of SpriteBatchStyle.
+//
+// Constructor.
+//
+function LineSegmentBatchStyle() {
+    //
+    //this.areDbFrequentlyChanged = false;
+    this.clearsDbAfterDrawing = true;
+}
+
+Object.freeze(LineSegmentBatchStyle);
+
 // Note:
 // NDC stands for 'normalized device coordinates'.
 
@@ -3495,13 +3553,12 @@ Object.freeze(Loader);
 //
 // Constructor.
 //
-function RendererSettings() {
+function RendererStyle() {
     //
-    this.canvas = null;
-    this.usesDefaultStyles = true;
+    this.canvasUsesDefaultStyle = true;
 }
 
-Object.freeze(RendererSettings);
+Object.freeze(RendererStyle);
 
 // Note:
 // This engine doesn't handle window's resize event anymore. See the article...
@@ -3513,15 +3570,9 @@ Object.freeze(RendererSettings);
 //
 // Constructor.
 //
-function Renderer(_settings) {
+function Renderer(_canvas, _style) {
     //
-    // Note:
-    // 'settings' include...
-    // - canvas
-    // - usesDefaultStyles
-
     var _self;
-    var _canvas;
     var _gl;
     var _loader;
     var _program;
@@ -3533,13 +3584,13 @@ function Renderer(_settings) {
         //
         _self = this;
 
-        if (_settings === undefined) {
-            _settings = new RendererSettings();
+        if (_style === undefined) {
+            _style = new RendererStyle();
         }
 
         setUpCanvas();
 
-        setUpStyles();
+        setUpStyle();
 
         setUpWebGLContext();
 
@@ -3630,29 +3681,24 @@ function Renderer(_settings) {
     //
     function setUpCanvas() {
         //
-        if (_settings.canvas !== null) {
-            //
-            _canvas = _settings.canvas;
-
-        } else {
-            //
-            if (document.body === undefined) {
-                throw 'document.body === undefined';
-            }
-
-            _canvas = document.createElementNS (
-                'http://www.w3.org/1999/xhtml',
-                'canvas'
-            );
-
-            _canvas.width = Renderer.CANVAS_WIDTH;
-            _canvas.height = Renderer.CANVAS_HEIGHT;
-
-            //document.body.appendChild(_canvas);
+        if (_canvas !== undefined) {
+            return;
         }
+
+        if (document.body === undefined) {
+            throw 'document.body === undefined';
+        }
+
+        _canvas = document.createElementNS (
+            'http://www.w3.org/1999/xhtml',
+            'canvas'
+        );
+
+        _canvas.width = Renderer.CANVAS_WIDTH;
+        _canvas.height = Renderer.CANVAS_HEIGHT;
     }
 
-    function setUpStyles() {
+    function setUpStyle() {
         //
         // Note:
         // This function is used to replace CSS below...
@@ -3663,7 +3709,7 @@ function Renderer(_settings) {
         //     display: block; /* prevents scrollbar */
         // }
         //
-        if (_settings.usesDefaultStyles === false) {
+        if (_style.canvasUsesDefaultStyle === false) {
             return;
         }
 
@@ -3763,7 +3809,7 @@ function Renderer(_settings) {
     function setUpSamplerState() {
         //
         // Note:
-        // The way of setting WebGL's sampler states is different from DirectX.
+        // The way of setting WebGL's sampler states is different from Direct3D.
     }
 
     function setUpRasterizerState() {
@@ -4275,22 +4321,34 @@ Sprite.createVertexTextureCoordinates = function(rect) {
 Object.freeze(Sprite);
 
 // Note:
-// SpriteBatch, in this engine, only supports vertex buffers, no index buffers.
-
-// Note:
-// LineSegment2D/3D do support vertex/index buffers depends on what value areDb-
-// FrequentlyChanged is in the constructors.
-
-// Note:
-// XNA SpriteBatch uses vertex/index buffers, and besides, it can draw more than
-// one deferred item at once if those items use the same texture. Maybe someday
-// I'll implement this feature, so this engine keeps areDbFrequentlyChanged in the
-// constructor (but not uses it).
+// WebGL only uses vertex/index buffers (no arrays, for drawing), so this engine
+// provides no areDbFrequentlyChanged option, which is provided in SpriteBatch of
+// our Direct3D-version engine.
 
 //
 // Constructor.
 //
-function SpriteBatch(_renderer, _settings) {
+function SpriteBatchStyle() {
+    //
+    //this.areDbFrequentlyChanged = true;
+    this.clearsDbAfterDrawing = true;
+}
+
+Object.freeze(SpriteBatchStyle);
+
+// Note:
+// SpriteBatch only supports vertex buffers, no index buffers.
+
+// Note:
+// LineSegment2D/3D do support vertex/index buffers.
+
+// Note:
+// Sees the notes in the beginning of SpriteBatchStyle.
+
+//
+// Constructor.
+//
+function SpriteBatch(_renderer, _style) {
     //
     var _self;
     var _gl;
@@ -4303,28 +4361,17 @@ function SpriteBatch(_renderer, _settings) {
     var _uniformLocations;
 
     var _vertexBuffers;
-    var _clearsDbAfterDrawing;
-    var _areDbFrequentlyChanged;
-
     var _defaultVertexBuffers;
 
     try {
         //
         _self = this;
+
+        if (_style === undefined) {
+            _style = new SpriteBatchStyle();
+        }
+
         _gl = _renderer.gl;
-
-        if (_settings !== undefined) {
-            _clearsDbAfterDrawing = _settings.clearsDbAfterDrawing;
-            _areDbFrequentlyChanged = _settings.areDbFrequentlyChanged;
-        }
-
-        if (_clearsDbAfterDrawing === undefined) {
-            _clearsDbAfterDrawing = SpriteBatch.DEFAULT_OF_IF_CLEARS_DB_AFTER_DRAWING;
-        }
-
-        if (_areDbFrequentlyChanged === undefined) {
-            _areDbFrequentlyChanged = SpriteBatch.DEFAULT_OF_IF_DB_FREQUENTLY_CHANGED;
-        }
 
         _db = [];
 
@@ -4497,7 +4544,7 @@ function SpriteBatch(_renderer, _settings) {
         //
         _db = [];
 
-        if (_clearsDbAfterDrawing === false) {
+        if (_style.clearsDbAfterDrawing === false) {
             _isOkToAddItem = true;
         }
     }
@@ -4518,7 +4565,7 @@ function SpriteBatch(_renderer, _settings) {
         vertexColor,
         sourceTextureCoordinateRect
     ){
-        if (_clearsDbAfterDrawing === false &&
+        if (_style.clearsDbAfterDrawing === false &&
             _isOkToAddItem === false) {
             return;
         }
@@ -4612,12 +4659,12 @@ function SpriteBatch(_renderer, _settings) {
         if (0 < _db.length) {
             //
             if (// Part 1.
-                _clearsDbAfterDrawing === true || 
+                _style.clearsDbAfterDrawing === true || 
                 // Part 2.
-               (_clearsDbAfterDrawing === false &&
+               (_style.clearsDbAfterDrawing === false &&
                 _isOkToAddItem === true)) {
                 //
-                if (_clearsDbAfterDrawing === false) {
+                if (_style.clearsDbAfterDrawing === false) {
                     _isOkToAddItem = false;
                 }
             }
@@ -4625,7 +4672,7 @@ function SpriteBatch(_renderer, _settings) {
             // Flushes the deferred items.
             flush();
 
-            if (_clearsDbAfterDrawing === true) {
+            if (_style.clearsDbAfterDrawing === true) {
                 //
                 // Clears the deferred items.
                 clear();
@@ -4683,9 +4730,6 @@ SpriteBatch.FRAGMENT_SHADER_SOURCE = [
    '}'
    
 ].join('\n');
-
-SpriteBatch.DEFAULT_OF_IF_CLEARS_DB_AFTER_DRAWING = true;
-SpriteBatch.DEFAULT_OF_IF_DB_FREQUENTLY_CHANGED = true;
 
 Object.freeze(SpriteBatch);
 
@@ -6544,6 +6588,8 @@ exports.Color = Color;
 exports.Colors = Colors;
 exports.DepthBufferValues = DepthBufferValues;
 exports.IndexBuffer = IndexBuffer;
+exports.LineSegmentBatch = LineSegmentBatch;
+exports.LineSegmentBatchStyle = LineSegmentBatchStyle;
 exports.NormalizedDeviceCoordinates = NormalizedDeviceCoordinates;
 exports.PositionColor = PositionColor;
 exports.PositionOnly = PositionOnly;
@@ -6552,13 +6598,14 @@ exports.PrimitiveType = PrimitiveType;
 exports.Program = Program;
 exports.Rect = Rect;
 exports.Renderer = Renderer;
-exports.RendererSettings = RendererSettings;
+exports.RendererStyle = RendererStyle;
 exports.ScreenCoordinateHelper = ScreenCoordinateHelper;
 exports.ShaderType = ShaderType;
 exports.Size2D = Size2D;
 exports.Size3D = Size3D;
 exports.Sprite = Sprite;
 exports.SpriteBatch = SpriteBatch;
+exports.SpriteBatchStyle = SpriteBatchStyle;
 exports.SpriteCreationOptions = SpriteCreationOptions;
 exports.Texture2D = Texture2D;
 exports.TextureCoordinateHelper = TextureCoordinateHelper;

@@ -1,25 +1,22 @@
 // Note:
-// SpriteBatch, in this engine, only supports vertex buffers, no index buffers.
+// SpriteBatch only supports vertex buffers, no index buffers.
 
 // Note:
-// LineSegment2D/3D do support vertex/index buffers depends on what value areDb-
-// FrequentlyChanged is in the constructors.
+// LineSegment2D/3D do support vertex/index buffers.
 
 // Note:
-// XNA SpriteBatch uses vertex/index buffers, and besides, it can draw more than
-// one deferred item at once if those items use the same texture. Maybe someday
-// I'll implement this feature, so this engine keeps areDbFrequentlyChanged in the
-// constructor (but not uses it).
+// Sees the notes in the beginning of SpriteBatchStyle.
 
 import { DepthBufferValues }     from './depth-buffer-values';
 import { Sprite }                from './sprite';
+import { SpriteBatchStyle }      from './sprite-batch-style';
 import { SpriteCreationOptions } from './sprite-creation-options';
 import { PrimitiveType }         from './primitive-type';
 
 //
 // Constructor.
 //
-function SpriteBatch(_renderer, _settings) {
+function SpriteBatch(_renderer, _style) {
     //
     var _self;
     var _gl;
@@ -32,28 +29,17 @@ function SpriteBatch(_renderer, _settings) {
     var _uniformLocations;
 
     var _vertexBuffers;
-    var _clearsDbAfterDrawing;
-    var _areDbFrequentlyChanged;
-
     var _defaultVertexBuffers;
 
     try {
         //
         _self = this;
+
+        if (_style === undefined) {
+            _style = new SpriteBatchStyle();
+        }
+
         _gl = _renderer.gl;
-
-        if (_settings !== undefined) {
-            _clearsDbAfterDrawing = _settings.clearsDbAfterDrawing;
-            _areDbFrequentlyChanged = _settings.areDbFrequentlyChanged;
-        }
-
-        if (_clearsDbAfterDrawing === undefined) {
-            _clearsDbAfterDrawing = SpriteBatch.DEFAULT_OF_IF_CLEARS_DB_AFTER_DRAWING;
-        }
-
-        if (_areDbFrequentlyChanged === undefined) {
-            _areDbFrequentlyChanged = SpriteBatch.DEFAULT_OF_IF_DB_FREQUENTLY_CHANGED;
-        }
 
         _db = [];
 
@@ -226,7 +212,7 @@ function SpriteBatch(_renderer, _settings) {
         //
         _db = [];
 
-        if (_clearsDbAfterDrawing === false) {
+        if (_style.clearsDbAfterDrawing === false) {
             _isOkToAddItem = true;
         }
     }
@@ -247,7 +233,7 @@ function SpriteBatch(_renderer, _settings) {
         vertexColor,
         sourceTextureCoordinateRect
     ){
-        if (_clearsDbAfterDrawing === false &&
+        if (_style.clearsDbAfterDrawing === false &&
             _isOkToAddItem === false) {
             return;
         }
@@ -341,12 +327,12 @@ function SpriteBatch(_renderer, _settings) {
         if (0 < _db.length) {
             //
             if (// Part 1.
-                _clearsDbAfterDrawing === true || 
+                _style.clearsDbAfterDrawing === true || 
                 // Part 2.
-               (_clearsDbAfterDrawing === false &&
+               (_style.clearsDbAfterDrawing === false &&
                 _isOkToAddItem === true)) {
                 //
-                if (_clearsDbAfterDrawing === false) {
+                if (_style.clearsDbAfterDrawing === false) {
                     _isOkToAddItem = false;
                 }
             }
@@ -354,7 +340,7 @@ function SpriteBatch(_renderer, _settings) {
             // Flushes the deferred items.
             flush();
 
-            if (_clearsDbAfterDrawing === true) {
+            if (_style.clearsDbAfterDrawing === true) {
                 //
                 // Clears the deferred items.
                 clear();
@@ -412,9 +398,6 @@ SpriteBatch.FRAGMENT_SHADER_SOURCE = [
    '}'
    
 ].join('\n');
-
-SpriteBatch.DEFAULT_OF_IF_CLEARS_DB_AFTER_DRAWING = true;
-SpriteBatch.DEFAULT_OF_IF_DB_FREQUENTLY_CHANGED = true;
 
 Object.freeze(SpriteBatch);
 

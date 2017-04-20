@@ -59,7 +59,7 @@ VertexBuffer.prototype = {
             gl.STATIC_DRAW
         );
     }
-}
+};
 
 Object.freeze(VertexBuffer);
 

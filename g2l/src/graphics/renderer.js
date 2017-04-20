@@ -13,7 +13,7 @@ import { DepthBufferValues }       from './depth-buffer-values';
 import { Loader }                  from '../loaders/loader';
 import { MathHelper }              from '../math/helpers/math-helper';
 import { Matrix4x4 }               from '../math/4x4-matrix';
-import { RendererSettings }        from './renderer-settings';
+import { RendererStyle }           from './renderer-style';
 import { Vector2D }                from '../math/2d-vector';
 import { Vector3D }                from '../math/3d-vector';
 import { Vector4D }                from '../math/4d-vector';
@@ -21,15 +21,9 @@ import { Vector4D }                from '../math/4d-vector';
 //
 // Constructor.
 //
-function Renderer(_settings) {
+function Renderer(_canvas, _style) {
     //
-    // Note:
-    // 'settings' include...
-    // - canvas
-    // - usesDefaultStyles
-
     var _self;
-    var _canvas;
     var _gl;
     var _loader;
     var _program;
@@ -41,13 +35,13 @@ function Renderer(_settings) {
         //
         _self = this;
 
-        if (_settings === undefined) {
-            _settings = new RendererSettings();
+        if (_style === undefined) {
+            _style = new RendererStyle();
         }
 
         setUpCanvas();
 
-        setUpStyles();
+        setUpStyle();
 
         setUpWebGLContext();
 
@@ -138,29 +132,24 @@ function Renderer(_settings) {
     //
     function setUpCanvas() {
         //
-        if (_settings.canvas !== null) {
-            //
-            _canvas = _settings.canvas;
-
-        } else {
-            //
-            if (document.body === undefined) {
-                throw 'document.body === undefined';
-            }
-
-            _canvas = document.createElementNS (
-                'http://www.w3.org/1999/xhtml',
-                'canvas'
-            );
-
-            _canvas.width = Renderer.CANVAS_WIDTH;
-            _canvas.height = Renderer.CANVAS_HEIGHT;
-
-            //document.body.appendChild(_canvas);
+        if (_canvas !== undefined) {
+            return;
         }
+
+        if (document.body === undefined) {
+            throw 'document.body === undefined';
+        }
+
+        _canvas = document.createElementNS (
+            'http://www.w3.org/1999/xhtml',
+            'canvas'
+        );
+
+        _canvas.width = Renderer.CANVAS_WIDTH;
+        _canvas.height = Renderer.CANVAS_HEIGHT;
     }
 
-    function setUpStyles() {
+    function setUpStyle() {
         //
         // Note:
         // This function is used to replace CSS below...
@@ -171,7 +160,7 @@ function Renderer(_settings) {
         //     display: block; /* prevents scrollbar */
         // }
         //
-        if (_settings.usesDefaultStyles === false) {
+        if (_style.canvasUsesDefaultStyle === false) {
             return;
         }
 
@@ -271,7 +260,7 @@ function Renderer(_settings) {
     function setUpSamplerState() {
         //
         // Note:
-        // The way of setting WebGL's sampler states is different from DirectX.
+        // The way of setting WebGL's sampler states is different from Direct3D.
     }
 
     function setUpRasterizerState() {
