@@ -61,10 +61,10 @@
                 "-allow-file-access-from-files"
             ]
         }, {
-            "name": "tests/painting",
+            "name": "tests/2d-world",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/g2l/examples/tests/painting/index.html",
+            "file": "${workspaceRoot}/g2l/examples/tests/2d-world/index.html",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
             ]

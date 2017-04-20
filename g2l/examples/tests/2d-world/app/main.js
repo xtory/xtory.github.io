@@ -26,7 +26,7 @@ function main() {
 
     try {
         //
-        title = 'Painting';
+        title = '2D world';
 
         renderer = new g2l.Renderer();
         document.body.appendChild(renderer.canvas);
