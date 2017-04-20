@@ -2647,6 +2647,412 @@ IndexBuffer.prototype = {
 
 Object.freeze(IndexBuffer);
 
+// Note:
+// GDI+'s Rectangle and WPF's Rect are both (left, top, width, height). But cuz
+// OpenGL's texture coordinates is from lower-left (0, 0) to upper-right (1, 1),
+// this engine uses Rect: (left, bottom, width, height).
+
+//
+// Constructor.
+//
+function Rect(_left, _bottom, _width, _height) {
+    //
+    this.left   = _left;
+    this.bottom = _bottom;
+    this.width  = _width;
+    this.height = _height;
+}
+
+//
+// Prototype.
+//
+Rect.prototype = {
+    //
+    // No contents.
+};
+
+Object.defineProperty(Rect.prototype, 'right', {
+    'get': function() { return this.left + this.width; }
+});
+
+Object.defineProperty(Rect.prototype, 'top', {
+    'get': function() { return this.bottom + this.height; }
+});
+
+Object.defineProperty(Rect.prototype, 'center', {
+    //
+    'get': function() {
+        //
+        return new Vector2D (
+            this.left + this.width * 0.5,
+            this.bottom + this.height * 0.5
+        );
+    }
+});
+
+Object.defineProperty(Rect.prototype, 'size', {
+    //
+    'get': function() { return new Vector2D(this.width, this.height); }
+});
+
+Object.freeze(Rect);
+
+//
+// Constructor.
+//
+function SpriteCreationOptions() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+SpriteCreationOptions.VERTEX_POSITIONS           = 0x00000001;
+SpriteCreationOptions.VERTEX_COLORS              = 0x00000002;
+SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES = 0x00000004;
+
+Object.freeze(SpriteCreationOptions);
+
+//
+// Constructor.
+//
+function Sprite (
+    _spriteBatch,
+    _texture,
+    _creationOptions,
+    _centerScreenPosition,
+    _screenSize,
+    _vertexColor,
+    _sourceTextureCoordinateRect
+){
+    if (_creationOptions === undefined) {
+        _creationOptions = Sprite.DEFAULT_CREATION_OPTIONS;
+    }
+
+    this.creationOptions = _creationOptions;
+
+    if (_vertexColor === undefined) {
+        _vertexColor = Sprite.DEFAULT_VERTEX_COLOR;
+    }
+
+    if (_sourceTextureCoordinateRect === undefined) {
+        //
+        _sourceTextureCoordinateRect =
+            Sprite.DEFAULT_SOURCE_TEXTURE_COORDINATE_RECT;
+    }
+
+    this.texture = _texture;
+
+    // 1. Vertex positions.
+    if ((_creationOptions & SpriteCreationOptions.VERTEX_POSITIONS) !==
+        SpriteCreationOptions.VERTEX_POSITIONS) {
+        throw 'A sprite-creation exception raised.';
+    }
+
+    this.vertexPositions = Sprite.createVertexPositions (
+        _centerScreenPosition,
+        _screenSize
+    );
+    
+    // 2. Vertex colors.
+    this.vertexColors = (
+        // Part 1.
+        ((_creationOptions & SpriteCreationOptions.VERTEX_COLORS) ===
+        SpriteCreationOptions.VERTEX_COLORS) ?
+        // Part 2.
+        Sprite.createVertexColors(_vertexColor) :
+        // Part 3.
+        null
+    );
+
+    // 3. Vertex texture coordinates.
+    this.vertexTextureCoordinates = (
+        // Part 1.
+        ((_creationOptions & SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES) ===
+        SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES) ?
+        // Part 2.
+        Sprite.createVertexTextureCoordinates(_sourceTextureCoordinateRect) :
+        // Part 3.
+        null
+    );
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+Sprite.VERTEX_COUNT            = 4;
+Sprite.POSITION_SIZE           = 3; // (x, y, z)
+Sprite.COLOR_SIZE              = 4; // (r, g, b, a)
+Sprite.TEXTURE_COORDINATE_SIZE = 2; // (s, t)
+
+// Note:
+/*
+Sprite.DEFAULT_CREATION_OPTIONS = (
+    SpriteCreationOptions.VERTEX_POSITIONS |
+    SpriteCreationOptions.VERTEX_COLORS |
+    SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES
+);
+*/
+Sprite.DEFAULT_CREATION_OPTIONS =
+    SpriteCreationOptions.VERTEX_POSITIONS;
+// :Note
+
+Sprite.DEFAULT_SCREEN_POSITION_DEPTH =
+    DepthBufferValues.NEAR_CLIP_PLANE;
+
+Sprite.DEFAULT_VERTEX_COLOR =
+    Colors.WHITE;
+
+Sprite.DEFAULT_SOURCE_TEXTURE_COORDINATE_RECT =
+    new Rect(0, 0, 1, 1);
+
+Sprite.DEFAULT_VERTEX_COLORS = new Float32Array (
+    [].concat (
+        Sprite.DEFAULT_VERTEX_COLOR.toArray(),
+        Sprite.DEFAULT_VERTEX_COLOR.toArray(),
+        Sprite.DEFAULT_VERTEX_COLOR.toArray(),
+        Sprite.DEFAULT_VERTEX_COLOR.toArray()
+    )
+);
+
+Sprite.DEFAULT_VERTEX_TEXTURE_COORDINATES = new Float32Array ([
+    1.0, 0.0, // lower-right.
+    1.0, 1.0, // upper-right.
+    0.0, 0.0, // lower-left.
+    0.0, 1.0  // upper-left.
+]);
+
+//
+// Static methods.
+// 
+Sprite.createVertexPositions = function(p, size) {
+    //
+    var halfWidth = size.width * 0.5;
+    var halfHeight = size.height * 0.5;
+
+    return new Float32Array ([
+        p.x+halfWidth, p.y-halfHeight, p.z,
+        p.x+halfWidth, p.y+halfHeight, p.z,
+        p.x-halfWidth, p.y-halfHeight, p.z,
+        p.x-halfWidth, p.y+halfHeight, p.z 
+    ]);
+};
+
+Sprite.createVertexColors = function(color) {
+    //
+    return new Float32Array ([
+        color.r, color.g, color.b, color.a,
+        color.r, color.g, color.b, color.a,
+        color.r, color.g, color.b, color.a,
+        color.r, color.g, color.b, color.a
+    ]);
+};
+
+Sprite.createVertexTextureCoordinates = function(rect) {
+    //
+    return new Float32Array ([
+        rect.right, rect.bottom, // lower-right.
+        rect.right, rect.top,    // upper-right.
+        rect.left,  rect.bottom, // lower-left.
+        rect.left,  rect.top     // upper-left.
+    ]);
+};
+
+Object.freeze(Sprite);
+
+//
+// Constructor.
+//
+function LineSegment (
+    _lineSegmentBatch,
+    _screenPosition1,
+    _screenPosition2,
+    _color,
+    _screenThickness
+){
+    // 1. Vertex positions.
+    this.vertexPositions = LineSegment.createVertexPositions (
+        _screenPosition1,
+        _screenPosition2,
+        _screenThickness
+    );
+    
+    // 2. Vertex colors.
+    this.vertexColors = LineSegment.createVertexColors(_color);
+
+    // 3. Indices.
+    this.indices = LineSegment.DEFAULT_INDICES;
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+LineSegment.VERTEX_COUNT  = 4;
+LineSegment.POSITION_SIZE = 3; // (x, y, z)
+LineSegment.COLOR_SIZE    = 4; // (r, g, b, a)
+LineSegment.INDEX_COUNT   = 6; // (0, 1, 2, 2, 1, 3)
+
+LineSegment.DEFAULT_SCREEN_POSITION_DEPTH =
+    DepthBufferValues.NEAR_CLIP_PLANE;
+
+LineSegment.DEFAULT_INDICES = [ 0, 1, 2, 2, 1, 3 ];
+
+//
+// Static methods.
+// 
+LineSegment.createVertexPositions = function (
+    screenPosition1,
+    screenPosition2,
+    screenThickness
+){
+    // Note:
+    // Sprite.createVertexPositions() returns a Float32Array directly, but Line-
+    // Segment doesn't.
+
+    //
+    // Vertex positions.
+    //
+    var p1 = screenPosition1.xy;
+    var p2 = screenPosition2.xy;
+
+    // Note:
+    // Imagine p1 is on the lower-left side of p2.
+    //
+    //         p2
+    //        /
+    //       /
+    //      /
+    //    p1
+    //
+    // Then calculate a perpendicular vector, which is the 90 degrees 'counter-
+    // clockwise' rotated result of the input vector: (p2 - p1). In this case,
+    // v is from lower-right to upper-left.
+    //
+    var v = Vector2D.calculatePerpendicularVectorOf (
+        Vector2D.subtractVectors(p2, p1) // p2 - p1
+    );
+
+    v = Vector2D.calculateUnitVectorOf(v);
+
+    var halfScreenThickness = screenThickness * 0.5;
+
+    // Note:
+    // Use the imagination above, 4 corners are then found below.
+
+    v = Vector2D.multiplyVectorByScalar(v, halfScreenThickness);
+    var lowerRightCorner = Vector2D.subtractVectors(p2, v); // p2 - v
+    var upperRightCorner = Vector2D.addVectors(p2, v);      // p2 + v
+    var lowerLeftCorner  = Vector2D.subtractVectors(p1, v); // p1 - v
+    var upperLeftCorner  = Vector2D.addVectors(p1, v);      // p1 + v
+
+    // Test:
+    /*
+    var p3 = new Vector3D (
+        lowerRightCorner.x,
+        lowerRightCorner.y,
+        screenPosition2.z
+    );
+
+    var p4 = new Vector3D (
+        upperRightCorner.x,
+        upperRightCorner.y,
+        screenPosition2.z
+    );
+
+    var p5 = new Vector3D (
+        lowerLeftCorner.x,
+        lowerLeftCorner.y,
+        screenPosition1.z
+    );
+
+    var p6 = new Vector3D (
+        upperLeftCorner.x,
+        upperLeftCorner.y,
+        screenPosition1.z
+    );
+    
+    var vertexPositions = [ p3, p4, p5, p6 ];
+
+    var vertexPositions2 = [];
+
+    for (var i=0; i<vertexPositions.length; i++) {
+        //
+        var item = vertexPositions[i];
+
+        var p = ScreenCoordinateHelper.toClipSpace (
+            renderer.canvas,
+            item
+        );
+
+        vertexPositions2 = vertexPositions2.concat(p.toArray());
+    }
+
+    return vertexPositions2;
+    */
+
+    return [
+        lowerRightCorner.x, lowerRightCorner.y, screenPosition2.z,
+        upperRightCorner.x, upperRightCorner.y, screenPosition2.z,
+        lowerLeftCorner.x,  lowerLeftCorner.y,  screenPosition1.z,
+        upperLeftCorner.x,  upperLeftCorner.y,  screenPosition1.z
+    ];
+    // :Test
+};
+
+LineSegment.createVertexColors = function(color) {
+    //
+    // Note:
+    // Sprite.createVertexColors() returns a Float32Array directly, but LineSegment
+    // doesn't.
+    /*
+    return new Float32Array ([
+        color.r, color.g, color.b, color.a,
+        color.r, color.g, color.b, color.a,
+        color.r, color.g, color.b, color.a,
+        color.r, color.g, color.b, color.a
+    ]);
+    */
+    return [
+        color.r, color.g, color.b, color.a,
+        color.r, color.g, color.b, color.a,
+        color.r, color.g, color.b, color.a,
+        color.r, color.g, color.b, color.a
+    ];
+    // :Note
+};
+
+Object.freeze(LineSegment);
+
+// Note:
+// Sees the notes in the beginning of SpriteBatchStyle.
+//
+// Constructor.
+//
+function LineSegmentBatchStyle() {
+    //
+    //this.areDbFrequentlyChanged = false;
+    this.clearsDbAfterDrawing = true;
+}
+
+Object.freeze(LineSegmentBatchStyle);
+
+//
+// Constructor.
+//
+function PrimitiveType() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+PrimitiveType.LINE_LIST      = 1; // = gl.LINES
+PrimitiveType.LINE_STRIP     = 3; // = gl.LINE_STRIP
+PrimitiveType.TRIANGLE_LIST  = 4; // = gl.TRIANGLES
+PrimitiveType.TRIANGLE_STRIP = 5; // = gl.TRIANGLE_STRIP
+
+Object.freeze(PrimitiveType);
+
 //
 // Constructor.
 //
@@ -2655,14 +3061,43 @@ function LineSegmentBatch(_renderer, _style) {
     var _self;
     var _gl;
     var _db;
+
+    var _vertexBuffers;
+    var _indexBuffer;
+
+    // Shaders.
+    var _program;
+    var _attributeLocations;
+    var _uniformLocations;
+
+    // Helpers.
+    var _vertexPositions;
+    var _vertexColors;
+    var _indices;
     var _isBegun;
+    var _isOkToAddItem;
 
     try {
         //
         _self = this;
-        _gl = _bufferLoader.loader.renderer.gl;
 
-        
+        if (_style === undefined) {
+            _style = new LineSegmentBatchStyle();
+        }
+
+        _gl = _renderer.gl;
+
+        _db = [];
+
+        setUpVertexBuffers();
+
+        setUpIndexBuffers();
+
+        setUpShaders();
+
+        // Helpers.
+        _isBegun = false;
+        _isOkToAddItem = true;
 
     } catch (e) {
         //
@@ -2681,29 +3116,288 @@ function LineSegmentBatch(_renderer, _style) {
     Object.defineProperty(_self, 'isBegun', {
         'get': function() { return _isBegun; }
     });
+
+    //
+    // Private methods.
+    //
+    function setUpVertexBuffers() {
+        //
+        // _vertexBuffers = {
+        //     position: [],
+        //     color: []
+        // };
+
+        _vertexBuffers = {
+            'position': _renderer.loader.createVertexBuffer(),
+            'color': _renderer.loader.createVertexBuffer()
+        };
+
+        _vertexPositions = [];
+        _vertexColors = [];
+
+        // _defaultVertexBuffers = {
+        //     color: _renderer.loader.createVertexBuffer(),
+        //     textureCoordinates: _renderer.loader.createVertexBuffer()
+        // };
+
+        // _defaultVertexBuffers.color.loadData (
+        //     Sprite.DEFAULT_VERTEX_COLORS,
+        //     Sprite.COLOR_SIZE
+        // );
+
+        // _defaultVertexBuffers.textureCoordinates.loadData (
+        //     Sprite.DEFAULT_VERTEX_TEXTURE_COORDINATES,
+        //     Sprite.TEXTURE_COORDINATE_SIZE
+        // );
+    }
+
+    function setUpIndexBuffers() {
+        //
+        _indexBuffer = _renderer.loader.createIndexBuffer();
+        _indices = [];
+    }
+
+    function setUpShaders() {
+        //
+        _program = _renderer.loader.setUpProgram (
+            LineSegmentBatch.VERTEX_SHADER_SOURCE,
+            LineSegmentBatch.FRAGMENT_SHADER_SOURCE
+        );
+
+        _attributeLocations = {
+            //
+            'vertexPosition': _renderer.getAttributeLocation (
+                _program,
+               'vertexPosition'
+            ),
+
+            'vertexColor': _renderer.getAttributeLocation (
+                _program,
+               'vertexColor'
+            )
+        };
+
+        _uniformLocations = {
+            //
+            'canvasClientSize': _renderer.getUniformLocation (
+                _program,
+               'canvasClientSize'
+            )
+        };
+    }
+
+    function flush() {
+        //
+        _renderer.program = _program;
+
+        _renderer.setVector2DUniform (
+            // Part 1.
+            _uniformLocations.canvasClientSize,
+            // Part 2.
+            new Float32Array ([
+                _renderer.canvas.clientWidth,
+                _renderer.canvas.clientHeight            
+            ])
+        );
+
+        _vertexBuffers.position.loadData (
+            new Float32Array(_vertexPositions),
+            LineSegment.POSITION_SIZE
+        );
+
+        _vertexBuffers.color.loadData (
+            new Float32Array(_vertexColors),
+            LineSegment.COLOR_SIZE
+        );
+
+        _indexBuffer.loadData (
+            new Uint16Array(_indices)
+        );
+        
+        _renderer.setAttribute (
+            _attributeLocations.vertexPosition,
+            _vertexBuffers.position
+        );
+
+        _renderer.setAttribute (
+            _attributeLocations.vertexColor,
+            _vertexBuffers.color
+        );
+
+        _renderer.drawIndexedPrimitives (
+            _indexBuffer,
+            PrimitiveType.TRIANGLE_LIST,
+            LineSegment.INDEX_COUNT * _db.length
+        );
+    }
+
+    function clear() {
+        //
+        _indices = [];
+        _vertexPositions = [];
+        _vertexColors = [];
+
+        _db = [];
+
+        if (_style.clearsDbAfterDrawing === false) {
+            _isOkToAddItem = true;
+        }
+    }    
+
+    //
+    // Privileged methods.
+    //
+    this.begin = function() {
+        //
+        _isBegun = true;
+    };
+
+    this.drawLineSegment = function (
+        screenPosition1,
+        screenPosition2,
+        color,
+        screenThickness
+    ){
+        if (_style.clearsDbAfterDrawing === false &&
+            _isOkToAddItem === false) {
+            return;
+        }
+
+        if (_isBegun === false) {
+            throw 'A begin-not-called-before-drawing exception raised.';
+        }
+
+        var lineSegment = new LineSegment (
+            _self,
+            screenPosition1, screenPosition2,
+            color,
+            screenThickness
+        );
+
+        //var vb;
+        //var index = _db.length;
+        
+        // 1. Vertex positions.
+        // if (_vertexBuffers.position.length - 1 < index) {
+        //     //
+        //     vb = _renderer.loader.createVertexBuffer();
+        //     _vertexBuffers.position.push(vb);
+
+        // } else {
+        //     //
+        //     vb = _vertexBuffers.position[index];
+        // }
+
+        // vb.loadData (
+        //     lineSegment.vertexPositions,
+        //     LineSegment.POSITION_SIZE
+        // );
+        _vertexPositions =
+            _vertexPositions.concat(lineSegment.vertexPositions);
+
+        // 2. Vertex colors.
+        // if (_vertexBuffers.color.length - 1 < index) {
+        //     //
+        //     vb = _renderer.loader.createVertexBuffer();
+        //     _vertexBuffers.color.push(vb);
+
+        // } else {
+        //     //
+        //     vb = _vertexBuffers.color[index];
+        // }
+
+        // vb.loadData (
+        //     lineSegment.vertexColors,
+        //     LineSegment.COLOR_SIZE
+        // );
+        _vertexColors =
+            _vertexColors.concat(lineSegment.vertexColors);
+
+        //var base = LineSegment.INDEX_COUNT * _db.length;
+        var base = LineSegment.VERTEX_COUNT * _db.length;
+        for (var i=0; i<LineSegment.INDEX_COUNT; i++) {
+            //
+            _indices.push(base + lineSegment.indices[i]);
+        }
+
+        _db.push(lineSegment);
+    };
+
+    this.end = function() {
+        //
+        if (_isBegun === false) {
+            throw 'A begin-not-called-before-drawing exception raised.';
+        }
+
+        if (0 < _db.length) {
+            //
+            if (// Part 1.
+                _style.clearsDbAfterDrawing === true || 
+                // Part 2.
+               (_style.clearsDbAfterDrawing === false &&
+                _isOkToAddItem === true)) {
+                //
+                if (_style.clearsDbAfterDrawing === false) {
+                    _isOkToAddItem = false;
+                }
+            }
+
+            // Flushes the deferred items.
+            flush();
+
+            if (_style.clearsDbAfterDrawing === true) {
+                //
+                // Clears the deferred items.
+                clear();
+            }
+        }
+
+        _isBegun = false;
+    };
 }
 
-LineSegmentBatch.prototype = {
+//
+// Static constants (after Object.freeze()).
+//
+LineSegmentBatch.VERTEX_SHADER_SOURCE = [
     //
-    // Public methods.
+   'precision highp float;', // which is the default vertex shader precision.
+
+   'attribute vec3 vertexPosition;',
+   'attribute vec4 vertexColor;',
+
+   'varying vec4 color;',
+
+   'uniform vec2 canvasClientSize;',
+
+   'void main() {',
+        //
+        // Converts the vertex position from screen to clip space (not NDC yet).
+       'gl_Position = vec4 (',
+           '-1.0 + 2.0 * (vertexPosition.x / canvasClientSize.x),',
+           '-1.0 + 2.0 * (vertexPosition.y / canvasClientSize.y),',
+           'vertexPosition.z,',
+           '1.0',
+       ');',
+
+       'color = vertexColor;',
+   '}'
+
+].join('\n');
+
+LineSegmentBatch.FRAGMENT_SHADER_SOURCE = [
     //
-    
-};
+   'precision mediump float;', // which is the recommended fragment shader precision.
+
+   'varying vec4 color;',
+
+   'void main() {',
+       'gl_FragColor = color;',
+   '}'
+   
+].join('\n');
 
 Object.freeze(LineSegmentBatch);
-
-// Note:
-// Sees the notes in the beginning of SpriteBatchStyle.
-//
-// Constructor.
-//
-function LineSegmentBatchStyle() {
-    //
-    //this.areDbFrequentlyChanged = false;
-    this.clearsDbAfterDrawing = true;
-}
-
-Object.freeze(LineSegmentBatchStyle);
 
 // Note:
 // NDC stands for 'normalized device coordinates'.
@@ -2887,23 +3581,6 @@ Object.freeze(PositionTextureCoordinates);
 //
 // Constructor.
 //
-function PrimitiveType() {
-    // No contents.
-}
-
-//
-// Static constants (after Object.freeze()).
-//
-PrimitiveType.LINE_LIST      = 1; // = gl.LINES
-PrimitiveType.LINE_STRIP     = 3; // = gl.LINE_STRIP
-PrimitiveType.TRIANGLE_LIST  = 4; // = gl.TRIANGLES
-PrimitiveType.TRIANGLE_STRIP = 5; // = gl.TRIANGLE_STRIP
-
-Object.freeze(PrimitiveType);
-
-//
-// Constructor.
-//
 function Program(_programLoader) {
     //
     var _self;
@@ -2937,56 +3614,6 @@ function Program(_programLoader) {
 }
 
 Object.freeze(Program);
-
-// Note:
-// GDI+'s Rectangle and WPF's Rect are both (left, top, width, height). But cuz
-// OpenGL's texture coordinates is from lower-left (0, 0) to upper-right (1, 1),
-// this engine uses Rect: (left, bottom, width, height).
-
-//
-// Constructor.
-//
-function Rect(_left, _bottom, _width, _height) {
-    //
-    this.left   = _left;
-    this.bottom = _bottom;
-    this.width  = _width;
-    this.height = _height;
-}
-
-//
-// Prototype.
-//
-Rect.prototype = {
-    //
-    // No contents.
-};
-
-Object.defineProperty(Rect.prototype, 'right', {
-    'get': function() { return this.left + this.width; }
-});
-
-Object.defineProperty(Rect.prototype, 'top', {
-    'get': function() { return this.bottom + this.height; }
-});
-
-Object.defineProperty(Rect.prototype, 'center', {
-    //
-    'get': function() {
-        //
-        return new Vector2D (
-            this.left + this.width * 0.5,
-            this.bottom + this.height * 0.5
-        );
-    }
-});
-
-Object.defineProperty(Rect.prototype, 'size', {
-    //
-    'get': function() { return new Vector2D(this.width, this.height); }
-});
-
-Object.freeze(Rect);
 
 //
 // Constructor.
@@ -3584,11 +4211,11 @@ function Renderer(_canvas, _style) {
         //
         _self = this;
 
+        setUpCanvas();
+
         if (_style === undefined) {
             _style = new RendererStyle();
-        }
-
-        setUpCanvas();
+        }        
 
         setUpStyle();
 
@@ -4157,169 +4784,6 @@ function Size3D(_width, _height, _depth) {
 
 Object.freeze(Size3D);
 
-//
-// Constructor.
-//
-function SpriteCreationOptions() {
-    // No contents.
-}
-
-//
-// Static constants (after Object.freeze()).
-//
-SpriteCreationOptions.VERTEX_POSITIONS           = 0x00000001;
-SpriteCreationOptions.VERTEX_COLORS              = 0x00000002;
-SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES = 0x00000004;
-
-Object.freeze(SpriteCreationOptions);
-
-//
-// Constructor.
-//
-function Sprite (
-    _spriteBatch,
-    _texture,
-    _creationOptions,
-    _centerScreenPosition,
-    _screenSize,
-    _vertexColor,
-    _sourceTextureCoordinateRect
-){
-    if (_creationOptions === undefined) {
-        _creationOptions = Sprite.DEFAULT_CREATION_OPTIONS;
-    }
-
-    this.creationOptions = _creationOptions;
-
-    if (_vertexColor === undefined) {
-        _vertexColor = Sprite.DEFAULT_VERTEX_COLOR;
-    }
-
-    if (_sourceTextureCoordinateRect === undefined) {
-        //
-        _sourceTextureCoordinateRect =
-            Sprite.DEFAULT_SOURCE_TEXTURE_COORDINATE_RECT;
-    }
-
-    this.texture = _texture;
-
-    // 1. Vertex positions.
-    if ((_creationOptions & SpriteCreationOptions.VERTEX_POSITIONS) !==
-        SpriteCreationOptions.VERTEX_POSITIONS) {
-        throw 'A sprite-creation exception raised.';
-    }
-
-    this.vertexPositions = Sprite.createVertexPositions (
-        _centerScreenPosition,
-        _screenSize
-    );
-    
-    // 2. Vertex colors.
-    this.vertexColors = (
-        // Part 1.
-        ((_creationOptions & SpriteCreationOptions.VERTEX_COLORS) ===
-        SpriteCreationOptions.VERTEX_COLORS) ?
-        // Part 2.
-        Sprite.createVertexColors(_vertexColor) :
-        // Part 3.
-        null
-    );
-
-    // 3. Vertex texture coordinates.
-    this.vertexTextureCoordinates = (
-        // Part 1.
-        ((_creationOptions & SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES) ===
-        SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES) ?
-        // Part 2.
-        Sprite.createVertexTextureCoordinates(_sourceTextureCoordinateRect) :
-        // Part 3.
-        null
-    );
-}
-
-//
-// Static constants (after Object.freeze()).
-//
-Sprite.VERTEX_COUNT            = 4;
-Sprite.POSITION_SIZE           = 3; // (x, y, z)
-Sprite.COLOR_SIZE              = 4; // (r, g, b, a)
-Sprite.TEXTURE_COORDINATE_SIZE = 2; // (s, t)
-
-// Note:
-/*
-Sprite.DEFAULT_CREATION_OPTIONS = (
-    SpriteCreationOptions.VERTEX_POSITIONS |
-    SpriteCreationOptions.VERTEX_COLORS |
-    SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES
-);
-*/
-Sprite.DEFAULT_CREATION_OPTIONS =
-    SpriteCreationOptions.VERTEX_POSITIONS;
-// :Note
-
-Sprite.DEFAULT_SCREEN_POSITION_DEPTH =
-    DepthBufferValues.NEAR_CLIP_PLANE;
-
-Sprite.DEFAULT_VERTEX_COLOR =
-    Colors.WHITE;
-
-Sprite.DEFAULT_SOURCE_TEXTURE_COORDINATE_RECT =
-    new Rect(0, 0, 1, 1);
-
-Sprite.DEFAULT_VERTEX_COLORS = new Float32Array (
-    [].concat (
-        Sprite.DEFAULT_VERTEX_COLOR.toArray(),
-        Sprite.DEFAULT_VERTEX_COLOR.toArray(),
-        Sprite.DEFAULT_VERTEX_COLOR.toArray(),
-        Sprite.DEFAULT_VERTEX_COLOR.toArray()
-    )
-);
-
-Sprite.DEFAULT_VERTEX_TEXTURE_COORDINATES = new Float32Array ([
-    1.0, 0.0, // lower-right.
-    1.0, 1.0, // upper-right.
-    0.0, 0.0, // lower-left.
-    0.0, 1.0  // upper-left.
-]);
-
-//
-// Static methods.
-// 
-Sprite.createVertexPositions = function(p, size) {
-    //
-    var halfWidth = size.width * 0.5;
-    var halfHeight = size.height * 0.5;
-
-    return new Float32Array ([
-        p.x+halfWidth, p.y-halfHeight, p.z,
-        p.x+halfWidth, p.y+halfHeight, p.z,
-        p.x-halfWidth, p.y-halfHeight, p.z,
-        p.x-halfWidth, p.y+halfHeight, p.z 
-    ]);
-};
-
-Sprite.createVertexColors = function(color) {
-    //
-    return new Float32Array ([
-        color.r, color.g, color.b, color.a,
-        color.r, color.g, color.b, color.a,
-        color.r, color.g, color.b, color.a,
-        color.r, color.g, color.b, color.a
-    ]);
-};
-
-Sprite.createVertexTextureCoordinates = function(rect) {
-    //
-    return new Float32Array ([
-        rect.right, rect.bottom, // lower-right.
-        rect.right, rect.top,    // upper-right.
-        rect.left,  rect.bottom, // lower-left.
-        rect.left,  rect.top     // upper-left.
-    ]);
-};
-
-Object.freeze(Sprite);
-
 // Note:
 // WebGL only uses vertex/index buffers (no arrays, for drawing), so this engine
 // provides no areDbFrequentlyChanged option, which is provided in SpriteBatch of
@@ -4353,15 +4817,18 @@ function SpriteBatch(_renderer, _style) {
     var _self;
     var _gl;
     var _db;
-    var _isBegun;
-    var _isOkToAddItem;
+    
+    var _vertexBuffers;
+    var _defaultVertexBuffers;
 
+    // Shaders.
     var _program;
     var _attributeLocations;
     var _uniformLocations;
 
-    var _vertexBuffers;
-    var _defaultVertexBuffers;
+    // Helpers
+    var _isBegun;
+    var _isOkToAddItem;
 
     try {
         //
@@ -4379,6 +4846,7 @@ function SpriteBatch(_renderer, _style) {
 
         setUpShaders();
 
+        // Helpers.
         _isBegun = false;
         _isOkToAddItem = true;
 
@@ -4406,14 +4874,14 @@ function SpriteBatch(_renderer, _style) {
     function setUpVertexBuffers() {
         //
         _vertexBuffers = {
-            position: [],
-            color: [],
-            textureCoordinates: []
+            'position': [],
+            'color': [],
+            'textureCoordinates': []
         };
 
         _defaultVertexBuffers = {
-            color: _renderer.loader.createVertexBuffer(),
-            textureCoordinates: _renderer.loader.createVertexBuffer()
+            'color': _renderer.loader.createVertexBuffer(),
+            'textureCoordinates': _renderer.loader.createVertexBuffer()
         };
 
         _defaultVertexBuffers.color.loadData (
@@ -4436,32 +4904,32 @@ function SpriteBatch(_renderer, _style) {
 
         _attributeLocations = {
             //
-            vertexPosition: _renderer.getAttributeLocation (
+            'vertexPosition': _renderer.getAttributeLocation (
                 _program,
-               'vertexPosition'
+                'vertexPosition'
             ),
 
-            vertexColor: _renderer.getAttributeLocation (
+            'vertexColor': _renderer.getAttributeLocation (
                 _program,
-               'vertexColor'
+                'vertexColor'
             ),
 
-            vertexTextureCoordinates: _renderer.getAttributeLocation (
+            'vertexTextureCoordinates': _renderer.getAttributeLocation (
                 _program,
-               'vertexTextureCoordinates'
+                'vertexTextureCoordinates'
             )
         };
 
         _uniformLocations = {
             //
-            canvasClientSize: _renderer.getUniformLocation (
+            'canvasClientSize': _renderer.getUniformLocation (
                 _program,
-               'canvasClientSize'
+                'canvasClientSize'
             ),
 
-            sampler: _renderer.getUniformLocation (
+            'sampler': _renderer.getUniformLocation (
                 _program,
-               'sampler'
+                'sampler'
             )
         };
     }
@@ -4701,8 +5169,7 @@ SpriteBatch.VERTEX_SHADER_SOURCE = [
 
    'void main() {',
         //
-        // Converts the vertex position from screen space to clip space (not NDC
-        // yet).
+        // Converts the vertex position from screen to clip space (not NDC yet).
        'gl_Position = vec4 (',
            '-1.0 + 2.0 * (vertexPosition.x / canvasClientSize.x),',
            '-1.0 + 2.0 * (vertexPosition.y / canvasClientSize.y),',

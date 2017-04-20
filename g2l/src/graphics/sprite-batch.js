@@ -21,15 +21,18 @@ function SpriteBatch(_renderer, _style) {
     var _self;
     var _gl;
     var _db;
-    var _isBegun;
-    var _isOkToAddItem;
+    
+    var _vertexBuffers;
+    var _defaultVertexBuffers;
 
+    // Shaders.
     var _program;
     var _attributeLocations;
     var _uniformLocations;
 
-    var _vertexBuffers;
-    var _defaultVertexBuffers;
+    // Helpers
+    var _isBegun;
+    var _isOkToAddItem;
 
     try {
         //
@@ -47,6 +50,7 @@ function SpriteBatch(_renderer, _style) {
 
         setUpShaders();
 
+        // Helpers.
         _isBegun = false;
         _isOkToAddItem = true;
 
@@ -74,14 +78,14 @@ function SpriteBatch(_renderer, _style) {
     function setUpVertexBuffers() {
         //
         _vertexBuffers = {
-            position: [],
-            color: [],
-            textureCoordinates: []
+            'position': [],
+            'color': [],
+            'textureCoordinates': []
         };
 
         _defaultVertexBuffers = {
-            color: _renderer.loader.createVertexBuffer(),
-            textureCoordinates: _renderer.loader.createVertexBuffer()
+            'color': _renderer.loader.createVertexBuffer(),
+            'textureCoordinates': _renderer.loader.createVertexBuffer()
         };
 
         _defaultVertexBuffers.color.loadData (
@@ -104,32 +108,32 @@ function SpriteBatch(_renderer, _style) {
 
         _attributeLocations = {
             //
-            vertexPosition: _renderer.getAttributeLocation (
+            'vertexPosition': _renderer.getAttributeLocation (
                 _program,
-               'vertexPosition'
+                'vertexPosition'
             ),
 
-            vertexColor: _renderer.getAttributeLocation (
+            'vertexColor': _renderer.getAttributeLocation (
                 _program,
-               'vertexColor'
+                'vertexColor'
             ),
 
-            vertexTextureCoordinates: _renderer.getAttributeLocation (
+            'vertexTextureCoordinates': _renderer.getAttributeLocation (
                 _program,
-               'vertexTextureCoordinates'
+                'vertexTextureCoordinates'
             )
         };
 
         _uniformLocations = {
             //
-            canvasClientSize: _renderer.getUniformLocation (
+            'canvasClientSize': _renderer.getUniformLocation (
                 _program,
-               'canvasClientSize'
+                'canvasClientSize'
             ),
 
-            sampler: _renderer.getUniformLocation (
+            'sampler': _renderer.getUniformLocation (
                 _program,
-               'sampler'
+                'sampler'
             )
         };
     }
@@ -369,8 +373,7 @@ SpriteBatch.VERTEX_SHADER_SOURCE = [
 
    'void main() {',
         //
-        // Converts the vertex position from screen space to clip space (not NDC
-        // yet).
+        // Converts the vertex position from screen to clip space (not NDC yet).
        'gl_Position = vec4 (',
            '-1.0 + 2.0 * (vertexPosition.x / canvasClientSize.x),',
            '-1.0 + 2.0 * (vertexPosition.y / canvasClientSize.y),',

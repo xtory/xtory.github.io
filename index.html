@@ -6,60 +6,63 @@
         <!--<link href='https://fonts.googleapis.com/css?family=Tangerine' rel='stylesheet'>-->
         <style>
 			body {
+                padding: 10px;
 				background-color: #202020;
                 font-family: 'Consolas'; /*font-family: 'Tangerine';*/
                 font-size: 100%;
                 font-style: italic;
                 font-weight: bold;
                 color: white;
+                letter-spacing: 1px;
 			}
 
-            h2 {
-                color: #FF9800;
+            .title {
+                margin-bottom: 15px;
+                font-size: x-large;
+                color: rgba(255, 152, 0, 1); /*#FF9800;*/
             }
 
-            a {
-                margin-top: 10px;
+            .category {
+                margin-bottom: 1px;
+                font-size: large;
+                color: rgba(224, 224, 224, 1);
             }
 
-            /* unvisited link */
-            a:link {
-                color: #9B869C;
+            .links {
+                margin-bottom: 25px;
             }
 
-            /* visited link */
-            a:visited {
-                color: #9B869C;
-            }
+            a:link    { color: #9B869C; } /* unvisited link */
+            a:visited { color: #9B869C; } /* visited link */
+            a:hover   { color: #DFC48C; } /* mouse over link */
+            a:active  { color: #736257; } /* selected link */
 
-            /* mouse over link */
-            a:hover {
-                color: #DFC48C;
-            }
-
-            /* selected link */
-            a:active {
-                color: #736257;
-            }
         </style>
     </head>
     <body bgcolor='#C7B299'>
-        <h2>g2l</h2>
+        
+        <div class='title'>GorillaGL (g2l)</div>
 
-        Tutorials:<br/>
-        <a href='https://xtory.github.io/g2l/examples/tutorials/a01-colored-triangles/'>A01: Colored triangles.</a><br/>
-        <a href='https://xtory.github.io/g2l/examples/tutorials/a02-texturing/'>A02: Texturing.</a><br/>
-        <a href='https://xtory.github.io/g2l/examples/tutorials/a03-alpha-blending/'>A03: Alpha blending.</a><br/>
-        <a href='https://xtory.github.io/g2l/examples/tutorials/a04-multitexturing/'>A04: Multitexturing.</a><br/>
-        <a href='https://xtory.github.io/g2l/examples/tutorials/a05-sprites/'>A05: Sprites.</a><br/>
-        <a href='https://xtory.github.io/g2l/examples/tutorials/b01-lighting/'>B01: Lighting (with Phong shading).</a><br/><br/>
+        <div class='category'>Tutorials:</div>
+        <div class='links'>
+            <a href='https://xtory.github.io/g2l/examples/tutorials/a01-colored-triangles/'>A01: Colored triangles.</a><br/>
+            <a href='https://xtory.github.io/g2l/examples/tutorials/a02-texturing/'>A02: Texturing.</a><br/>
+            <a href='https://xtory.github.io/g2l/examples/tutorials/a03-alpha-blending/'>A03: Alpha blending.</a><br/>
+            <a href='https://xtory.github.io/g2l/examples/tutorials/a04-multitexturing/'>A04: Multitexturing.</a><br/>
+            <a href='https://xtory.github.io/g2l/examples/tutorials/a05-sprites/'>A05: Sprites.</a><br/>
+            <a href='https://xtory.github.io/g2l/examples/tutorials/b01-lighting/'>B01: Lighting (with Phong shading).</a>
+        </div>
 
-        Samples:<br/>
-        <a href='https://xtory.github.io/g2l/examples/samples/2d-line-segments/'>2D line segments.</a><br/><br/>
+        <div class='category'>Samples:</div>
+        <div class='links'>
+            <a href='https://xtory.github.io/g2l/examples/samples/2d-line-segments/'>2D line segments.</a>
+        </div>
 
-        Tests:<br/>
-        <a href='https://xtory.github.io/g2l/examples/tests/io/'>IO.</a><br/>
-        <a href='https://xtory.github.io/g2l/examples/tests/painting/'>Painting.</a><br/>
+        <div class='category'>Tests:</div>
+        <div class='links'>
+            <a href='https://xtory.github.io/g2l/examples/tests/io/'>IO.</a><br/>
+            <a href='https://xtory.github.io/g2l/examples/tests/painting/'>Painting.</a>
+        </div>
         
     </body>
 </html>

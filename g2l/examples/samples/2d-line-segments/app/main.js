@@ -17,6 +17,11 @@ function main() {
     var then;
     var lastAverageFps;
 
+    // Test
+    var lineSegmentBatch;
+    var _options;
+    var _usesLineSegmentBatch;
+
     try {
         //
         title = '2D line segments';
@@ -36,6 +41,10 @@ function main() {
         document.body.appendChild(renderer.canvas);
 
         loader = renderer.loader;
+
+        // Test
+        lineSegmentBatch = new g2l.LineSegmentBatch(renderer);
+        _usesLineSegmentBatch = false;
 
         setUpShaders();
 
@@ -95,6 +104,18 @@ function main() {
         fps = new g2l.Fps();
         then = 0;
         lastAverageFps = 0;
+
+        _options = [];
+        
+        var option = document.getElementById('none');
+        option.addEventListener('click', onClick);
+        _options.push(option);
+
+        option = document.getElementById('batching');
+        option.addEventListener('click', onClick);
+        _options.push(option);
+
+        _options[0].click();
     }
 
     function updateScene() {
@@ -113,19 +134,55 @@ function main() {
             canvas.clientHeight * 0.5
         );
 
-        drawLineSegment (
-            new g2l.Vector3D(p.x, p.y-200, 0),
-            new g2l.Vector3D(p.x, p.y+200, 1),
-            g2l.Colors.PHOTOSHOP_DARK_BLUE,
-            50
-        );
+        var p1 = new g2l.Vector3D(p.x,     p.y-200, 0);
+        var p2 = new g2l.Vector3D(p.x,     p.y+200, 1);
+        var p3 = new g2l.Vector3D(p.x-250, p.y,     0.5);
+        var p4 = new g2l.Vector3D(p.x+250, p.y,     0.5);
 
-        drawLineSegment (
-            new g2l.Vector3D(p.x-250, p.y, 0.5),
-            new g2l.Vector3D(p.x+250, p.y, 0.5),
-            g2l.Colors.CADET_BLUE,
-            35
-        );
+        if (_usesLineSegmentBatch === false) {
+            //
+            drawLineSegment (
+                // Part 1.
+                p1, p2,
+                // Part 2.
+                g2l.Colors.PHOTOSHOP_DARK_RED,
+                // Part 3.
+                50
+            );
+
+            drawLineSegment (
+                // Part 1.
+                p3, p4,
+                // Part 2.
+                g2l.Colors.PHOTOSHOP_DARK_YELLOW_ORANGE,
+                // Part 3.
+                35
+            );
+
+        } else { // _usesLineSegmentBatch === true
+            //
+            lineSegmentBatch.begin();
+
+            lineSegmentBatch.drawLineSegment (
+                // Part 1.
+                p1, p2,
+                // Part 2.
+                g2l.Colors.PHOTOSHOP_DARK_BLUE,
+                // Part 3.
+                50
+            );
+
+            lineSegmentBatch.drawLineSegment (
+                // Part 1.
+                p3, p4,
+                // Part 2.
+                g2l.Colors.PHOTOSHOP_DARK_GREEN,
+                // Part 3.
+                35
+            );
+
+            lineSegmentBatch.end();
+        }
 
         drawInfo();
     }
@@ -285,6 +342,36 @@ function main() {
             info.fps.innerHTML = 'FPS: ' + fps.average;
 
             lastAverageFps = averageFps;
+        }
+    }
+
+    //
+    // Event listeners.
+    //
+    function onClick(event) {
+        //
+        if (event.target === _options[0]) {
+            //
+            _usesLineSegmentBatch = false;
+
+        } else if (
+            event.target === _options[1]
+        ){
+            _usesLineSegmentBatch = true;
+        }
+
+        for (var i=0; i<_options.length; i++) {
+            //
+            var item = _options[i];
+
+            if (item === event.target) {
+                //
+                item.style.opacity = '1.0';
+
+            } else {
+                //
+                item.style.opacity = '0.45';
+            }
         }
     }
 }

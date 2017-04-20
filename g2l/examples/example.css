@@ -24,8 +24,8 @@ html, body {
     font-size: medium;
     color: rgba(155, 134, 156, 1); /*#9B869C*/
     letter-spacing: 1px;
+    pointer-events: none;
 
-    pointer-events:        none;
     user-select:           none; /* Non-prefixed version, currently supported by Chrome and Opera */
     -moz-user-select:      none; /* Firefox */
     -webkit-user-select:   none; /* Safari */
@@ -43,5 +43,10 @@ html, body {
 .fps {
     margin-bottom: 15px;
     font-size: large;
-    color: rgba(224, 224, 224, 1); /*white;*/
+    color: rgba(224, 224, 224, 1);
+}
+
+.clickable {
+    pointer-events: auto;
+    cursor: pointer;
 }

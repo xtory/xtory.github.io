@@ -35,11 +35,11 @@ function Renderer(_canvas, _style) {
         //
         _self = this;
 
+        setUpCanvas();
+
         if (_style === undefined) {
             _style = new RendererStyle();
-        }
-
-        setUpCanvas();
+        }        
 
         setUpStyle();
 
