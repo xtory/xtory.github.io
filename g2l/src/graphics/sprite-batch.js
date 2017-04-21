@@ -7,10 +7,11 @@
 // Note:
 // Sees the notes in the beginning of SpriteBatchStyle.
 
+import { Color }                 from './color';
 import { DepthBufferValues }     from './depth-buffer-values';
 import { Sprite }                from './sprite';
 import { SpriteBatchStyle }      from './sprite-batch-style';
-import { SpriteCreationOptions } from './sprite-creation-options';
+import { SpriteFlushingOptions } from './sprite-flushing-options';
 import { PrimitiveType }         from './primitive-type';
 
 //
@@ -23,7 +24,9 @@ function SpriteBatch(_renderer, _style) {
     var _db;
     
     var _vertexBuffers;
-    var _defaultVertexBuffers;
+    //var _defaultVertexBuffers;
+    var _defaultTextureCoordinateVertexBuffer;
+    var _vertexArrays;
 
     // Shaders.
     var _program;
@@ -79,21 +82,20 @@ function SpriteBatch(_renderer, _style) {
         //
         _vertexBuffers = {
             'position': [],
-            'color': [],
             'textureCoordinates': []
         };
 
-        _defaultVertexBuffers = {
-            'color': _renderer.loader.createVertexBuffer(),
-            'textureCoordinates': _renderer.loader.createVertexBuffer()
+        _defaultTextureCoordinateVertexBuffer =
+            _renderer.loader.createVertexBuffer();
+
+        // Test:
+        _vertexArrays = {
+            'position': [],
+            'textureCoordinates': []
         };
+        // :Test
 
-        _defaultVertexBuffers.color.loadData (
-            Sprite.DEFAULT_VERTEX_COLORS,
-            Sprite.COLOR_SIZE
-        );
-
-        _defaultVertexBuffers.textureCoordinates.loadData (
+        _defaultTextureCoordinateVertexBuffer.loadData (
             Sprite.DEFAULT_VERTEX_TEXTURE_COORDINATES,
             Sprite.TEXTURE_COORDINATE_SIZE
         );
@@ -113,11 +115,6 @@ function SpriteBatch(_renderer, _style) {
                 'vertexPosition'
             ),
 
-            'vertexColor': _renderer.getAttributeLocation (
-                _program,
-                'vertexColor'
-            ),
-
             'vertexTextureCoordinates': _renderer.getAttributeLocation (
                 _program,
                 'vertexTextureCoordinates'
@@ -131,13 +128,18 @@ function SpriteBatch(_renderer, _style) {
                 'canvasClientSize'
             ),
 
+            'color': _renderer.getUniformLocation (
+                _program,
+                'color'
+            ),
+
             'sampler': _renderer.getUniformLocation (
                 _program,
                 'sampler'
             )
         };
     }
-
+    
     function flush() {
         //
         _renderer.program = _program;
@@ -148,12 +150,14 @@ function SpriteBatch(_renderer, _style) {
             // Part 2.
             new Float32Array ([
                 _renderer.canvas.clientWidth,
-                _renderer.canvas.clientHeight            
+                _renderer.canvas.clientHeight
             ])
-        );        
+        );
 
         var vb = null;
-        var lastTexture = null;
+        var lastColor; // which is a Float32Array.
+        var lastOfIfUsesDefault; // if texture coordinates uses default.
+        var lastTexture;
         
         for (var i=0; i<_db.length; i++) {
             //
@@ -166,33 +170,49 @@ function SpriteBatch(_renderer, _style) {
                 vb
             );
 
-            if ((item.creationOptions & SpriteCreationOptions.VERTEX_COLORS) ===
-                SpriteCreationOptions.VERTEX_COLORS) {
+            if (// Part 1.
+                lastColor === undefined ||
+                // Part 2.
+               (item.color[0] != lastColor[0] ||
+                item.color[1] != lastColor[1] ||
+                item.color[2] != lastColor[2] ||
+                item.color[3] != lastColor[3])) {
                 //
-                vb = _vertexBuffers.color[i];
+                _renderer.setVector4DUniform (
+                    // Part 1.
+                    _uniformLocations.color,
+                    // Part 2.
+                    item.color
+                );
 
-            } else {
-                vb = _defaultVertexBuffers.color;
+                lastColor = item.color;
             }
 
-            _renderer.setAttribute (
-                _attributeLocations.vertexColor,
-                vb
+            var usesDefault = (
+                ((item.flushingOptions & SpriteFlushingOptions.VERTEX_TEXTURE_COORDINATES) ===
+                SpriteFlushingOptions.VERTEX_TEXTURE_COORDINATES) ?
+                false :
+                true
             );
 
-            if ((item.creationOptions & SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES) ===
-                SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES) {
+            if (usesDefault === false) {
                 //
                 vb = _vertexBuffers.textureCoordinates[i];
 
             } else {
-                vb = _defaultVertexBuffers.textureCoordinates;
+                //
+                vb = _defaultTextureCoordinateVertexBuffer;
             }
 
-            _renderer.setAttribute (
-                _attributeLocations.vertexTextureCoordinates,
-                vb
-            );
+            if (usesDefault !== lastOfIfUsesDefault) {
+                //
+                _renderer.setAttribute (
+                    _attributeLocations.vertexTextureCoordinates,
+                    vb
+                );
+
+                lastOfIfUsesDefault = usesDefault;
+            }
 
             if (lastTexture !== item.texture) {
                 //
@@ -210,7 +230,7 @@ function SpriteBatch(_renderer, _style) {
                 4
             );
         }
-    }
+    }    
 
     function clear() {
         //
@@ -227,15 +247,21 @@ function SpriteBatch(_renderer, _style) {
     this.begin = function() {
         //
         _isBegun = true;
+
+        if (_vertexArrays.position.length != _vertexBuffers.position.length ||
+            _vertexArrays.textureCoordinates.length != _vertexBuffers.textureCoordinates.length) {
+            //
+            throw 'An invalid-length exception raised.';
+        }
     };
 
     this.drawSprite = function (
         texture,
-        creationOptions,
+        flushingOptions,
         centerScreenPosition,
         screenSize,
-        vertexColor,
-        sourceTextureCoordinateRect
+        sourceRect,
+        color
     ){
         if (_style.clearsDbAfterDrawing === false &&
             _isOkToAddItem === false) {
@@ -250,73 +276,63 @@ function SpriteBatch(_renderer, _style) {
             return;
         }
 
-        var sprite = new Sprite (
-            _self,
-            texture,
-            creationOptions,
-            centerScreenPosition,
-            screenSize,
-            vertexColor,
-            sourceTextureCoordinateRect
-        );
-
-        var vb;
+        var va1, va2; // vertex arrays.
+        var vb1, vb2; // vertex buffers.
         var index = _db.length;
-        
-        // 1. Vertex positions.
-        if (_vertexBuffers.position.length - 1 < index) {
-            //
-            vb = _renderer.loader.createVertexBuffer();
-            _vertexBuffers.position.push(vb);
 
-        } else {
+        // 1. Vertex arrays.
+        if (_vertexArrays.position.length - 1 < index) {
             //
-            vb = _vertexBuffers.position[index];
+            va1 = new Float32Array(Sprite.POSITION_SIZE * Sprite.VERTEX_COUNT);
+            _vertexArrays.position.push(va1);
+
+            vb1 = _renderer.loader.createVertexBuffer();
+            _vertexBuffers.position.push(vb1);
+
+        } else { // index <=  _vertexArrays.position.length - 1
+            //
+            va1 = _vertexArrays.position[index];
+            vb1 = _vertexBuffers.position[index];
         }
 
-        vb.loadData (
-            sprite.vertexPositions,
-            Sprite.POSITION_SIZE
+        // 2. Vertex texture coordinates.
+        if (_vertexArrays.textureCoordinates.length - 1 < index) {
+            //
+            va2 = new Float32Array(Sprite.TEXTURE_COORDINATE_SIZE * Sprite.VERTEX_COUNT);
+            _vertexArrays.textureCoordinates.push(va2);
+
+            vb2 = _renderer.loader.createVertexBuffer();
+            _vertexBuffers.textureCoordinates.push(vb2);
+
+        } else { // index <= _vertexArrays.textureCoordinates.length - 1
+            //
+            va2 = _vertexArrays.textureCoordinates[index];
+            vb2 = _vertexBuffers.textureCoordinates[index];
+        }
+
+        var sprite = new Sprite (
+            // Part 1.
+            _self,
+            // Part 2.
+            texture,
+            // Part 3.
+            centerScreenPosition, screenSize,
+            // Part 4.
+            sourceRect,
+            // Part 5.
+            color,
+            // Part 6.
+            va1, va2
         );
 
-        // 2. Vertex colors.
-        if (_vertexBuffers.color.length - 1 < index) {
-            //
-            vb = _renderer.loader.createVertexBuffer();
-            _vertexBuffers.color.push(vb);
+        // 1. Vertex positions.
+        vb1.loadData(va1, Sprite.POSITION_SIZE);
 
-        } else {
+        // 2. Vertex texture coordinates.
+        if ((sprite.flushingOptions & SpriteFlushingOptions.VERTEX_TEXTURE_COORDINATES) ===
+            SpriteFlushingOptions.VERTEX_TEXTURE_COORDINATES) {
             //
-            vb = _vertexBuffers.color[index];
-        }
-
-        if ((sprite.creationOptions & SpriteCreationOptions.VERTEX_COLORS) ===
-            SpriteCreationOptions.VERTEX_COLORS) {
-            //
-            vb.loadData (
-                sprite.vertexColors,
-                Sprite.COLOR_SIZE
-            );
-        }
-
-        // 3. Vertex texture coordinates.
-        if (_vertexBuffers.textureCoordinates.length - 1 < index) {
-            //
-            vb = _renderer.loader.createVertexBuffer();
-            _vertexBuffers.textureCoordinates.push(vb);
-
-        } else {
-            //
-            vb = _vertexBuffers.textureCoordinates[index];
-        }
-
-        if ((sprite.creationOptions & SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES) ===
-            SpriteCreationOptions.VERTEX_TEXTURE_COORDINATES) {
-            //
-            vb.loadData (
-                sprite.vertexTextureCoordinates,
-                Sprite.TEXTURE_COORDINATE_SIZE
-            );
+            vb2.loadData(va2, Sprite.TEXTURE_COORDINATE_SIZE);
         }
 
         _db.push(sprite);
@@ -362,14 +378,12 @@ SpriteBatch.VERTEX_SHADER_SOURCE = [
     //
    'precision highp float;', // which is the default vertex shader precision.
 
+   'uniform vec2 canvasClientSize;',
+
    'attribute vec3 vertexPosition;',
-   'attribute vec4 vertexColor;',
    'attribute vec2 vertexTextureCoordinates;',
 
-   'varying vec4 color;',
    'varying vec2 textureCoordinates;',
-
-   'uniform vec2 canvasClientSize;',
 
    'void main() {',
         //
@@ -381,7 +395,6 @@ SpriteBatch.VERTEX_SHADER_SOURCE = [
            '1.0',
        ');',
 
-       'color = vertexColor;',
        'textureCoordinates = vertexTextureCoordinates;',
    '}'
 
@@ -391,10 +404,10 @@ SpriteBatch.FRAGMENT_SHADER_SOURCE = [
     //
    'precision mediump float;', // which is the recommended fragment shader precision.
 
-   'varying vec4 color;',
-   'varying vec2 textureCoordinates;',
-
    'uniform sampler2D sampler;',
+   'uniform vec4 color;',
+
+   'varying vec2 textureCoordinates;',
 
    'void main() {',
        'gl_FragColor = color * texture2D(sampler, textureCoordinates);',

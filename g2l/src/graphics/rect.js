@@ -16,14 +16,6 @@ function Rect(_left, _bottom, _width, _height) {
     this.height = _height;
 }
 
-//
-// Prototype.
-//
-Rect.prototype = {
-    //
-    // No contents.
-};
-
 Object.defineProperty(Rect.prototype, 'right', {
     'get': function() { return this.left + this.width; }
 });
@@ -47,6 +39,26 @@ Object.defineProperty(Rect.prototype, 'size', {
     //
     'get': function() { return new Vector2D(this.width, this.height); }
 });
+
+Rect.areEqual = function(rect1, rect2) {
+    //
+    if ((rect1 instanceof Rect) === false ||
+        (rect2 instanceof Rect) === false) {
+        return false;
+    }
+
+    if (rect1.left   !== rect2.left ||
+        rect1.bottom !== rect2.bottom ||
+        rect1.width  !== rect2.width ||
+        rect1.height !== rect2.height) {
+        //
+        return false;
+
+    } else {
+        //
+        return true;
+    }
+};
 
 Object.freeze(Rect);
 

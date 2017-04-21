@@ -63,10 +63,10 @@ function main() {
     //
     function setUpWorld2D() {
         //
-        var worldStyle = new g2l.World2DStyle();
-        worldStyle.backgroundColor = g2l.Color.DEFAULT_BACKGROUND_COLOR; //new g2l.Color(0.25, 0.25, 0.25, 1);
+        var style = new g2l.World2DStyle();
+        style.backgroundColor = g2l.Color.DEFAULT_BACKGROUND_COLOR;
 
-        world2D = new g2l.World2D(renderer, worldStyle);
+        world2D = new g2l.World2D(renderer, style);
     }
 
     function setUpTextures() {
@@ -94,7 +94,7 @@ function main() {
     function setUpWorld2DImages() {
         //
         world2DImages = [];
-        world2DImageCount = 1000;
+        world2DImageCount = 2000;
 
         var world2DImageSize = new g2l.Size2D(64, 64);
 
@@ -107,11 +107,18 @@ function main() {
             );
 
             var world2DImage = new g2l.World2DImage (
+                // Part 1.
                 world2D,
+                // Part 2.
                 textures[i % textures.length],
-                undefined,
+                // Part 3.
                 p,
-                world2DImageSize
+                // Part 4.
+                world2DImageSize,
+                // Part 5.
+                undefined, //new g2l.Rect(0.25, 0.25, 0.5, 0.5),
+                // Part 6.
+                new g2l.Color(0.5, 0.25, 0.25, 1)
             );
 
             world2D.addItem (

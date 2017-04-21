@@ -1,5 +1,4 @@
 import { DepthBufferValues } from './depth-buffer-values';
-import { Sprite }            from './sprite';
 import { Vector2D }          from '../math/2d-vector';
 import { Vector3D }          from '../math/3d-vector';
 

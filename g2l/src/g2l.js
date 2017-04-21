@@ -32,7 +32,7 @@ export { Size3D }                                     from './graphics/3d-size';
 export { Sprite }                                     from './graphics/sprite';
 export { SpriteBatch }                                from './graphics/sprite-batch';
 export { SpriteBatchStyle }                           from './graphics/sprite-batch-style';
-export { SpriteCreationOptions }                      from './graphics/sprite-creation-options';
+export { SpriteFlushingOptions }                      from './graphics/sprite-flushing-options';
 export { Texture2D }                                  from './graphics/2d-texture';
 export { TextureCoordinateHelper }                    from './graphics/helpers/texture-coordinate-helper';
 export { TransformedPositionColor }                   from './graphics/shaders/transformed-position-color';

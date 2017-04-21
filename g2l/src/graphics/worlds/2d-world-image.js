@@ -12,11 +12,10 @@ import { World2DLineSegment } from './2d-world-line-segment';
 function World2DImage (
     _world,
     _texture,
-    _creationOptions,
     _centerPosition, // in world space.
     _size,           // in world space.
-    _vertexColor,
-    _sourceTextureCoordinateRect
+    _sourceRect,
+    _color
 ){
     World2DItem.call(this, _world);
 
@@ -49,10 +48,6 @@ function World2DImage (
         Object.defineProperty(_self, 'texture', {
             'get': function() { return _texture; },
             'set': function(value) { _texture = value; }
-        });
-
-        Object.defineProperty(_self, 'creationOptions', {
-            'get': function() { return _creationOptions; },
         });
 
         // Note:
@@ -130,22 +125,14 @@ function World2DImage (
             // :Test
         });
 
-        if (_vertexColor === undefined) {
-            _vertexColor = World2DImage.DEFAULT_VERTEX_COLOR;
-        }
-
-        Object.defineProperty(_self, 'vertexColor', {
-            'get': function() { return _vertexColor; },
-            'set': function(value) { _vertexColor = value; }
+        Object.defineProperty(_self, 'sourceRect', {
+            'get': function() { return _sourceRect; },
+            'set': function(value) { _sourceRect = value; }
         });
 
-        if (_sourceTextureCoordinateRect === undefined) {
-            _sourceTextureCoordinateRect = World2DImage.DEFAULT_SOURCE_TEXTURE_COORDINATE_RECT;
-        }
-
-        Object.defineProperty(_self, 'sourceTextureCoordinateRect', {
-            'get': function() { return _sourceTextureCoordinateRect; },
-            'set': function(value) { _sourceTextureCoordinateRect = value; }
+        Object.defineProperty(_self, 'color', {
+            'get': function() { return _color; },
+            'set': function(value) { _color = value; }
         });
 
         //
@@ -246,15 +233,15 @@ World2DImage.prototype.draw = function() {
     
     world.spriteBatch.drawSprite (
         this.texture,
-        this.creationOptions,
+        this.flushingOptions,
         new Vector3D (
             this.centerScreenPosition.x,
             this.centerScreenPosition.y,
             Sprite.DEFAULT_SCREEN_POSITION_DEPTH
         ),
         this.screenSize,
-        this.vertexColor,
-        this.sourceTextureCoordinateRect
+        this.sourceRect,
+        this.color
     );
 
     // Sets the canvas' last drawn item to this image.
@@ -344,15 +331,6 @@ World2DImage.prototype.beginSpriteBatch = function() {
     //
     this.world.spriteBatch.begin();
 };
-
-//
-// Static constants (after Object.freeze()).
-//
-World2DImage.DEFAULT_VERTEX_COLOR =
-    Sprite.DEFAULT_VERTEX_COLOR;
-
-World2DImage.DEFAULT_SOURCE_TEXTURE_COORDINATE_RECT =
-    Sprite.DEFAULT_SOURCE_TEXTURE_COORDINATE_RECT;
 
 Object.freeze(World2DImage);
 

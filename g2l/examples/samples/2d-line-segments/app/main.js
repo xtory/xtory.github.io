@@ -30,9 +30,9 @@ function main() {
         /*
         var canvas = document.getElementById('canvas');
 
-        var rendererStyle = new g2l.RendererStyle();
-        rendererStyle.canvasUsesDefaultStyle = false;
-        renderer = new g2l.Renderer(canvas, rendererStyle);
+        var style = new g2l.RendererStyle();
+        style.canvasUsesDefaultStyle = false;
+        renderer = new g2l.Renderer(canvas, style);
         */
 
         renderer = new g2l.Renderer();
