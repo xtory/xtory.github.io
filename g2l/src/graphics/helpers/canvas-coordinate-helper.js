@@ -14,7 +14,7 @@ CanvasCoordinateHelper.fromDisplayToDrawSpace = function(canvas, p) {
         x: (p.x / canvas.clientWidth) * canvas.width,
         y: (p.y / canvas.clientHeight) * canvas.height
     };
-}
+};
 
 CanvasCoordinateHelper.fromDrawToDisplaySpace = function(canvas, p) {
     //
@@ -22,7 +22,7 @@ CanvasCoordinateHelper.fromDrawToDisplaySpace = function(canvas, p) {
         x: (p.x / canvas.width) * canvas.clientWidth,
         y: (p.y / canvas.height) * canvas.clientHeight
     };
-}
+};
 
 Object.freeze(CanvasCoordinateHelper);
 

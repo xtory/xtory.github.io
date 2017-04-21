@@ -43,7 +43,7 @@ function main() {
         loader = renderer.loader;
 
         // Test
-        lineSegmentBatch = new g2l.LineSegmentBatch(renderer);
+        lineSegmentBatch = new g2l.LineSegment2DBatch(renderer);
         _usesLineSegmentBatch = false;
 
         setUpShaders();
@@ -145,18 +145,18 @@ function main() {
                 // Part 1.
                 p1, p2,
                 // Part 2.
-                g2l.Colors.PHOTOSHOP_DARK_RED,
+                50,
                 // Part 3.
-                50
+                g2l.Colors.PHOTOSHOP_DARK_RED
             );
 
             drawLineSegment (
                 // Part 1.
                 p3, p4,
                 // Part 2.
-                g2l.Colors.PHOTOSHOP_DARK_YELLOW_ORANGE,
-                // Part 3.
-                35
+                35,
+                // Part 2.
+                g2l.Colors.PHOTOSHOP_DARK_YELLOW_ORANGE
             );
 
         } else { // _usesLineSegmentBatch === true
@@ -167,18 +167,18 @@ function main() {
                 // Part 1.
                 p1, p2,
                 // Part 2.
-                g2l.Colors.PHOTOSHOP_DARK_BLUE,
+                50,
                 // Part 3.
-                50
+                g2l.Colors.PHOTOSHOP_DARK_BLUE
             );
 
             lineSegmentBatch.drawLineSegment (
                 // Part 1.
                 p3, p4,
                 // Part 2.
-                g2l.Colors.PHOTOSHOP_DARK_GREEN,
+                35,
                 // Part 3.
-                35
+                g2l.Colors.PHOTOSHOP_DARK_GREEN
             );
 
             lineSegmentBatch.end();
@@ -190,14 +190,14 @@ function main() {
     function drawLineSegment (
         screenPosition1,
         screenPosition2,
-        color,
-        screenThickness
+        screenThickness,
+        color
     ){
         setUpLineSegment (
             screenPosition1,
             screenPosition2,
-            color,
-            screenThickness
+            screenThickness,
+            color
         );
 
         renderer.program = program;
@@ -222,8 +222,8 @@ function main() {
     function setUpLineSegment (
         screenPosition1,
         screenPosition2,
-        color,
-        screenThickness
+        screenThickness,
+        color
     ){
         vertexBuffers = {
             position: loader.createVertexBuffer(),

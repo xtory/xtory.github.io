@@ -97,7 +97,7 @@ Sprite.createVertexPositions = function(a, p, size) {
     a[3]=p.x+halfWidth;    a[ 4]=p.y+halfHeight;    a[ 5]=p.z;
     a[6]=p.x-halfWidth;    a[ 7]=p.y-halfHeight;    a[ 8]=p.z;
     a[9]=p.x-halfWidth;    a[10]=p.y+halfHeight;    a[11]=p.z;
-}
+};
 
 Sprite.createVertexTextureCoordinates = function(a, rect) {
     //
@@ -105,7 +105,7 @@ Sprite.createVertexTextureCoordinates = function(a, rect) {
     a[2]=rect.right;    a[3]=rect.top;    // upper-right.
     a[4]=rect.left;     a[5]=rect.bottom; // lower-left.
     a[6]=rect.left;     a[7]=rect.top;    // upper-left.
-}
+};
 
 Object.freeze(Sprite);
 

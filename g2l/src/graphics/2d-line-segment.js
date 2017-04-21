@@ -5,44 +5,44 @@ import { Vector3D }          from '../math/3d-vector';
 //
 // Constructor.
 //
-function LineSegment (
+function LineSegment2D (
     _lineSegmentBatch,
     _screenPosition1,
     _screenPosition2,
-    _color,
-    _screenThickness
+    _screenThickness,
+    _color
 ){
     // 1. Vertex positions.
-    this.vertexPositions = LineSegment.createVertexPositions (
+    this.vertexPositions = LineSegment2D.createVertexPositions (
         _screenPosition1,
         _screenPosition2,
         _screenThickness
     );
     
     // 2. Vertex colors.
-    this.vertexColors = LineSegment.createVertexColors(_color);
+    this.vertexColors = LineSegment2D.createVertexColors(_color);
 
     // 3. Indices.
-    this.indices = LineSegment.DEFAULT_INDICES;
+    this.indices = LineSegment2D.DEFAULT_INDICES;
 }
 
 //
 // Static constants (after Object.freeze()).
 //
-LineSegment.VERTEX_COUNT  = 4;
-LineSegment.POSITION_SIZE = 3; // (x, y, z)
-LineSegment.COLOR_SIZE    = 4; // (r, g, b, a)
-LineSegment.INDEX_COUNT   = 6; // (0, 1, 2, 2, 1, 3)
+LineSegment2D.VERTEX_COUNT  = 4;
+LineSegment2D.POSITION_SIZE = 3; // (x, y, z)
+LineSegment2D.COLOR_SIZE    = 4; // (r, g, b, a)
+LineSegment2D.INDEX_COUNT   = 6; // (0, 1, 2, 2, 1, 3)
 
-LineSegment.DEFAULT_SCREEN_POSITION_DEPTH =
+LineSegment2D.DEFAULT_SCREEN_POSITION_DEPTH =
     DepthBufferValues.NEAR_CLIP_PLANE;
 
-LineSegment.DEFAULT_INDICES = [ 0, 1, 2, 2, 1, 3 ];
+LineSegment2D.DEFAULT_INDICES = [ 0, 1, 2, 2, 1, 3 ];
 
 //
 // Static methods.
 // 
-LineSegment.createVertexPositions = function (
+LineSegment2D.createVertexPositions = function (
     screenPosition1,
     screenPosition2,
     screenThickness
@@ -139,12 +139,12 @@ LineSegment.createVertexPositions = function (
         upperLeftCorner.x,  upperLeftCorner.y,  screenPosition1.z
     ];
     // :Test
-}
+};
 
-LineSegment.createVertexColors = function(color) {
+LineSegment2D.createVertexColors = function(color) {
     //
     // Note:
-    // Sprite.createVertexColors() returns a Float32Array directly, but LineSegment
+    // Sprite.createVertexColors() returns a Float32Array directly, but LineSegment2D
     // doesn't.
     /*
     return new Float32Array ([
@@ -161,8 +161,8 @@ LineSegment.createVertexColors = function(color) {
         color.r, color.g, color.b, color.a
     ];
     // :Note
-}
+};
 
-Object.freeze(LineSegment);
+Object.freeze(LineSegment2D);
 
-export { LineSegment };
+export { LineSegment2D };

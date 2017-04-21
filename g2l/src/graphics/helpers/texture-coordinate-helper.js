@@ -36,7 +36,7 @@ TextureCoordinateHelper.toUV = function(s, t) {
         u: s,
         v: 1 - t
     };
-}
+};
 
 TextureCoordinateHelper.toST = function(u, v) {
     //
@@ -44,7 +44,7 @@ TextureCoordinateHelper.toST = function(u, v) {
         s: u,
         t: 1 - v
     };
-}    
+};
 
 Object.freeze(TextureCoordinateHelper);
 

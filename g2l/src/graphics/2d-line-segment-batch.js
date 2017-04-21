@@ -1,11 +1,11 @@
-import { LineSegment }           from './line-segment';
-import { LineSegmentBatchStyle } from './line-segment-batch-style';
-import { PrimitiveType }         from './primitive-type';
+import { LineSegment2D }           from './2d-line-segment';
+import { LineSegment2DBatchStyle } from './2d-line-segment-batch-style';
+import { PrimitiveType }           from './primitive-type';
 
 //
 // Constructor.
 //
-function LineSegmentBatch(_renderer, _style) {
+function LineSegment2DBatch(_renderer, _style) {
     //
     var _self;
     var _gl;
@@ -31,7 +31,7 @@ function LineSegmentBatch(_renderer, _style) {
         _self = this;
 
         if (_style === undefined) {
-            _style = new LineSegmentBatchStyle();
+            _style = new LineSegment2DBatchStyle();
         }
 
         _gl = _renderer.gl;
@@ -50,7 +50,7 @@ function LineSegmentBatch(_renderer, _style) {
 
     } catch (e) {
         //
-        console.log('g2l.LineSegmentBatch: ' + e);
+        console.log('g2l.LineSegment2DBatch: ' + e);
 
         throw e;
     }
@@ -109,8 +109,8 @@ function LineSegmentBatch(_renderer, _style) {
     function setUpShaders() {
         //
         _program = _renderer.loader.setUpProgram (
-            LineSegmentBatch.VERTEX_SHADER_SOURCE,
-            LineSegmentBatch.FRAGMENT_SHADER_SOURCE
+            LineSegment2DBatch.VERTEX_SHADER_SOURCE,
+            LineSegment2DBatch.FRAGMENT_SHADER_SOURCE
         );
 
         _attributeLocations = {
@@ -151,12 +151,12 @@ function LineSegmentBatch(_renderer, _style) {
 
         _vertexBuffers.position.loadData (
             new Float32Array(_vertexPositions),
-            LineSegment.POSITION_SIZE
+            LineSegment2D.POSITION_SIZE
         );
 
         _vertexBuffers.color.loadData (
             new Float32Array(_vertexColors),
-            LineSegment.COLOR_SIZE
+            LineSegment2D.COLOR_SIZE
         );
 
         _indexBuffer.loadData (
@@ -176,7 +176,7 @@ function LineSegmentBatch(_renderer, _style) {
         _renderer.drawIndexedPrimitives (
             _indexBuffer,
             PrimitiveType.TRIANGLE_LIST,
-            LineSegment.INDEX_COUNT * _db.length
+            LineSegment2D.INDEX_COUNT * _db.length
         );
     }
 
@@ -204,8 +204,8 @@ function LineSegmentBatch(_renderer, _style) {
     this.drawLineSegment = function (
         screenPosition1,
         screenPosition2,
-        color,
-        screenThickness
+        screenThickness,
+        color
     ){
         if (_style.clearsDbAfterDrawing === false &&
             _isOkToAddItem === false) {
@@ -216,11 +216,15 @@ function LineSegmentBatch(_renderer, _style) {
             throw 'A begin-not-called-before-drawing exception raised.';
         }
 
-        var lineSegment = new LineSegment (
+        var lineSegment = new LineSegment2D (
+            // Part 1.
             _self,
+            // Part 2.
             screenPosition1, screenPosition2,
-            color,
-            screenThickness
+            // Part 3.
+            screenThickness,
+            // Part 4.
+            color
         );
 
         //var vb;
@@ -239,7 +243,7 @@ function LineSegmentBatch(_renderer, _style) {
 
         // vb.loadData (
         //     lineSegment.vertexPositions,
-        //     LineSegment.POSITION_SIZE
+        //     LineSegment2D.POSITION_SIZE
         // );
         _vertexPositions =
             _vertexPositions.concat(lineSegment.vertexPositions);
@@ -257,14 +261,14 @@ function LineSegmentBatch(_renderer, _style) {
 
         // vb.loadData (
         //     lineSegment.vertexColors,
-        //     LineSegment.COLOR_SIZE
+        //     LineSegment2D.COLOR_SIZE
         // );
         _vertexColors =
             _vertexColors.concat(lineSegment.vertexColors);
 
-        //var base = LineSegment.INDEX_COUNT * _db.length;
-        var base = LineSegment.VERTEX_COUNT * _db.length;
-        for (var i=0; i<LineSegment.INDEX_COUNT; i++) {
+        //var base = LineSegment2D.INDEX_COUNT * _db.length;
+        var base = LineSegment2D.VERTEX_COUNT * _db.length;
+        for (var i=0; i<LineSegment2D.INDEX_COUNT; i++) {
             //
             _indices.push(base + lineSegment.indices[i]);
         }
@@ -308,7 +312,7 @@ function LineSegmentBatch(_renderer, _style) {
 //
 // Static constants (after Object.freeze()).
 //
-LineSegmentBatch.VERTEX_SHADER_SOURCE = [
+LineSegment2DBatch.VERTEX_SHADER_SOURCE = [
     //
    'precision highp float;', // which is the default vertex shader precision.
 
@@ -334,7 +338,7 @@ LineSegmentBatch.VERTEX_SHADER_SOURCE = [
 
 ].join('\n');
 
-LineSegmentBatch.FRAGMENT_SHADER_SOURCE = [
+LineSegment2DBatch.FRAGMENT_SHADER_SOURCE = [
     //
    'precision mediump float;', // which is the recommended fragment shader precision.
 
@@ -346,6 +350,6 @@ LineSegmentBatch.FRAGMENT_SHADER_SOURCE = [
    
 ].join('\n');
 
-Object.freeze(LineSegmentBatch);
+Object.freeze(LineSegment2DBatch);
 
-export { LineSegmentBatch };
+export { LineSegment2DBatch };

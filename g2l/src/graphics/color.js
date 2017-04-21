@@ -47,7 +47,7 @@ Color.areEqual = function(value1, value2) {
     } else {
         return true;
     }
-}
+};
 
 Object.freeze(Color);
 

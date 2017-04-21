@@ -23,9 +23,7 @@ function World2DImage (
     var _centerScreenPosition;
     var _screenSize;
 
-    //
     // Styles.
-    //
     var _boundsScreenSize;
     var _minScreenSize;
     var _maxScreenSize;
@@ -38,6 +36,7 @@ function World2DImage (
             throw 'An argument-null exception raised.';
         }
 
+        // Styles.
         _boundsScreenSize = false;
         _minScreenSize = new Size2D(0, 0);
         _maxScreenSize = new Size2D(Number.MAX_VALUE, Number.MAX_VALUE);
@@ -139,18 +138,60 @@ function World2DImage (
         // Styles.
         //
         Object.defineProperty(_self, 'boundsScreenSize', {
-            'get': function() { return _boundsScreenSize; },
-            'set': function(value) { _boundsScreenSize = value; }
+            //
+            'get': function() {
+                //
+                return _boundsScreenSize;
+            },
+
+            'set': function(value) {
+                //
+                if (value === _boundsScreenSize) {
+                    return;
+                }
+
+                _boundsScreenSize = value;
+
+                update();
+            }
         });
 
         Object.defineProperty(_self, 'minScreenSize', {
-            'get': function() { return _minScreenSize; },
-            'set': function(value) { _minScreenSize = value; }
+            //
+            'get': function() {
+                //
+                return _minScreenSize;
+            },
+
+            'set': function(value) {
+                //
+                if (Size2D.areEqual(value, _minScreenSize) === true) {
+                    return;
+                }
+
+                _minScreenSize = value;
+
+                update();
+            }
         });
 
         Object.defineProperty(_self, 'maxScreenSize', {
-            'get': function() { return _maxScreenSize; },
-            'set': function(value) { _maxScreenSize = value; }
+            //
+            'get': function() {
+                //
+                return _maxScreenSize;
+            },
+
+            'set': function(value) {
+                //
+                if (Size2D.areEqual(value, _maxScreenSize) === true) {
+                    return;
+                }
+
+                _maxScreenSize = value;
+
+                update();
+            }
         });
 
         // Note:
@@ -259,7 +300,7 @@ World2DImage.prototype.boundScreenSize = function() {
 
     if (this.maxScreenSize.width < this.minScreenSize.width ||
         this.maxScreenSize.height < this.minScreenSize.height) {
-        throw new InvalidOperationException();
+        throw new 'An invalid-operation exception raised.';
     }
 
     // 1. Minimum size in screen space.

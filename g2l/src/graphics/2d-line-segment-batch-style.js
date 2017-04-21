@@ -3,12 +3,12 @@
 //
 // Constructor.
 //
-function LineSegmentBatchStyle() {
+function LineSegment2DBatchStyle() {
     //
     //this.areDbFrequentlyChanged = false;
     this.clearsDbAfterDrawing = true;
 }
 
-Object.freeze(LineSegmentBatchStyle);
+Object.freeze(LineSegment2DBatchStyle);
 
-export { LineSegmentBatchStyle };
+export { LineSegment2DBatchStyle };

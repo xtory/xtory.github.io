@@ -7,12 +7,12 @@ function main() {
     var title;
     var renderer;
     var loader;
-    var world2D;
+    var world; // 2D world.
 
     var textures;
-    var world2DImages;
-    var world2DImageCount;
-    var world2DLineSegments;
+    var worldImages;
+    var worldLineSegments;
+    var worldImageCount;
 
     // Info.
     var info;
@@ -33,13 +33,11 @@ function main() {
 
         loader = renderer.loader;
 
-        setUpWorld2D();
+        setUpWorld();
 
         setUpTextures();
 
-        setUpWorld2DImages();
-
-        setUpWorld2DLineSegments();
+        setUpWorldItems();
 
         setUpInfo();
 
@@ -61,12 +59,12 @@ function main() {
     //
     // Functions.
     //
-    function setUpWorld2D() {
+    function setUpWorld() {
         //
         var style = new g2l.World2DStyle();
         style.backgroundColor = g2l.Color.DEFAULT_BACKGROUND_COLOR;
 
-        world2D = new g2l.World2D(renderer, style);
+        world = new g2l.World2D(renderer, style);
     }
 
     function setUpTextures() {
@@ -91,47 +89,72 @@ function main() {
         }
     }
 
-    function setUpWorld2DImages() {
+    function setUpWorldItems() {
         //
-        world2DImages = [];
-        world2DImageCount = 2000;
+        worldImages = [];
+        worldLineSegments = [];
 
-        var world2DImageSize = new g2l.Size2D(64, 64);
+        worldImageCount = 500; //2000;
+
+        var worldImageSize = new g2l.Size2D(32, 32); // LA icon's default size: (32, 32)
+        var worldLineSegmentThickness = 1.5; // LA link's default thickness: 1.5
 
         var halfLength = 5000;
-        for (var i=0; i<world2DImageCount; i++) {
+        for (var i=0; i<worldImageCount; i++) {
             //
             var p = new g2l.Vector2D (
                 halfLength * (-0.5 + Math.random()), // -length/2 ~ length/2
                 halfLength * (-0.5 + Math.random())  // -length/2 ~ length/2
             );
 
-            var world2DImage = new g2l.World2DImage (
+            var worldImage = new g2l.World2DImage (
                 // Part 1.
-                world2D,
+                world,
                 // Part 2.
                 textures[i % textures.length],
                 // Part 3.
                 p,
                 // Part 4.
-                world2DImageSize,
+                worldImageSize
                 // Part 5.
-                undefined, //new g2l.Rect(0.25, 0.25, 0.5, 0.5),
+                //undefined, //new g2l.Rect(0.25, 0.25, 0.5, 0.5),
                 // Part 6.
-                new g2l.Color(0.5, 0.25, 0.25, 1)
+                //new g2l.Color(0.5, 0.25, 0.25, 1)
             );
 
-            world2D.addItem (
+            world.addItem (
                 g2l.World2DLayerName.MIDDLE_IMAGES,
-                world2DImage
+                worldImage
             );
 
-            world2DImages.push(world2DImage);            
+            worldImages.push(worldImage);
         }
-    }
 
-    function setUpWorld2DLineSegments() {
-        //
+        for (var i=1; i<worldImages.length; i++) {
+            //
+            var item1 = worldImages[i - 1];
+            var item2 = worldImages[i];
+
+            var worldLineSegment = new g2l.World2DLineSegment (
+                // Part 1.
+                world,
+                // Part 2.
+                item1.centerPosition, item2.centerPosition,
+                // Part 3.
+                worldLineSegmentThickness,
+                // Part 4.
+                new g2l.Color (
+                    Math.random(), Math.random(), Math.random(), 0.5
+                )
+            );
+
+            world.addItem (
+                g2l.World2DLayerName.LINE_SEGMENTS_BELOW_MIDDLE_IMAGES,
+                worldLineSegment
+            );
+
+            worldLineSegments.push(worldLineSegment);
+        }
     }
     
     function setUpInfo() {
@@ -174,14 +197,14 @@ function main() {
 
     function updateScene() {
         //
-        world2D.update();
+        world.update();
         
         fps.update();
     }
 
     function drawScene() {
         //
-        world2D.draw();
+        world.draw();
 
         drawInfo();
     }
@@ -198,9 +221,9 @@ function main() {
         info.fps.innerHTML = 'FPS: ' + fps.average;
 
         info.more.innerHTML = (
-            'World-to-screen scale factor: '+ world2D.worldToScreenScaleFactor.toFixed(5) + '<br>' +
-            'Drawn image count: ' + world2D.drawnImageCount + '<br>' +
-            'Drawn line segment count: ' + world2D.drawnLineSegmentCount
+            'World-to-screen scale factor: '+ world.worldToScreenScaleFactor.toFixed(5) + '<br>' +
+            'Drawn image count: ' + world.drawnImageCount + '<br>' +
+            'Drawn line segment count: ' + world.drawnLineSegmentCount
         );
     }
 
@@ -249,7 +272,7 @@ function main() {
 
             lastMouseScreenPosition = mouseScreenPosition;
 
-            world2D.move (
+            world.move (
                 g2l.Vector2D.negateVector(offset)
             );
         }
@@ -288,7 +311,7 @@ function main() {
 
         var delta = (event.deltaY < 0) ? 100 : -100;
 
-        world2D.zoomAt (
+        world.zoomAt (
             new g2l.Vector2D (
                 event.clientX,
                 renderer.canvas.clientHeight - event.clientY

@@ -62,7 +62,7 @@ ScreenCoordinateHelper.toClipSpace = function(canvas, p) {
         1.0 // w.
     );
     // :Note
-}
+};
 
 Object.freeze(ScreenCoordinateHelper);
 

@@ -11,6 +11,7 @@ import { IndexHelper }                         from '../../helpers/index-helper'
 import { MathHelper }                          from '../../math/helpers/math-helper';
 import { Size2D }                              from '../2d-size';
 import { SpriteBatch }                         from '../sprite-batch';
+import { LineSegment2DBatch }                  from '../2d-line-segment-batch';
 import { Vector2D }                            from '../../math/2d-vector';
 import { World2DBoundsChangedEvent }           from './2d-world-bounds-changed-event';
 import { World2DLayerName }                    from './2d-world-layer-name';
@@ -26,6 +27,7 @@ function World2D(_renderer, _style) {
     var _self;
     var _state;
     var _spriteBatch;
+    var _lineSegmentBatch;
 
     //
     // Bounds.
@@ -66,6 +68,7 @@ function World2D(_renderer, _style) {
         _state = new World2DStateNormal(_self);
 
         _spriteBatch = new SpriteBatch(_renderer);
+        _lineSegmentBatch = new LineSegment2DBatch(_renderer);
 
         _centerPosition = new Vector2D(0, 0);
         _worldToScreenScaleFactor = 1.0;
@@ -137,6 +140,10 @@ function World2D(_renderer, _style) {
 
     Object.defineProperty(_self, 'spriteBatch', {
         'get': function() { return _spriteBatch; }
+    });
+
+    Object.defineProperty(_self, 'lineSegmentBatch', {
+        'get': function() { return _lineSegmentBatch; }
     });
 
     //
@@ -403,8 +410,8 @@ function World2D(_renderer, _style) {
         // 3. Ends the sprite batch (if necessary).
         this.endSpriteBatch();
 
-        // // Ends the line-segment batch (if necessary).
-        // endLineSegmentBatch();
+        // Ends the line-segment batch (if necessary).
+        this.endLineSegmentBatch();
 
         // 4. Sets the last drawn item to null.
         _lastDrawnItem = null;
@@ -611,7 +618,34 @@ function World2D(_renderer, _style) {
     };
 
     this.endLineSegmentBatch = function() {
-        // No contents.
+        //
+        if (_lineSegmentBatch.isBegun === false) {
+            return;
+        }
+
+        var gl = _renderer.gl;
+
+        // Sets the graphics states.
+        // _scene.GraphicsDevice.AlphaBlendState =
+        //     AlphaBlendStates.Transparent;
+        gl.enable(gl.BLEND);
+
+        gl.blendFunc (
+            gl.SRC_ALPHA,
+            gl.ONE_MINUS_SRC_ALPHA
+        );
+
+        // _scene.GraphicsDevice.DepthStencilState =
+        //     DepthStencilStates.None;
+
+        // _scene.GraphicsDevice.RasterizerState =
+        //     RasterizerStates.CullCounterclockwise;
+
+        // _scene.GraphicsDevice.TextureBlendState =
+        //     TextureBlendStates.VertexColorOnly;
+
+        // Ends the line-segment batch.
+        _lineSegmentBatch.end();
     };
 
     this.convertPositionFromScreenToWorldSpace = function(screenPosition) {

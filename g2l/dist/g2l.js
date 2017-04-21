@@ -2650,44 +2650,132 @@ Object.freeze(IndexBuffer);
 //
 // Constructor.
 //
-function LineSegment (
+function Line2DIntersectionResult() {
+    // No contents.
+}
+
+//
+// Static constants (after Object.freeze()).
+//
+Line2DIntersectionResult.OBJECT_ON_LEFT_SIDE_OF_LINE    = 0;
+Line2DIntersectionResult.OBJECT_ON_RIGHT_SIDE_OF_LINE   = 1;
+Line2DIntersectionResult.OBJECT_INTERSECTING_OR_ON_LINE = 2;
+
+Object.freeze(Line2DIntersectionResult);
+
+//
+// Constructor.
+//
+function Line2DHelper() {
+    // No contents.
+}
+
+//
+// Static methods.
+//
+/// <summary>
+/// Checks if the line (not line segment) intersects the point.
+/// </summary>
+/// <param name="p1">One of the points on the line as the start position.</param>
+/// <param name="p2">One of the points on the line as the finish position.</param>
+/// <param name="p">The point to check.</param>
+/// <returns>A value indicates the point is on the left, right side of the
+/// line, or precisely on the line.</returns>
+Line2DHelper.lineIntersectsPoint = function(p1, p2, p) {
+    //
+//#if DEBUG
+    /*
+    var v1 = p2 - p1;
+    var v2 = p - p1;
+
+    // Note:
+    // We can call Vector2D.CalculatePerpendicularDotProductOf() instead
+    // to get the same result of calling these two lines of code below.
+    />
+    // Creates a perpendicular vector of v1 by rotating v1 90 degrees
+    // counterclockwise.
+    var v3 = Vector2D.createPerpendicularVectorOf(v1); 
+
+    // dot(v3, v2) = |v3||v2|cosOfTheta, where theta is the angle between
+    // v3 and v2.
+    var s = Vector2D.calculateDotProductOf(v3, v2);
+
+    // Then, because |v3| and |v2| are both positive and can't make cos-
+    // OfTheta become negative from positive, or vice versa, we're able
+    // to use cosOfTheta to know if theta is less than 90 degrees (when
+    // 0 < s), larger than 90 degrees (when s < 0), or equal to 90 degrees
+    // (when s = 0). And further, we're able to find if p is on the left
+    // , right side of the line, or on the line.
+    </
+
+    var s = Vector2D.calculatePerpendicularDotProductOf(v1, v2);
+    // :Note
+    */
+
+//#else // RELEASE
+
+    var s = (p2.x-p1.x)*(p.y-p1.y) - (p2.y-p1.y)*(p.x-p1.x);
+
+//#endif // DEBUG
+
+    if (MathHelper.EPSILON <= s) { // 0 < s
+    //
+        return Line2DIntersectionResult.OBJECT_ON_LEFT_SIDE_OF_LINE;
+
+    } else if (
+        s <= -MathHelper.EPSILON // s < 0
+    ){
+        return Line2DIntersectionResult.OBJECT_ON_RIGHT_SIDE_OF_LINE;
+
+    } else { // -MathHelper.EPSILON < s < MathHelper.EPSILON, s == 0
+        //
+        return Line2DIntersectionResult.OBJECT_INTERSECTING_OR_ON_LINE; 
+    }
+};
+
+Object.freeze(Line2DHelper);
+
+//
+// Constructor.
+//
+function LineSegment2D (
     _lineSegmentBatch,
     _screenPosition1,
     _screenPosition2,
-    _color,
-    _screenThickness
+    _screenThickness,
+    _color
 ){
     // 1. Vertex positions.
-    this.vertexPositions = LineSegment.createVertexPositions (
+    this.vertexPositions = LineSegment2D.createVertexPositions (
         _screenPosition1,
         _screenPosition2,
         _screenThickness
     );
     
     // 2. Vertex colors.
-    this.vertexColors = LineSegment.createVertexColors(_color);
+    this.vertexColors = LineSegment2D.createVertexColors(_color);
 
     // 3. Indices.
-    this.indices = LineSegment.DEFAULT_INDICES;
+    this.indices = LineSegment2D.DEFAULT_INDICES;
 }
 
 //
 // Static constants (after Object.freeze()).
 //
-LineSegment.VERTEX_COUNT  = 4;
-LineSegment.POSITION_SIZE = 3; // (x, y, z)
-LineSegment.COLOR_SIZE    = 4; // (r, g, b, a)
-LineSegment.INDEX_COUNT   = 6; // (0, 1, 2, 2, 1, 3)
+LineSegment2D.VERTEX_COUNT  = 4;
+LineSegment2D.POSITION_SIZE = 3; // (x, y, z)
+LineSegment2D.COLOR_SIZE    = 4; // (r, g, b, a)
+LineSegment2D.INDEX_COUNT   = 6; // (0, 1, 2, 2, 1, 3)
 
-LineSegment.DEFAULT_SCREEN_POSITION_DEPTH =
+LineSegment2D.DEFAULT_SCREEN_POSITION_DEPTH =
     DepthBufferValues.NEAR_CLIP_PLANE;
 
-LineSegment.DEFAULT_INDICES = [ 0, 1, 2, 2, 1, 3 ];
+LineSegment2D.DEFAULT_INDICES = [ 0, 1, 2, 2, 1, 3 ];
 
 //
 // Static methods.
 // 
-LineSegment.createVertexPositions = function (
+LineSegment2D.createVertexPositions = function (
     screenPosition1,
     screenPosition2,
     screenThickness
@@ -2786,10 +2874,10 @@ LineSegment.createVertexPositions = function (
     // :Test
 };
 
-LineSegment.createVertexColors = function(color) {
+LineSegment2D.createVertexColors = function(color) {
     //
     // Note:
-    // Sprite.createVertexColors() returns a Float32Array directly, but LineSegment
+    // Sprite.createVertexColors() returns a Float32Array directly, but LineSegment2D
     // doesn't.
     /*
     return new Float32Array ([
@@ -2808,20 +2896,20 @@ LineSegment.createVertexColors = function(color) {
     // :Note
 };
 
-Object.freeze(LineSegment);
+Object.freeze(LineSegment2D);
 
 // Note:
 // Sees the notes in the beginning of SpriteBatchStyle.
 //
 // Constructor.
 //
-function LineSegmentBatchStyle() {
+function LineSegment2DBatchStyle() {
     //
     //this.areDbFrequentlyChanged = false;
     this.clearsDbAfterDrawing = true;
 }
 
-Object.freeze(LineSegmentBatchStyle);
+Object.freeze(LineSegment2DBatchStyle);
 
 //
 // Constructor.
@@ -2843,7 +2931,7 @@ Object.freeze(PrimitiveType);
 //
 // Constructor.
 //
-function LineSegmentBatch(_renderer, _style) {
+function LineSegment2DBatch(_renderer, _style) {
     //
     var _self;
     var _gl;
@@ -2869,7 +2957,7 @@ function LineSegmentBatch(_renderer, _style) {
         _self = this;
 
         if (_style === undefined) {
-            _style = new LineSegmentBatchStyle();
+            _style = new LineSegment2DBatchStyle();
         }
 
         _gl = _renderer.gl;
@@ -2888,7 +2976,7 @@ function LineSegmentBatch(_renderer, _style) {
 
     } catch (e) {
         //
-        console.log('g2l.LineSegmentBatch: ' + e);
+        console.log('g2l.LineSegment2DBatch: ' + e);
 
         throw e;
     }
@@ -2947,8 +3035,8 @@ function LineSegmentBatch(_renderer, _style) {
     function setUpShaders() {
         //
         _program = _renderer.loader.setUpProgram (
-            LineSegmentBatch.VERTEX_SHADER_SOURCE,
-            LineSegmentBatch.FRAGMENT_SHADER_SOURCE
+            LineSegment2DBatch.VERTEX_SHADER_SOURCE,
+            LineSegment2DBatch.FRAGMENT_SHADER_SOURCE
         );
 
         _attributeLocations = {
@@ -2989,12 +3077,12 @@ function LineSegmentBatch(_renderer, _style) {
 
         _vertexBuffers.position.loadData (
             new Float32Array(_vertexPositions),
-            LineSegment.POSITION_SIZE
+            LineSegment2D.POSITION_SIZE
         );
 
         _vertexBuffers.color.loadData (
             new Float32Array(_vertexColors),
-            LineSegment.COLOR_SIZE
+            LineSegment2D.COLOR_SIZE
         );
 
         _indexBuffer.loadData (
@@ -3014,7 +3102,7 @@ function LineSegmentBatch(_renderer, _style) {
         _renderer.drawIndexedPrimitives (
             _indexBuffer,
             PrimitiveType.TRIANGLE_LIST,
-            LineSegment.INDEX_COUNT * _db.length
+            LineSegment2D.INDEX_COUNT * _db.length
         );
     }
 
@@ -3042,8 +3130,8 @@ function LineSegmentBatch(_renderer, _style) {
     this.drawLineSegment = function (
         screenPosition1,
         screenPosition2,
-        color,
-        screenThickness
+        screenThickness,
+        color
     ){
         if (_style.clearsDbAfterDrawing === false &&
             _isOkToAddItem === false) {
@@ -3054,11 +3142,15 @@ function LineSegmentBatch(_renderer, _style) {
             throw 'A begin-not-called-before-drawing exception raised.';
         }
 
-        var lineSegment = new LineSegment (
+        var lineSegment = new LineSegment2D (
+            // Part 1.
             _self,
+            // Part 2.
             screenPosition1, screenPosition2,
-            color,
-            screenThickness
+            // Part 3.
+            screenThickness,
+            // Part 4.
+            color
         );
 
         //var vb;
@@ -3077,7 +3169,7 @@ function LineSegmentBatch(_renderer, _style) {
 
         // vb.loadData (
         //     lineSegment.vertexPositions,
-        //     LineSegment.POSITION_SIZE
+        //     LineSegment2D.POSITION_SIZE
         // );
         _vertexPositions =
             _vertexPositions.concat(lineSegment.vertexPositions);
@@ -3095,14 +3187,14 @@ function LineSegmentBatch(_renderer, _style) {
 
         // vb.loadData (
         //     lineSegment.vertexColors,
-        //     LineSegment.COLOR_SIZE
+        //     LineSegment2D.COLOR_SIZE
         // );
         _vertexColors =
             _vertexColors.concat(lineSegment.vertexColors);
 
-        //var base = LineSegment.INDEX_COUNT * _db.length;
-        var base = LineSegment.VERTEX_COUNT * _db.length;
-        for (var i=0; i<LineSegment.INDEX_COUNT; i++) {
+        //var base = LineSegment2D.INDEX_COUNT * _db.length;
+        var base = LineSegment2D.VERTEX_COUNT * _db.length;
+        for (var i=0; i<LineSegment2D.INDEX_COUNT; i++) {
             //
             _indices.push(base + lineSegment.indices[i]);
         }
@@ -3146,7 +3238,7 @@ function LineSegmentBatch(_renderer, _style) {
 //
 // Static constants (after Object.freeze()).
 //
-LineSegmentBatch.VERTEX_SHADER_SOURCE = [
+LineSegment2DBatch.VERTEX_SHADER_SOURCE = [
     //
    'precision highp float;', // which is the default vertex shader precision.
 
@@ -3172,7 +3264,7 @@ LineSegmentBatch.VERTEX_SHADER_SOURCE = [
 
 ].join('\n');
 
-LineSegmentBatch.FRAGMENT_SHADER_SOURCE = [
+LineSegment2DBatch.FRAGMENT_SHADER_SOURCE = [
     //
    'precision mediump float;', // which is the recommended fragment shader precision.
 
@@ -3184,7 +3276,151 @@ LineSegmentBatch.FRAGMENT_SHADER_SOURCE = [
    
 ].join('\n');
 
-Object.freeze(LineSegmentBatch);
+Object.freeze(LineSegment2DBatch);
+
+//
+// Constructor.
+//
+function LineSegment2DHelper() {
+    // No contents.
+}
+
+//
+// Static methods.
+//
+/// <summary>
+/// Checks if the line segment intersects the bounds.
+/// </summary>
+/// <param name="p1">The line segment's start position in world space.</param>
+/// <param name="p2">The line segment's finish position in world space.</param>
+/// <param name="boundsCenterPosition">The bounds' center position in world space.</param>
+/// <param name="boundsSize">The bounds' size in world space.</param>
+/// <returns>True if the line segment intersects the rect; false if it
+/// doesn't.</returns>
+LineSegment2DHelper.lineSegmentIntersectsBounds = function (
+    p1,
+    p2,
+    boundsCenterPosition,
+    boundsSize
+){
+    var halfWidth = boundsSize.width * 0.5;
+    var halfHeight = boundsSize.height * 0.5;
+
+    var lowerLeftPosition = ( // in world space.
+        //
+        Vector2D.addVectors (
+            boundsCenterPosition,
+            new Vector2D(-halfWidth, -halfHeight)
+        )
+    );
+
+    var upperLeftPosition = (
+        //
+        Vector2D.addVectors (
+            boundsCenterPosition,
+            new Vector2D(-halfWidth,  halfHeight)
+        )
+    );
+
+    var upperRightPosition = (
+        //
+        Vector2D.addVectors (
+            boundsCenterPosition,
+            new Vector2D( halfWidth,  halfHeight)
+        )
+    );
+
+    var lowerRightPosition = (
+        //
+        Vector2D.addVectors (
+            boundsCenterPosition,
+            new Vector2D( halfWidth, -halfHeight)
+        )
+    );
+
+    // Note:
+    // Step 1:
+    // Checks if all four corners of the bounds (in world space) are on the same
+    // side of this line. If they are, return false.
+
+    var result1 = Line2DHelper.lineIntersectsPoint (
+        // Part 1.
+        p1, p2,
+        // Part 2.
+        lowerLeftPosition
+    );
+
+    var result2 = Line2DHelper.lineIntersectsPoint (
+        // Part 1.
+        p1, p2,
+        // Part 2.
+        upperLeftPosition
+    );
+
+    var result3 = Line2DHelper.lineIntersectsPoint (
+        // Part 1.
+        p1, p2,
+        // Part 2.
+        upperRightPosition
+    );
+
+    var result4 = Line2DHelper.lineIntersectsPoint (
+        // Part 1.
+        p1, p2,
+        // Part 2.
+        lowerRightPosition
+    );
+
+    // Note:
+    // If any one of the results is Intersecting, we assume the intersection
+    // possibly occurs and pass the Step 1's checkings.
+
+    if (result1 === Line2DIntersectionResult.OBJECT_ON_LEFT_SIDE_OF_LINE &&
+        result1 === result2 &&
+        result1 === result3 &&
+        result1 === result4) {
+        //
+        return false;
+
+    } else if (
+        result1 === Line2DIntersectionResult.OBJECT_ON_RIGHT_SIDE_OF_LINE &&
+        result1 === result2 &&
+        result1 === result3 &&
+        result1 === result4
+    ){
+        return false;
+    }
+
+    // Note:
+    // Step 2:
+    // Projects the line's two vertex positions onto the X axis (that is, Y = 0),
+    // and checks whether the line's shadow intersects the canvas' shadow. Repeat
+    // on the Y axis.
+
+    if (p1.x < upperLeftPosition.x &&
+        p2.x < upperLeftPosition.x) {
+        return false;
+    }
+
+    if (lowerRightPosition.x < p1.x &&
+        lowerRightPosition.x < p2.x) {
+        return false;
+    }
+
+    if (p1.y < lowerRightPosition.y &&
+        p2.y < lowerRightPosition.y) {
+        return false;
+    }
+
+    if (upperLeftPosition.y < p1.y &&
+        upperLeftPosition.y < p2.y) {
+        return false;
+    }
+
+    return true;
+};
+
+Object.freeze(LineSegment2DHelper);
 
 // Note:
 // NDC stands for 'normalized device coordinates'.
@@ -5228,7 +5464,7 @@ TextureCoordinateHelper.toST = function(u, v) {
         s: u,
         t: 1 - v
     };
-};    
+};
 
 Object.freeze(TextureCoordinateHelper);
 
@@ -5660,6 +5896,7 @@ function World2D(_renderer, _style) {
     var _self;
     var _state;
     var _spriteBatch;
+    var _lineSegmentBatch;
 
     //
     // Bounds.
@@ -5700,6 +5937,7 @@ function World2D(_renderer, _style) {
         _state = new World2DStateNormal(_self);
 
         _spriteBatch = new SpriteBatch(_renderer);
+        _lineSegmentBatch = new LineSegment2DBatch(_renderer);
 
         _centerPosition = new Vector2D(0, 0);
         _worldToScreenScaleFactor = 1.0;
@@ -5771,6 +6009,10 @@ function World2D(_renderer, _style) {
 
     Object.defineProperty(_self, 'spriteBatch', {
         'get': function() { return _spriteBatch; }
+    });
+
+    Object.defineProperty(_self, 'lineSegmentBatch', {
+        'get': function() { return _lineSegmentBatch; }
     });
 
     //
@@ -6037,8 +6279,8 @@ function World2D(_renderer, _style) {
         // 3. Ends the sprite batch (if necessary).
         this.endSpriteBatch();
 
-        // // Ends the line-segment batch (if necessary).
-        // endLineSegmentBatch();
+        // Ends the line-segment batch (if necessary).
+        this.endLineSegmentBatch();
 
         // 4. Sets the last drawn item to null.
         _lastDrawnItem = null;
@@ -6245,7 +6487,34 @@ function World2D(_renderer, _style) {
     };
 
     this.endLineSegmentBatch = function() {
-        // No contents.
+        //
+        if (_lineSegmentBatch.isBegun === false) {
+            return;
+        }
+
+        var gl = _renderer.gl;
+
+        // Sets the graphics states.
+        // _scene.GraphicsDevice.AlphaBlendState =
+        //     AlphaBlendStates.Transparent;
+        gl.enable(gl.BLEND);
+
+        gl.blendFunc (
+            gl.SRC_ALPHA,
+            gl.ONE_MINUS_SRC_ALPHA
+        );
+
+        // _scene.GraphicsDevice.DepthStencilState =
+        //     DepthStencilStates.None;
+
+        // _scene.GraphicsDevice.RasterizerState =
+        //     RasterizerStates.CullCounterclockwise;
+
+        // _scene.GraphicsDevice.TextureBlendState =
+        //     TextureBlendStates.VertexColorOnly;
+
+        // Ends the line-segment batch.
+        _lineSegmentBatch.end();
     };
 
     this.convertPositionFromScreenToWorldSpace = function(screenPosition) {
@@ -6510,15 +6779,197 @@ Object.freeze(World2DItem);
 //
 // Constructor.
 //
-function World2DLineSegment(_world) {
-    //
+function World2DLineSegment (
+    _world,
+    _startPosition,
+    _finishPosition,
+    _thickness,
+    _color
+){
     World2DItem.call(this, _world);
 
     var _self;
+    var _startScreenPosition;
+    var _finishScreenPosition;
+    var _screenThickness;
+
+    // Styles.
+    var _boundsScreenThickness;
+    var _minScreenThickness;
+    var _maxScreenThickness;
 
     try {
         //
         _self = this;
+
+        if (_thickness < 0) {
+            throw 'An invalid-length exception raised.';
+        }
+
+        // Styles.
+        _boundsScreenThickness = false;
+        _minScreenThickness = 0; // Thickness can't be < 0.
+        _maxScreenThickness = Number.MAX_VALUE;
+
+        // Note:
+        // Define properties before continuing.
+
+        // Note:
+        // The start position in world space.
+        Object.defineProperty(_self, 'startPosition', {
+            //
+            'get': function() {
+                return _startPosition;
+            },
+
+            'set': function(value) {
+                //
+                if (Vector2D.areEqual(value, _startPosition) === true) {
+                    return;
+                }
+
+                _startPosition = value;
+
+                _startScreenPosition =
+                    _world.convertPositionFromWorldToScreenSpace(_startPosition);
+
+                // Test:
+                _self.invalidateBounds();
+                // :Test
+            }
+        });
+
+        // Note:
+        // The finish position in world space.
+        Object.defineProperty(_self, 'finishPosition', {
+            //
+            'get': function() {
+                return _finishPosition;
+            },
+
+            'set': function(value) {
+                //
+                if (Vector2D.areEqual(value, _finishPosition) === true) {
+                    return;
+                }
+
+                _finishPosition = value;
+
+                _finishScreenPosition =
+                    _world.convertPositionFromWorldToScreenSpace(_finishPosition);
+
+                // Test:
+                _self.InvalidateBounds();
+                // :Test
+            }
+        });
+
+        Object.defineProperty(_self, 'startScreenPosition', {
+            'get': function() { return _startScreenPosition },
+            // Test:
+            'set': function(value) { _startScreenPosition = value; }
+            // :Test
+        });
+
+        Object.defineProperty(_self, 'finishScreenPosition', {
+            'get': function() { return _finishScreenPosition },
+            // Test:
+            'set': function(value) { _finishScreenPosition = value; }
+            // :Test
+        });
+
+        // Note:
+        // The thickness in world space.
+        Object.defineProperty(_self, 'thickness', {
+            //
+            'get': function() {
+                return _thickness;
+            },
+
+            'set': function(value) {
+                //
+                if (value === _thickness) {
+                    return;
+                }
+
+                _thickness = value;
+
+                update();
+            }
+        });
+
+        Object.defineProperty(_self, 'screenThickness', {
+            'get': function() { return _screenThickness },
+            // Test:
+            'set': function(value) { _screenThickness = value; }
+            // :Test
+        });
+
+        Object.defineProperty(_self, 'color', {
+            'get': function() { return _color },
+            'set': function(value) { _color = value; }
+        });
+
+        // Styles
+        Object.defineProperty(_self, 'boundsScreenThickness', {
+            //
+            'get': function() {
+                //
+                return _boundsScreenThickness
+            },
+
+            'set': function(value) {
+                //
+                if (value === _boundsScreenThickness) {
+                    return;
+                }
+
+                _boundsScreenThickness = value;
+
+                update();
+            }
+        });
+
+        Object.defineProperty(_self, 'minScreenThickness', {
+            //
+            'get': function() {
+                //
+                return _minScreenThickness
+            },
+
+            'set': function(value) {
+                //
+                if (value === _minScreenThickness) {
+                    return;
+                }
+
+                _minScreenThickness = value;
+
+                update();
+            }
+        });
+
+        Object.defineProperty(_self, 'maxScreenThickness', {
+            //
+            'get': function() {
+                //
+                return _maxScreenThickness
+            },
+
+            'set': function(value) {
+                //
+                if (value === _maxScreenThickness) {
+                    return;
+                }
+
+                _maxScreenThickness = value;
+
+                update();
+            }
+        });
+
+        // Calls Update() to calculate the positions and thickness in screen space.
+        this.update();
 
     } catch (e) {
         //
@@ -6529,6 +6980,144 @@ function World2DLineSegment(_world) {
 }
 
 JSHelper.inherit(World2DLineSegment, World2DItem);
+
+World2DLineSegment.prototype.update = function() {
+    //
+    // Note:
+    // See the note in World2DImage.update()
+
+    if (this.isEnabled === false) {
+        return;
+    }
+
+    // 1. Calculates the start/finish positions and thickness in screen space.
+    this.startScreenPosition =
+        this.world.convertPositionFromWorldToScreenSpace(this.startPosition);
+
+    this.finishScreenPosition =
+        this.world.convertPositionFromWorldToScreenSpace(this.finishPosition);
+
+    this.screenThickness =
+        this.thickness * this.world.worldToScreenScaleFactor;
+
+    // 2. Bounds the thickness in screen space (if necessary).
+    this.boundScreenThickness();
+};
+
+World2DLineSegment.prototype.draw = function() {
+    //
+    var world = this.world;
+    if (world.drawsItem(this) === false) {
+        return;
+    }
+    
+    if (world.lastDrawnItem === null) {
+        //
+        world.lineSegmentBatch.begin();
+
+    } else if (
+        (world.lastDrawnItem instanceof World2DImage) === true
+    ){
+        if (world.spriteBatch.IsBegun === true) {
+            world.endSpriteBatch();
+        }
+
+        world.lineSegmentBatch.begin();
+
+    } else if (
+       (world.lastDrawnItem instanceof World2DLineSegment) === true &&
+        world.lineSegmentBatch.isBegun === false
+    ){
+        // Note:
+        // This situation shouldn't happen. But if it does, begin the line-segment
+        // batch.
+
+        //Debug.Fail(new InvalidOperationException().ToString());
+        console.log('An invalid-operation exception raised.');
+
+        world.lineSegmentBatch.begin();
+    }
+
+    // Draws this line segment.
+    world.lineSegmentBatch.drawLineSegment (
+        new Vector3D (
+            this.startScreenPosition.x,
+            this.startScreenPosition.y,
+            LineSegment2D.DEFAULT_SCREEN_POSITION_DEPTH
+        ),
+        new Vector3D (
+            this.finishScreenPosition.x,
+            this.finishScreenPosition.y,
+            LineSegment2D.DEFAULT_SCREEN_POSITION_DEPTH
+        ),
+        this.screenThickness,
+        this.color
+    );
+
+    // Sets the canvas' last drawn item to this line segment.
+    world.lastDrawnItem = this;
+
+    // Increases the canvas' drawn line-segment count by 1.
+    world.drawnLineSegmentCount++;
+};
+
+World2DLineSegment.prototype.boundScreenThickness = function() {
+    //
+    if (this.boundsScreenThickness === false) {
+        return;
+    }
+
+    if (this.minScreenThickness < 0 ||
+        this.maxScreenThickness < 0) {
+        //
+        throw 'An invalid-operation exception raised.';
+    }
+
+    if (this.screenThickness < this.minScreenThickness) {
+        //
+        this.screenThickness = this.minScreenThickness;
+
+        // Note:
+        // Sets the line segment's thickness in screen space to min, but keeps the
+        // thickness in world space unchanged.
+        /*
+        this.thickness =
+            this.screenThickness / this.world.worldToScreenScaleFactor;
+        */
+
+    } else if (
+        this.maxScreenThickness < this.screenThickness
+    ){
+        this.screenThickness = this.maxScreenThickness;
+
+        // Note:
+        // See the note above.
+    }
+};
+
+//
+// Helpers
+//
+World2DLineSegment.prototype.checkIfOutOfBounds = function() {
+    //
+    var centerPosition = this.world.centerPosition;
+    var size = this.world.size;
+
+    if (LineSegment2DHelper.lineSegmentIntersectsBounds (
+            // Part 1.
+            this.startPosition, this.finishPosition,
+            // Part 2.
+            centerPosition, size
+            //
+        ) === true) {
+        //
+        this.isOutOfBounds = false;
+
+    } else {
+        //
+        this.isOutOfBounds = true;
+    }
+};
 
 Object.freeze(World2DLineSegment);
 
@@ -6549,9 +7138,7 @@ function World2DImage (
     var _centerScreenPosition;
     var _screenSize;
 
-    //
     // Styles.
-    //
     var _boundsScreenSize;
     var _minScreenSize;
     var _maxScreenSize;
@@ -6564,6 +7151,7 @@ function World2DImage (
             throw 'An argument-null exception raised.';
         }
 
+        // Styles.
         _boundsScreenSize = false;
         _minScreenSize = new Size2D(0, 0);
         _maxScreenSize = new Size2D(Number.MAX_VALUE, Number.MAX_VALUE);
@@ -6665,18 +7253,60 @@ function World2DImage (
         // Styles.
         //
         Object.defineProperty(_self, 'boundsScreenSize', {
-            'get': function() { return _boundsScreenSize; },
-            'set': function(value) { _boundsScreenSize = value; }
+            //
+            'get': function() {
+                //
+                return _boundsScreenSize;
+            },
+
+            'set': function(value) {
+                //
+                if (value === _boundsScreenSize) {
+                    return;
+                }
+
+                _boundsScreenSize = value;
+
+                update();
+            }
         });
 
         Object.defineProperty(_self, 'minScreenSize', {
-            'get': function() { return _minScreenSize; },
-            'set': function(value) { _minScreenSize = value; }
+            //
+            'get': function() {
+                //
+                return _minScreenSize;
+            },
+
+            'set': function(value) {
+                //
+                if (Size2D.areEqual(value, _minScreenSize) === true) {
+                    return;
+                }
+
+                _minScreenSize = value;
+
+                update();
+            }
         });
 
         Object.defineProperty(_self, 'maxScreenSize', {
-            'get': function() { return _maxScreenSize; },
-            'set': function(value) { _maxScreenSize = value; }
+            //
+            'get': function() {
+                //
+                return _maxScreenSize;
+            },
+
+            'set': function(value) {
+                //
+                if (Size2D.areEqual(value, _maxScreenSize) === true) {
+                    return;
+                }
+
+                _maxScreenSize = value;
+
+                update();
+            }
         });
 
         // Note:
@@ -6785,7 +7415,7 @@ World2DImage.prototype.boundScreenSize = function() {
 
     if (this.maxScreenSize.width < this.minScreenSize.width ||
         this.maxScreenSize.height < this.minScreenSize.height) {
-        throw new InvalidOperationException();
+        throw new 'An invalid-operation exception raised.';
     }
 
     // 1. Minimum size in screen space.
@@ -7015,8 +7645,12 @@ exports.Color = Color;
 exports.Colors = Colors;
 exports.DepthBufferValues = DepthBufferValues;
 exports.IndexBuffer = IndexBuffer;
-exports.LineSegmentBatch = LineSegmentBatch;
-exports.LineSegmentBatchStyle = LineSegmentBatchStyle;
+exports.Line2DHelper = Line2DHelper;
+exports.Line2DIntersectionResult = Line2DIntersectionResult;
+exports.LineSegment2D = LineSegment2D;
+exports.LineSegment2DBatch = LineSegment2DBatch;
+exports.LineSegment2DBatchStyle = LineSegment2DBatchStyle;
+exports.LineSegment2DHelper = LineSegment2DHelper;
 exports.NormalizedDeviceCoordinates = NormalizedDeviceCoordinates;
 exports.PositionColor = PositionColor;
 exports.PositionOnly = PositionOnly;
