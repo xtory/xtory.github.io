@@ -20,7 +20,7 @@ export { LineSegment2D }                              from './graphics/2d-line-s
 export { LineSegment2DBatch }                         from './graphics/2d-line-segment-batch';
 export { LineSegment2DBatchStyle }                    from './graphics/2d-line-segment-batch-style';
 export { LineSegment2DHelper }                        from './graphics/helpers/2d-line-segment-helper';
-export { NormalizedDeviceCoordinates }                from './graphics/normalized-device-coordinates';
+export { Ndc }                                        from './graphics/ndc';
 export { PositionColor }                              from './graphics/shaders/position-color';
 export { PositionOnly }                               from './graphics/shaders/position-only';
 export { PositionTextureCoordinates }                 from './graphics/shaders/position-texture-coordinates';

@@ -37,16 +37,16 @@ function World2DItem(_world) {
     // Properties.
     //
     Object.defineProperty(_self, 'world', {
-        'get': function() { return _world; }
+        get: function() { return _world; }
     });
 
     Object.defineProperty(_self, 'isEnabled', {
         //
-        'get': function() {
+        get: function() {
             return _isEnabled;
         },
 
-        'set': function(value) {
+        set: function(value) {
             //
             if (value === _isEnabled) {
                 return;
@@ -63,12 +63,12 @@ function World2DItem(_world) {
 
     Object.defineProperty(_self, 'isVisible', {
         //
-        'get': function() {
+        get: function() {
             //
             return _isVisible;
         },
 
-        'set': function(value) {
+        set: function(value) {
             //
             if (value === _isVisible) {
                 return;
@@ -91,12 +91,12 @@ function World2DItem(_world) {
 
     Object.defineProperty(_self, 'isSelected', {
         //
-        'get': function() {
+        get: function() {
             //
             return _isSelected;
         },
 
-        'set': function(value) {
+        set: function(value) {
             //
             if (value === _isSelected) {
                 return;
@@ -110,7 +110,7 @@ function World2DItem(_world) {
 
     Object.defineProperty(_self, 'isOutOfBounds', {
         //
-        'get': function() {
+        get: function() {
             //
             if (_hasToCheckBounds === true) {
                 //
@@ -122,7 +122,7 @@ function World2DItem(_world) {
             return _isOutOfBounds;
         },
 
-        'set': function(value) {
+        set: function(value) {
             //
             if (value === _isOutOfBounds) {
                 return;
@@ -135,13 +135,13 @@ function World2DItem(_world) {
     });
 
     Object.defineProperty(_self, 'tag', {
-        'get': function() { return _tag; },
-        'set': function(value) { _tag = value; }
+        get: function() { return _tag; },
+        set: function(value) { _tag = value; }
     });
 
     Object.defineProperty(_self, 'hasToCheckBounds', {
-        'get': function() { return _hasToCheckBounds; },
-        'set': function(value) { _hasToCheckBounds = value; }
+        get: function() { return _hasToCheckBounds; },
+        set: function(value) { _hasToCheckBounds = value; }
     });
 }
 

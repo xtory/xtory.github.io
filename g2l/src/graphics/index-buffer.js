@@ -25,11 +25,11 @@ function IndexBuffer(_bufferLoader) {
     // Properties.
     //
     Object.defineProperty(_self, 'bufferLoader', {
-        'get': function() { return _bufferLoader; }
+        get: function() { return _bufferLoader; }
     });
 
     Object.defineProperty(_self, 'webGLBuffer', {
-        'get': function() { return _webGLBuffer; }
+        get: function() { return _webGLBuffer; }
     });
 }
 

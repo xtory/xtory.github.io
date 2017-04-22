@@ -77,36 +77,36 @@ function Camera (
     // Properties.
     //
     Object.defineProperty(_self, 'renderer', {
-        'get': function() { return _renderer; }
+        get: function() { return _renderer; }
     });
 
     Object.defineProperty(_self, 'position', {
-        'get': function() { return _position; },
-        'set': function(value) { _position = value; }
+        get: function() { return _position; },
+        set: function(value) { _position = value; }
     });
 
     Object.defineProperty(_self, 'facingDirection', {
-        'get': function() { return _facingDirection; },
-        'set': function(value) { _facingDirection = value; }
+        get: function() { return _facingDirection; },
+        set: function(value) { _facingDirection = value; }
     });
 
     Object.defineProperty(_self, 'upDirection', {
-        'get': function() { return _upDirection; },
-        'set': function(value) { _upDirection = value; }
+        get: function() { return _upDirection; },
+        set: function(value) { _upDirection = value; }
     });
 
     Object.defineProperty(_self, 'distanceToNearPlane', {
-        'get': function() { return _distanceToNearPlane; },
-        'set': function(value) { _distanceToNearPlane = value; }
+        get: function() { return _distanceToNearPlane; },
+        set: function(value) { _distanceToNearPlane = value; }
     });
 
     Object.defineProperty(_self, 'distanceToFarPlane', {
-        'get': function() { return _distanceToFarPlane; },
-        'set': function(value) { _distanceToFarPlane = value; }
+        get: function() { return _distanceToFarPlane; },
+        set: function(value) { _distanceToFarPlane = value; }
     });
 
     Object.defineProperty(_self, 'viewFrustum', {
-        'get': function() { return _viewFrustum; }
+        get: function() { return _viewFrustum; }
     });
 
     //

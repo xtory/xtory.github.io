@@ -39,20 +39,20 @@
 //
 // Constructor.
 //
-function NormalizedDeviceCoordinates() {
+function Ndc() {
     // No contents.
 }
 
 //
 // Static constants (after Object.freeze()).
 //
-NormalizedDeviceCoordinates.MIN_X = -1; // Left.
-NormalizedDeviceCoordinates.MAX_X =  1; // Right.
-NormalizedDeviceCoordinates.MIN_Y = -1; // Bottom.
-NormalizedDeviceCoordinates.MAX_Y =  1; // Top.
-NormalizedDeviceCoordinates.MIN_Z = -1; // Near.
-NormalizedDeviceCoordinates.MAX_Z =  1; // Far.
+Ndc.MIN_X = -1; // Left.
+Ndc.MAX_X =  1; // Right.
+Ndc.MIN_Y = -1; // Bottom.
+Ndc.MAX_Y =  1; // Top.
+Ndc.MIN_Z = -1; // Near.
+Ndc.MAX_Z =  1; // Far.
 
-Object.freeze(NormalizedDeviceCoordinates);
+Object.freeze(Ndc);
 
-export { NormalizedDeviceCoordinates };
+export { Ndc };

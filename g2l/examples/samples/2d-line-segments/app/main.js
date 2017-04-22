@@ -10,6 +10,7 @@ function main() {
     var vertexBuffers;
     var program;
     var attributeLocations;
+    var uniformLocations;
 
     // Info.
     var info;
@@ -19,8 +20,8 @@ function main() {
 
     // Test
     var lineSegmentBatch;
-    var _options;
-    var _usesLineSegmentBatch;
+    var options;
+    var usesLineSegmentBatch;
 
     try {
         //
@@ -44,7 +45,7 @@ function main() {
 
         // Test
         lineSegmentBatch = new g2l.LineSegment2DBatch(renderer);
-        _usesLineSegmentBatch = false;
+        usesLineSegmentBatch = false;
 
         setUpShaders();
 
@@ -64,9 +65,13 @@ function main() {
     //
     function setUpShaders() {
         //
+        // program = loader.setUpProgram (
+        //     g2l.TransformedPositionColor.VERTEX_SHADER_SOURCE,
+        //     g2l.TransformedPositionColor.FRAGMENT_SHADER_SOURCE
+        // );
         program = loader.setUpProgram (
-            g2l.TransformedPositionColor.VERTEX_SHADER_SOURCE,
-            g2l.TransformedPositionColor.FRAGMENT_SHADER_SOURCE
+            g2l.LineSegment2DBatch.VERTEX_SHADER_SOURCE,
+            g2l.LineSegment2DBatch.FRAGMENT_SHADER_SOURCE
         );
 
         attributeLocations = {
@@ -79,6 +84,14 @@ function main() {
             vertexColor: renderer.getAttributeLocation (
                 program,
                'vertexColor'
+            )
+        };
+
+        uniformLocations = {
+            //
+            canvasClientSize: renderer.getUniformLocation (
+                program,
+               'canvasClientSize'
             )
         };
     }
@@ -105,17 +118,17 @@ function main() {
         then = 0;
         lastAverageFps = 0;
 
-        _options = [];
+        options = [];
         
         var option = document.getElementById('none');
         option.addEventListener('click', onClick);
-        _options.push(option);
+        options.push(option);
 
         option = document.getElementById('batching');
         option.addEventListener('click', onClick);
-        _options.push(option);
+        options.push(option);
 
-        _options[0].click();
+        options[0].click();
     }
 
     function updateScene() {
@@ -139,8 +152,19 @@ function main() {
         var p3 = new g2l.Vector3D(p.x-250, p.y,     0.5);
         var p4 = new g2l.Vector3D(p.x+250, p.y,     0.5);
 
-        if (_usesLineSegmentBatch === false) {
+        if (usesLineSegmentBatch === false) {
             //
+            renderer.program = program;
+
+            // Sets the shared uniform.
+            renderer.setVector2DUniform (
+                uniformLocations.canvasClientSize,
+                new Float32Array ([
+                    renderer.canvas.clientWidth,
+                    renderer.canvas.clientHeight
+                ])
+            );
+
             drawLineSegment (
                 // Part 1.
                 p1, p2,
@@ -199,8 +223,6 @@ function main() {
             screenThickness,
             color
         );
-
-        renderer.program = program;
 
         renderer.setAttribute (
             attributeLocations.vertexPosition,
@@ -261,54 +283,31 @@ function main() {
         // Use the imagination above, 4 corners are then found below.
 
         v = g2l.Vector2D.multiplyVectorByScalar(v, halfScreenThickness);
-        var lowerRightCorner = g2l.Vector2D.subtractVectors(p2, v); // p2 - v
-        var upperRightCorner = g2l.Vector2D.addVectors(p2, v);      // p2 + v
-        var lowerLeftCorner  = g2l.Vector2D.subtractVectors(p1, v); // p1 - v
-        var upperLeftCorner  = g2l.Vector2D.addVectors(p1, v);      // p1 + v
 
-        var p3 = new g2l.Vector3D (
-            lowerRightCorner.x,
-            lowerRightCorner.y,
-            screenPosition2.z
-        );
-
-        var p4 = new g2l.Vector3D (
-            upperRightCorner.x,
-            upperRightCorner.y,
-            screenPosition2.z
-        );
-
-        var p5 = new g2l.Vector3D (
-            lowerLeftCorner.x,
-            lowerLeftCorner.y,
-            screenPosition1.z
-        );
-
-        var p6 = new g2l.Vector3D (
-            upperLeftCorner.x,
-            upperLeftCorner.y,
-            screenPosition1.z
-        );
+        // Lower right.
+        var p3 = g2l.Vector2D.subtractVectors(p2, v); // p2 - v
         
-        var vertexPositions = [ p3, p4, p5, p6 ];
+        // Upper right.
+        var p4 = g2l.Vector2D.addVectors(p2, v); // p2 + v
 
-        var vertexPositions2 = [];
+        // Lower left.
+        var p5 = g2l.Vector2D.subtractVectors(p1, v); // p1 - v
 
-        for (var i=0; i<vertexPositions.length; i++) {
-            //
-            var item = vertexPositions[i];
+        // Upper left.
+        var p6 = g2l.Vector2D.addVectors(p1, v); // p1 + v
 
-            var p = g2l.ScreenCoordinateHelper.toClipSpace (
-                renderer.canvas,
-                item
-            );
+        var vertexPositions = new Float32Array ([
+            // Part 1: Lower right corner.
+            p3.x, p3.y, screenPosition2.z,
+            // Part 2: Upper right corner.
+            p4.x, p4.y, screenPosition2.z,
+            // Part 3: Lower left corner.
+            p5.x, p5.y, screenPosition1.z,
+            // Part 4: Upper left corner.
+            p6.x, p6.y, screenPosition1.z
+        ]);
 
-            vertexPositions2 = vertexPositions2.concat(p.toArray());
-        }
-
-        var vertexPositions3 = new Float32Array(vertexPositions2);
-
-        vertexBuffers.position.loadData(vertexPositions3, 4);
+        vertexBuffers.position.loadData(vertexPositions, 3);
 
         //
         // Vertex colors.
@@ -350,19 +349,19 @@ function main() {
     //
     function onClick(event) {
         //
-        if (event.target === _options[0]) {
+        if (event.target === options[0]) {
             //
-            _usesLineSegmentBatch = false;
+            usesLineSegmentBatch = false;
 
         } else if (
-            event.target === _options[1]
+            event.target === options[1]
         ){
-            _usesLineSegmentBatch = true;
+            usesLineSegmentBatch = true;
         }
 
-        for (var i=0; i<_options.length; i++) {
+        for (var i=0; i<options.length; i++) {
             //
-            var item = _options[i];
+            var item = options[i];
 
             if (item === event.target) {
                 //

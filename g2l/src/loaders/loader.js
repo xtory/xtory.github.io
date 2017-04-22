@@ -39,7 +39,7 @@ function Loader(_renderer) {
         _gl = _renderer.gl;
 
         Object.defineProperty(_self, 'renderer', {
-            'get': function() { return _renderer; }
+            get: function() { return _renderer; }
         })
     }
     

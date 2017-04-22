@@ -58,11 +58,11 @@ function Renderer(_canvas, _style) {
     // Properties.
     //
     Object.defineProperty(_self, 'canvas', {
-        'get': function() { return _canvas; }
+        get: function() { return _canvas; }
     });
     
     Object.defineProperty(_self, 'gl', {
-        'get': function() { return _gl; }
+        get: function() { return _gl; }
     });
 
     // Note:
@@ -73,7 +73,7 @@ function Renderer(_canvas, _style) {
     /*
     Object.defineProperty(_self, 'viewport', {
         //
-        'get': function() {
+        get: function() {
             //
             var value = _gl.getParameter(_gl.VIEWPORT);
 
@@ -85,7 +85,7 @@ function Renderer(_canvas, _style) {
             return new Viewport(p3.x, p3.y, p4.x, p4.y);
         },
 
-        'set': function(value) {
+        set: function(value) {
             //
             var p1 = new Vector2D(value[0], value[1]);
             var p2 = new Vector2D(value[2], value[3]);

@@ -46,11 +46,11 @@ function SmoothCamera (
     //
     Object.defineProperty(_self, 'state', {
         //
-        'get': function() {
+        get: function() {
             return _state;
         },
 
-        'set': function(value) {
+        set: function(value) {
             //
             if (value === _state) {
                 return;
@@ -63,8 +63,8 @@ function SmoothCamera (
     });
 
     Object.defineProperty(_self, 'zoomingDuration', {
-       'get': function() { return _zoomingDuration; },
-       'set': function(value) { _zoomingDuration = value; }
+       get: function() { return _zoomingDuration; },
+       set: function(value) { _zoomingDuration = value; }
     });
 
     //

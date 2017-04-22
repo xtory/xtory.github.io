@@ -25,7 +25,7 @@ function ProgramLoader(_loader) {
     // Properties.
     //
     Object.defineProperty(_self, 'loader', {
-        'get': function() { return _loader; }
+        get: function() { return _loader; }
     })
 
     //

@@ -99,16 +99,16 @@ function World2D(_renderer, _style) {
     // Properties.
     //
     Object.defineProperty(_self, 'renderer', {
-        'get': function() { return _renderer; }
+        get: function() { return _renderer; }
     });
 
     Object.defineProperty(_self, 'style', {
         //
-        'get': function() {
+        get: function() {
             return _style;
         },
 
-        'set': function(value) {
+        set: function(value) {
             //
             if (value === _style) {
                 return;
@@ -122,11 +122,11 @@ function World2D(_renderer, _style) {
 
     Object.defineProperty(_self, 'state', {
         //
-        'get': function() {
+        get: function() {
             return _state;
         },
 
-        'set': function(value) {
+        set: function(value) {
             //
             if (value === _state) {
                 return;
@@ -139,41 +139,41 @@ function World2D(_renderer, _style) {
     });
 
     Object.defineProperty(_self, 'spriteBatch', {
-        'get': function() { return _spriteBatch; }
+        get: function() { return _spriteBatch; }
     });
 
     Object.defineProperty(_self, 'lineSegmentBatch', {
-        'get': function() { return _lineSegmentBatch; }
+        get: function() { return _lineSegmentBatch; }
     });
 
     //
     // Extent.
     //
     Object.defineProperty(_self, 'centerPosition', {
-        'get': function() { return _centerPosition; }
+        get: function() { return _centerPosition; }
     });
 
     Object.defineProperty(_self, 'size', {
-        'get': function() { return _size; }
+        get: function() { return _size; }
     });
 
     Object.defineProperty(_self, 'worldToScreenScaleFactor', {
-        'get': function() { return _worldToScreenScaleFactor; }
+        get: function() { return _worldToScreenScaleFactor; }
     });
 
     Object.defineProperty(_self, 'drawnImageCount', {
-        'get': function() { return _drawnImageCount; },
-        'set': function(value) { _drawnImageCount = value; }
+        get: function() { return _drawnImageCount; },
+        set: function(value) { _drawnImageCount = value; }
     });
 
     Object.defineProperty(_self, 'drawnLineSegmentCount', {
-        'get': function() { return _drawnLineSegmentCount; },
-        'set': function(value) { _drawnLineSegmentCount = value; }
+        get: function() { return _drawnLineSegmentCount; },
+        set: function(value) { _drawnLineSegmentCount = value; }
     });
 
     Object.defineProperty(_self, 'lastDrawnItem', {
-        'get': function() { return _lastDrawnItem; },
-        'set': function(value) { _lastDrawnItem = value; }
+        get: function() { return _lastDrawnItem; },
+        set: function(value) { _lastDrawnItem = value; }
     });
 
     //

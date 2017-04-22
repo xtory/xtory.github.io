@@ -17,16 +17,16 @@ function Rect(_left, _bottom, _width, _height) {
 }
 
 Object.defineProperty(Rect.prototype, 'right', {
-    'get': function() { return this.left + this.width; }
+    get: function() { return this.left + this.width; }
 });
 
 Object.defineProperty(Rect.prototype, 'top', {
-    'get': function() { return this.bottom + this.height; }
+    get: function() { return this.bottom + this.height; }
 });
 
 Object.defineProperty(Rect.prototype, 'center', {
     //
-    'get': function() {
+    get: function() {
         //
         return new Vector2D (
             this.left + this.width * 0.5,
@@ -37,7 +37,7 @@ Object.defineProperty(Rect.prototype, 'center', {
 
 Object.defineProperty(Rect.prototype, 'size', {
     //
-    'get': function() { return new Vector2D(this.width, this.height); }
+    get: function() { return new Vector2D(this.width, this.height); }
 });
 
 Rect.areEqual = function(rect1, rect2) {

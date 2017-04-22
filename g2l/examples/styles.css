@@ -21,7 +21,7 @@ html, body {
     font-family: 'Consolas';
     font-weight: bold;
     font-style: italic;
-    font-size: medium;
+    font-size: large;
     color: rgba(155, 134, 156, 1); /*#9B869C*/
     letter-spacing: 1px;
     pointer-events: none;
@@ -32,18 +32,36 @@ html, body {
     -webkit-touch-callout: none; /* iOS Safari */
     -ms-user-select:       none; /* Internet Explorer/Edge */
     -khtml-user-select:    none; /* Konqueror HTML */
+
+    /*text-shadow:
+    -1px -1px 3px rgba(32, 32, 32, 0.75),
+     1px -1px 3px rgba(32, 32, 32, 0.75),
+    -1px  1px 3px rgba(32, 32, 32, 0.75),
+     1px  1px 3px rgba(32, 32, 32, 0.75);*/
 }
 
 .title {
     margin-bottom: 5px;
-    font-size: x-large;
+    font-size: xx-large;
     color: rgba(255, 152, 0, 1); /*#FF9800;*/
+
+    text-shadow:
+    -1px -1px 3px rgba(32, 32, 32, 0.75),
+     1px -1px 3px rgba(32, 32, 32, 0.75),
+    -1px  1px 3px rgba(32, 32, 32, 0.75),
+     1px  1px 3px rgba(32, 32, 32, 0.75);
 }
 
 .fps {
     margin-bottom: 15px;
-    font-size: large;
+    font-size: x-large;
     color: rgba(224, 224, 224, 1);
+
+    text-shadow:
+    -1px -1px 1px rgba(32, 32, 32, 0.75),
+     1px -1px 1px rgba(32, 32, 32, 0.75),
+    -1px  1px 1px rgba(32, 32, 32, 0.75),
+     1px  1px 1px rgba(32, 32, 32, 0.75);
 }
 
 .clickable {

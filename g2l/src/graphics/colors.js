@@ -21,16 +21,17 @@ Colors.DEFAULT_BACKGROUND = new Color(32/255, 32/255, 32/255, 1);
 Colors.BLACK       = new Color(0, 0, 0, 1);
 Colors.WHITE       = new Color(1, 1, 1, 1);
 Colors.TRANSPARENT = new Color(1, 1, 1, 0);
-Colors.SKY_BLUE    = new Color(135/255, 206/255, 235/255, 1);
-Colors.CADET_BLUE  = new Color(95/255, 158/255, 160/255, 1);
 
+Colors.SKY_BLUE    = new Color(135/255, 206/255, 235/255, 1);
+Colors.CADET_BLUE  = new Color( 95/255, 158/255, 160/255, 1);
+Colors.PINK        = new Color(255/255, 192/255, 203/255, 1);
 //
 // Photoshop
 //
 // Red.
 // (PS, There's no PHOTOSHOP_PASTEL_RED (cuz it's ugly), use PINK instead.)
 //
-Colors.PINK = new Color(255/255, 192/255, 203/255, 1);
+//Colors.PHOTOSHOP_PASTEL_RED = new Color(...);
 Colors.PHOTOSHOP_DARK_RED = new Color(157/255, 10/255, 14/255, 1);
 
 //

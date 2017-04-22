@@ -39,24 +39,24 @@ function CameraStateZooming (
     // Properties.
     //
     Object.defineProperty(_self, 'sineEase', {
-        'get': function() { return _sineEase; }
+        get: function() { return _sineEase; }
     });
 
     Object.defineProperty(_self, 'distance', {
-        'get': function() { return _distance; }
+        get: function() { return _distance; }
     });
 
     Object.defineProperty(_self, 'zoomedDistance', {
-        'get': function() { return _zoomedDistance; },
-        'set': function(value) { _zoomedDistance = value; }
+        get: function() { return _zoomedDistance; },
+        set: function(value) { _zoomedDistance = value; }
     });
 
     Object.defineProperty(_self, 'updatingCallback', {
-        'get': function() { return _updatingCallback; }
+        get: function() { return _updatingCallback; }
     });
 
     Object.defineProperty(_self, 'finishingCallback', {
-        'get': function() { return _finishingCallback; }
+        get: function() { return _finishingCallback; }
     });
 }
 

@@ -25,11 +25,11 @@ function Program(_programLoader) {
     // Properties.
     //
     Object.defineProperty(_self, 'programLoader', {
-        'get': function() { return _programLoader; }
+        get: function() { return _programLoader; }
     });
 
     Object.defineProperty(_self, 'webGLProgram', {
-        'get': function() { return _webGLProgram; }
+        get: function() { return _webGLProgram; }
     });
 }
 

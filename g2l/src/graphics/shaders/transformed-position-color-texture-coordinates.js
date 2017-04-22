@@ -10,37 +10,37 @@ function TransformedPositionColorTextureCoordinates() {
 //
 TransformedPositionColorTextureCoordinates.VERTEX_SHADER_SOURCE = [
     //
-   'precision highp float;', // which is the default vertex shader precision.
+    'precision highp float;', // which is the default vertex shader precision.
 
-   'attribute vec4 vertexPosition;',
-   'attribute vec4 vertexColor;',
-   'attribute vec2 vertexTextureCoordinates;',
+    'attribute vec4 vertexPosition;',
+    'attribute vec4 vertexColor;',
+    'attribute vec2 vertexTextureCoordinates;',
 
-   'varying vec4 color;',
-   'varying vec2 textureCoordinates;',
+    'varying vec4 _color;',
+    'varying vec2 _textureCoordinates;',
 
-   'void main() {',
+    'void main() {',
         //
-       'gl_Position = vertexPosition;',
+        'gl_Position = vertexPosition;',
        
-       'color = vertexColor;',
-       'textureCoordinates = vertexTextureCoordinates;',
-   '}'
+        '_color = vertexColor;',
+        '_textureCoordinates = vertexTextureCoordinates;',
+    '}'
 
 ].join('\n');
 
 TransformedPositionColorTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
     //
-   'precision mediump float;', // which is the recommended fragment shader precision.
+    'precision mediump float;', // which is the recommended fragment shader precision.
 
-   'varying vec4 color;',
-   'varying vec2 textureCoordinates;',
+    'uniform sampler2D sampler;',
 
-   'uniform sampler2D sampler;',
+    'varying vec4 _color;',
+    'varying vec2 _textureCoordinates;',
 
-   'void main() {',
-       'gl_FragColor = color * texture2D(sampler, textureCoordinates);',
-   '}'
+    'void main() {',
+        'gl_FragColor = _color * texture2D(sampler, _textureCoordinates);',
+    '}'
    
 ].join('\n');
 

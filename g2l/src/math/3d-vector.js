@@ -23,7 +23,7 @@ Vector3D.prototype = {
 };
 
 Object.defineProperty(Vector3D.prototype, 'xy', {
-    'get': function() { return new Vector2D(this.x, this.y); }
+    get: function() { return new Vector2D(this.x, this.y); }
 });
 
 //

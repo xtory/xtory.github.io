@@ -1,8 +1,8 @@
 // Note:
 // NDC stands for 'normalized device coordinates'.
 
-import { NormalizedDeviceCoordinates  } from '../normalized-device-coordinates';
-import { Vector4D  } from '../../math/4d-vector';
+import { Ndc } from '../ndc';
+import { Vector4D } from '../../math/4d-vector';
 
 //
 // Constructor.
@@ -31,13 +31,13 @@ ScreenCoordinateHelper.toClipSpace = function(canvas, p) {
     /*
     return new Vector3D (
         // Part 1.
-        NormalizedDeviceCoordinates.MIN_X +
+        Ndc.MIN_X +
         ((p.x - 0.5) / viewport.width) *
-        (NormalizedDeviceCoordinates.MAX_X - NormalizedDeviceCoordinates.MIN_X),
+        (Ndc.MAX_X - Ndc.MIN_X),
         // Part 2.
-        NormalizedDeviceCoordinates.MIN_Y +
+        Ndc.MIN_Y +
         ((p.y - 0.5) / viewport.height) *
-        (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y),
+        (Ndc.MAX_Y - Ndc.MIN_Y),
         // Part 3.
         p.z,
         // Part 4.
@@ -47,17 +47,17 @@ ScreenCoordinateHelper.toClipSpace = function(canvas, p) {
 
     return new Vector4D (
         // Part 1.
-        NormalizedDeviceCoordinates.MIN_X + // = -1
+        Ndc.MIN_X + // = -1
         (p.x / canvas.clientWidth) *
-        (NormalizedDeviceCoordinates.MAX_X - NormalizedDeviceCoordinates.MIN_X), // = 2
+        (Ndc.MAX_X - Ndc.MIN_X), // = 2
         // Part 2.
-        NormalizedDeviceCoordinates.MIN_Y + // = -1
+        Ndc.MIN_Y + // = -1
         (p.y / canvas.clientHeight) *
-        (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y), // = 2
+        (Ndc.MAX_Y - Ndc.MIN_Y), // = 2
         // Part 3.
-        NormalizedDeviceCoordinates.MIN_Z + // = -1
+        Ndc.MIN_Z + // = -1
         p.z *
-        (NormalizedDeviceCoordinates.MAX_Z - NormalizedDeviceCoordinates.MIN_Z), // = 2
+        (Ndc.MAX_Z - Ndc.MIN_Z), // = 2
         // Part 4.
         1.0 // w.
     );

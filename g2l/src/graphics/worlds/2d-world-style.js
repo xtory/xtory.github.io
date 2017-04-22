@@ -5,7 +5,7 @@ import { Colors } from '../colors';
 //
 function World2DStyle() {
     //
-    this.backgroundColor                    = Colors.WHITE;
+    this.backgroundColor                    = Colors.DEFAULT_BACKGROUND_COLOR;
     this.zoomDuration                       = 250; // in milliseconds.
     this.zoomScaleFactor                    = 2.0;
     this.hitLineSegmentScreenThicknessTimes = 5.0;

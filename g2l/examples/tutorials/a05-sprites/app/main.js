@@ -46,34 +46,45 @@ function main() {
     function setUpShaders() {
         //
         program = loader.setUpProgram (
-            g2l.TransformedPositionColorTextureCoordinates.VERTEX_SHADER_SOURCE,
-            g2l.TransformedPositionColorTextureCoordinates.FRAGMENT_SHADER_SOURCE
+            g2l.SpriteBatch.VERTEX_SHADER_SOURCE,
+            g2l.SpriteBatch.FRAGMENT_SHADER_SOURCE
         );
 
         attributeLocations = {
             //
             vertexPosition: renderer.getAttributeLocation (
                 program,
-               'vertexPosition'
-            ),
-
-            vertexColor: renderer.getAttributeLocation (
-                program,
-               'vertexColor'
+                'vertexPosition'
             ),
 
             vertexTextureCoordinates: renderer.getAttributeLocation (
                 program,
-               'vertexTextureCoordinates'
+                'vertexTextureCoordinates'
             )
         };
-
+        
         uniformLocations = {
             //
-            sampler: renderer.getUniformLocation (
-                program,
-               'sampler'
-            )
+            shared: {
+                //
+                canvasClientSize: renderer.getUniformLocation (
+                    program,
+                    'canvasClientSize'
+                )
+            },
+
+            unique: {
+                //
+                color: renderer.getUniformLocation (
+                    program,
+                    'color'
+                ),
+
+                sampler: renderer.getUniformLocation (
+                    program,
+                    'sampler'
+                )
+            }
         };
     }
 
@@ -100,14 +111,19 @@ function main() {
 
         renderer.program = program;
 
+        // Sets the shared uniforms.
+        renderer.setVector2DUniform (
+            uniformLocations.shared.canvasClientSize,
+            new Float32Array ([
+                renderer.canvas.clientWidth,
+                renderer.canvas.clientHeight
+            ])
+        );
+
+        // Sets the attributes.
         renderer.setAttribute (
             attributeLocations.vertexPosition,
             vertexBuffers.position
-        );
-
-        renderer.setAttribute (
-            attributeLocations.vertexColor,
-            vertexBuffers.color
         );
 
         renderer.setAttribute (
@@ -115,11 +131,19 @@ function main() {
             vertexBuffers.textureCoordinates
         );
 
-        renderer.setSampler (
-            uniformLocations.sampler,
-            texture
+        // Sets the unique uniforms.
+        renderer.setVector4DUniform (
+            uniformLocations.unique.color,
+            new Float32Array (
+                g2l.Colors.PHOTOSHOP_DARK_GREEN.toArray()
+            )
         );
 
+        renderer.setSampler (
+            uniformLocations.unique.sampler,
+            texture
+        );
+        
         renderer.drawPrimitives (
             g2l.PrimitiveType.TRIANGLE_STRIP,
             0,
@@ -131,7 +155,6 @@ function main() {
         //
         vertexBuffers = {
             position: loader.createVertexBuffer(),
-            color: loader.createVertexBuffer(),
             textureCoordinates: loader.createVertexBuffer()
         };
 
@@ -141,50 +164,16 @@ function main() {
         var halfWidth = w * 0.5;
         var halfHeight = h * 0.5;
 
-        var vertexPositions = [
-            new g2l.Vector3D(x+halfWidth, y-halfHeight, 0),
-            new g2l.Vector3D(x+halfWidth, y+halfHeight, 0),
-            new g2l.Vector3D(x-halfWidth, y-halfHeight, 0),
-            new g2l.Vector3D(x-halfWidth, y+halfHeight, 0) 
-        ];
-
-        var vertexPositions2 = [];
-        for (var i=0; i<vertexPositions.length; i++) {
-            //
-            var item = vertexPositions[i];
-
-            var p = g2l.ScreenCoordinateHelper.toClipSpace (
-                renderer.canvas,
-                item
-            );
-
-            vertexPositions2 = vertexPositions2.concat(p.toArray());
-        }
-
-        var vertexPositions3 = new Float32Array(vertexPositions2);
+        var vertexPositions = new Float32Array ([
+            x+halfWidth, y-halfHeight, 0,
+            x+halfWidth, y+halfHeight, 0,
+            x-halfWidth, y-halfHeight, 0,
+            x-halfWidth, y+halfHeight, 0 
+        ]);
 
         vertexBuffers.position.loadData (
-            vertexPositions3,
-            4
-        );
-
-        //
-        // Vertex colors.
-        //
-        var vertexColors = [];
-
-        for (var i=0; i<4; i++) {
-            //
-            vertexColors = vertexColors.concat (
-                g2l.Colors.WHITE.toArray()
-            );
-        }
-
-        var vertexColors2 = new Float32Array(vertexColors);
-
-        vertexBuffers.color.loadData (
-            vertexColors2,
-            4
+            vertexPositions,
+            3
         );
 
         //

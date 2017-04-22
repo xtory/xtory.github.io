@@ -25,22 +25,22 @@ function Texture2D(_textureLoader) {
     // Properties.
     //
     Object.defineProperty(_self, 'loader', {
-        'get': function() { return _loader; }
+        get: function() { return _loader; }
     });
 
     Object.defineProperty(_self, 'width', {
-        'get': function() { return _width; },
-        'set': function(value) { _width = value; }
+        get: function() { return _width; },
+        set: function(value) { _width = value; }
     });
 
     Object.defineProperty(_self, 'height', {
-        'get': function() { return _height; },
-        'set': function(value) { _height = value; }
+        get: function() { return _height; },
+        set: function(value) { _height = value; }
     });
 
     Object.defineProperty(_self, 'webGLTexture', {
-        'get': function() { return _webGLTexture; },
-        'set': function(value) { _webGLTexture = value; }
+        get: function() { return _webGLTexture; },
+        set: function(value) { _webGLTexture = value; }
     });
 }
 

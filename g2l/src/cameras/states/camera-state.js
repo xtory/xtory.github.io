@@ -20,7 +20,7 @@ function CameraState(_camera) {
     // Properties.
     //
     Object.defineProperty(_self, 'camera', {
-        'get': function() { return _camera; }
+        get: function() { return _camera; }
     });
 }
 

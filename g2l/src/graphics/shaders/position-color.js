@@ -10,31 +10,33 @@ function PositionColor() {
 //
 PositionColor.VERTEX_SHADER_SOURCE = [
     //
-   'precision highp float;', // which is the default vertex shader precision.
+    'precision highp float;', // which is the default vertex shader precision.
 
-   'attribute vec3 vertexPosition;',
-   'attribute vec4 vertexColor;',
+    'uniform mat4 transform;',
 
-   'varying vec4 color;',
+    'attribute vec3 vertexPosition;',
+    'attribute vec4 vertexColor;',
 
-   'uniform mat4 transform;',
+    'varying vec4 _color;',
 
-   'void main() {',
-       'gl_Position = transform * vec4(vertexPosition, 1.0);',
-       'color = vertexColor;',
-   '}'
+    'void main() {',
+        //
+        'gl_Position = transform * vec4(vertexPosition, 1.0);',
+        
+        '_color = vertexColor;',
+    '}'
 
 ].join('\n');
 
 PositionColor.FRAGMENT_SHADER_SOURCE = [
     //
-   'precision mediump float;', // which is the recommended fragment shader precision.
+    'precision mediump float;', // which is the recommended fragment shader precision.
 
-   'varying vec4 color;',
+    'varying vec4 _color;',
 
-   'void main() {',
-       'gl_FragColor = color;',
-   '}'
+    'void main() {',
+        'gl_FragColor = _color;',
+    '}'
 
 ].join('\n');
 

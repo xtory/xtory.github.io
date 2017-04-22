@@ -25,7 +25,7 @@ Vector4D.prototype = {
 };
 
 Object.defineProperty(Vector4D.prototype, 'xyz', {
-    'get': function() { return new Vector3D(this.x, this.y, this.z); }
+    get: function() { return new Vector3D(this.x, this.y, this.z); }
 });
 
 //

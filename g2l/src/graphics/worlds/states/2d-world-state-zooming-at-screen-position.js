@@ -28,32 +28,32 @@ function World2DStateZoomingAtScreenPosition (
         _self = this;
 
         Object.defineProperty(_self, 'screenPosition', {
-            'get': function() { return _screenPosition; }
+            get: function() { return _screenPosition; }
         });
 
         _oldSize = _world.size;
 
         Object.defineProperty(_self, 'oldSize', {
-            'get': function() { return _oldSize; }
+            get: function() { return _oldSize; }
         });
 
         Object.defineProperty(_self, 'newSize', {
-            'get': function() { return _newSize; }
+            get: function() { return _newSize; }
         });
 
         Object.defineProperty(_self, 'updatingCallback', {
-            'get': function() { return _updatingCallback; }
+            get: function() { return _updatingCallback; }
         });
 
         Object.defineProperty(_self, 'finishingCallback', {
-            'get': function() { return _finishingCallback; }
+            get: function() { return _finishingCallback; }
         });
 
         _sineEase = new SineEase(EaseMode.EASE_OUT, _duration, false);
         _sineEase.start();
 
         Object.defineProperty(_self, 'sineEase', {
-            'get': function() { return _sineEase; }
+            get: function() { return _sineEase; }
         });
 
     } catch (e) {

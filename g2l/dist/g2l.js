@@ -1149,7 +1149,7 @@ Vector4D.prototype = {
 };
 
 Object.defineProperty(Vector4D.prototype, 'xyz', {
-    'get': function() { return new Vector3D(this.x, this.y, this.z); }
+    get: function() { return new Vector3D(this.x, this.y, this.z); }
 });
 
 //
@@ -1263,7 +1263,7 @@ Vector3D.prototype = {
 };
 
 Object.defineProperty(Vector3D.prototype, 'xy', {
-    'get': function() { return new Vector2D(this.x, this.y); }
+    get: function() { return new Vector2D(this.x, this.y); }
 });
 
 //
@@ -1510,36 +1510,36 @@ function Camera (
     // Properties.
     //
     Object.defineProperty(_self, 'renderer', {
-        'get': function() { return _renderer; }
+        get: function() { return _renderer; }
     });
 
     Object.defineProperty(_self, 'position', {
-        'get': function() { return _position; },
-        'set': function(value) { _position = value; }
+        get: function() { return _position; },
+        set: function(value) { _position = value; }
     });
 
     Object.defineProperty(_self, 'facingDirection', {
-        'get': function() { return _facingDirection; },
-        'set': function(value) { _facingDirection = value; }
+        get: function() { return _facingDirection; },
+        set: function(value) { _facingDirection = value; }
     });
 
     Object.defineProperty(_self, 'upDirection', {
-        'get': function() { return _upDirection; },
-        'set': function(value) { _upDirection = value; }
+        get: function() { return _upDirection; },
+        set: function(value) { _upDirection = value; }
     });
 
     Object.defineProperty(_self, 'distanceToNearPlane', {
-        'get': function() { return _distanceToNearPlane; },
-        'set': function(value) { _distanceToNearPlane = value; }
+        get: function() { return _distanceToNearPlane; },
+        set: function(value) { _distanceToNearPlane = value; }
     });
 
     Object.defineProperty(_self, 'distanceToFarPlane', {
-        'get': function() { return _distanceToFarPlane; },
-        'set': function(value) { _distanceToFarPlane = value; }
+        get: function() { return _distanceToFarPlane; },
+        set: function(value) { _distanceToFarPlane = value; }
     });
 
     Object.defineProperty(_self, 'viewFrustum', {
-        'get': function() { return _viewFrustum; }
+        get: function() { return _viewFrustum; }
     });
 
     //
@@ -1733,7 +1733,7 @@ function CameraState(_camera) {
     // Properties.
     //
     Object.defineProperty(_self, 'camera', {
-        'get': function() { return _camera; }
+        get: function() { return _camera; }
     });
 }
 
@@ -2134,24 +2134,24 @@ function CameraStateZooming (
     // Properties.
     //
     Object.defineProperty(_self, 'sineEase', {
-        'get': function() { return _sineEase; }
+        get: function() { return _sineEase; }
     });
 
     Object.defineProperty(_self, 'distance', {
-        'get': function() { return _distance; }
+        get: function() { return _distance; }
     });
 
     Object.defineProperty(_self, 'zoomedDistance', {
-        'get': function() { return _zoomedDistance; },
-        'set': function(value) { _zoomedDistance = value; }
+        get: function() { return _zoomedDistance; },
+        set: function(value) { _zoomedDistance = value; }
     });
 
     Object.defineProperty(_self, 'updatingCallback', {
-        'get': function() { return _updatingCallback; }
+        get: function() { return _updatingCallback; }
     });
 
     Object.defineProperty(_self, 'finishingCallback', {
-        'get': function() { return _finishingCallback; }
+        get: function() { return _finishingCallback; }
     });
 }
 
@@ -2230,11 +2230,11 @@ function SmoothCamera (
     //
     Object.defineProperty(_self, 'state', {
         //
-        'get': function() {
+        get: function() {
             return _state;
         },
 
-        'set': function(value) {
+        set: function(value) {
             //
             if (value === _state) {
                 return;
@@ -2247,8 +2247,8 @@ function SmoothCamera (
     });
 
     Object.defineProperty(_self, 'zoomingDuration', {
-       'get': function() { return _zoomingDuration; },
-       'set': function(value) { _zoomingDuration = value; }
+       get: function() { return _zoomingDuration; },
+       set: function(value) { _zoomingDuration = value; }
     });
 
     //
@@ -2405,16 +2405,17 @@ Colors.DEFAULT_BACKGROUND = new Color(32/255, 32/255, 32/255, 1);
 Colors.BLACK       = new Color(0, 0, 0, 1);
 Colors.WHITE       = new Color(1, 1, 1, 1);
 Colors.TRANSPARENT = new Color(1, 1, 1, 0);
-Colors.SKY_BLUE    = new Color(135/255, 206/255, 235/255, 1);
-Colors.CADET_BLUE  = new Color(95/255, 158/255, 160/255, 1);
 
+Colors.SKY_BLUE    = new Color(135/255, 206/255, 235/255, 1);
+Colors.CADET_BLUE  = new Color( 95/255, 158/255, 160/255, 1);
+Colors.PINK        = new Color(255/255, 192/255, 203/255, 1);
 //
 // Photoshop
 //
 // Red.
 // (PS, There's no PHOTOSHOP_PASTEL_RED (cuz it's ugly), use PINK instead.)
 //
-Colors.PINK = new Color(255/255, 192/255, 203/255, 1);
+//Colors.PHOTOSHOP_PASTEL_RED = new Color(...);
 Colors.PHOTOSHOP_DARK_RED = new Color(157/255, 10/255, 14/255, 1);
 
 //
@@ -2593,11 +2594,11 @@ function IndexBuffer(_bufferLoader) {
     // Properties.
     //
     Object.defineProperty(_self, 'bufferLoader', {
-        'get': function() { return _bufferLoader; }
+        get: function() { return _bufferLoader; }
     });
 
     Object.defineProperty(_self, 'webGLBuffer', {
-        'get': function() { return _webGLBuffer; }
+        get: function() { return _webGLBuffer; }
     });
 }
 
@@ -2815,63 +2816,25 @@ LineSegment2D.createVertexPositions = function (
     // Use the imagination above, 4 corners are then found below.
 
     v = Vector2D.multiplyVectorByScalar(v, halfScreenThickness);
-    var lowerRightCorner = Vector2D.subtractVectors(p2, v); // p2 - v
-    var upperRightCorner = Vector2D.addVectors(p2, v);      // p2 + v
-    var lowerLeftCorner  = Vector2D.subtractVectors(p1, v); // p1 - v
-    var upperLeftCorner  = Vector2D.addVectors(p1, v);      // p1 + v
 
-    // Test:
-    /*
-    var p3 = new Vector3D (
-        lowerRightCorner.x,
-        lowerRightCorner.y,
-        screenPosition2.z
-    );
+    // Lower right.
+    var p3 = Vector2D.subtractVectors(p2, v); // p2 - v
 
-    var p4 = new Vector3D (
-        upperRightCorner.x,
-        upperRightCorner.y,
-        screenPosition2.z
-    );
+    // Upper rght.
+    var p4 = Vector2D.addVectors(p2, v); // p2 + v
 
-    var p5 = new Vector3D (
-        lowerLeftCorner.x,
-        lowerLeftCorner.y,
-        screenPosition1.z
-    );
+    // Lower left.
+    var p5 = Vector2D.subtractVectors(p1, v); // p1 - v
 
-    var p6 = new Vector3D (
-        upperLeftCorner.x,
-        upperLeftCorner.y,
-        screenPosition1.z
-    );
-    
-    var vertexPositions = [ p3, p4, p5, p6 ];
-
-    var vertexPositions2 = [];
-
-    for (var i=0; i<vertexPositions.length; i++) {
-        //
-        var item = vertexPositions[i];
-
-        var p = ScreenCoordinateHelper.toClipSpace (
-            renderer.canvas,
-            item
-        );
-
-        vertexPositions2 = vertexPositions2.concat(p.toArray());
-    }
-
-    return vertexPositions2;
-    */
+    // Upper left.
+    var p6 = Vector2D.addVectors(p1, v); // p1 + v
 
     return [
-        lowerRightCorner.x, lowerRightCorner.y, screenPosition2.z,
-        upperRightCorner.x, upperRightCorner.y, screenPosition2.z,
-        lowerLeftCorner.x,  lowerLeftCorner.y,  screenPosition1.z,
-        upperLeftCorner.x,  upperLeftCorner.y,  screenPosition1.z
+        p3.x, p3.y, screenPosition2.z,
+        p4.x, p4.y, screenPosition2.z,
+        p5.x, p5.y, screenPosition1.z,
+        p6.x, p6.y, screenPosition1.z
     ];
-    // :Test
 };
 
 LineSegment2D.createVertexColors = function(color) {
@@ -2985,11 +2948,11 @@ function LineSegment2DBatch(_renderer, _style) {
     // Properties.
     //
     Object.defineProperty(_self, 'renderer', {
-        'get': function() { return _renderer; }
+        get: function() { return _renderer; }
     });
 
     Object.defineProperty(_self, 'isBegun', {
-        'get': function() { return _isBegun; }
+        get: function() { return _isBegun; }
     });
 
     //
@@ -3240,39 +3203,39 @@ function LineSegment2DBatch(_renderer, _style) {
 //
 LineSegment2DBatch.VERTEX_SHADER_SOURCE = [
     //
-   'precision highp float;', // which is the default vertex shader precision.
+    'precision highp float;', // which is the default vertex shader precision.
 
-   'attribute vec3 vertexPosition;',
-   'attribute vec4 vertexColor;',
+    'attribute vec3 vertexPosition;',
+    'attribute vec4 vertexColor;',
 
-   'varying vec4 color;',
+    'uniform vec2 canvasClientSize;',
 
-   'uniform vec2 canvasClientSize;',
+    'varying vec4 _color;',
 
-   'void main() {',
+    'void main() {',
         //
-        // Converts the vertex position from screen to clip space (not NDC yet).
-       'gl_Position = vec4 (',
-           '-1.0 + 2.0 * (vertexPosition.x / canvasClientSize.x),',
-           '-1.0 + 2.0 * (vertexPosition.y / canvasClientSize.y),',
-           'vertexPosition.z,',
-           '1.0',
-       ');',
+        // Converts the (vertex) position from screen to 'clip' space with w = 1,
+        // just like what ScreenCoordinateHelper.toClipSpace() does.
+        'gl_Position = vec4 (',
+            '-1.0 + 2.0 * (vertexPosition.xy / canvasClientSize.xy),',
+            'vertexPosition.z,',
+            '1.0',
+        ');',
 
-       'color = vertexColor;',
-   '}'
+        '_color = vertexColor;',
+    '}'
 
 ].join('\n');
 
 LineSegment2DBatch.FRAGMENT_SHADER_SOURCE = [
     //
-   'precision mediump float;', // which is the recommended fragment shader precision.
+    'precision mediump float;', // which is the recommended fragment shader precision.
 
-   'varying vec4 color;',
+    'varying vec4 _color;',
 
-   'void main() {',
-       'gl_FragColor = color;',
-   '}'
+    'void main() {',
+        'gl_FragColor = _color;',
+    '}'
    
 ].join('\n');
 
@@ -3463,21 +3426,21 @@ Object.freeze(LineSegment2DHelper);
 //
 // Constructor.
 //
-function NormalizedDeviceCoordinates() {
+function Ndc() {
     // No contents.
 }
 
 //
 // Static constants (after Object.freeze()).
 //
-NormalizedDeviceCoordinates.MIN_X = -1; // Left.
-NormalizedDeviceCoordinates.MAX_X =  1; // Right.
-NormalizedDeviceCoordinates.MIN_Y = -1; // Bottom.
-NormalizedDeviceCoordinates.MAX_Y =  1; // Top.
-NormalizedDeviceCoordinates.MIN_Z = -1; // Near.
-NormalizedDeviceCoordinates.MAX_Z =  1; // Far.
+Ndc.MIN_X = -1; // Left.
+Ndc.MAX_X =  1; // Right.
+Ndc.MIN_Y = -1; // Bottom.
+Ndc.MAX_Y =  1; // Top.
+Ndc.MIN_Z = -1; // Near.
+Ndc.MAX_Z =  1; // Far.
 
-Object.freeze(NormalizedDeviceCoordinates);
+Object.freeze(Ndc);
 
 //
 // Constructor.
@@ -3491,31 +3454,33 @@ function PositionColor() {
 //
 PositionColor.VERTEX_SHADER_SOURCE = [
     //
-   'precision highp float;', // which is the default vertex shader precision.
+    'precision highp float;', // which is the default vertex shader precision.
 
-   'attribute vec3 vertexPosition;',
-   'attribute vec4 vertexColor;',
+    'uniform mat4 transform;',
 
-   'varying vec4 color;',
+    'attribute vec3 vertexPosition;',
+    'attribute vec4 vertexColor;',
 
-   'uniform mat4 transform;',
+    'varying vec4 _color;',
 
-   'void main() {',
-       'gl_Position = transform * vec4(vertexPosition, 1.0);',
-       'color = vertexColor;',
-   '}'
+    'void main() {',
+        //
+        'gl_Position = transform * vec4(vertexPosition, 1.0);',
+        
+        '_color = vertexColor;',
+    '}'
 
 ].join('\n');
 
 PositionColor.FRAGMENT_SHADER_SOURCE = [
     //
-   'precision mediump float;', // which is the recommended fragment shader precision.
+    'precision mediump float;', // which is the recommended fragment shader precision.
 
-   'varying vec4 color;',
+    'varying vec4 _color;',
 
-   'void main() {',
-       'gl_FragColor = color;',
-   '}'
+    'void main() {',
+        'gl_FragColor = _color;',
+    '}'
 
 ].join('\n');
 
@@ -3533,25 +3498,25 @@ function PositionOnly() {
 //
 PositionOnly.VERTEX_SHADER_SOURCE = [
     //
-   'precision highp float;', // which is the default vertex shader precision.
+    'precision highp float;', // which is the default vertex shader precision.
 
-   'attribute vec3 vertexPosition;',
+    'uniform mat4 transform;',
 
-   'uniform mat4 transform;',
+    'attribute vec3 vertexPosition;',
 
-   'void main() {',
-       'gl_Position = transform * vec4(vertexPosition, 1.0);',
-   '}'
+    'void main() {',
+        'gl_Position = transform * vec4(vertexPosition, 1.0);',
+    '}'
    
 ].join('\n');
 
 PositionOnly.FRAGMENT_SHADER_SOURCE = [
     //
-   'precision mediump float;', // which is the recommended fragment shader precision.
+    'precision mediump float;', // which is the recommended fragment shader precision.
 
-   'void main() {',
-       'gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);',
-   '}'
+    'void main() {',
+        'gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);',
+    '}'
 
 ].join('\n');
 
@@ -3569,19 +3534,21 @@ function PositionTextureCoordinates() {
 //
 PositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
     //
-   'precision highp float;', // which is the default vertex shader precision.
+    'precision highp float;', // which is the default vertex shader precision.
 
-   'attribute vec3 vertexPosition;',
-   'attribute vec2 vertexTextureCoordinates;',
+    'uniform mat4 transform;',
 
-   'varying vec2 textureCoordinates;',
+    'attribute vec3 vertexPosition;',
+    'attribute vec2 vertexTextureCoordinates;',
 
-   'uniform mat4 transform;',
+    'varying vec2 _textureCoordinates;',
 
-   'void main() {',
-       'gl_Position = transform * vec4(vertexPosition, 1.0);',
-       'textureCoordinates = vertexTextureCoordinates;',
-   '}'
+    'void main() {',
+        //
+        'gl_Position = transform * vec4(vertexPosition, 1.0);',
+
+        '_textureCoordinates = vertexTextureCoordinates;',
+    '}'
 
 ].join('\n');
 
@@ -3589,12 +3556,12 @@ PositionTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
     //
    'precision mediump float;', // which is the recommended fragment shader precision.
 
-   'varying vec2 textureCoordinates;',
-
    'uniform sampler2D sampler;',
 
+   'varying vec2 _textureCoordinates;',
+
    'void main() {',
-       'gl_FragColor = texture2D(sampler, textureCoordinates);',
+       'gl_FragColor = texture2D(sampler, _textureCoordinates);',
    '}'
    
 ].join('\n');
@@ -3628,11 +3595,11 @@ function Program(_programLoader) {
     // Properties.
     //
     Object.defineProperty(_self, 'programLoader', {
-        'get': function() { return _programLoader; }
+        get: function() { return _programLoader; }
     });
 
     Object.defineProperty(_self, 'webGLProgram', {
-        'get': function() { return _webGLProgram; }
+        get: function() { return _webGLProgram; }
     });
 }
 
@@ -3655,16 +3622,16 @@ function Rect(_left, _bottom, _width, _height) {
 }
 
 Object.defineProperty(Rect.prototype, 'right', {
-    'get': function() { return this.left + this.width; }
+    get: function() { return this.left + this.width; }
 });
 
 Object.defineProperty(Rect.prototype, 'top', {
-    'get': function() { return this.bottom + this.height; }
+    get: function() { return this.bottom + this.height; }
 });
 
 Object.defineProperty(Rect.prototype, 'center', {
     //
-    'get': function() {
+    get: function() {
         //
         return new Vector2D (
             this.left + this.width * 0.5,
@@ -3675,7 +3642,7 @@ Object.defineProperty(Rect.prototype, 'center', {
 
 Object.defineProperty(Rect.prototype, 'size', {
     //
-    'get': function() { return new Vector2D(this.width, this.height); }
+    get: function() { return new Vector2D(this.width, this.height); }
 });
 
 Rect.areEqual = function(rect1, rect2) {
@@ -3728,16 +3695,16 @@ function VertexBuffer(_bufferLoader) {
     // Properties.
     //
     Object.defineProperty(_self, 'bufferLoader', {
-        'get': function() { return _bufferLoader; }
+        get: function() { return _bufferLoader; }
     });
 
     Object.defineProperty(_self, 'webGLBuffer', {
-        'get': function() { return _webGLBuffer; }
+        get: function() { return _webGLBuffer; }
     });
 
     Object.defineProperty(_self, 'size', {
-        'get': function() { return _size; },
-        'set': function(value) { _size = value; }
+        get: function() { return _size; },
+        set: function(value) { _size = value; }
     });
 }
 
@@ -3789,7 +3756,7 @@ function BufferLoader(_loader) {
     // Properties.
     //
     Object.defineProperty(_self, 'loader', {
-        'get': function() { return _loader; }
+        get: function() { return _loader; }
     });
     
     //
@@ -3845,7 +3812,7 @@ function ProgramLoader(_loader) {
     // Properties.
     //
     Object.defineProperty(_self, 'loader', {
-        'get': function() { return _loader; }
+        get: function() { return _loader; }
     });
 
     //
@@ -4017,22 +3984,22 @@ function Texture2D(_textureLoader) {
     // Properties.
     //
     Object.defineProperty(_self, 'loader', {
-        'get': function() { return _loader; }
+        get: function() { return _loader; }
     });
 
     Object.defineProperty(_self, 'width', {
-        'get': function() { return _width; },
-        'set': function(value) { _width = value; }
+        get: function() { return _width; },
+        set: function(value) { _width = value; }
     });
 
     Object.defineProperty(_self, 'height', {
-        'get': function() { return _height; },
-        'set': function(value) { _height = value; }
+        get: function() { return _height; },
+        set: function(value) { _height = value; }
     });
 
     Object.defineProperty(_self, 'webGLTexture', {
-        'get': function() { return _webGLTexture; },
-        'set': function(value) { _webGLTexture = value; }
+        get: function() { return _webGLTexture; },
+        set: function(value) { _webGLTexture = value; }
     });
 }
 
@@ -4069,7 +4036,7 @@ function TextureLoader(_loader) {
     // Properties.
     //
     Object.defineProperty(_self, 'loader', {
-        'get': function() { return _loader; }
+        get: function() { return _loader; }
     });
 
     //
@@ -4229,7 +4196,7 @@ function Loader(_renderer) {
         _gl = _renderer.gl;
 
         Object.defineProperty(_self, 'renderer', {
-            'get': function() { return _renderer; }
+            get: function() { return _renderer; }
         });
     }
     
@@ -4319,11 +4286,11 @@ function Renderer(_canvas, _style) {
     // Properties.
     //
     Object.defineProperty(_self, 'canvas', {
-        'get': function() { return _canvas; }
+        get: function() { return _canvas; }
     });
     
     Object.defineProperty(_self, 'gl', {
-        'get': function() { return _gl; }
+        get: function() { return _gl; }
     });
 
     // Note:
@@ -4334,7 +4301,7 @@ function Renderer(_canvas, _style) {
     /*
     Object.defineProperty(_self, 'viewport', {
         //
-        'get': function() {
+        get: function() {
             //
             var value = _gl.getParameter(_gl.VIEWPORT);
 
@@ -4346,7 +4313,7 @@ function Renderer(_canvas, _style) {
             return new Viewport(p3.x, p3.y, p4.x, p4.y);
         },
 
-        'set': function(value) {
+        set: function(value) {
             //
             var p1 = new Vector2D(value[0], value[1]);
             var p2 = new Vector2D(value[2], value[3]);
@@ -4778,13 +4745,13 @@ ScreenCoordinateHelper.toClipSpace = function(canvas, p) {
     /*
     return new Vector3D (
         // Part 1.
-        NormalizedDeviceCoordinates.MIN_X +
+        Ndc.MIN_X +
         ((p.x - 0.5) / viewport.width) *
-        (NormalizedDeviceCoordinates.MAX_X - NormalizedDeviceCoordinates.MIN_X),
+        (Ndc.MAX_X - Ndc.MIN_X),
         // Part 2.
-        NormalizedDeviceCoordinates.MIN_Y +
+        Ndc.MIN_Y +
         ((p.y - 0.5) / viewport.height) *
-        (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y),
+        (Ndc.MAX_Y - Ndc.MIN_Y),
         // Part 3.
         p.z,
         // Part 4.
@@ -4794,17 +4761,17 @@ ScreenCoordinateHelper.toClipSpace = function(canvas, p) {
 
     return new Vector4D (
         // Part 1.
-        NormalizedDeviceCoordinates.MIN_X + // = -1
+        Ndc.MIN_X + // = -1
         (p.x / canvas.clientWidth) *
-        (NormalizedDeviceCoordinates.MAX_X - NormalizedDeviceCoordinates.MIN_X), // = 2
+        (Ndc.MAX_X - Ndc.MIN_X), // = 2
         // Part 2.
-        NormalizedDeviceCoordinates.MIN_Y + // = -1
+        Ndc.MIN_Y + // = -1
         (p.y / canvas.clientHeight) *
-        (NormalizedDeviceCoordinates.MAX_Y - NormalizedDeviceCoordinates.MIN_Y), // = 2
+        (Ndc.MAX_Y - Ndc.MIN_Y), // = 2
         // Part 3.
-        NormalizedDeviceCoordinates.MIN_Z + // = -1
+        Ndc.MIN_Z + // = -1
         p.z *
-        (NormalizedDeviceCoordinates.MAX_Z - NormalizedDeviceCoordinates.MIN_Z), // = 2
+        (Ndc.MAX_Z - Ndc.MIN_Z), // = 2
         // Part 4.
         1.0 // w.
     );
@@ -5069,11 +5036,11 @@ function SpriteBatch(_renderer, _style) {
     // Properties.
     //
     Object.defineProperty(_self, 'renderer', {
-        'get': function() { return _renderer; }
+        get: function() { return _renderer; }
     });
 
     Object.defineProperty(_self, 'isBegun', {
-        'get': function() { return _isBegun; }
+        get: function() { return _isBegun; }
     });
 
     //
@@ -5124,20 +5091,26 @@ function SpriteBatch(_renderer, _style) {
 
         _uniformLocations = {
             //
-            'canvasClientSize': _renderer.getUniformLocation (
-                _program,
-                'canvasClientSize'
-            ),
+            shared: {
+                //
+                'canvasClientSize': _renderer.getUniformLocation (
+                    _program,
+                    'canvasClientSize'
+                )
+            },
 
-            'color': _renderer.getUniformLocation (
-                _program,
-                'color'
-            ),
+            unique: {
+                //
+                'color': _renderer.getUniformLocation (
+                    _program,
+                    'color'
+                ),
 
-            'sampler': _renderer.getUniformLocation (
-                _program,
-                'sampler'
-            )
+                'sampler': _renderer.getUniformLocation (
+                    _program,
+                    'sampler'
+                )
+            }
         };
     }
     
@@ -5147,7 +5120,7 @@ function SpriteBatch(_renderer, _style) {
 
         _renderer.setVector2DUniform (
             // Part 1.
-            _uniformLocations.canvasClientSize,
+            _uniformLocations.shared.canvasClientSize,
             // Part 2.
             new Float32Array ([
                 _renderer.canvas.clientWidth,
@@ -5181,7 +5154,7 @@ function SpriteBatch(_renderer, _style) {
                 //
                 _renderer.setVector4DUniform (
                     // Part 1.
-                    _uniformLocations.color,
+                    _uniformLocations.unique.color,
                     // Part 2.
                     item.color
                 );
@@ -5218,7 +5191,7 @@ function SpriteBatch(_renderer, _style) {
             if (lastTexture !== item.texture) {
                 //
                 _renderer.setSampler (
-                    _uniformLocations.sampler,
+                    _uniformLocations.unique.sampler,
                     item.texture
                 );
 
@@ -5375,44 +5348,70 @@ function SpriteBatch(_renderer, _style) {
 //
 // Static constants (after Object.freeze()).
 //
+// SpriteBatch.VERTEX_SHADER_SOURCE = [
+//     //
+//     'precision highp float;', // which is the default vertex shader precision.
+
+//     'uniform vec2 canvasClientSize;',
+
+//     'attribute vec3 vertexPosition;',
+//     'attribute vec2 vertexTextureCoordinates;',
+
+//     'varying vec2 _textureCoordinates;',
+
+//     'void main() {',
+//         //
+//         // Converts the (vertex) position from screen to 'clip' space with w = 1.
+//         'gl_Position = vec4 (',
+//             '-1.0 + 2.0 * (vertexPosition.x / canvasClientSize.x),',
+//             '-1.0 + 2.0 * (vertexPosition.y / canvasClientSize.y),',
+//             'vertexPosition.z,',
+//             '1.0',
+//         ');',
+
+//         '_textureCoordinates = vertexTextureCoordinates;',
+//     '}'
+
+// ].join('\n');
+
 SpriteBatch.VERTEX_SHADER_SOURCE = [
     //
-   'precision highp float;', // which is the default vertex shader precision.
+    'precision highp float;', // which is the default vertex shader precision.
 
-   'uniform vec2 canvasClientSize;',
+    'uniform vec2 canvasClientSize;',
 
-   'attribute vec3 vertexPosition;',
-   'attribute vec2 vertexTextureCoordinates;',
+    'attribute vec3 vertexPosition;',
+    'attribute vec2 vertexTextureCoordinates;',
 
-   'varying vec2 textureCoordinates;',
+    'varying vec2 _textureCoordinates;',
 
-   'void main() {',
+    'void main() {',
         //
-        // Converts the vertex position from screen to clip space (not NDC yet).
-       'gl_Position = vec4 (',
-           '-1.0 + 2.0 * (vertexPosition.x / canvasClientSize.x),',
-           '-1.0 + 2.0 * (vertexPosition.y / canvasClientSize.y),',
-           'vertexPosition.z,',
-           '1.0',
-       ');',
+        // Converts the (vertex) position from screen to 'clip' space with w = 1,
+        // just like what ScreenCoordinateHelper.toClipSpace() does.
+        'gl_Position = vec4 (',
+            '-1.0 + 2.0 * (vertexPosition.xy / canvasClientSize.xy),',
+            'vertexPosition.z,',
+            '1.0',
+        ');',
 
-       'textureCoordinates = vertexTextureCoordinates;',
-   '}'
+        '_textureCoordinates = vertexTextureCoordinates;',
+    '}'
 
 ].join('\n');
 
 SpriteBatch.FRAGMENT_SHADER_SOURCE = [
     //
-   'precision mediump float;', // which is the recommended fragment shader precision.
+    'precision mediump float;', // which is the recommended fragment shader precision.
 
-   'uniform sampler2D sampler;',
-   'uniform vec4 color;',
+    'uniform vec4 color;',
+    'uniform sampler2D sampler;',
 
-   'varying vec2 textureCoordinates;',
+    'varying vec2 _textureCoordinates;',
 
-   'void main() {',
-       'gl_FragColor = color * texture2D(sampler, textureCoordinates);',
-   '}'
+    'void main() {',
+        'gl_FragColor = color * texture2D(sampler, _textureCoordinates);',
+    '}'
    
 ].join('\n');
 
@@ -5480,29 +5479,31 @@ function TransformedPositionColor() {
 //
 TransformedPositionColor.VERTEX_SHADER_SOURCE = [
     //
-   'precision highp float;', // which is the default vertex shader precision.
+    'precision highp float;', // which is the default vertex shader precision.
 
-   'attribute vec4 vertexPosition;',
-   'attribute vec4 vertexColor;',
+    'attribute vec4 vertexPosition;',
+    'attribute vec4 vertexColor;',
 
-   'varying vec4 color;',
+    'varying vec4 _color;',
 
-   'void main() {',
-       'gl_Position = vertexPosition;',
-       'color = vertexColor;',
-   '}'
+    'void main() {',
+        //
+        'gl_Position = vertexPosition;',
+
+        '_color = vertexColor;',
+    '}'
 
 ].join('\n');
 
 TransformedPositionColor.FRAGMENT_SHADER_SOURCE = [
     //
-   'precision mediump float;', // which is the recommended fragment shader precision.
+    'precision mediump float;', // which is the recommended fragment shader precision.
 
-   'varying vec4 color;',
+    'varying vec4 _color;',
 
-   'void main() {',
-       'gl_FragColor = color;',
-   '}'
+    'void main() {',
+        'gl_FragColor = _color;',
+    '}'
    
 ].join('\n');
 
@@ -5520,37 +5521,37 @@ function TransformedPositionColorTextureCoordinates() {
 //
 TransformedPositionColorTextureCoordinates.VERTEX_SHADER_SOURCE = [
     //
-   'precision highp float;', // which is the default vertex shader precision.
+    'precision highp float;', // which is the default vertex shader precision.
 
-   'attribute vec4 vertexPosition;',
-   'attribute vec4 vertexColor;',
-   'attribute vec2 vertexTextureCoordinates;',
+    'attribute vec4 vertexPosition;',
+    'attribute vec4 vertexColor;',
+    'attribute vec2 vertexTextureCoordinates;',
 
-   'varying vec4 color;',
-   'varying vec2 textureCoordinates;',
+    'varying vec4 _color;',
+    'varying vec2 _textureCoordinates;',
 
-   'void main() {',
+    'void main() {',
         //
-       'gl_Position = vertexPosition;',
+        'gl_Position = vertexPosition;',
        
-       'color = vertexColor;',
-       'textureCoordinates = vertexTextureCoordinates;',
-   '}'
+        '_color = vertexColor;',
+        '_textureCoordinates = vertexTextureCoordinates;',
+    '}'
 
 ].join('\n');
 
 TransformedPositionColorTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
     //
-   'precision mediump float;', // which is the recommended fragment shader precision.
+    'precision mediump float;', // which is the recommended fragment shader precision.
 
-   'varying vec4 color;',
-   'varying vec2 textureCoordinates;',
+    'uniform sampler2D sampler;',
 
-   'uniform sampler2D sampler;',
+    'varying vec4 _color;',
+    'varying vec2 _textureCoordinates;',
 
-   'void main() {',
-       'gl_FragColor = color * texture2D(sampler, textureCoordinates);',
-   '}'
+    'void main() {',
+        'gl_FragColor = _color * texture2D(sampler, _textureCoordinates);',
+    '}'
    
 ].join('\n');
 
@@ -5568,31 +5569,33 @@ function TransformedPositionTextureCoordinates() {
 //
 TransformedPositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
     //
-   'precision highp float;', // which is the default vertex shader precision.
+    'precision highp float;', // which is the default vertex shader precision.
 
-   'attribute vec4 vertexPosition;',
-   'attribute vec2 vertexTextureCoordinates;',
+    'attribute vec4 vertexPosition;',
+    'attribute vec2 vertexTextureCoordinates;',
 
-   'varying vec2 textureCoordinates;',
+    'varying vec2 _textureCoordinates;',
 
-   'void main() {',
-       'gl_Position = vertexPosition;',
-       'textureCoordinates = vertexTextureCoordinates;',
-   '}'
+    'void main() {',
+        //
+        'gl_Position = vertexPosition;',
+
+        '_textureCoordinates = vertexTextureCoordinates;',
+    '}'
 
 ].join('\n');
 
 TransformedPositionTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
     //
-   'precision mediump float;', // which is the recommended fragment shader precision.
+    'precision mediump float;', // which is the recommended fragment shader precision.
 
-   'varying vec2 textureCoordinates;',
+    'uniform sampler2D sampler;',
 
-   'uniform sampler2D sampler;',
+    'varying vec2 _textureCoordinates;',
 
-   'void main() {',
-       'gl_FragColor = texture2D(sampler, textureCoordinates);',
-   '}'
+    'void main() {',
+        'gl_FragColor = texture2D(sampler, _textureCoordinates);',
+    '}'
    
 ].join('\n');
 
@@ -5723,7 +5726,7 @@ function World2DState(_world) {
     // Properties.
     //
     Object.defineProperty(_self, 'world', {
-        'get': function() { return _world; }
+        get: function() { return _world; }
     });
 }
 
@@ -5773,32 +5776,32 @@ function World2DStateZoomingAtScreenPosition (
         _self = this;
 
         Object.defineProperty(_self, 'screenPosition', {
-            'get': function() { return _screenPosition; }
+            get: function() { return _screenPosition; }
         });
 
         _oldSize = _world.size;
 
         Object.defineProperty(_self, 'oldSize', {
-            'get': function() { return _oldSize; }
+            get: function() { return _oldSize; }
         });
 
         Object.defineProperty(_self, 'newSize', {
-            'get': function() { return _newSize; }
+            get: function() { return _newSize; }
         });
 
         Object.defineProperty(_self, 'updatingCallback', {
-            'get': function() { return _updatingCallback; }
+            get: function() { return _updatingCallback; }
         });
 
         Object.defineProperty(_self, 'finishingCallback', {
-            'get': function() { return _finishingCallback; }
+            get: function() { return _finishingCallback; }
         });
 
         _sineEase = new SineEase(EaseMode.EASE_OUT, _duration, false);
         _sineEase.start();
 
         Object.defineProperty(_self, 'sineEase', {
-            'get': function() { return _sineEase; }
+            get: function() { return _sineEase; }
         });
 
     } catch (e) {
@@ -5872,7 +5875,7 @@ Object.freeze(World2DStateZoomingAtScreenPosition);
 //
 function World2DStyle() {
     //
-    this.backgroundColor                    = Colors.WHITE;
+    this.backgroundColor                    = Colors.DEFAULT_BACKGROUND_COLOR;
     this.zoomDuration                       = 250; // in milliseconds.
     this.zoomScaleFactor                    = 2.0;
     this.hitLineSegmentScreenThicknessTimes = 5.0;
@@ -5968,16 +5971,16 @@ function World2D(_renderer, _style) {
     // Properties.
     //
     Object.defineProperty(_self, 'renderer', {
-        'get': function() { return _renderer; }
+        get: function() { return _renderer; }
     });
 
     Object.defineProperty(_self, 'style', {
         //
-        'get': function() {
+        get: function() {
             return _style;
         },
 
-        'set': function(value) {
+        set: function(value) {
             //
             if (value === _style) {
                 return;
@@ -5991,11 +5994,11 @@ function World2D(_renderer, _style) {
 
     Object.defineProperty(_self, 'state', {
         //
-        'get': function() {
+        get: function() {
             return _state;
         },
 
-        'set': function(value) {
+        set: function(value) {
             //
             if (value === _state) {
                 return;
@@ -6008,41 +6011,41 @@ function World2D(_renderer, _style) {
     });
 
     Object.defineProperty(_self, 'spriteBatch', {
-        'get': function() { return _spriteBatch; }
+        get: function() { return _spriteBatch; }
     });
 
     Object.defineProperty(_self, 'lineSegmentBatch', {
-        'get': function() { return _lineSegmentBatch; }
+        get: function() { return _lineSegmentBatch; }
     });
 
     //
     // Extent.
     //
     Object.defineProperty(_self, 'centerPosition', {
-        'get': function() { return _centerPosition; }
+        get: function() { return _centerPosition; }
     });
 
     Object.defineProperty(_self, 'size', {
-        'get': function() { return _size; }
+        get: function() { return _size; }
     });
 
     Object.defineProperty(_self, 'worldToScreenScaleFactor', {
-        'get': function() { return _worldToScreenScaleFactor; }
+        get: function() { return _worldToScreenScaleFactor; }
     });
 
     Object.defineProperty(_self, 'drawnImageCount', {
-        'get': function() { return _drawnImageCount; },
-        'set': function(value) { _drawnImageCount = value; }
+        get: function() { return _drawnImageCount; },
+        set: function(value) { _drawnImageCount = value; }
     });
 
     Object.defineProperty(_self, 'drawnLineSegmentCount', {
-        'get': function() { return _drawnLineSegmentCount; },
-        'set': function(value) { _drawnLineSegmentCount = value; }
+        get: function() { return _drawnLineSegmentCount; },
+        set: function(value) { _drawnLineSegmentCount = value; }
     });
 
     Object.defineProperty(_self, 'lastDrawnItem', {
-        'get': function() { return _lastDrawnItem; },
-        'set': function(value) { _lastDrawnItem = value; }
+        get: function() { return _lastDrawnItem; },
+        set: function(value) { _lastDrawnItem = value; }
     });
 
     //
@@ -6635,16 +6638,16 @@ function World2DItem(_world) {
     // Properties.
     //
     Object.defineProperty(_self, 'world', {
-        'get': function() { return _world; }
+        get: function() { return _world; }
     });
 
     Object.defineProperty(_self, 'isEnabled', {
         //
-        'get': function() {
+        get: function() {
             return _isEnabled;
         },
 
-        'set': function(value) {
+        set: function(value) {
             //
             if (value === _isEnabled) {
                 return;
@@ -6661,12 +6664,12 @@ function World2DItem(_world) {
 
     Object.defineProperty(_self, 'isVisible', {
         //
-        'get': function() {
+        get: function() {
             //
             return _isVisible;
         },
 
-        'set': function(value) {
+        set: function(value) {
             //
             if (value === _isVisible) {
                 return;
@@ -6689,12 +6692,12 @@ function World2DItem(_world) {
 
     Object.defineProperty(_self, 'isSelected', {
         //
-        'get': function() {
+        get: function() {
             //
             return _isSelected;
         },
 
-        'set': function(value) {
+        set: function(value) {
             //
             if (value === _isSelected) {
                 return;
@@ -6708,7 +6711,7 @@ function World2DItem(_world) {
 
     Object.defineProperty(_self, 'isOutOfBounds', {
         //
-        'get': function() {
+        get: function() {
             //
             if (_hasToCheckBounds === true) {
                 //
@@ -6720,7 +6723,7 @@ function World2DItem(_world) {
             return _isOutOfBounds;
         },
 
-        'set': function(value) {
+        set: function(value) {
             //
             if (value === _isOutOfBounds) {
                 return;
@@ -6733,13 +6736,13 @@ function World2DItem(_world) {
     });
 
     Object.defineProperty(_self, 'tag', {
-        'get': function() { return _tag; },
-        'set': function(value) { _tag = value; }
+        get: function() { return _tag; },
+        set: function(value) { _tag = value; }
     });
 
     Object.defineProperty(_self, 'hasToCheckBounds', {
-        'get': function() { return _hasToCheckBounds; },
-        'set': function(value) { _hasToCheckBounds = value; }
+        get: function() { return _hasToCheckBounds; },
+        set: function(value) { _hasToCheckBounds = value; }
     });
 }
 
@@ -6818,11 +6821,11 @@ function World2DLineSegment (
         // The start position in world space.
         Object.defineProperty(_self, 'startPosition', {
             //
-            'get': function() {
+            get: function() {
                 return _startPosition;
             },
 
-            'set': function(value) {
+            set: function(value) {
                 //
                 if (Vector2D.areEqual(value, _startPosition) === true) {
                     return;
@@ -6843,11 +6846,11 @@ function World2DLineSegment (
         // The finish position in world space.
         Object.defineProperty(_self, 'finishPosition', {
             //
-            'get': function() {
+            get: function() {
                 return _finishPosition;
             },
 
-            'set': function(value) {
+            set: function(value) {
                 //
                 if (Vector2D.areEqual(value, _finishPosition) === true) {
                     return;
@@ -6865,16 +6868,16 @@ function World2DLineSegment (
         });
 
         Object.defineProperty(_self, 'startScreenPosition', {
-            'get': function() { return _startScreenPosition },
+            get: function() { return _startScreenPosition },
             // Test:
-            'set': function(value) { _startScreenPosition = value; }
+            set: function(value) { _startScreenPosition = value; }
             // :Test
         });
 
         Object.defineProperty(_self, 'finishScreenPosition', {
-            'get': function() { return _finishScreenPosition },
+            get: function() { return _finishScreenPosition },
             // Test:
-            'set': function(value) { _finishScreenPosition = value; }
+            set: function(value) { _finishScreenPosition = value; }
             // :Test
         });
 
@@ -6882,11 +6885,11 @@ function World2DLineSegment (
         // The thickness in world space.
         Object.defineProperty(_self, 'thickness', {
             //
-            'get': function() {
+            get: function() {
                 return _thickness;
             },
 
-            'set': function(value) {
+            set: function(value) {
                 //
                 if (value === _thickness) {
                     return;
@@ -6899,26 +6902,26 @@ function World2DLineSegment (
         });
 
         Object.defineProperty(_self, 'screenThickness', {
-            'get': function() { return _screenThickness },
+            get: function() { return _screenThickness },
             // Test:
-            'set': function(value) { _screenThickness = value; }
+            set: function(value) { _screenThickness = value; }
             // :Test
         });
 
         Object.defineProperty(_self, 'color', {
-            'get': function() { return _color },
-            'set': function(value) { _color = value; }
+            get: function() { return _color },
+            set: function(value) { _color = value; }
         });
 
         // Styles
         Object.defineProperty(_self, 'boundsScreenThickness', {
             //
-            'get': function() {
+            get: function() {
                 //
                 return _boundsScreenThickness
             },
 
-            'set': function(value) {
+            set: function(value) {
                 //
                 if (value === _boundsScreenThickness) {
                     return;
@@ -6932,12 +6935,12 @@ function World2DLineSegment (
 
         Object.defineProperty(_self, 'minScreenThickness', {
             //
-            'get': function() {
+            get: function() {
                 //
                 return _minScreenThickness
             },
 
-            'set': function(value) {
+            set: function(value) {
                 //
                 if (value === _minScreenThickness) {
                     return;
@@ -6951,12 +6954,12 @@ function World2DLineSegment (
 
         Object.defineProperty(_self, 'maxScreenThickness', {
             //
-            'get': function() {
+            get: function() {
                 //
                 return _maxScreenThickness
             },
 
-            'set': function(value) {
+            set: function(value) {
                 //
                 if (value === _maxScreenThickness) {
                     return;
@@ -7160,8 +7163,8 @@ function World2DImage (
         // Define properties before continuing.
 
         Object.defineProperty(_self, 'texture', {
-            'get': function() { return _texture; },
-            'set': function(value) { _texture = value; }
+            get: function() { return _texture; },
+            set: function(value) { _texture = value; }
         });
 
         // Note:
@@ -7169,12 +7172,12 @@ function World2DImage (
         // space".
         Object.defineProperty(_self, 'centerPosition', {
             //
-            'get': function() {
+            get: function() {
                 //
                 return _centerPosition;
             },
 
-            'set': function(value) {
+            set: function(value) {
                 //
                 if (Vector2D.areEqual(value, _centerPosition) === true) {
                     return;
@@ -7196,12 +7199,12 @@ function World2DImage (
         // 'Size' here means this image's size in world space.
         Object.defineProperty(_self, 'size', {
             //
-            'get': function() {
+            get: function() {
                 //
                 return _size;
             },
 
-            'set': function(value) {
+            set: function(value) {
                 //
                 if (Size2D.areEqual(value, _size) === true) {
                     return;
@@ -7223,9 +7226,9 @@ function World2DImage (
         // "CenterScreenPosition" here means this image's center position in screen
         // space, not the screen's center position.
         Object.defineProperty(_self, 'centerScreenPosition', {
-            'get': function() { return _centerScreenPosition; },
+            get: function() { return _centerScreenPosition; },
             // Test:
-            'set': function(value) { _centerScreenPosition = value; }
+            set: function(value) { _centerScreenPosition = value; }
             // :Test
         });
 
@@ -7233,20 +7236,20 @@ function World2DImage (
         // "ScreenSize" here means this image's size in screen space, not the screen's
         // size.
         Object.defineProperty(_self, 'screenSize', {
-            'get': function() { return _screenSize; },
+            get: function() { return _screenSize; },
             // Test:
-            'set': function(value) { _screenSize = value; }
+            set: function(value) { _screenSize = value; }
             // :Test
         });
 
         Object.defineProperty(_self, 'sourceRect', {
-            'get': function() { return _sourceRect; },
-            'set': function(value) { _sourceRect = value; }
+            get: function() { return _sourceRect; },
+            set: function(value) { _sourceRect = value; }
         });
 
         Object.defineProperty(_self, 'color', {
-            'get': function() { return _color; },
-            'set': function(value) { _color = value; }
+            get: function() { return _color; },
+            set: function(value) { _color = value; }
         });
 
         //
@@ -7254,12 +7257,12 @@ function World2DImage (
         //
         Object.defineProperty(_self, 'boundsScreenSize', {
             //
-            'get': function() {
+            get: function() {
                 //
                 return _boundsScreenSize;
             },
 
-            'set': function(value) {
+            set: function(value) {
                 //
                 if (value === _boundsScreenSize) {
                     return;
@@ -7273,12 +7276,12 @@ function World2DImage (
 
         Object.defineProperty(_self, 'minScreenSize', {
             //
-            'get': function() {
+            get: function() {
                 //
                 return _minScreenSize;
             },
 
-            'set': function(value) {
+            set: function(value) {
                 //
                 if (Size2D.areEqual(value, _minScreenSize) === true) {
                     return;
@@ -7292,12 +7295,12 @@ function World2DImage (
 
         Object.defineProperty(_self, 'maxScreenSize', {
             //
-            'get': function() {
+            get: function() {
                 //
                 return _maxScreenSize;
             },
 
-            'set': function(value) {
+            set: function(value) {
                 //
                 if (Size2D.areEqual(value, _maxScreenSize) === true) {
                     return;
@@ -7651,7 +7654,7 @@ exports.LineSegment2D = LineSegment2D;
 exports.LineSegment2DBatch = LineSegment2DBatch;
 exports.LineSegment2DBatchStyle = LineSegment2DBatchStyle;
 exports.LineSegment2DHelper = LineSegment2DHelper;
-exports.NormalizedDeviceCoordinates = NormalizedDeviceCoordinates;
+exports.Ndc = Ndc;
 exports.PositionColor = PositionColor;
 exports.PositionOnly = PositionOnly;
 exports.PositionTextureCoordinates = PositionTextureCoordinates;

@@ -59,11 +59,11 @@ function LineSegment2DBatch(_renderer, _style) {
     // Properties.
     //
     Object.defineProperty(_self, 'renderer', {
-        'get': function() { return _renderer; }
+        get: function() { return _renderer; }
     });
 
     Object.defineProperty(_self, 'isBegun', {
-        'get': function() { return _isBegun; }
+        get: function() { return _isBegun; }
     });
 
     //
@@ -314,39 +314,39 @@ function LineSegment2DBatch(_renderer, _style) {
 //
 LineSegment2DBatch.VERTEX_SHADER_SOURCE = [
     //
-   'precision highp float;', // which is the default vertex shader precision.
+    'precision highp float;', // which is the default vertex shader precision.
 
-   'attribute vec3 vertexPosition;',
-   'attribute vec4 vertexColor;',
+    'attribute vec3 vertexPosition;',
+    'attribute vec4 vertexColor;',
 
-   'varying vec4 color;',
+    'uniform vec2 canvasClientSize;',
 
-   'uniform vec2 canvasClientSize;',
+    'varying vec4 _color;',
 
-   'void main() {',
+    'void main() {',
         //
-        // Converts the vertex position from screen to clip space (not NDC yet).
-       'gl_Position = vec4 (',
-           '-1.0 + 2.0 * (vertexPosition.x / canvasClientSize.x),',
-           '-1.0 + 2.0 * (vertexPosition.y / canvasClientSize.y),',
-           'vertexPosition.z,',
-           '1.0',
-       ');',
+        // Converts the (vertex) position from screen to 'clip' space with w = 1,
+        // just like what ScreenCoordinateHelper.toClipSpace() does.
+        'gl_Position = vec4 (',
+            '-1.0 + 2.0 * (vertexPosition.xy / canvasClientSize.xy),',
+            'vertexPosition.z,',
+            '1.0',
+        ');',
 
-       'color = vertexColor;',
-   '}'
+        '_color = vertexColor;',
+    '}'
 
 ].join('\n');
 
 LineSegment2DBatch.FRAGMENT_SHADER_SOURCE = [
     //
-   'precision mediump float;', // which is the recommended fragment shader precision.
+    'precision mediump float;', // which is the recommended fragment shader precision.
 
-   'varying vec4 color;',
+    'varying vec4 _color;',
 
-   'void main() {',
-       'gl_FragColor = color;',
-   '}'
+    'void main() {',
+        'gl_FragColor = _color;',
+    '}'
    
 ].join('\n');
 

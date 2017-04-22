@@ -82,63 +82,25 @@ LineSegment2D.createVertexPositions = function (
     // Use the imagination above, 4 corners are then found below.
 
     v = Vector2D.multiplyVectorByScalar(v, halfScreenThickness);
-    var lowerRightCorner = Vector2D.subtractVectors(p2, v); // p2 - v
-    var upperRightCorner = Vector2D.addVectors(p2, v);      // p2 + v
-    var lowerLeftCorner  = Vector2D.subtractVectors(p1, v); // p1 - v
-    var upperLeftCorner  = Vector2D.addVectors(p1, v);      // p1 + v
 
-    // Test:
-    /*
-    var p3 = new Vector3D (
-        lowerRightCorner.x,
-        lowerRightCorner.y,
-        screenPosition2.z
-    );
+    // Lower right.
+    var p3 = Vector2D.subtractVectors(p2, v); // p2 - v
 
-    var p4 = new Vector3D (
-        upperRightCorner.x,
-        upperRightCorner.y,
-        screenPosition2.z
-    );
+    // Upper rght.
+    var p4 = Vector2D.addVectors(p2, v); // p2 + v
 
-    var p5 = new Vector3D (
-        lowerLeftCorner.x,
-        lowerLeftCorner.y,
-        screenPosition1.z
-    );
+    // Lower left.
+    var p5 = Vector2D.subtractVectors(p1, v); // p1 - v
 
-    var p6 = new Vector3D (
-        upperLeftCorner.x,
-        upperLeftCorner.y,
-        screenPosition1.z
-    );
-    
-    var vertexPositions = [ p3, p4, p5, p6 ];
-
-    var vertexPositions2 = [];
-
-    for (var i=0; i<vertexPositions.length; i++) {
-        //
-        var item = vertexPositions[i];
-
-        var p = ScreenCoordinateHelper.toClipSpace (
-            renderer.canvas,
-            item
-        );
-
-        vertexPositions2 = vertexPositions2.concat(p.toArray());
-    }
-
-    return vertexPositions2;
-    */
+    // Upper left.
+    var p6 = Vector2D.addVectors(p1, v); // p1 + v
 
     return [
-        lowerRightCorner.x, lowerRightCorner.y, screenPosition2.z,
-        upperRightCorner.x, upperRightCorner.y, screenPosition2.z,
-        lowerLeftCorner.x,  lowerLeftCorner.y,  screenPosition1.z,
-        upperLeftCorner.x,  upperLeftCorner.y,  screenPosition1.z
+        p3.x, p3.y, screenPosition2.z,
+        p4.x, p4.y, screenPosition2.z,
+        p5.x, p5.y, screenPosition1.z,
+        p6.x, p6.y, screenPosition1.z
     ];
-    // :Test
 };
 
 LineSegment2D.createVertexColors = function(color) {

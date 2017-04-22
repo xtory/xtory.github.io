@@ -45,8 +45,8 @@ function World2DImage (
         // Define properties before continuing.
 
         Object.defineProperty(_self, 'texture', {
-            'get': function() { return _texture; },
-            'set': function(value) { _texture = value; }
+            get: function() { return _texture; },
+            set: function(value) { _texture = value; }
         });
 
         // Note:
@@ -54,12 +54,12 @@ function World2DImage (
         // space".
         Object.defineProperty(_self, 'centerPosition', {
             //
-            'get': function() {
+            get: function() {
                 //
                 return _centerPosition;
             },
 
-            'set': function(value) {
+            set: function(value) {
                 //
                 if (Vector2D.areEqual(value, _centerPosition) === true) {
                     return;
@@ -81,12 +81,12 @@ function World2DImage (
         // 'Size' here means this image's size in world space.
         Object.defineProperty(_self, 'size', {
             //
-            'get': function() {
+            get: function() {
                 //
                 return _size;
             },
 
-            'set': function(value) {
+            set: function(value) {
                 //
                 if (Size2D.areEqual(value, _size) === true) {
                     return;
@@ -108,9 +108,9 @@ function World2DImage (
         // "CenterScreenPosition" here means this image's center position in screen
         // space, not the screen's center position.
         Object.defineProperty(_self, 'centerScreenPosition', {
-            'get': function() { return _centerScreenPosition; },
+            get: function() { return _centerScreenPosition; },
             // Test:
-            'set': function(value) { _centerScreenPosition = value; }
+            set: function(value) { _centerScreenPosition = value; }
             // :Test
         });
 
@@ -118,20 +118,20 @@ function World2DImage (
         // "ScreenSize" here means this image's size in screen space, not the screen's
         // size.
         Object.defineProperty(_self, 'screenSize', {
-            'get': function() { return _screenSize; },
+            get: function() { return _screenSize; },
             // Test:
-            'set': function(value) { _screenSize = value; }
+            set: function(value) { _screenSize = value; }
             // :Test
         });
 
         Object.defineProperty(_self, 'sourceRect', {
-            'get': function() { return _sourceRect; },
-            'set': function(value) { _sourceRect = value; }
+            get: function() { return _sourceRect; },
+            set: function(value) { _sourceRect = value; }
         });
 
         Object.defineProperty(_self, 'color', {
-            'get': function() { return _color; },
-            'set': function(value) { _color = value; }
+            get: function() { return _color; },
+            set: function(value) { _color = value; }
         });
 
         //
@@ -139,12 +139,12 @@ function World2DImage (
         //
         Object.defineProperty(_self, 'boundsScreenSize', {
             //
-            'get': function() {
+            get: function() {
                 //
                 return _boundsScreenSize;
             },
 
-            'set': function(value) {
+            set: function(value) {
                 //
                 if (value === _boundsScreenSize) {
                     return;
@@ -158,12 +158,12 @@ function World2DImage (
 
         Object.defineProperty(_self, 'minScreenSize', {
             //
-            'get': function() {
+            get: function() {
                 //
                 return _minScreenSize;
             },
 
-            'set': function(value) {
+            set: function(value) {
                 //
                 if (Size2D.areEqual(value, _minScreenSize) === true) {
                     return;
@@ -177,12 +177,12 @@ function World2DImage (
 
         Object.defineProperty(_self, 'maxScreenSize', {
             //
-            'get': function() {
+            get: function() {
                 //
                 return _maxScreenSize;
             },
 
-            'set': function(value) {
+            set: function(value) {
                 //
                 if (Size2D.areEqual(value, _maxScreenSize) === true) {
                     return;

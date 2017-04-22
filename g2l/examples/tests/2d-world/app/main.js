@@ -62,7 +62,7 @@ function main() {
     function setUpWorld() {
         //
         var style = new g2l.World2DStyle();
-        style.backgroundColor = g2l.Color.DEFAULT_BACKGROUND_COLOR;
+        style.backgroundColor = g2l.Colors.WHITE;
 
         world = new g2l.World2D(renderer, style);
     }
@@ -94,12 +94,12 @@ function main() {
         worldImages = [];
         worldLineSegments = [];
 
-        worldImageCount = 500; //2000;
+        worldImageCount = 50; //2000;
 
         var worldImageSize = new g2l.Size2D(32, 32); // LA icon's default size: (32, 32)
         var worldLineSegmentThickness = 1.5; // LA link's default thickness: 1.5
 
-        var halfLength = 5000;
+        var halfLength = 2500; //5000;
         for (var i=0; i<worldImageCount; i++) {
             //
             var p = new g2l.Vector2D (

@@ -68,11 +68,11 @@ function SpriteBatch(_renderer, _style) {
     // Properties.
     //
     Object.defineProperty(_self, 'renderer', {
-        'get': function() { return _renderer; }
+        get: function() { return _renderer; }
     });
 
     Object.defineProperty(_self, 'isBegun', {
-        'get': function() { return _isBegun; }
+        get: function() { return _isBegun; }
     });
 
     //
@@ -123,20 +123,26 @@ function SpriteBatch(_renderer, _style) {
 
         _uniformLocations = {
             //
-            'canvasClientSize': _renderer.getUniformLocation (
-                _program,
-                'canvasClientSize'
-            ),
+            shared: {
+                //
+                'canvasClientSize': _renderer.getUniformLocation (
+                    _program,
+                    'canvasClientSize'
+                )
+            },
 
-            'color': _renderer.getUniformLocation (
-                _program,
-                'color'
-            ),
+            unique: {
+                //
+                'color': _renderer.getUniformLocation (
+                    _program,
+                    'color'
+                ),
 
-            'sampler': _renderer.getUniformLocation (
-                _program,
-                'sampler'
-            )
+                'sampler': _renderer.getUniformLocation (
+                    _program,
+                    'sampler'
+                )
+            }
         };
     }
     
@@ -146,7 +152,7 @@ function SpriteBatch(_renderer, _style) {
 
         _renderer.setVector2DUniform (
             // Part 1.
-            _uniformLocations.canvasClientSize,
+            _uniformLocations.shared.canvasClientSize,
             // Part 2.
             new Float32Array ([
                 _renderer.canvas.clientWidth,
@@ -180,7 +186,7 @@ function SpriteBatch(_renderer, _style) {
                 //
                 _renderer.setVector4DUniform (
                     // Part 1.
-                    _uniformLocations.color,
+                    _uniformLocations.unique.color,
                     // Part 2.
                     item.color
                 );
@@ -217,7 +223,7 @@ function SpriteBatch(_renderer, _style) {
             if (lastTexture !== item.texture) {
                 //
                 _renderer.setSampler (
-                    _uniformLocations.sampler,
+                    _uniformLocations.unique.sampler,
                     item.texture
                 );
 
@@ -374,44 +380,70 @@ function SpriteBatch(_renderer, _style) {
 //
 // Static constants (after Object.freeze()).
 //
+// SpriteBatch.VERTEX_SHADER_SOURCE = [
+//     //
+//     'precision highp float;', // which is the default vertex shader precision.
+
+//     'uniform vec2 canvasClientSize;',
+
+//     'attribute vec3 vertexPosition;',
+//     'attribute vec2 vertexTextureCoordinates;',
+
+//     'varying vec2 _textureCoordinates;',
+
+//     'void main() {',
+//         //
+//         // Converts the (vertex) position from screen to 'clip' space with w = 1.
+//         'gl_Position = vec4 (',
+//             '-1.0 + 2.0 * (vertexPosition.x / canvasClientSize.x),',
+//             '-1.0 + 2.0 * (vertexPosition.y / canvasClientSize.y),',
+//             'vertexPosition.z,',
+//             '1.0',
+//         ');',
+
+//         '_textureCoordinates = vertexTextureCoordinates;',
+//     '}'
+
+// ].join('\n');
+
 SpriteBatch.VERTEX_SHADER_SOURCE = [
     //
-   'precision highp float;', // which is the default vertex shader precision.
+    'precision highp float;', // which is the default vertex shader precision.
 
-   'uniform vec2 canvasClientSize;',
+    'uniform vec2 canvasClientSize;',
 
-   'attribute vec3 vertexPosition;',
-   'attribute vec2 vertexTextureCoordinates;',
+    'attribute vec3 vertexPosition;',
+    'attribute vec2 vertexTextureCoordinates;',
 
-   'varying vec2 textureCoordinates;',
+    'varying vec2 _textureCoordinates;',
 
-   'void main() {',
+    'void main() {',
         //
-        // Converts the vertex position from screen to clip space (not NDC yet).
-       'gl_Position = vec4 (',
-           '-1.0 + 2.0 * (vertexPosition.x / canvasClientSize.x),',
-           '-1.0 + 2.0 * (vertexPosition.y / canvasClientSize.y),',
-           'vertexPosition.z,',
-           '1.0',
-       ');',
+        // Converts the (vertex) position from screen to 'clip' space with w = 1,
+        // just like what ScreenCoordinateHelper.toClipSpace() does.
+        'gl_Position = vec4 (',
+            '-1.0 + 2.0 * (vertexPosition.xy / canvasClientSize.xy),',
+            'vertexPosition.z,',
+            '1.0',
+        ');',
 
-       'textureCoordinates = vertexTextureCoordinates;',
-   '}'
+        '_textureCoordinates = vertexTextureCoordinates;',
+    '}'
 
 ].join('\n');
 
 SpriteBatch.FRAGMENT_SHADER_SOURCE = [
     //
-   'precision mediump float;', // which is the recommended fragment shader precision.
+    'precision mediump float;', // which is the recommended fragment shader precision.
 
-   'uniform sampler2D sampler;',
-   'uniform vec4 color;',
+    'uniform vec4 color;',
+    'uniform sampler2D sampler;',
 
-   'varying vec2 textureCoordinates;',
+    'varying vec2 _textureCoordinates;',
 
-   'void main() {',
-       'gl_FragColor = color * texture2D(sampler, textureCoordinates);',
-   '}'
+    'void main() {',
+        'gl_FragColor = color * texture2D(sampler, _textureCoordinates);',
+    '}'
    
 ].join('\n');
 

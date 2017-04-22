@@ -48,11 +48,11 @@ function World2DLineSegment (
         // The start position in world space.
         Object.defineProperty(_self, 'startPosition', {
             //
-            'get': function() {
+            get: function() {
                 return _startPosition;
             },
 
-            'set': function(value) {
+            set: function(value) {
                 //
                 if (Vector2D.areEqual(value, _startPosition) === true) {
                     return;
@@ -73,11 +73,11 @@ function World2DLineSegment (
         // The finish position in world space.
         Object.defineProperty(_self, 'finishPosition', {
             //
-            'get': function() {
+            get: function() {
                 return _finishPosition;
             },
 
-            'set': function(value) {
+            set: function(value) {
                 //
                 if (Vector2D.areEqual(value, _finishPosition) === true) {
                     return;
@@ -95,16 +95,16 @@ function World2DLineSegment (
         });
 
         Object.defineProperty(_self, 'startScreenPosition', {
-            'get': function() { return _startScreenPosition },
+            get: function() { return _startScreenPosition },
             // Test:
-            'set': function(value) { _startScreenPosition = value; }
+            set: function(value) { _startScreenPosition = value; }
             // :Test
         });
 
         Object.defineProperty(_self, 'finishScreenPosition', {
-            'get': function() { return _finishScreenPosition },
+            get: function() { return _finishScreenPosition },
             // Test:
-            'set': function(value) { _finishScreenPosition = value; }
+            set: function(value) { _finishScreenPosition = value; }
             // :Test
         });
 
@@ -112,11 +112,11 @@ function World2DLineSegment (
         // The thickness in world space.
         Object.defineProperty(_self, 'thickness', {
             //
-            'get': function() {
+            get: function() {
                 return _thickness;
             },
 
-            'set': function(value) {
+            set: function(value) {
                 //
                 if (value === _thickness) {
                     return;
@@ -129,26 +129,26 @@ function World2DLineSegment (
         });
 
         Object.defineProperty(_self, 'screenThickness', {
-            'get': function() { return _screenThickness },
+            get: function() { return _screenThickness },
             // Test:
-            'set': function(value) { _screenThickness = value; }
+            set: function(value) { _screenThickness = value; }
             // :Test
         });
 
         Object.defineProperty(_self, 'color', {
-            'get': function() { return _color },
-            'set': function(value) { _color = value; }
+            get: function() { return _color },
+            set: function(value) { _color = value; }
         });
 
         // Styles
         Object.defineProperty(_self, 'boundsScreenThickness', {
             //
-            'get': function() {
+            get: function() {
                 //
                 return _boundsScreenThickness
             },
 
-            'set': function(value) {
+            set: function(value) {
                 //
                 if (value === _boundsScreenThickness) {
                     return;
@@ -162,12 +162,12 @@ function World2DLineSegment (
 
         Object.defineProperty(_self, 'minScreenThickness', {
             //
-            'get': function() {
+            get: function() {
                 //
                 return _minScreenThickness
             },
 
-            'set': function(value) {
+            set: function(value) {
                 //
                 if (value === _minScreenThickness) {
                     return;
@@ -181,12 +181,12 @@ function World2DLineSegment (
 
         Object.defineProperty(_self, 'maxScreenThickness', {
             //
-            'get': function() {
+            get: function() {
                 //
                 return _maxScreenThickness
             },
 
-            'set': function(value) {
+            set: function(value) {
                 //
                 if (value === _maxScreenThickness) {
                     return;

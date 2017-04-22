@@ -20,7 +20,7 @@ function World2DState(_world) {
     // Properties.
     //
     Object.defineProperty(_self, 'world', {
-        'get': function() { return _world; }
+        get: function() { return _world; }
     });
 }
 
