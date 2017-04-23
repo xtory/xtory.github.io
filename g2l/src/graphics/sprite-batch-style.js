@@ -8,8 +8,13 @@
 //
 function SpriteBatchStyle() {
     //
-    //this.areDbFrequentlyChanged = true;
     this.clearsDbAfterDrawing = true;
+
+    // Note:
+    // See the note above.
+    /*
+    this.areDbFrequentlyChanged = true;
+    */
 }
 
 Object.freeze(SpriteBatchStyle);

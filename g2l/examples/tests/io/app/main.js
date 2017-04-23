@@ -201,12 +201,12 @@ function main() {
             //
             vertexPosition: renderer.getAttributeLocation (
                 program,
-               'vertexPosition'
+                'vertexPosition'
             ),
 
             vertexColor: renderer.getAttributeLocation (
                 program,
-               'vertexColor'
+                'vertexColor'
             )
         };
 
@@ -214,7 +214,7 @@ function main() {
             //
             transform: renderer.getUniformLocation (
                 program,
-               'transform'
+                'transform'
             )
         };
     }

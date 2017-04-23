@@ -94,7 +94,7 @@ function main() {
         worldImages = [];
         worldLineSegments = [];
 
-        worldImageCount = 50; //2000;
+        worldImageCount = 500; //50; //2000;
 
         var worldImageSize = new g2l.Size2D(32, 32); // LA icon's default size: (32, 32)
         var worldLineSegmentThickness = 1.5; // LA link's default thickness: 1.5
@@ -126,6 +126,8 @@ function main() {
                 g2l.World2DLayerName.MIDDLE_IMAGES,
                 worldImage
             );
+
+            worldImage.isVisible = false;
 
             worldImages.push(worldImage);
         }

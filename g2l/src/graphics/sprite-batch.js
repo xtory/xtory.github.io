@@ -176,6 +176,22 @@ function SpriteBatch(_renderer, _style) {
                 vb
             );
 
+            var usesDefault = (
+                ((item.flushingOptions & SpriteFlushingOptions.VERTEX_TEXTURE_COORDINATES) ===
+                SpriteFlushingOptions.VERTEX_TEXTURE_COORDINATES) ?
+                false :
+                true
+            );
+
+            if (usesDefault === false) {
+                //
+                vb = _vertexBuffers.textureCoordinates[i];
+
+            } else {
+                //
+                vb = _defaultTextureCoordinateVertexBuffer;
+            }
+
             if (// Part 1.
                 lastColor === undefined ||
                 // Part 2.
@@ -193,23 +209,7 @@ function SpriteBatch(_renderer, _style) {
 
                 lastColor = item.color;
             }
-
-            var usesDefault = (
-                ((item.flushingOptions & SpriteFlushingOptions.VERTEX_TEXTURE_COORDINATES) ===
-                SpriteFlushingOptions.VERTEX_TEXTURE_COORDINATES) ?
-                false :
-                true
-            );
-
-            if (usesDefault === false) {
-                //
-                vb = _vertexBuffers.textureCoordinates[i];
-
-            } else {
-                //
-                vb = _defaultTextureCoordinateVertexBuffer;
-            }
-
+            
             if (usesDefault !== lastOfIfUsesDefault) {
                 //
                 _renderer.setAttribute (
@@ -380,40 +380,14 @@ function SpriteBatch(_renderer, _style) {
 //
 // Static constants (after Object.freeze()).
 //
-// SpriteBatch.VERTEX_SHADER_SOURCE = [
-//     //
-//     'precision highp float;', // which is the default vertex shader precision.
-
-//     'uniform vec2 canvasClientSize;',
-
-//     'attribute vec3 vertexPosition;',
-//     'attribute vec2 vertexTextureCoordinates;',
-
-//     'varying vec2 _textureCoordinates;',
-
-//     'void main() {',
-//         //
-//         // Converts the (vertex) position from screen to 'clip' space with w = 1.
-//         'gl_Position = vec4 (',
-//             '-1.0 + 2.0 * (vertexPosition.x / canvasClientSize.x),',
-//             '-1.0 + 2.0 * (vertexPosition.y / canvasClientSize.y),',
-//             'vertexPosition.z,',
-//             '1.0',
-//         ');',
-
-//         '_textureCoordinates = vertexTextureCoordinates;',
-//     '}'
-
-// ].join('\n');
-
 SpriteBatch.VERTEX_SHADER_SOURCE = [
     //
     'precision highp float;', // which is the default vertex shader precision.
 
-    'uniform vec2 canvasClientSize;',
-
     'attribute vec3 vertexPosition;',
     'attribute vec2 vertexTextureCoordinates;',
+
+    'uniform vec2 canvasClientSize;',
 
     'varying vec2 _textureCoordinates;',
 

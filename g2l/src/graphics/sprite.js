@@ -27,13 +27,8 @@ function Sprite (
     );
 
     // 2. Vertex texture coordinates.
-    if (// Part 1.
-        _sourceRect === undefined ||
-        // Part 2.
-        Rect.areEqual (
-            _sourceRect,
-            Sprite.DEFAULT_SOURCE_RECT
-        ) === true) {
+    if (_sourceRect === undefined ||
+        Rect.areEqual(_sourceRect, Sprite.DEFAULT_SOURCE_RECT) === true) {
         //
         this.flushingOptions = SpriteFlushingOptions.VERTEX_POSITIONS;
 

@@ -12,9 +12,9 @@ PositionOnly.VERTEX_SHADER_SOURCE = [
     //
     'precision highp float;', // which is the default vertex shader precision.
 
-    'uniform mat4 transform;',
-
     'attribute vec3 vertexPosition;',
+
+    'uniform mat4 transform;',
 
     'void main() {',
         'gl_Position = transform * vec4(vertexPosition, 1.0);',

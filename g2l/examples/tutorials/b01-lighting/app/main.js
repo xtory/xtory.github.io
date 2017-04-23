@@ -263,17 +263,17 @@ function main() {
             //
             vertexPosition: renderer.getAttributeLocation (
                 program,
-               'vertexPosition'
+                'vertexPosition'
             ),
 
             vertexNormal: renderer.getAttributeLocation (
                 program,
-               'vertexNormal'
+                'vertexNormal'
             ),
             
             vertexTextureCoordinates: renderer.getAttributeLocation (
                 program,
-               'vertexTextureCoordinates'
+                'vertexTextureCoordinates'
             )
         };
         
@@ -281,17 +281,17 @@ function main() {
             //
             transform: renderer.getUniformLocation (
                 program,
-               'transform'
+                'transform'
             ),
 
             transposeOfInverseOfModelMatrix: renderer.getUniformLocation (
                 program,
-               'transposeOfInverseOfModelMatrix'
+                'transposeOfInverseOfModelMatrix'
             ),
 
             sampler: renderer.getUniformLocation (
                 program,
-               'sampler'
+                'sampler'
             )
         };
     }

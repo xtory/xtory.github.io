@@ -1,12 +1,15 @@
-// Note:
-// Sees the notes in the beginning of SpriteBatchStyle.
 //
 // Constructor.
 //
 function LineSegment2DBatchStyle() {
     //
-    //this.areDbFrequentlyChanged = false;
     this.clearsDbAfterDrawing = true;
+
+    // Note:
+    // See the note in the beginning of SpriteBatchStyle.
+    /*
+    this.areDbFrequentlyChanged = false;
+    */
 }
 
 Object.freeze(LineSegment2DBatchStyle);

@@ -65,10 +65,6 @@ function main() {
     //
     function setUpShaders() {
         //
-        // program = loader.setUpProgram (
-        //     g2l.TransformedPositionColor.VERTEX_SHADER_SOURCE,
-        //     g2l.TransformedPositionColor.FRAGMENT_SHADER_SOURCE
-        // );
         program = loader.setUpProgram (
             g2l.LineSegment2DBatch.VERTEX_SHADER_SOURCE,
             g2l.LineSegment2DBatch.FRAGMENT_SHADER_SOURCE
@@ -78,12 +74,12 @@ function main() {
             //
             vertexPosition: renderer.getAttributeLocation (
                 program,
-               'vertexPosition'
+                'vertexPosition'
             ),
 
             vertexColor: renderer.getAttributeLocation (
                 program,
-               'vertexColor'
+                'vertexColor'
             )
         };
 
@@ -91,7 +87,7 @@ function main() {
             //
             canvasClientSize: renderer.getUniformLocation (
                 program,
-               'canvasClientSize'
+                'canvasClientSize'
             )
         };
     }

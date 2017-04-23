@@ -101,19 +101,19 @@ function main() {
             //
             vertexPosition: renderer.getAttributeLocation (
                 program,
-               'vertexPosition'
+                'vertexPosition'
             ),
 
             vertexColor: renderer.getAttributeLocation (
                 program,
-               'vertexColor'
+                'vertexColor'
             )
         };
         
         uniformLocations = {
             transform: renderer.getUniformLocation (
                 program,
-               'transform'
+                'transform'
             )
         };
     }

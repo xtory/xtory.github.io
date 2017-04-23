@@ -12,10 +12,10 @@ Multitexturing.VERTEX_SHADER_SOURCE = [
     //
     'precision highp float;', // which is the default vertex shader precision.
 
-    'uniform mat4 transform;',
-
     'attribute vec3 vertexPosition;',
     'attribute vec2 vertexTextureCoordinates;',
+
+    'uniform mat4 transform;',
 
     'varying vec2 _textureCoordinates;',
 

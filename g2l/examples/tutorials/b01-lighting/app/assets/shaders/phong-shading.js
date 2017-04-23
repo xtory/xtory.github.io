@@ -12,12 +12,12 @@ PhongShading.VERTEX_SHADER_SOURCE = [
     //
     'precision highp float;', // which is the default vertex shader precision.
 
-    'uniform mat4 transposeOfInverseOfModelMatrix;',
-    'uniform mat4 transform;',
-
     'attribute vec3 vertexPosition;',
     'attribute vec3 vertexNormal;',
     'attribute vec2 vertexTextureCoordinates;',
+
+    'uniform mat4 transposeOfInverseOfModelMatrix;',
+    'uniform mat4 transform;',
 
     'varying vec2 _textureCoordinates;',
     'varying vec3 _lighting;',

@@ -1,6 +1,11 @@
+// Note:
+// Sprite.createVertexXxx() returns a Float32Array directly, but LineSegment2D
+// doesn't. Instead, LineSegment2D's vertexPositions, vertexColors, indices are
+// all arrays cuz later the values in these arrays will be combined to big Float32-
+// Arrays or Uint16Array, not now.
+
 import { DepthBufferValues } from './depth-buffer-values';
-import { Vector2D }          from '../math/2d-vector';
-import { Vector3D }          from '../math/3d-vector';
+import { Vector2D } from '../math/2d-vector';
 
 //
 // Constructor.
@@ -10,20 +15,25 @@ function LineSegment2D (
     _screenPosition1,
     _screenPosition2,
     _screenThickness,
-    _color
+    _color,
+    _vertexPositions, // which is a [], not a Float32Array.
+    _vertexColors     // which is a [], not a Float32Array.
 ){
     // 1. Vertex positions.
-    this.vertexPositions = LineSegment2D.createVertexPositions (
-        _screenPosition1,
-        _screenPosition2,
-        _screenThickness
+    //this.vertexPositions = LineSegment2D.createVertexPositions (
+    LineSegment2D.createVertexPositions (
+        // Part 1.
+        _vertexPositions,
+        // Part 2.
+        _screenPosition1, _screenPosition2, _screenThickness
     );
     
     // 2. Vertex colors.
-    this.vertexColors = LineSegment2D.createVertexColors(_color);
+    //this.vertexColors = LineSegment2D.createVertexColors(_color);
+    LineSegment2D.createVertexColors(_vertexColors, _color);
 
     // 3. Indices.
-    this.indices = LineSegment2D.DEFAULT_INDICES;
+    //this.indices = LineSegment2D.INDICES;
 }
 
 //
@@ -37,23 +47,20 @@ LineSegment2D.INDEX_COUNT   = 6; // (0, 1, 2, 2, 1, 3)
 LineSegment2D.DEFAULT_SCREEN_POSITION_DEPTH =
     DepthBufferValues.NEAR_CLIP_PLANE;
 
-LineSegment2D.DEFAULT_INDICES = [ 0, 1, 2, 2, 1, 3 ];
+LineSegment2D.INDICES = [ 0, 1, 2, 2, 1, 3 ];
 
 //
 // Static methods.
 // 
 LineSegment2D.createVertexPositions = function (
+    a,
     screenPosition1,
     screenPosition2,
     screenThickness
 ){
     // Note:
-    // Sprite.createVertexPositions() returns a Float32Array directly, but Line-
-    // Segment doesn't.
+    // See the note in the beginning of this constructor function.
 
-    //
-    // Vertex positions.
-    //
     var p1 = screenPosition1.xy;
     var p2 = screenPosition2.xy;
 
@@ -95,34 +102,35 @@ LineSegment2D.createVertexPositions = function (
     // Upper left.
     var p6 = Vector2D.addVectors(p1, v); // p1 + v
 
-    return [
-        p3.x, p3.y, screenPosition2.z,
-        p4.x, p4.y, screenPosition2.z,
-        p5.x, p5.y, screenPosition1.z,
-        p6.x, p6.y, screenPosition1.z
-    ];
+    // return [
+    //     p3.x, p3.y, screenPosition2.z,
+    //     p4.x, p4.y, screenPosition2.z,
+    //     p5.x, p5.y, screenPosition1.z,
+    //     p6.x, p6.y, screenPosition1.z
+    // ];
+
+    a[0]=p3.x;    a[ 1]=p3.y;    a[ 2]=screenPosition2.z;
+    a[3]=p4.x;    a[ 4]=p4.y;    a[ 5]=screenPosition2.z;
+    a[6]=p5.x;    a[ 7]=p5.y;    a[ 8]=screenPosition1.z;
+    a[9]=p6.x;    a[10]=p6.y;    a[11]=screenPosition1.z;
 };
 
-LineSegment2D.createVertexColors = function(color) {
+LineSegment2D.createVertexColors = function(a, color) {
     //
     // Note:
-    // Sprite.createVertexColors() returns a Float32Array directly, but LineSegment2D
-    // doesn't.
-    /*
-    return new Float32Array ([
-        color.r, color.g, color.b, color.a,
-        color.r, color.g, color.b, color.a,
-        color.r, color.g, color.b, color.a,
-        color.r, color.g, color.b, color.a
-    ]);
-    */
-    return [
-        color.r, color.g, color.b, color.a,
-        color.r, color.g, color.b, color.a,
-        color.r, color.g, color.b, color.a,
-        color.r, color.g, color.b, color.a
-    ];
-    // :Note
+    // See the note in the beginning of this constructor function.
+    //
+    // return [
+    //     color.r, color.g, color.b, color.a,
+    //     color.r, color.g, color.b, color.a,
+    //     color.r, color.g, color.b, color.a,
+    //     color.r, color.g, color.b, color.a
+    // ];
+
+    a[ 0]=color.r;    a[ 1]=color.g;    a[ 2]=color.b;    a[ 3]=color.a;
+    a[ 4]=color.r;    a[ 5]=color.g;    a[ 6]=color.b;    a[ 7]=color.a;
+    a[ 8]=color.r;    a[ 9]=color.g;    a[10]=color.b;    a[11]=color.a;
+    a[12]=color.r;    a[13]=color.g;    a[14]=color.b;    a[15]=color.a;
 };
 
 Object.freeze(LineSegment2D);

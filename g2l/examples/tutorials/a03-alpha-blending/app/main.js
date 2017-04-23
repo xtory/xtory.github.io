@@ -117,12 +117,12 @@ function main() {
             //
             vertexPosition: renderer.getAttributeLocation (
                 program,
-               'vertexPosition'
+                'vertexPosition'
             ),
 
             vertexTextureCoordinates: renderer.getAttributeLocation (
                 program,
-               'vertexTextureCoordinates'
+                'vertexTextureCoordinates'
             )
         };
 
@@ -130,12 +130,12 @@ function main() {
             //
             transform: renderer.getUniformLocation (
                 program,
-               'transform'
+                'transform'
             ),
 
             sampler: renderer.getUniformLocation (
                 program,
-               'sampler'
+                'sampler'
             )
         };
     }

@@ -2736,6 +2736,12 @@ Line2DHelper.lineIntersectsPoint = function(p1, p2, p) {
 
 Object.freeze(Line2DHelper);
 
+// Note:
+// Sprite.createVertexXxx() returns a Float32Array directly, but LineSegment2D
+// doesn't. Instead, LineSegment2D's vertexPositions, vertexColors, indices are
+// all arrays cuz later the values in these arrays will be combined to big Float32-
+// Arrays or Uint16Array, not now.
+
 //
 // Constructor.
 //
@@ -2744,20 +2750,25 @@ function LineSegment2D (
     _screenPosition1,
     _screenPosition2,
     _screenThickness,
-    _color
+    _color,
+    _vertexPositions, // which is a [], not a Float32Array.
+    _vertexColors     // which is a [], not a Float32Array.
 ){
     // 1. Vertex positions.
-    this.vertexPositions = LineSegment2D.createVertexPositions (
-        _screenPosition1,
-        _screenPosition2,
-        _screenThickness
+    //this.vertexPositions = LineSegment2D.createVertexPositions (
+    LineSegment2D.createVertexPositions (
+        // Part 1.
+        _vertexPositions,
+        // Part 2.
+        _screenPosition1, _screenPosition2, _screenThickness
     );
     
     // 2. Vertex colors.
-    this.vertexColors = LineSegment2D.createVertexColors(_color);
+    //this.vertexColors = LineSegment2D.createVertexColors(_color);
+    LineSegment2D.createVertexColors(_vertexColors, _color);
 
     // 3. Indices.
-    this.indices = LineSegment2D.DEFAULT_INDICES;
+    //this.indices = LineSegment2D.INDICES;
 }
 
 //
@@ -2771,23 +2782,20 @@ LineSegment2D.INDEX_COUNT   = 6; // (0, 1, 2, 2, 1, 3)
 LineSegment2D.DEFAULT_SCREEN_POSITION_DEPTH =
     DepthBufferValues.NEAR_CLIP_PLANE;
 
-LineSegment2D.DEFAULT_INDICES = [ 0, 1, 2, 2, 1, 3 ];
+LineSegment2D.INDICES = [ 0, 1, 2, 2, 1, 3 ];
 
 //
 // Static methods.
 // 
 LineSegment2D.createVertexPositions = function (
+    a,
     screenPosition1,
     screenPosition2,
     screenThickness
 ){
     // Note:
-    // Sprite.createVertexPositions() returns a Float32Array directly, but Line-
-    // Segment doesn't.
+    // See the note in the beginning of this constructor function.
 
-    //
-    // Vertex positions.
-    //
     var p1 = screenPosition1.xy;
     var p2 = screenPosition2.xy;
 
@@ -2829,47 +2837,51 @@ LineSegment2D.createVertexPositions = function (
     // Upper left.
     var p6 = Vector2D.addVectors(p1, v); // p1 + v
 
-    return [
-        p3.x, p3.y, screenPosition2.z,
-        p4.x, p4.y, screenPosition2.z,
-        p5.x, p5.y, screenPosition1.z,
-        p6.x, p6.y, screenPosition1.z
-    ];
+    // return [
+    //     p3.x, p3.y, screenPosition2.z,
+    //     p4.x, p4.y, screenPosition2.z,
+    //     p5.x, p5.y, screenPosition1.z,
+    //     p6.x, p6.y, screenPosition1.z
+    // ];
+
+    a[0]=p3.x;    a[ 1]=p3.y;    a[ 2]=screenPosition2.z;
+    a[3]=p4.x;    a[ 4]=p4.y;    a[ 5]=screenPosition2.z;
+    a[6]=p5.x;    a[ 7]=p5.y;    a[ 8]=screenPosition1.z;
+    a[9]=p6.x;    a[10]=p6.y;    a[11]=screenPosition1.z;
 };
 
-LineSegment2D.createVertexColors = function(color) {
+LineSegment2D.createVertexColors = function(a, color) {
     //
     // Note:
-    // Sprite.createVertexColors() returns a Float32Array directly, but LineSegment2D
-    // doesn't.
-    /*
-    return new Float32Array ([
-        color.r, color.g, color.b, color.a,
-        color.r, color.g, color.b, color.a,
-        color.r, color.g, color.b, color.a,
-        color.r, color.g, color.b, color.a
-    ]);
-    */
-    return [
-        color.r, color.g, color.b, color.a,
-        color.r, color.g, color.b, color.a,
-        color.r, color.g, color.b, color.a,
-        color.r, color.g, color.b, color.a
-    ];
-    // :Note
+    // See the note in the beginning of this constructor function.
+    //
+    // return [
+    //     color.r, color.g, color.b, color.a,
+    //     color.r, color.g, color.b, color.a,
+    //     color.r, color.g, color.b, color.a,
+    //     color.r, color.g, color.b, color.a
+    // ];
+
+    a[ 0]=color.r;    a[ 1]=color.g;    a[ 2]=color.b;    a[ 3]=color.a;
+    a[ 4]=color.r;    a[ 5]=color.g;    a[ 6]=color.b;    a[ 7]=color.a;
+    a[ 8]=color.r;    a[ 9]=color.g;    a[10]=color.b;    a[11]=color.a;
+    a[12]=color.r;    a[13]=color.g;    a[14]=color.b;    a[15]=color.a;
 };
 
 Object.freeze(LineSegment2D);
 
-// Note:
-// Sees the notes in the beginning of SpriteBatchStyle.
 //
 // Constructor.
 //
 function LineSegment2DBatchStyle() {
     //
-    //this.areDbFrequentlyChanged = false;
     this.clearsDbAfterDrawing = true;
+
+    // Note:
+    // See the note in the beginning of SpriteBatchStyle.
+    /*
+    this.areDbFrequentlyChanged = false;
+    */
 }
 
 Object.freeze(LineSegment2DBatchStyle);
@@ -2909,8 +2921,10 @@ function LineSegment2DBatch(_renderer, _style) {
     var _uniformLocations;
 
     // Helpers.
-    var _vertexPositions;
-    var _vertexColors;
+    var _vertexArrays;
+    // var _vertexPositions;
+    // var _vertexColors;
+    var _canvasClientSize; // which is a Float32Array.
     var _indices;
     var _isBegun;
     var _isOkToAddItem;
@@ -2930,6 +2944,8 @@ function LineSegment2DBatch(_renderer, _style) {
         setUpVertexBuffers();
 
         setUpIndexBuffers();
+
+        _canvasClientSize = new Float32Array(2);
 
         setUpShaders();
 
@@ -2960,38 +2976,28 @@ function LineSegment2DBatch(_renderer, _style) {
     //
     function setUpVertexBuffers() {
         //
-        // _vertexBuffers = {
-        //     position: [],
-        //     color: []
-        // };
-
         _vertexBuffers = {
             'position': _renderer.loader.createVertexBuffer(),
             'color': _renderer.loader.createVertexBuffer()
         };
 
-        _vertexPositions = [];
-        _vertexColors = [];
+        // _vertexPositions = [];
+        // _vertexColors = [];
 
-        // _defaultVertexBuffers = {
-        //     color: _renderer.loader.createVertexBuffer(),
-        //     textureCoordinates: _renderer.loader.createVertexBuffer()
-        // };
-
-        // _defaultVertexBuffers.color.loadData (
-        //     Sprite.DEFAULT_VERTEX_COLORS,
-        //     Sprite.COLOR_SIZE
-        // );
-
-        // _defaultVertexBuffers.textureCoordinates.loadData (
-        //     Sprite.DEFAULT_VERTEX_TEXTURE_COORDINATES,
-        //     Sprite.TEXTURE_COORDINATE_SIZE
-        // );
+        _vertexArrays = {
+            'position': [],
+            'color': [],
+            'position2': [],
+            'color2': []
+            // 'position3': null, // which is a Float32Array.
+            // 'color3': null     // which is a Float32Array.
+        };
     }
 
     function setUpIndexBuffers() {
         //
         _indexBuffer = _renderer.loader.createIndexBuffer();
+
         _indices = [];
     }
 
@@ -3006,12 +3012,12 @@ function LineSegment2DBatch(_renderer, _style) {
             //
             'vertexPosition': _renderer.getAttributeLocation (
                 _program,
-               'vertexPosition'
+                'vertexPosition'
             ),
 
             'vertexColor': _renderer.getAttributeLocation (
                 _program,
-               'vertexColor'
+                'vertexColor'
             )
         };
 
@@ -3019,32 +3025,27 @@ function LineSegment2DBatch(_renderer, _style) {
             //
             'canvasClientSize': _renderer.getUniformLocation (
                 _program,
-               'canvasClientSize'
+                'canvasClientSize'
             )
         };
     }
 
     function flush() {
         //
-        _renderer.program = _program;
-
-        _renderer.setVector2DUniform (
-            // Part 1.
-            _uniformLocations.canvasClientSize,
-            // Part 2.
-            new Float32Array ([
-                _renderer.canvas.clientWidth,
-                _renderer.canvas.clientHeight            
-            ])
-        );
+        // if (_vertexArrays.position3 === null ||
+        //     _vertexArrays.position3.length < _vertexArrays.position2.length) {
+        //     //
+        //     _vertexArrays.position3 =
+        //         new Float32Array(_vertexArrays.position2.length);
+        // }
 
         _vertexBuffers.position.loadData (
-            new Float32Array(_vertexPositions),
+            new Float32Array(_vertexArrays.position2), //new Float32Array(_vertexPositions),
             LineSegment2D.POSITION_SIZE
         );
 
         _vertexBuffers.color.loadData (
-            new Float32Array(_vertexColors),
+            new Float32Array(_vertexArrays.color2), //new Float32Array(_vertexColors),
             LineSegment2D.COLOR_SIZE
         );
 
@@ -3052,6 +3053,8 @@ function LineSegment2DBatch(_renderer, _style) {
             new Uint16Array(_indices)
         );
         
+        _renderer.program = _program;
+
         _renderer.setAttribute (
             _attributeLocations.vertexPosition,
             _vertexBuffers.position
@@ -3062,6 +3065,14 @@ function LineSegment2DBatch(_renderer, _style) {
             _vertexBuffers.color
         );
 
+        _canvasClientSize[0] = _renderer.canvas.clientWidth;
+        _canvasClientSize[1] = _renderer.canvas.clientHeight;
+
+        _renderer.setVector2DUniform (
+            _uniformLocations.canvasClientSize,
+            _canvasClientSize
+        );
+        
         _renderer.drawIndexedPrimitives (
             _indexBuffer,
             PrimitiveType.TRIANGLE_LIST,
@@ -3072,8 +3083,10 @@ function LineSegment2DBatch(_renderer, _style) {
     function clear() {
         //
         _indices = [];
-        _vertexPositions = [];
-        _vertexColors = [];
+        // _vertexColors = [];
+        // _vertexPositions = [];
+        _vertexArrays.color2 = [];
+        _vertexArrays.position2 = [];
 
         _db = [];
 
@@ -3105,6 +3118,40 @@ function LineSegment2DBatch(_renderer, _style) {
             throw 'A begin-not-called-before-drawing exception raised.';
         }
 
+        var va1, va2; // vertex arrays.
+        //var vb1, vb2; // vertex buffers.
+        var index = _db.length;
+
+        // 1. Vertex arrays.
+        if (_vertexArrays.position.length - 1 < index) {
+            //
+            va1 = [];
+            _vertexArrays.position.push(va1);
+
+            // vb1 = _renderer.loader.createVertexBuffer();
+            // _vertexBuffers.position.push(vb1);
+
+        } else { // index <=  _vertexArrays.position.length - 1
+            //
+            va1 = _vertexArrays.position[index];
+            //vb1 = _vertexBuffers.position[index];
+        }
+
+        // 2. Vertex colors.
+        if (_vertexArrays.color.length - 1 < index) {
+            //
+            va2 = [];
+            _vertexArrays.color.push(va2);
+
+            // vb2 = _renderer.loader.createVertexBuffer();
+            // _vertexBuffers.textureCoordinates.push(vb2);
+
+        } else { // index <= _vertexArrays.color.length - 1
+            //
+            va2 = _vertexArrays.color[index];
+            //vb2 = _vertexBuffers.textureCoordinates[index];
+        }
+
         var lineSegment = new LineSegment2D (
             // Part 1.
             _self,
@@ -3113,53 +3160,28 @@ function LineSegment2DBatch(_renderer, _style) {
             // Part 3.
             screenThickness,
             // Part 4.
-            color
+            color,
+            // Part 5.
+            va1, va2
         );
 
-        //var vb;
-        //var index = _db.length;
-        
-        // 1. Vertex positions.
-        // if (_vertexBuffers.position.length - 1 < index) {
-        //     //
-        //     vb = _renderer.loader.createVertexBuffer();
-        //     _vertexBuffers.position.push(vb);
-
-        // } else {
-        //     //
-        //     vb = _vertexBuffers.position[index];
-        // }
-
-        // vb.loadData (
-        //     lineSegment.vertexPositions,
-        //     LineSegment2D.POSITION_SIZE
-        // );
-        _vertexPositions =
-            _vertexPositions.concat(lineSegment.vertexPositions);
+        // _vertexPositions =
+        //     _vertexPositions.concat(lineSegment.vertexPositions);
+        _vertexArrays.position2 =
+            _vertexArrays.position2.concat(va1);
 
         // 2. Vertex colors.
-        // if (_vertexBuffers.color.length - 1 < index) {
-        //     //
-        //     vb = _renderer.loader.createVertexBuffer();
-        //     _vertexBuffers.color.push(vb);
+        // _vertexColors =
+        //     _vertexColors.concat(lineSegment.vertexColors);
+        _vertexArrays.color2 =
+            _vertexArrays.color2.concat(va2);
 
-        // } else {
-        //     //
-        //     vb = _vertexBuffers.color[index];
-        // }
-
-        // vb.loadData (
-        //     lineSegment.vertexColors,
-        //     LineSegment2D.COLOR_SIZE
-        // );
-        _vertexColors =
-            _vertexColors.concat(lineSegment.vertexColors);
-
-        //var base = LineSegment2D.INDEX_COUNT * _db.length;
+        // 3. Indices.
         var base = LineSegment2D.VERTEX_COUNT * _db.length;
         for (var i=0; i<LineSegment2D.INDEX_COUNT; i++) {
             //
-            _indices.push(base + lineSegment.indices[i]);
+            //_indices.push(base + lineSegment.indices[i]);
+            _indices.push(base + LineSegment2D.INDICES[i]);
         }
 
         _db.push(lineSegment);
@@ -3456,10 +3478,10 @@ PositionColor.VERTEX_SHADER_SOURCE = [
     //
     'precision highp float;', // which is the default vertex shader precision.
 
-    'uniform mat4 transform;',
-
     'attribute vec3 vertexPosition;',
     'attribute vec4 vertexColor;',
+
+    'uniform mat4 transform;',
 
     'varying vec4 _color;',
 
@@ -3500,9 +3522,9 @@ PositionOnly.VERTEX_SHADER_SOURCE = [
     //
     'precision highp float;', // which is the default vertex shader precision.
 
-    'uniform mat4 transform;',
-
     'attribute vec3 vertexPosition;',
+
+    'uniform mat4 transform;',
 
     'void main() {',
         'gl_Position = transform * vec4(vertexPosition, 1.0);',
@@ -3536,10 +3558,10 @@ PositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
     //
     'precision highp float;', // which is the default vertex shader precision.
 
-    'uniform mat4 transform;',
-
     'attribute vec3 vertexPosition;',
     'attribute vec2 vertexTextureCoordinates;',
+
+    'uniform mat4 transform;',
 
     'varying vec2 _textureCoordinates;',
 
@@ -4875,13 +4897,8 @@ function Sprite (
     );
 
     // 2. Vertex texture coordinates.
-    if (// Part 1.
-        _sourceRect === undefined ||
-        // Part 2.
-        Rect.areEqual (
-            _sourceRect,
-            Sprite.DEFAULT_SOURCE_RECT
-        ) === true) {
+    if (_sourceRect === undefined ||
+        Rect.areEqual(_sourceRect, Sprite.DEFAULT_SOURCE_RECT) === true) {
         //
         this.flushingOptions = SpriteFlushingOptions.VERTEX_POSITIONS;
 
@@ -4967,8 +4984,13 @@ Object.freeze(Sprite);
 //
 function SpriteBatchStyle() {
     //
-    //this.areDbFrequentlyChanged = true;
     this.clearsDbAfterDrawing = true;
+
+    // Note:
+    // See the note above.
+    /*
+    this.areDbFrequentlyChanged = true;
+    */
 }
 
 Object.freeze(SpriteBatchStyle);
@@ -5144,6 +5166,22 @@ function SpriteBatch(_renderer, _style) {
                 vb
             );
 
+            var usesDefault = (
+                ((item.flushingOptions & SpriteFlushingOptions.VERTEX_TEXTURE_COORDINATES) ===
+                SpriteFlushingOptions.VERTEX_TEXTURE_COORDINATES) ?
+                false :
+                true
+            );
+
+            if (usesDefault === false) {
+                //
+                vb = _vertexBuffers.textureCoordinates[i];
+
+            } else {
+                //
+                vb = _defaultTextureCoordinateVertexBuffer;
+            }
+
             if (// Part 1.
                 lastColor === undefined ||
                 // Part 2.
@@ -5161,23 +5199,7 @@ function SpriteBatch(_renderer, _style) {
 
                 lastColor = item.color;
             }
-
-            var usesDefault = (
-                ((item.flushingOptions & SpriteFlushingOptions.VERTEX_TEXTURE_COORDINATES) ===
-                SpriteFlushingOptions.VERTEX_TEXTURE_COORDINATES) ?
-                false :
-                true
-            );
-
-            if (usesDefault === false) {
-                //
-                vb = _vertexBuffers.textureCoordinates[i];
-
-            } else {
-                //
-                vb = _defaultTextureCoordinateVertexBuffer;
-            }
-
+            
             if (usesDefault !== lastOfIfUsesDefault) {
                 //
                 _renderer.setAttribute (
@@ -5348,40 +5370,14 @@ function SpriteBatch(_renderer, _style) {
 //
 // Static constants (after Object.freeze()).
 //
-// SpriteBatch.VERTEX_SHADER_SOURCE = [
-//     //
-//     'precision highp float;', // which is the default vertex shader precision.
-
-//     'uniform vec2 canvasClientSize;',
-
-//     'attribute vec3 vertexPosition;',
-//     'attribute vec2 vertexTextureCoordinates;',
-
-//     'varying vec2 _textureCoordinates;',
-
-//     'void main() {',
-//         //
-//         // Converts the (vertex) position from screen to 'clip' space with w = 1.
-//         'gl_Position = vec4 (',
-//             '-1.0 + 2.0 * (vertexPosition.x / canvasClientSize.x),',
-//             '-1.0 + 2.0 * (vertexPosition.y / canvasClientSize.y),',
-//             'vertexPosition.z,',
-//             '1.0',
-//         ');',
-
-//         '_textureCoordinates = vertexTextureCoordinates;',
-//     '}'
-
-// ].join('\n');
-
 SpriteBatch.VERTEX_SHADER_SOURCE = [
     //
     'precision highp float;', // which is the default vertex shader precision.
 
-    'uniform vec2 canvasClientSize;',
-
     'attribute vec3 vertexPosition;',
     'attribute vec2 vertexTextureCoordinates;',
+
+    'uniform vec2 canvasClientSize;',
 
     'varying vec2 _textureCoordinates;',
 

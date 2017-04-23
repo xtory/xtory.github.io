@@ -12,10 +12,10 @@ PositionColor.VERTEX_SHADER_SOURCE = [
     //
     'precision highp float;', // which is the default vertex shader precision.
 
-    'uniform mat4 transform;',
-
     'attribute vec3 vertexPosition;',
     'attribute vec4 vertexColor;',
+
+    'uniform mat4 transform;',
 
     'varying vec4 _color;',
 
