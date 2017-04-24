@@ -111,10 +111,14 @@ function main() {
         };
         
         uniformLocations = {
-            transform: renderer.getUniformLocation (
-                program,
-                'transform'
-            )
+            //
+            shared: {
+                //
+                transform: renderer.getUniformLocation (
+                    program,
+                    'transform'
+                )
+            }
         };
     }
 
@@ -173,7 +177,7 @@ function main() {
         );
 
         renderer.setMatrix4x4Uniform (
-            uniformLocations.transform,
+            uniformLocations.shared.transform,
             transform.db
         );
     }    

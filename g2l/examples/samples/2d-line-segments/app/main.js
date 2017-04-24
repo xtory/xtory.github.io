@@ -85,10 +85,13 @@ function main() {
 
         uniformLocations = {
             //
-            canvasClientSize: renderer.getUniformLocation (
-                program,
-                'canvasClientSize'
-            )
+            shared: {
+                //
+                canvasClientSize: renderer.getUniformLocation (
+                    program,
+                    'canvasClientSize'
+                )
+            }
         };
     }
 
@@ -101,9 +104,9 @@ function main() {
         );
 
         info = {
-            'title': divs[0],
-            'fps':   divs[1],
-            'more':  divs[2]
+            title: divs[0],
+            fps:   divs[1],
+            more:  divs[2]
         };
 
         info.title.innerHTML = title;
@@ -154,7 +157,7 @@ function main() {
 
             // Sets the shared uniform.
             renderer.setVector2DUniform (
-                uniformLocations.canvasClientSize,
+                uniformLocations.shared.canvasClientSize,
                 new Float32Array ([
                     renderer.canvas.clientWidth,
                     renderer.canvas.clientHeight

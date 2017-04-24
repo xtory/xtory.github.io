@@ -81,8 +81,8 @@ function SpriteBatch(_renderer, _style) {
     function setUpVertexBuffers() {
         //
         _vertexBuffers = {
-            'position': [],
-            'textureCoordinates': []
+            position: [],
+            textureCoordinates: []
         };
 
         _defaultTextureCoordinateVertexBuffer =
@@ -90,8 +90,8 @@ function SpriteBatch(_renderer, _style) {
 
         // Test:
         _vertexArrays = {
-            'position': [],
-            'textureCoordinates': []
+            position: [],
+            textureCoordinates: []
         };
         // :Test
 
@@ -110,12 +110,12 @@ function SpriteBatch(_renderer, _style) {
 
         _attributeLocations = {
             //
-            'vertexPosition': _renderer.getAttributeLocation (
+            vertexPosition: _renderer.getAttributeLocation (
                 _program,
                 'vertexPosition'
             ),
 
-            'vertexTextureCoordinates': _renderer.getAttributeLocation (
+            vertexTextureCoordinates: _renderer.getAttributeLocation (
                 _program,
                 'vertexTextureCoordinates'
             )
@@ -125,7 +125,7 @@ function SpriteBatch(_renderer, _style) {
             //
             shared: {
                 //
-                'canvasClientSize': _renderer.getUniformLocation (
+                canvasClientSize: _renderer.getUniformLocation (
                     _program,
                     'canvasClientSize'
                 )
@@ -133,12 +133,12 @@ function SpriteBatch(_renderer, _style) {
 
             unique: {
                 //
-                'color': _renderer.getUniformLocation (
+                color: _renderer.getUniformLocation (
                     _program,
                     'color'
                 ),
 
-                'sampler': _renderer.getUniformLocation (
+                sampler: _renderer.getUniformLocation (
                     _program,
                     'sampler'
                 )

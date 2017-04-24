@@ -128,20 +128,26 @@ function main() {
 
         uniformLocations = {
             //
-            transform: renderer.getUniformLocation (
-                program,
-                'transform'
-            ),
+            shared: {
+                //
+                transform: renderer.getUniformLocation (
+                    program,
+                    'transform'
+                )
+            },
 
-            sampler1: renderer.getUniformLocation (
-                program,
-                'sampler1'
-            ),
+            unique: {
+                //
+                sampler1: renderer.getUniformLocation (
+                    program,
+                    'sampler1'
+                ),
 
-            sampler2: renderer.getUniformLocation (
-                program,
-                'sampler2'
-            )
+                sampler2: renderer.getUniformLocation (
+                    program,
+                    'sampler2'
+                )
+            }
         };
     }
 
@@ -169,18 +175,18 @@ function main() {
         camera.getTransform(transform);
 
         renderer.setMatrix4x4Uniform (
-            uniformLocations.transform,
+            uniformLocations.shared.transform,
             transform.db
         );
         
         renderer.setSampler (
-            uniformLocations.sampler1,
+            uniformLocations.unique.sampler1,
             texture1,
             0
         );
 
         renderer.setSampler (
-            uniformLocations.sampler2,
+            uniformLocations.unique.sampler2,
             texture2,
             1
         );

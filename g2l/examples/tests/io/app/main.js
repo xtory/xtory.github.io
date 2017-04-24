@@ -212,10 +212,13 @@ function main() {
 
         uniformLocations = {
             //
-            transform: renderer.getUniformLocation (
-                program,
-                'transform'
-            )
+            shared: {
+                //
+                transform: renderer.getUniformLocation (
+                    program,
+                    'transform'
+                )
+            }
         };
     }
 
@@ -228,9 +231,9 @@ function main() {
         );
 
         info = {
-            'title': divs[0],
-            'fps':   divs[1],
-            'more':  divs[2]
+            title: divs[0],
+            fps:   divs[1],
+            more:  divs[2]
         };
 
         info.title.innerHTML = title;
@@ -288,7 +291,7 @@ function main() {
         );
 
         renderer.setMatrix4x4Uniform (
-            uniformLocations.transform,
+            uniformLocations.shared.transform,
             transform.db
         );
         

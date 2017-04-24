@@ -279,20 +279,26 @@ function main() {
         
         uniformLocations = {
             //
-            transform: renderer.getUniformLocation (
-                program,
-                'transform'
-            ),
+            shared: {
+                //
+                transform: renderer.getUniformLocation (
+                    program,
+                    'transform'
+                ),
 
-            transposeOfInverseOfModelMatrix: renderer.getUniformLocation (
-                program,
-                'transposeOfInverseOfModelMatrix'
-            ),
+                transposeOfInverseOfModelMatrix: renderer.getUniformLocation (
+                    program,
+                    'transposeOfInverseOfModelMatrix'
+                )
+            },
 
-            sampler: renderer.getUniformLocation (
-                program,
-                'sampler'
-            )
+            unique: {
+                //
+                sampler: renderer.getUniformLocation (
+                    program,
+                    'sampler'
+                )
+            }
         };
     }
 
@@ -344,7 +350,7 @@ function main() {
         setUpTransform();
         
         renderer.setSampler (
-            uniformLocations.sampler,
+            uniformLocations.unique.sampler,
             texture
         );
 
@@ -383,7 +389,7 @@ function main() {
             g2l.Matrix4x4.transposeMatrix(transposeOfInverseOfModelMatrix);
         
         renderer.setMatrix4x4Uniform (
-            uniformLocations.transposeOfInverseOfModelMatrix,
+            uniformLocations.shared.transposeOfInverseOfModelMatrix,
             transposeOfInverseOfModelMatrix.db
         );
 
@@ -395,7 +401,7 @@ function main() {
         );
 
         renderer.setMatrix4x4Uniform (
-            uniformLocations.transform,
+            uniformLocations.shared.transform,
             transform.db
         );
     }

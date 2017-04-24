@@ -89,17 +89,89 @@ function main() {
         }
     }
 
+    // function setUpWorldItems() {
+    //     //
+    //     worldImages = [];
+    //     worldLineSegments = [];
+
+    //     worldImageCount = 2000; //50; //2000;
+
+    //     var worldImageSize = new g2l.Size2D(32, 32); // LA icon's default size: (32, 32)
+    //     var worldLineSegmentThickness = 1.5; // LA link's default thickness: 1.5
+
+    //     var halfLength = 2500; //5000;
+    //     for (var i=0; i<worldImageCount; i++) {
+    //         //
+    //         var p = new g2l.Vector2D (
+    //             halfLength * (-0.5 + Math.random()), // -length/2 ~ length/2
+    //             halfLength * (-0.5 + Math.random())  // -length/2 ~ length/2
+    //         );
+
+    //         var worldImage = new g2l.World2DImage (
+    //             // Part 1.
+    //             world,
+    //             // Part 2.
+    //             textures[i % textures.length],
+    //             // Part 3.
+    //             p,
+    //             // Part 4.
+    //             worldImageSize
+    //             // Part 5.
+    //             //undefined, //new g2l.Rect(0.25, 0.25, 0.5, 0.5),
+    //             // Part 6.
+    //             //new g2l.Color(0.5, 0.25, 0.25, 1)
+    //         );
+
+    //         world.addItem (
+    //             g2l.World2DLayerName.MIDDLE_IMAGES,
+    //             worldImage
+    //         );
+
+    //         //worldImage.isVisible = false;
+
+    //         worldImages.push(worldImage);
+    //     }
+
+    //     for (var i=1; i<worldImages.length; i++) {
+    //         //
+    //         var item1 = worldImages[i - 1];
+    //         var item2 = worldImages[i];
+
+    //         var worldLineSegment = new g2l.World2DLineSegment (
+    //             // Part 1.
+    //             world,
+    //             // Part 2.
+    //             item1.centerPosition, item2.centerPosition,
+    //             // Part 3.
+    //             worldLineSegmentThickness,
+    //             // Part 4.
+    //             new g2l.Color (
+    //                 Math.random(), Math.random(), Math.random(), 0.5
+    //             )
+    //         );
+
+    //         world.addItem (
+    //             g2l.World2DLayerName.LINE_SEGMENTS_BELOW_MIDDLE_IMAGES,
+    //             worldLineSegment
+    //         );
+
+    //         worldLineSegments.push(worldLineSegment);
+    //     }
+    // }
+
     function setUpWorldItems() {
         //
         worldImages = [];
         worldLineSegments = [];
 
-        worldImageCount = 500; //50; //2000;
+        worldImageCount = 5000; //50; //2000;
 
         var worldImageSize = new g2l.Size2D(32, 32); // LA icon's default size: (32, 32)
         var worldLineSegmentThickness = 1.5; // LA link's default thickness: 1.5
 
         var halfLength = 2500; //5000;
+        var worldImagePositions = [];
+
         for (var i=0; i<worldImageCount; i++) {
             //
             var p = new g2l.Vector2D (
@@ -107,41 +179,19 @@ function main() {
                 halfLength * (-0.5 + Math.random())  // -length/2 ~ length/2
             );
 
-            var worldImage = new g2l.World2DImage (
-                // Part 1.
-                world,
-                // Part 2.
-                textures[i % textures.length],
-                // Part 3.
-                p,
-                // Part 4.
-                worldImageSize
-                // Part 5.
-                //undefined, //new g2l.Rect(0.25, 0.25, 0.5, 0.5),
-                // Part 6.
-                //new g2l.Color(0.5, 0.25, 0.25, 1)
-            );
-
-            world.addItem (
-                g2l.World2DLayerName.MIDDLE_IMAGES,
-                worldImage
-            );
-
-            worldImage.isVisible = false;
-
-            worldImages.push(worldImage);
+            worldImagePositions.push(p);
         }
 
-        for (var i=1; i<worldImages.length; i++) {
+        for (var i=1; i<worldImagePositions.length; i++) {
             //
-            var item1 = worldImages[i - 1];
-            var item2 = worldImages[i];
+            var item1 = worldImagePositions[i - 1];
+            var item2 = worldImagePositions[i];
 
             var worldLineSegment = new g2l.World2DLineSegment (
                 // Part 1.
                 world,
                 // Part 2.
-                item1.centerPosition, item2.centerPosition,
+                item1, item2,
                 // Part 3.
                 worldLineSegmentThickness,
                 // Part 4.
@@ -168,9 +218,9 @@ function main() {
         );
 
         info = {
-            'title': divs[0],
-            'fps':   divs[1],
-            'more':  divs[2]
+            title: divs[0],
+            fps:   divs[1],
+            more:  divs[2]
         };
 
         info.title.innerHTML = title;

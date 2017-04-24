@@ -128,15 +128,21 @@ function main() {
 
         uniformLocations = {
             //
-            transform: renderer.getUniformLocation (
-                program,
-                'transform'
-            ),
+            shared: {
+                //
+                transform: renderer.getUniformLocation (
+                    program,
+                    'transform'
+                )
+            },
 
-            sampler: renderer.getUniformLocation (
-                program,
-                'sampler'
-            )
+            unique: {
+                //
+                sampler: renderer.getUniformLocation (
+                    program,
+                    'sampler'
+                )
+            }
         };
     }
 
@@ -176,12 +182,12 @@ function main() {
         camera.getTransform(transform);
 
         renderer.setMatrix4x4Uniform (
-            uniformLocations.transform,
+            uniformLocations.shared.transform,
             transform.db
         );
         
         renderer.setSampler (
-            uniformLocations.sampler,
+            uniformLocations.unique.sampler,
             texture
         );
 

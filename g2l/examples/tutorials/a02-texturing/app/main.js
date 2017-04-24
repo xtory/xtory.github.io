@@ -132,15 +132,21 @@ function main() {
 
         uniformLocations = {
             //
-            transform: renderer.getUniformLocation (
-                program,
-                'transform'
-            ),
+            shared: {
+                //
+                transform: renderer.getUniformLocation (
+                    program,
+                    'transform'
+                )
+            },
 
-            sampler: renderer.getUniformLocation (
-                program,
-                'sampler'
-            )
+            unique: {
+                //
+                sampler: renderer.getUniformLocation (
+                    program,
+                    'sampler'
+                )
+            }
         };
     }
 
@@ -175,7 +181,7 @@ function main() {
         setUpTransform();
 
         renderer.setSampler (
-            uniformLocations.sampler,
+            uniformLocations.unique.sampler,
             texture
         );
 
@@ -204,7 +210,7 @@ function main() {
         );
 
         renderer.setMatrix4x4Uniform (
-            uniformLocations.transform,
+            uniformLocations.shared.transform,
             transform.db
         );
     } 
