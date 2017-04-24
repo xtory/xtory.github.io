@@ -396,11 +396,6 @@ function Matrix4x4 (
     this.db[3]=_s41;    this.db[7]=_s42;    this.db[11]=_s43;    this.db[15]=_s44;
 }
 
-Matrix4x4.prototype = {
-    //
-    // No contents.
-};
-
 Object.defineProperty(Matrix4x4.prototype, 's11', {
     get: function() { return this.db[0]; }
 });
@@ -3012,7 +3007,7 @@ function LineSegment2DBatch(_renderer, _style) {
         };
 
         // Helpers.
-        _canvasClientSize = new Float32Array(2);
+        _canvasClientSize = new Float32Array([undefined, undefined]);
     }
 
     function setUpVertices() {
@@ -3108,14 +3103,18 @@ function LineSegment2DBatch(_renderer, _style) {
             _vertexBuffers.color
         );
 
-        _canvasClientSize[0] = _renderer.canvas.clientWidth;
-        _canvasClientSize[1] = _renderer.canvas.clientHeight;
+        if (_renderer.canvas.clientWidth !== _canvasClientSize[0] ||
+            _renderer.canvas.clientHeight !== _canvasClientSize[1]) {
+            //
+            _canvasClientSize[0] = _renderer.canvas.clientWidth;
+            _canvasClientSize[1] = _renderer.canvas.clientHeight;
 
-        _renderer.setVector2DUniform (
-            _uniformLocations.shared.canvasClientSize,
-            _canvasClientSize
-        );
-        
+            _renderer.setVector2DUniform (
+                _uniformLocations.shared.canvasClientSize,
+                _canvasClientSize
+            );
+        }
+
         _renderer.drawIndexedPrimitives (
             _indexBuffer,
             PrimitiveType.TRIANGLE_LIST,
@@ -3125,12 +3124,6 @@ function LineSegment2DBatch(_renderer, _style) {
 
     function clear() {
         //
-        //_indices = [];
-        // _vertexColors = [];
-        // _vertexPositions = [];
-        // _vertexArrays.color2 = [];
-        // _vertexArrays.position2 = [];
-
         _db = [];
 
         if (_style.clearsDbAfterDrawing === false) {
@@ -5033,7 +5026,6 @@ function SpriteBatch(_renderer, _style) {
     var _db;
     
     var _vertexBuffers;
-    //var _defaultVertexBuffers;
     var _defaultTextureCoordinateVertexBuffer;
     var _vertexArrays;
 
@@ -5043,6 +5035,7 @@ function SpriteBatch(_renderer, _style) {
     var _uniformLocations;
 
     // Helpers
+    var _canvasClientSize; // which is a Float32Array.
     var _isBegun;
     var _isOkToAddItem;
 
@@ -5153,21 +5146,26 @@ function SpriteBatch(_renderer, _style) {
                 )
             }
         };
+
+        // Helpers.
+        _canvasClientSize = new Float32Array([undefined, undefined]);
     }
     
     function flush() {
         //
         _renderer.program = _program;
 
-        _renderer.setVector2DUniform (
-            // Part 1.
-            _uniformLocations.shared.canvasClientSize,
-            // Part 2.
-            new Float32Array ([
-                _renderer.canvas.clientWidth,
-                _renderer.canvas.clientHeight
-            ])
-        );
+        if (_renderer.canvas.clientWidth !== _canvasClientSize[0] ||
+            _renderer.canvas.clientHeight !== _canvasClientSize[1]) {
+            //
+            _canvasClientSize[0] = _renderer.canvas.clientWidth;
+            _canvasClientSize[1] = _renderer.canvas.clientHeight;
+
+            _renderer.setVector2DUniform (
+                _uniformLocations.shared.canvasClientSize,
+                _canvasClientSize
+            );
+        }
 
         var vb = null;
         var lastColor; // which is a Float32Array.
@@ -5897,6 +5895,30 @@ function World2DStyle() {
     this.viewMargin                         = 125; // in world space.
 }
 
+//
+// Static methods.
+//
+World2DStyle.areEqual = function(style1, style2) {
+    //
+    if ((style1 instanceof World2DStyle) === false ||
+        (style2 instanceof World2DStyle) === false) {
+        return false;
+    }
+
+    if (Color.areEqual(style1.backgroundColor, style2.backgroundColor) === false ||
+        style1.zoomDuration !== style2.zoomDuration ||
+        style1.zoomScaleFactor !== style2.zoomScaleFactor ||
+        style1.hitLineSegmentScreenThicknessTimes !== style2.hitLineSegmentScreenThicknessTimes ||
+        style1.viewMargin !== style2.viewMargin) {
+        //
+        return false;
+
+    } else {
+        //
+        return true;
+    }
+};
+
 Object.freeze(World2DStyle);
 
 // Note:
@@ -5997,7 +6019,7 @@ function World2D(_renderer, _style) {
 
         set: function(value) {
             //
-            if (value === _style) {
+            if (World2DStyle.areEqual(value, _style) === true) {
                 return;
             }
 
@@ -6617,6 +6639,40 @@ Object.freeze(World2D);
 //
 // Constructor.
 //
+function World2DImageStyle() {
+    //
+    this.boundsScreenSize = false;
+    this.minScreenSize    = new Size2D(0, 0);
+    this.maxScreenSize    = new Size2D(Number.MAX_VALUE, Number.MAX_VALUE);
+}
+
+//
+// Static methods.
+//
+World2DImageStyle.areEqual = function(style1, style2) {
+    //
+    if ((style1 instanceof World2DImageStyle) === false ||
+        (style2 instanceof World2DImageStyle) === false) {
+        return false;
+    }
+
+    if (style1.boundsScreenSize !== style2.boundsScreenSize ||
+        Size2D.areEqual(style1.minScreenSize, style2.minScreenSize) === false ||
+        Size2D.areEqual(style1.maxScreenSize, style2.maxScreenSize) === false) {
+        //
+        return false;
+
+    } else {
+        //
+        return true;
+    }
+};
+
+Object.freeze(World2DImageStyle);
+
+//
+// Constructor.
+//
 function World2DItem(_world) {
     //
     var _self;
@@ -6797,6 +6853,40 @@ Object.freeze(World2DItem);
 //
 // Constructor.
 //
+function World2DLineSegmentStyle() {
+    //
+    this.boundsScreenThickness = false;
+    this.minScreenThickness    = 0;
+    this.maxScreenThickness    = Number.MAX_VALUE;
+}
+
+//
+// Static methods.
+//
+World2DLineSegmentStyle.areEqual = function(style1, style2) {
+    //
+    if ((style1 instanceof World2DLineSegmentStyle) === false ||
+        (style2 instanceof World2DLineSegmentStyle) === false) {
+        return false;
+    }
+
+    if (style1.boundsScreenThickness !== style2.boundsScreenThickness ||
+        style1.minScreenThickness !== style2.minScreenThickness ||
+        style1.maxScreenThickness !== style2.maxScreenThickness) {
+        //
+        return false;
+
+    } else {
+        //
+        return true;
+    }
+};
+
+Object.freeze(World2DLineSegmentStyle);
+
+//
+// Constructor.
+//
 function World2DLineSegment (
     _world,
     _startPosition,
@@ -6810,11 +6900,7 @@ function World2DLineSegment (
     var _startScreenPosition;
     var _finishScreenPosition;
     var _screenThickness;
-
-    // Styles.
-    var _boundsScreenThickness;
-    var _minScreenThickness;
-    var _maxScreenThickness;
+    var _style;
 
     try {
         //
@@ -6823,11 +6909,6 @@ function World2DLineSegment (
         if (_thickness < 0) {
             throw 'An invalid-length exception raised.';
         }
-
-        // Styles.
-        _boundsScreenThickness = false;
-        _minScreenThickness = 0; // Thickness can't be < 0.
-        _maxScreenThickness = Number.MAX_VALUE;
 
         // Note:
         // Define properties before continuing.
@@ -6928,59 +7009,22 @@ function World2DLineSegment (
             set: function(value) { _color = value; }
         });
 
-        // Styles
-        Object.defineProperty(_self, 'boundsScreenThickness', {
+        _style = new World2DLineSegmentStyle();
+        
+        Object.defineProperty(_self, 'style', {
             //
             get: function() {
                 //
-                return _boundsScreenThickness
+                return _style
             },
 
             set: function(value) {
                 //
-                if (value === _boundsScreenThickness) {
+                if (World2DLineSegmentStyle.areEqual(value, _style) === true) {
                     return;
                 }
 
-                _boundsScreenThickness = value;
-
-                update();
-            }
-        });
-
-        Object.defineProperty(_self, 'minScreenThickness', {
-            //
-            get: function() {
-                //
-                return _minScreenThickness
-            },
-
-            set: function(value) {
-                //
-                if (value === _minScreenThickness) {
-                    return;
-                }
-
-                _minScreenThickness = value;
-
-                update();
-            }
-        });
-
-        Object.defineProperty(_self, 'maxScreenThickness', {
-            //
-            get: function() {
-                //
-                return _maxScreenThickness
-            },
-
-            set: function(value) {
-                //
-                if (value === _maxScreenThickness) {
-                    return;
-                }
-
-                _maxScreenThickness = value;
+                _style = value;
 
                 update();
             }
@@ -7081,19 +7125,21 @@ World2DLineSegment.prototype.draw = function() {
 
 World2DLineSegment.prototype.boundScreenThickness = function() {
     //
-    if (this.boundsScreenThickness === false) {
+    var style = this.style;
+
+    if (style.boundsScreenThickness === false) {
         return;
     }
 
-    if (this.minScreenThickness < 0 ||
-        this.maxScreenThickness < 0) {
+    if (style.minScreenThickness < 0 ||
+        style.maxScreenThickness < 0) {
         //
         throw 'An invalid-operation exception raised.';
     }
 
-    if (this.screenThickness < this.minScreenThickness) {
+    if (this.screenThickness < style.minScreenThickness) {
         //
-        this.screenThickness = this.minScreenThickness;
+        this.screenThickness = style.minScreenThickness;
 
         // Note:
         // Sets the line segment's thickness in screen space to min, but keeps the
@@ -7104,9 +7150,9 @@ World2DLineSegment.prototype.boundScreenThickness = function() {
         */
 
     } else if (
-        this.maxScreenThickness < this.screenThickness
+        style.maxScreenThickness < this.screenThickness
     ){
-        this.screenThickness = this.maxScreenThickness;
+        this.screenThickness = style.maxScreenThickness;
 
         // Note:
         // See the note above.
@@ -7155,11 +7201,7 @@ function World2DImage (
     var _self;
     var _centerScreenPosition;
     var _screenSize;
-
-    // Styles.
-    var _boundsScreenSize;
-    var _minScreenSize;
-    var _maxScreenSize;
+    var _style;
 
     try {
         //
@@ -7168,11 +7210,6 @@ function World2DImage (
         if (_texture === null) {
             throw 'An argument-null exception raised.';
         }
-
-        // Styles.
-        _boundsScreenSize = false;
-        _minScreenSize = new Size2D(0, 0);
-        _maxScreenSize = new Size2D(Number.MAX_VALUE, Number.MAX_VALUE);
 
         // Note:
         // Define properties before continuing.
@@ -7267,61 +7304,22 @@ function World2DImage (
             set: function(value) { _color = value; }
         });
 
-        //
-        // Styles.
-        //
-        Object.defineProperty(_self, 'boundsScreenSize', {
+        _style = new World2DImageStyle();
+
+        Object.defineProperty(_self, 'style', {
             //
             get: function() {
                 //
-                return _boundsScreenSize;
+                return _style;
             },
 
             set: function(value) {
                 //
-                if (value === _boundsScreenSize) {
+                if (World2DImageStyle.areEqual(value,  _style) === true) {
                     return;
                 }
 
-                _boundsScreenSize = value;
-
-                update();
-            }
-        });
-
-        Object.defineProperty(_self, 'minScreenSize', {
-            //
-            get: function() {
-                //
-                return _minScreenSize;
-            },
-
-            set: function(value) {
-                //
-                if (Size2D.areEqual(value, _minScreenSize) === true) {
-                    return;
-                }
-
-                _minScreenSize = value;
-
-                update();
-            }
-        });
-
-        Object.defineProperty(_self, 'maxScreenSize', {
-            //
-            get: function() {
-                //
-                return _maxScreenSize;
-            },
-
-            set: function(value) {
-                //
-                if (Size2D.areEqual(value, _maxScreenSize) === true) {
-                    return;
-                }
-
-                _maxScreenSize = value;
+                _style = value;
 
                 update();
             }
@@ -7427,49 +7425,51 @@ World2DImage.prototype.draw = function() {
 
 World2DImage.prototype.boundScreenSize = function() {
     //
-    if (this.boundsScreenSize === false) {
+    var style = this.style;
+
+    if (style.boundsScreenSize === false) {
         return;
     }
 
-    if (this.maxScreenSize.width < this.minScreenSize.width ||
-        this.maxScreenSize.height < this.minScreenSize.height) {
+    if (style.maxScreenSize.width < style.minScreenSize.width ||
+        style.maxScreenSize.height < style.minScreenSize.height) {
         throw new 'An invalid-operation exception raised.';
     }
 
     // 1. Minimum size in screen space.
-    if (this.screenSize.width < this.minScreenSize.width) {
+    if (this.screenSize.width < style.minScreenSize.width) {
         //
-        this.screenSize.width = this.minScreenSize.width;
+        this.screenSize.width = style.minScreenSize.width;
 
         // Note:
         // Set the image's size in screen space to min, but keep the size in world
         // space unchanged.
         /*
-        _size.width =
-            _screenSize.width / this.world.worldToScreenScaleFactor;
+        this.size.width =
+            this.screenSize.width / this.world.worldToScreenScaleFactor;
         */
     }
 
-    if (this.screenSize.height < this.minScreenSize.height) {
+    if (this.screenSize.height < style.minScreenSize.height) {
         //
-        this.screenSize.height = this.minScreenSize.height;
+        this.screenSize.height = style.minScreenSize.height;
 
         // Note:
         // See the notes above.
     }
 
     // 2. Maximum size in screen space.
-    if (this.maxScreenSize.width < this.screenSize.width) {
+    if (style.maxScreenSize.width < this.screenSize.width) {
         //
-        this.screenSize.width = this.maxScreenSize.width;
+        this.screenSize.width = style.maxScreenSize.width;
 
         // Note:
         // See the notes above.
     }
 
-    if (this.maxScreenSize.height < this.screenSize.height) {
+    if (style.maxScreenSize.height < this.screenSize.height) {
         //
-        this.screenSize.height = this.maxScreenSize.height;
+        this.screenSize.height = style.maxScreenSize.height;
 
         // Note:
         // See the notes above.
@@ -7695,8 +7695,10 @@ exports.VertexBuffer = VertexBuffer;
 exports.World2D = World2D;
 exports.World2DBoundsChangedEvent = World2DBoundsChangedEvent;
 exports.World2DImage = World2DImage;
+exports.World2DImageStyle = World2DImageStyle;
 exports.World2DItem = World2DItem;
 exports.World2DLineSegment = World2DLineSegment;
+exports.World2DLineSegmentStyle = World2DLineSegmentStyle;
 exports.World2DLayerName = World2DLayerName;
 exports.World2DState = World2DState;
 exports.World2DStateNormal = World2DStateNormal;

@@ -24,7 +24,6 @@ function SpriteBatch(_renderer, _style) {
     var _db;
     
     var _vertexBuffers;
-    //var _defaultVertexBuffers;
     var _defaultTextureCoordinateVertexBuffer;
     var _vertexArrays;
 
@@ -34,6 +33,7 @@ function SpriteBatch(_renderer, _style) {
     var _uniformLocations;
 
     // Helpers
+    var _canvasClientSize; // which is a Float32Array.
     var _isBegun;
     var _isOkToAddItem;
 
@@ -144,21 +144,26 @@ function SpriteBatch(_renderer, _style) {
                 )
             }
         };
+
+        // Helpers.
+        _canvasClientSize = new Float32Array([undefined, undefined]);
     }
     
     function flush() {
         //
         _renderer.program = _program;
 
-        _renderer.setVector2DUniform (
-            // Part 1.
-            _uniformLocations.shared.canvasClientSize,
-            // Part 2.
-            new Float32Array ([
-                _renderer.canvas.clientWidth,
-                _renderer.canvas.clientHeight
-            ])
-        );
+        if (_renderer.canvas.clientWidth !== _canvasClientSize[0] ||
+            _renderer.canvas.clientHeight !== _canvasClientSize[1]) {
+            //
+            _canvasClientSize[0] = _renderer.canvas.clientWidth;
+            _canvasClientSize[1] = _renderer.canvas.clientHeight;
+
+            _renderer.setVector2DUniform (
+                _uniformLocations.shared.canvasClientSize,
+                _canvasClientSize
+            );
+        }
 
         var vb = null;
         var lastColor; // which is a Float32Array.

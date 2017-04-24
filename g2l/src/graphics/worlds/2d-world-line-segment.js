@@ -1,10 +1,11 @@
-import { JSHelper }            from '../../helpers/js-helper';
-import { LineSegment2D }       from '../2d-line-segment';
-import { LineSegment2DHelper } from '../helpers/2d-line-segment-helper';
-import { Vector2D }            from '../../math/2d-vector';
-import { Vector3D }            from '../../math/3d-vector';
-import { World2DImage }        from './2d-world-image';
-import { World2DItem }         from './2d-world-item';
+import { JSHelper }                from '../../helpers/js-helper';
+import { LineSegment2D }           from '../2d-line-segment';
+import { LineSegment2DHelper }     from '../helpers/2d-line-segment-helper';
+import { Vector2D }                from '../../math/2d-vector';
+import { Vector3D }                from '../../math/3d-vector';
+import { World2DImage }            from './2d-world-image';
+import { World2DItem }             from './2d-world-item';
+import { World2DLineSegmentStyle } from './2d-world-line-segment-style';
 
 //
 // Constructor.
@@ -22,11 +23,7 @@ function World2DLineSegment (
     var _startScreenPosition;
     var _finishScreenPosition;
     var _screenThickness;
-
-    // Styles.
-    var _boundsScreenThickness;
-    var _minScreenThickness;
-    var _maxScreenThickness;
+    var _style;
 
     try {
         //
@@ -35,11 +32,6 @@ function World2DLineSegment (
         if (_thickness < 0) {
             throw 'An invalid-length exception raised.';
         }
-
-        // Styles.
-        _boundsScreenThickness = false;
-        _minScreenThickness = 0; // Thickness can't be < 0.
-        _maxScreenThickness = Number.MAX_VALUE;
 
         // Note:
         // Define properties before continuing.
@@ -140,59 +132,22 @@ function World2DLineSegment (
             set: function(value) { _color = value; }
         });
 
-        // Styles
-        Object.defineProperty(_self, 'boundsScreenThickness', {
+        _style = new World2DLineSegmentStyle();
+        
+        Object.defineProperty(_self, 'style', {
             //
             get: function() {
                 //
-                return _boundsScreenThickness
+                return _style
             },
 
             set: function(value) {
                 //
-                if (value === _boundsScreenThickness) {
+                if (World2DLineSegmentStyle.areEqual(value, _style) === true) {
                     return;
                 }
 
-                _boundsScreenThickness = value;
-
-                update();
-            }
-        });
-
-        Object.defineProperty(_self, 'minScreenThickness', {
-            //
-            get: function() {
-                //
-                return _minScreenThickness
-            },
-
-            set: function(value) {
-                //
-                if (value === _minScreenThickness) {
-                    return;
-                }
-
-                _minScreenThickness = value;
-
-                update();
-            }
-        });
-
-        Object.defineProperty(_self, 'maxScreenThickness', {
-            //
-            get: function() {
-                //
-                return _maxScreenThickness
-            },
-
-            set: function(value) {
-                //
-                if (value === _maxScreenThickness) {
-                    return;
-                }
-
-                _maxScreenThickness = value;
+                _style = value;
 
                 update();
             }
@@ -293,19 +248,21 @@ World2DLineSegment.prototype.draw = function() {
 
 World2DLineSegment.prototype.boundScreenThickness = function() {
     //
-    if (this.boundsScreenThickness === false) {
+    var style = this.style;
+
+    if (style.boundsScreenThickness === false) {
         return;
     }
 
-    if (this.minScreenThickness < 0 ||
-        this.maxScreenThickness < 0) {
+    if (style.minScreenThickness < 0 ||
+        style.maxScreenThickness < 0) {
         //
         throw 'An invalid-operation exception raised.';
     }
 
-    if (this.screenThickness < this.minScreenThickness) {
+    if (this.screenThickness < style.minScreenThickness) {
         //
-        this.screenThickness = this.minScreenThickness;
+        this.screenThickness = style.minScreenThickness;
 
         // Note:
         // Sets the line segment's thickness in screen space to min, but keeps the
@@ -316,9 +273,9 @@ World2DLineSegment.prototype.boundScreenThickness = function() {
         */
 
     } else if (
-        this.maxScreenThickness < this.screenThickness
+        style.maxScreenThickness < this.screenThickness
     ){
-        this.screenThickness = this.maxScreenThickness;
+        this.screenThickness = style.maxScreenThickness;
 
         // Note:
         // See the note above.

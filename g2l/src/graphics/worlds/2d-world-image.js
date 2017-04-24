@@ -3,6 +3,7 @@ import { Size2D }             from '../2d-size';
 import { Sprite }             from '../sprite';
 import { Vector2D }           from '../../math/2d-vector';
 import { Vector3D }           from '../../math/3d-vector';
+import { World2DImageStyle }  from './2d-world-image-style';
 import { World2DItem }        from './2d-world-item';
 import { World2DLineSegment } from './2d-world-line-segment';
 
@@ -22,11 +23,7 @@ function World2DImage (
     var _self;
     var _centerScreenPosition;
     var _screenSize;
-
-    // Styles.
-    var _boundsScreenSize;
-    var _minScreenSize;
-    var _maxScreenSize;
+    var _style;
 
     try {
         //
@@ -35,11 +32,6 @@ function World2DImage (
         if (_texture === null) {
             throw 'An argument-null exception raised.';
         }
-
-        // Styles.
-        _boundsScreenSize = false;
-        _minScreenSize = new Size2D(0, 0);
-        _maxScreenSize = new Size2D(Number.MAX_VALUE, Number.MAX_VALUE);
 
         // Note:
         // Define properties before continuing.
@@ -134,61 +126,22 @@ function World2DImage (
             set: function(value) { _color = value; }
         });
 
-        //
-        // Styles.
-        //
-        Object.defineProperty(_self, 'boundsScreenSize', {
+        _style = new World2DImageStyle();
+
+        Object.defineProperty(_self, 'style', {
             //
             get: function() {
                 //
-                return _boundsScreenSize;
+                return _style;
             },
 
             set: function(value) {
                 //
-                if (value === _boundsScreenSize) {
+                if (World2DImageStyle.areEqual(value,  _style) === true) {
                     return;
                 }
 
-                _boundsScreenSize = value;
-
-                update();
-            }
-        });
-
-        Object.defineProperty(_self, 'minScreenSize', {
-            //
-            get: function() {
-                //
-                return _minScreenSize;
-            },
-
-            set: function(value) {
-                //
-                if (Size2D.areEqual(value, _minScreenSize) === true) {
-                    return;
-                }
-
-                _minScreenSize = value;
-
-                update();
-            }
-        });
-
-        Object.defineProperty(_self, 'maxScreenSize', {
-            //
-            get: function() {
-                //
-                return _maxScreenSize;
-            },
-
-            set: function(value) {
-                //
-                if (Size2D.areEqual(value, _maxScreenSize) === true) {
-                    return;
-                }
-
-                _maxScreenSize = value;
+                _style = value;
 
                 update();
             }
@@ -294,49 +247,51 @@ World2DImage.prototype.draw = function() {
 
 World2DImage.prototype.boundScreenSize = function() {
     //
-    if (this.boundsScreenSize === false) {
+    var style = this.style;
+
+    if (style.boundsScreenSize === false) {
         return;
     }
 
-    if (this.maxScreenSize.width < this.minScreenSize.width ||
-        this.maxScreenSize.height < this.minScreenSize.height) {
+    if (style.maxScreenSize.width < style.minScreenSize.width ||
+        style.maxScreenSize.height < style.minScreenSize.height) {
         throw new 'An invalid-operation exception raised.';
     }
 
     // 1. Minimum size in screen space.
-    if (this.screenSize.width < this.minScreenSize.width) {
+    if (this.screenSize.width < style.minScreenSize.width) {
         //
-        this.screenSize.width = this.minScreenSize.width;
+        this.screenSize.width = style.minScreenSize.width;
 
         // Note:
         // Set the image's size in screen space to min, but keep the size in world
         // space unchanged.
         /*
-        _size.width =
-            _screenSize.width / this.world.worldToScreenScaleFactor;
+        this.size.width =
+            this.screenSize.width / this.world.worldToScreenScaleFactor;
         */
     }
 
-    if (this.screenSize.height < this.minScreenSize.height) {
+    if (this.screenSize.height < style.minScreenSize.height) {
         //
-        this.screenSize.height = this.minScreenSize.height;
+        this.screenSize.height = style.minScreenSize.height;
 
         // Note:
         // See the notes above.
     }
 
     // 2. Maximum size in screen space.
-    if (this.maxScreenSize.width < this.screenSize.width) {
+    if (style.maxScreenSize.width < this.screenSize.width) {
         //
-        this.screenSize.width = this.maxScreenSize.width;
+        this.screenSize.width = style.maxScreenSize.width;
 
         // Note:
         // See the notes above.
     }
 
-    if (this.maxScreenSize.height < this.screenSize.height) {
+    if (style.maxScreenSize.height < this.screenSize.height) {
         //
-        this.screenSize.height = this.maxScreenSize.height;
+        this.screenSize.height = style.maxScreenSize.height;
 
         // Note:
         // See the notes above.

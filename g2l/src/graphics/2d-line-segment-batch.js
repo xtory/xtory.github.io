@@ -123,7 +123,7 @@ function LineSegment2DBatch(_renderer, _style) {
         };
 
         // Helpers.
-        _canvasClientSize = new Float32Array(2);
+        _canvasClientSize = new Float32Array([undefined, undefined]);
     }
 
     function setUpVertices() {
@@ -219,14 +219,18 @@ function LineSegment2DBatch(_renderer, _style) {
             _vertexBuffers.color
         );
 
-        _canvasClientSize[0] = _renderer.canvas.clientWidth;
-        _canvasClientSize[1] = _renderer.canvas.clientHeight;
+        if (_renderer.canvas.clientWidth !== _canvasClientSize[0] ||
+            _renderer.canvas.clientHeight !== _canvasClientSize[1]) {
+            //
+            _canvasClientSize[0] = _renderer.canvas.clientWidth;
+            _canvasClientSize[1] = _renderer.canvas.clientHeight;
 
-        _renderer.setVector2DUniform (
-            _uniformLocations.shared.canvasClientSize,
-            _canvasClientSize
-        );
-        
+            _renderer.setVector2DUniform (
+                _uniformLocations.shared.canvasClientSize,
+                _canvasClientSize
+            );
+        }
+
         _renderer.drawIndexedPrimitives (
             _indexBuffer,
             PrimitiveType.TRIANGLE_LIST,
@@ -236,12 +240,6 @@ function LineSegment2DBatch(_renderer, _style) {
 
     function clear() {
         //
-        //_indices = [];
-        // _vertexColors = [];
-        // _vertexPositions = [];
-        // _vertexArrays.color2 = [];
-        // _vertexArrays.position2 = [];
-
         _db = [];
 
         if (_style.clearsDbAfterDrawing === false) {

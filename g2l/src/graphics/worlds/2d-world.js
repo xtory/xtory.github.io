@@ -110,7 +110,7 @@ function World2D(_renderer, _style) {
 
         set: function(value) {
             //
-            if (value === _style) {
+            if (World2DStyle.areEqual(value, _style) === true) {
                 return;
             }
 

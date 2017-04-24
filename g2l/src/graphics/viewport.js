@@ -35,11 +35,6 @@ function Viewport(_left, _bottom, _width, _height) {
     this.height = _height;
 }
 
-Viewport.prototype = {
-    //
-    // No contents.
-};
-
 Object.defineProperty(Viewport.prototype, 'aspectRatio', {
     get: function() { return this.width / this.height; }
 });

@@ -81,11 +81,6 @@ function Matrix4x4 (
     this.db[3]=_s41;    this.db[7]=_s42;    this.db[11]=_s43;    this.db[15]=_s44;
 }
 
-Matrix4x4.prototype = {
-    //
-    // No contents.
-};
-
 Object.defineProperty(Matrix4x4.prototype, 's11', {
     get: function() { return this.db[0]; }
 });

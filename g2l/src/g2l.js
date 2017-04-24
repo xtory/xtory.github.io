@@ -46,8 +46,10 @@ export { VertexBuffer }                               from './graphics/vertex-bu
 export { World2D }                                    from './graphics/worlds/2d-world';
 export { World2DBoundsChangedEvent }                  from './graphics/worlds/2d-world-bounds-changed-event';
 export { World2DImage }                               from './graphics/worlds/2d-world-image';
+export { World2DImageStyle }                          from './graphics/worlds/2d-world-image-style';
 export { World2DItem }                                from './graphics/worlds/2d-world-item';
 export { World2DLineSegment }                         from './graphics/worlds/2d-world-line-segment';
+export { World2DLineSegmentStyle }                    from './graphics/worlds/2d-world-line-segment-style';
 export { World2DLayerName }                           from './graphics/worlds/2d-world-layer-name';
 export { World2DState }                               from './graphics/worlds/states/2d-world-state';
 export { World2DStateNormal }                         from './graphics/worlds/states/2d-world-state-normal';
