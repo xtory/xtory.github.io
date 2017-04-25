@@ -1,7 +1,7 @@
 //import babel from 'rollup-plugin-babel';
 
 export default {
-    entry: './src/g2l.js',
+    entry: './src/g2l/g2l.js',
     targets: [
 		{
 			format: 'iife',
@@ -25,10 +25,5 @@ export default {
 		// 	moduleName: 'GorillaGL',
 		// 	dest: 'dist/g2l.umd.js'
 		// }
-	],
-    // plugins: [
-    //     babel ({
-    //         exclude: 'node_modules/**'
-    //     })
-    // ]
+	]
 };

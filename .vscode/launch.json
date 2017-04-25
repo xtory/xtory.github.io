@@ -8,7 +8,7 @@
             "name": "tutorials/a01-colored-triangles",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/g2l/examples/tutorials/a01-colored-triangles/index.html",
+            "file": "${workspaceRoot}/xtory/examples/tutorials/a01-colored-triangles/index.html",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
             ]
@@ -16,7 +16,7 @@
             "name": "tutorials/a02-texturing",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/g2l/examples/tutorials/a02-texturing/index.html",
+            "file": "${workspaceRoot}/xtory/examples/tutorials/a02-texturing/index.html",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
             ]
@@ -24,7 +24,7 @@
             "name": "tutorials/a03-alpha-blending",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/g2l/examples/tutorials/a03-alpha-blending/index.html",
+            "file": "${workspaceRoot}/xtory/examples/tutorials/a03-alpha-blending/index.html",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
             ]
@@ -32,7 +32,7 @@
             "name": "tutorials/a04-multitexturing",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/g2l/examples/tutorials/a04-multitexturing/index.html",
+            "file": "${workspaceRoot}/xtory/examples/tutorials/a04-multitexturing/index.html",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
             ]
@@ -40,7 +40,7 @@
             "name": "tutorials/a05-sprites",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/g2l/examples/tutorials/a05-sprites/index.html",
+            "file": "${workspaceRoot}/xtory/examples/tutorials/a05-sprites/index.html",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
             ]
@@ -48,7 +48,7 @@
             "name": "tutorials/b01-lighting",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/g2l/examples/tutorials/b01-lighting/index.html",
+            "file": "${workspaceRoot}/xtory/examples/tutorials/b01-lighting/index.html",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
             ]
@@ -56,7 +56,7 @@
             "name": "samples/2d-line-segments",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/g2l/examples/samples/2d-line-segments/index.html",
+            "file": "${workspaceRoot}/xtory/examples/samples/2d-line-segments/index.html",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
             ]
@@ -64,7 +64,7 @@
             "name": "tests/2d-world",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/g2l/examples/tests/2d-world/index.html",
+            "file": "${workspaceRoot}/xtory/examples/tests/2d-world/index.html",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
             ]
@@ -72,7 +72,15 @@
             "name": "tests/io",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/g2l/examples/tests/io/index.html",
+            "file": "${workspaceRoot}/xtory/examples/tests/io/index.html",
+            "runtimeArgs": [
+                "-allow-file-access-from-files"
+            ]
+        }, {
+            "name": "tests/gla",
+            "type": "chrome",
+            "request": "launch",
+            "file": "${workspaceRoot}/xtory/examples/tests/gla/index.html",
             "runtimeArgs": [
                 "-allow-file-access-from-files"
             ]
