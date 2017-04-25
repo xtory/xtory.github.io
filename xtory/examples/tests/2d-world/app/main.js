@@ -13,6 +13,7 @@ function main() {
     var worldImages;
     var worldLineSegments;
     var worldImageCount;
+    var worldLineSegmentCount;
 
     // Info.
     var info;
@@ -94,12 +95,13 @@ function main() {
         worldImages = [];
         worldLineSegments = [];
 
-        worldImageCount = 2000; //50; //2000;
+        worldImageCount = 100; //50; //2000;
+        worldLineSegmentCount = 150;
 
         var worldImageSize = new g2l.Size2D(32, 32); // LA icon's default size: (32, 32)
         var worldLineSegmentThickness = 1.5; // LA link's default thickness: 1.5
 
-        var halfLength = 2500; //5000;
+        var halfLength = 500; //5000;
         for (var i=0; i<worldImageCount; i++) {
             //
             var p = new g2l.Vector2D (
@@ -130,16 +132,49 @@ function main() {
             worldImages.push(worldImage);
         }
 
-        for (var i=1; i<worldImages.length; i++) {
+        var net = [];
+        for (var i=0; i<worldImageCount; i++) {
+            net.push([]);
+        }
+
+        var index1 = -1;
+        var index2 = -1;
+        for (var i=0; i<worldLineSegmentCount; i++) {
             //
-            var item1 = worldImages[i - 1];
-            var item2 = worldImages[i];
+            index1 = Math.floor(worldImageCount * Math.random());
+
+            while (true) {
+                //
+                index2 = Math.floor(worldImageCount * Math.random());
+                if (index1 === index2) {
+                    continue;
+                }
+
+                if (net[index1].length === 0 ||
+                    net[index2].length === 0) {
+                    break;
+                }
+
+                var retry = false;
+                var item = net[index1];
+                for (var j=0; j<item.length; j++) {
+                    //
+                    if (item[j] === index2) {
+                        retry = true;
+                        break;
+                    }
+                }
+
+                if (retry === false) {
+                    break;
+                }
+            }
 
             var worldLineSegment = new g2l.World2DLineSegment (
                 // Part 1.
                 world,
                 // Part 2.
-                item1.centerPosition, item2.centerPosition,
+                worldImages[index1].centerPosition, worldImages[index2].centerPosition,
                 // Part 3.
                 worldLineSegmentThickness,
                 // Part 4.
@@ -154,7 +189,39 @@ function main() {
             );
 
             worldLineSegments.push(worldLineSegment);
+
+            net[index1].push(index2);
+            net[index2].push(index1);
+
+            index1 = -1;
+            index2 = -1;
         }
+
+        // for (var i=1; i<worldImages.length; i++) {
+        //     //
+        //     var item1 = worldImages[i - 1];
+        //     var item2 = worldImages[i];
+
+        //     var worldLineSegment = new g2l.World2DLineSegment (
+        //         // Part 1.
+        //         world,
+        //         // Part 2.
+        //         item1.centerPosition, item2.centerPosition,
+        //         // Part 3.
+        //         worldLineSegmentThickness,
+        //         // Part 4.
+        //         new g2l.Color (
+        //             Math.random(), Math.random(), Math.random(), 0.5
+        //         )
+        //     );
+
+        //     world.addItem (
+        //         g2l.World2DLayerName.LINE_SEGMENTS_BELOW_MIDDLE_IMAGES,
+        //         worldLineSegment
+        //     );
+
+        //     worldLineSegments.push(worldLineSegment);
+        // }
     }
 
     // function setUpWorldItems() {
