@@ -58,11 +58,13 @@ export { World2DStyle }                               from './graphics/worlds/2d
 
 // Helpers.
 export { ArrayHelper }                                from './helpers/array-helper';
+export { ComparisonResults }                          from './helpers/comparison-results';
 export { ExceptionHelper }                            from './helpers/exception-helper';
 export { Fps }                                        from './helpers/fps';
 export { IndexHelper }                                from './helpers/index-helper';
 export { JSHelper }                                   from './helpers/js-helper';
 export { MouseButton }                                from './helpers/mouse-button';
+export { RandomHelper }                               from './helpers/random-helper';
 
 // Loaders.
 export { BufferLoader }                               from './loaders/buffer-loader';

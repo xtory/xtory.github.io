@@ -70,6 +70,4 @@ function Loader(_renderer) {
     };
 }
 
-Object.freeze(Loader);
-
 export { Loader };

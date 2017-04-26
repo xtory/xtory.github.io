@@ -146,7 +146,7 @@ Object.defineProperty(Matrix4x4.prototype, 's44', {
 });
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 Matrix4x4.ELEMENT_COUNT = 16;
 
@@ -512,7 +512,5 @@ Matrix4x4.areEqual = function(m1, m2) {
 
     return true;
 };
-
-Object.freeze(Matrix4x4);
 
 export { Matrix4x4 };

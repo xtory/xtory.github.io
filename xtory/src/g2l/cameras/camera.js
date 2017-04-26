@@ -266,7 +266,7 @@ Camera.prototype = {
 };
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 Camera.DEFAULT_FACING_DIRECTION       = Vector3D.negateVector(AxisGroup.Z_AXIS);
 Camera.DEFAULT_UP_DIRECTION           = AxisGroup.Y_AXIS;
@@ -275,7 +275,5 @@ Camera.MIN_DISTANCE_TO_NEAR_PLANE     = 10;
 Camera.MAX_DISTANCE_TO_FAR_PLANE      = 1000000;                           // = 10^6
 Camera.DEFAULT_DISTANCE_TO_NEAR_PLANE = Camera.MIN_DISTANCE_TO_NEAR_PLANE; // = 10.
 Camera.DEFAULT_DISTANCE_TO_FAR_PLANE  = 100000;                            // = 10^5
-
-Object.freeze(Camera);
 
 export { Camera };

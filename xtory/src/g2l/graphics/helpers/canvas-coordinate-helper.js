@@ -24,6 +24,4 @@ CanvasCoordinateHelper.fromDrawToDisplaySpace = function(canvas, p) {
     };
 };
 
-Object.freeze(CanvasCoordinateHelper);
-
 export { CanvasCoordinateHelper };

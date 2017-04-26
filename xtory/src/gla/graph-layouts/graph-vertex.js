@@ -1,11 +1,9 @@
 //
 // Constructor.
 //
-function Vertex(_position) {
+function GraphVertex(_position) {
     //
     this.position = _position; // which is a Vector2D.
 }
 
-Object.freeze(Vertex);
-
-export { Vertex };
+export { GraphVertex };

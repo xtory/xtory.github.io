@@ -11,6 +11,4 @@ function World2DStateNormal(_world) {
 
 JSHelper.inherit(World2DStateNormal, World2DState);
 
-Object.freeze(World2DStateNormal);
-
 export { World2DStateNormal };

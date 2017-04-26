@@ -60,6 +60,4 @@ Rect.areEqual = function(rect1, rect2) {
     }
 };
 
-Object.freeze(Rect);
-
 export { Rect };

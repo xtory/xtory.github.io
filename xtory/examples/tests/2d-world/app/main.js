@@ -3,17 +3,22 @@ function main() {
     'use strict';
 
     var g2l = GorillaGL;
+    var gla = GorillaLinkAnalysis;
 
     var title;
     var renderer;
     var loader;
     var world; // 2D world.
+    var chart;
+    var layout;
 
     var textures;
-    var worldImages;
-    var worldLineSegments;
     var worldImageCount;
+    var worldImages;
     var worldLineSegmentCount;
+    var worldLineSegments;
+    var ends;
+    var links;
 
     // Info.
     var info;
@@ -36,9 +41,14 @@ function main() {
 
         setUpWorld();
 
+        chart = new gla.Chart();
+        layout = chart.layout;
+
         setUpTextures();
 
         setUpWorldItems();
+
+        setUpLayout();
 
         setUpInfo();
 
@@ -94,14 +104,16 @@ function main() {
         //
         worldImages = [];
         worldLineSegments = [];
+        ends = [];
+        links = [];
 
         worldImageCount = 100; //50; //2000;
-        worldLineSegmentCount = 150;
+        worldLineSegmentCount = 250;
 
         var worldImageSize = new g2l.Size2D(32, 32); // LA icon's default size: (32, 32)
         var worldLineSegmentThickness = 1.5; // LA link's default thickness: 1.5
 
-        var halfLength = 500; //5000;
+        var halfLength = 1000; //5000;
         for (var i=0; i<worldImageCount; i++) {
             //
             var p = new g2l.Vector2D (
@@ -130,6 +142,10 @@ function main() {
             );
 
             worldImages.push(worldImage);
+
+            ends.push ({
+                centerPosition: p
+            });
         }
 
         var net = [];
@@ -190,90 +206,49 @@ function main() {
 
             worldLineSegments.push(worldLineSegment);
 
+            links.push ({
+                sourceGraphVertexIndex: index1,
+                destinationGraphVertexIndex: index2
+            });            
+
             net[index1].push(index2);
             net[index2].push(index1);
 
             index1 = -1;
             index2 = -1;
         }
-
-        // for (var i=1; i<worldImages.length; i++) {
-        //     //
-        //     var item1 = worldImages[i - 1];
-        //     var item2 = worldImages[i];
-
-        //     var worldLineSegment = new g2l.World2DLineSegment (
-        //         // Part 1.
-        //         world,
-        //         // Part 2.
-        //         item1.centerPosition, item2.centerPosition,
-        //         // Part 3.
-        //         worldLineSegmentThickness,
-        //         // Part 4.
-        //         new g2l.Color (
-        //             Math.random(), Math.random(), Math.random(), 0.5
-        //         )
-        //     );
-
-        //     world.addItem (
-        //         g2l.World2DLayerName.LINE_SEGMENTS_BELOW_MIDDLE_IMAGES,
-        //         worldLineSegment
-        //     );
-
-        //     worldLineSegments.push(worldLineSegment);
-        // }
     }
 
-    // function setUpWorldItems() {
-    //     //
-    //     worldImages = [];
-    //     worldLineSegments = [];
+    function setUpLayout() {
+        //
+        var style = new gla.CircularLayoutStyle();
+        layout.startPerformingCircularlayout (
+            style,
+            ends, links,
+            world.centerPosition
+        );
 
-    //     worldImageCount = 5000; //50; //2000;
+        // Test:
+        for (var i=0; i<ends.length; i++) {
+            //
+            var item = layout.getGraphVertexAt(i);
+            worldImages[i].centerPosition = item;
+        }
 
-    //     var worldImageSize = new g2l.Size2D(32, 32); // LA icon's default size: (32, 32)
-    //     var worldLineSegmentThickness = 1.5; // LA link's default thickness: 1.5
+        for (var i=0; i<links.length; i++) {
+            //
+            var item = links[i];
 
-    //     var halfLength = 2500; //5000;
-    //     var worldImagePositions = [];
+            var end1 = worldImages[item.sourceGraphVertexIndex];
+            var end2 = worldImages[item.destinationGraphVertexIndex];
 
-    //     for (var i=0; i<worldImageCount; i++) {
-    //         //
-    //         var p = new g2l.Vector2D (
-    //             halfLength * (-0.5 + Math.random()), // -length/2 ~ length/2
-    //             halfLength * (-0.5 + Math.random())  // -length/2 ~ length/2
-    //         );
+            var worldLineSegment = worldLineSegments[i];
+            worldLineSegment.startPosition = end1.centerPosition;
+            worldLineSegment.finishPosition = end2.centerPosition;
+        }
+        // :Test
+    }
 
-    //         worldImagePositions.push(p);
-    //     }
-
-    //     for (var i=1; i<worldImagePositions.length; i++) {
-    //         //
-    //         var item1 = worldImagePositions[i - 1];
-    //         var item2 = worldImagePositions[i];
-
-    //         var worldLineSegment = new g2l.World2DLineSegment (
-    //             // Part 1.
-    //             world,
-    //             // Part 2.
-    //             item1, item2,
-    //             // Part 3.
-    //             worldLineSegmentThickness,
-    //             // Part 4.
-    //             new g2l.Color (
-    //                 Math.random(), Math.random(), Math.random(), 0.5
-    //             )
-    //         );
-
-    //         world.addItem (
-    //             g2l.World2DLayerName.LINE_SEGMENTS_BELOW_MIDDLE_IMAGES,
-    //             worldLineSegment
-    //         );
-
-    //         worldLineSegments.push(worldLineSegment);
-    //     }
-    // }
-    
     function setUpInfo() {
         //
         var divs = (

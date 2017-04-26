@@ -39,7 +39,7 @@ function LineSegment2D (
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 LineSegment2D.VERTEX_COUNT  = 4;
 LineSegment2D.POSITION_SIZE = 3; // (x, y, z)
@@ -120,7 +120,5 @@ LineSegment2D.createVertexColors = function(a, color) {
     a[ 8]=color.r;    a[ 9]=color.g;    a[10]=color.b;    a[11]=color.a;
     a[12]=color.r;    a[13]=color.g;    a[14]=color.b;    a[15]=color.a;
 };
-
-Object.freeze(LineSegment2D);
 
 export { LineSegment2D };

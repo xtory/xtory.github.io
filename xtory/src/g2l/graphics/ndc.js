@@ -44,7 +44,7 @@ function Ndc() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 Ndc.MIN_X = -1; // Left.
 Ndc.MAX_X =  1; // Right.
@@ -52,7 +52,5 @@ Ndc.MIN_Y = -1; // Bottom.
 Ndc.MAX_Y =  1; // Top.
 Ndc.MIN_Z = -1; // Near.
 Ndc.MAX_Z =  1; // Far.
-
-Object.freeze(Ndc);
 
 export { Ndc };

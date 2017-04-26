@@ -19,7 +19,7 @@ Vector2D.prototype = {
 };
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 Vector2D.ELEMENT_COUNT = 2;
 
@@ -128,7 +128,5 @@ Vector2D.areEqual = function(v1, v2) {
         return true;
     }
 };
-
-Object.freeze(Vector2D);
 
 export { Vector2D };

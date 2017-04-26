@@ -8,12 +8,10 @@ function AxisGroup() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 AxisGroup.X_AXIS = new Vector3D(1, 0, 0);
 AxisGroup.Y_AXIS = new Vector3D(0, 1, 0);
 AxisGroup.Z_AXIS = new Vector3D(0, 0, 1);
-
-Object.freeze(AxisGroup);
 
 export { AxisGroup };

@@ -37,6 +37,4 @@ World2DStyle.areEqual = function(style1, style2) {
     }
 }
 
-Object.freeze(World2DStyle);
-
 export { World2DStyle };

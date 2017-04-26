@@ -6,7 +6,7 @@ function TransformedPositionColor() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 TransformedPositionColor.VERTEX_SHADER_SOURCE = [
     //
@@ -37,7 +37,5 @@ TransformedPositionColor.FRAGMENT_SHADER_SOURCE = [
     '}'
    
 ].join('\n');
-
-Object.freeze(TransformedPositionColor);
 
 export { TransformedPositionColor };

@@ -81,7 +81,7 @@ function World2DLineSegment (
                     _world.convertPositionFromWorldToScreenSpace(_finishPosition);
 
                 // Test:
-                _self.InvalidateBounds();
+                _self.invalidateBounds();
                 // :Test
             }
         });
@@ -305,7 +305,5 @@ World2DLineSegment.prototype.checkIfOutOfBounds = function() {
         this.isOutOfBounds = true;
     }
 };
-
-Object.freeze(World2DLineSegment);
 
 export { World2DLineSegment };

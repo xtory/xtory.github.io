@@ -17,6 +17,4 @@ function SpriteBatchStyle() {
     */
 }
 
-Object.freeze(SpriteBatchStyle);
-
 export { SpriteBatchStyle };

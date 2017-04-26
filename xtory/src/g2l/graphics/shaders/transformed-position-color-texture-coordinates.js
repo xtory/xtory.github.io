@@ -6,7 +6,7 @@ function TransformedPositionColorTextureCoordinates() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 TransformedPositionColorTextureCoordinates.VERTEX_SHADER_SOURCE = [
     //
@@ -43,7 +43,5 @@ TransformedPositionColorTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
     '}'
    
 ].join('\n');
-
-Object.freeze(TransformedPositionColorTextureCoordinates);
 
 export { TransformedPositionColorTextureCoordinates };

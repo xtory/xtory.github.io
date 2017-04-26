@@ -6,7 +6,7 @@ function PositionOnly() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 PositionOnly.VERTEX_SHADER_SOURCE = [
     //
@@ -31,7 +31,5 @@ PositionOnly.FRAGMENT_SHADER_SOURCE = [
     '}'
 
 ].join('\n');
-
-Object.freeze(PositionOnly);
 
 export { PositionOnly };

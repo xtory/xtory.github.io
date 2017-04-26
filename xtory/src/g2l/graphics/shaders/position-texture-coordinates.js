@@ -6,7 +6,7 @@ function PositionTextureCoordinates() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 PositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
     //
@@ -41,7 +41,5 @@ PositionTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
    '}'
    
 ].join('\n');
-
-Object.freeze(PositionTextureCoordinates);
 
 export { PositionTextureCoordinates };

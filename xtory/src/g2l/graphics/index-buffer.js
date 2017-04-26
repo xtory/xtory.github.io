@@ -77,6 +77,4 @@ IndexBuffer.prototype = {
     }
 };
 
-Object.freeze(IndexBuffer);
-
 export { IndexBuffer };

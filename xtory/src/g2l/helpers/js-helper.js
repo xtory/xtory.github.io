@@ -17,6 +17,4 @@ JSHelper.inherit = function(subobject, superobject) {
     subobject.prototype = new helper();
 };
 
-Object.freeze(JSHelper);
-
 export { JSHelper };

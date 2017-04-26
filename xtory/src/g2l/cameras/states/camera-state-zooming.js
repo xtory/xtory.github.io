@@ -91,6 +91,4 @@ CameraStateZooming.prototype.update = function() {
     }
 };
 
-Object.freeze(CameraStateZooming);
-
 export { CameraStateZooming };

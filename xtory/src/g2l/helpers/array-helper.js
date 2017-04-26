@@ -33,6 +33,4 @@ ArrayHelper.remove = function(array, item) {
     return false;
 };
 
-Object.freeze(ArrayHelper);
-
 export { ArrayHelper };

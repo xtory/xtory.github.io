@@ -6,7 +6,7 @@ function ChartLayerName() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 ChartLayerName.BACKGROUND     = GorillaGL.World2DLayerName.BACKGROUND; //GorillaGL.World2DLayerName.BACKGROUND,
 ChartLayerName.FILLED_BOXES   = GorillaGL.World2DLayerName.BACKGROUND + 1;
@@ -22,7 +22,5 @@ ChartLayerName.FIRST_ITEM    = ChartLayerName.BACKGROUND;
 ChartLayerName.LAST_ITEM     = ChartLayerName.LEGENDS;
 ChartLayerName.FARTHEST_ITEM = ChartLayerName.BACKGROUND;
 ChartLayerName.NEAREST_ITEM  = ChartLayerName.LEGENDS;
-
-Object.freeze(ChartLayerName);
 
 export { ChartLayerName };

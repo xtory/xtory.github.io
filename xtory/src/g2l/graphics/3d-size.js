@@ -8,6 +8,4 @@ function Size3D(_width, _height, _depth) {
     this.depth  = _depth;
 }
 
-Object.freeze(Size3D);
-
 export { Size3D };

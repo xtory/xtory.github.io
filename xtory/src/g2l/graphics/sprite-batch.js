@@ -383,7 +383,7 @@ function SpriteBatch(_renderer, _style) {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 SpriteBatch.VERTEX_SHADER_SOURCE = [
     //
@@ -425,7 +425,5 @@ SpriteBatch.FRAGMENT_SHADER_SOURCE = [
     '}'
    
 ].join('\n');
-
-Object.freeze(SpriteBatch);
 
 export { SpriteBatch };

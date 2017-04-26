@@ -349,7 +349,7 @@ function LineSegment2DBatch(_renderer, _style) {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 LineSegment2DBatch.VERTEX_SHADER_SOURCE = [
     //
@@ -388,7 +388,5 @@ LineSegment2DBatch.FRAGMENT_SHADER_SOURCE = [
     '}'
    
 ].join('\n');
-
-Object.freeze(LineSegment2DBatch);
 
 export { LineSegment2DBatch };

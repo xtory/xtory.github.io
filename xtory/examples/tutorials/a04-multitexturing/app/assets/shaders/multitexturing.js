@@ -6,7 +6,7 @@ function Multitexturing() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 Multitexturing.VERTEX_SHADER_SOURCE = [
     //
@@ -53,5 +53,3 @@ Multitexturing.FRAGMENT_SHADER_SOURCE = [
     '}'
 
 ].join('\n');
-
-Object.freeze(Multitexturing);

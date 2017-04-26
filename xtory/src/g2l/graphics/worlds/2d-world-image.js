@@ -328,6 +328,4 @@ World2DImage.prototype.beginSpriteBatch = function() {
     this.world.spriteBatch.begin();
 };
 
-Object.freeze(World2DImage);
-
 export { World2DImage };

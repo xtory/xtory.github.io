@@ -18,6 +18,4 @@ IndexHelper.isIndexValid = function(itemCount, index) {
     }
 }
 
-Object.freeze(IndexHelper);
-
 export { IndexHelper };

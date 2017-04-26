@@ -34,6 +34,4 @@ World2DState.prototype = {
     }
 };
 
-Object.freeze(World2DState);
-
 export { World2DState };

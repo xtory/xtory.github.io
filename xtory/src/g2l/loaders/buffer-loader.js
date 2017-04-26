@@ -40,6 +40,4 @@ function BufferLoader(_loader) {
     };
 }
 
-Object.freeze(BufferLoader);
-
 export { BufferLoader };

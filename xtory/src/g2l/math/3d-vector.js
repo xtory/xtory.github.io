@@ -27,7 +27,7 @@ Object.defineProperty(Vector3D.prototype, 'xy', {
 });
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 Vector3D.ELEMENT_COUNT = 3;
 
@@ -102,24 +102,24 @@ Vector3D.calculateCrossProductOf = function(v1, v2) {
     );
 };
 
-Vector3D.transformPoint = function(m, p) {
+Vector3D.transformPoint = function(p, m) {
     //
-    var v = new Vector4D(p.x, p.y, p.z, 1);
-    var v2 = Vector4D.Transform(m, v);
+    var v1 = new Vector4D(p.x, p.y, p.z, 1);
+    var v2 = Vector4D.transform(v1, m);
 
     var s = 1 / v2.w;
     return new Vector3D(v2.x*s, v2.y*s, v2.z*s);
 };
 
-Vector3D.transformVector = function(m, v) {
+Vector3D.transformVector = function(v, m) {
     //
     var v2 = new Vector4D(v.x, v.y, v.z, 0);
-    v = Vector4D.Transform(m, v2);
+    var v3 = Vector4D.transform(v2, m);
 
-    return new Vector3D(v.x, v.y, v.z);
+    return new Vector3D(v3.x, v3.y, v3.z);
 };
 
-Vector3D.transform = function(v1, q) {
+Vector3D.transform = function(v, q) {
     //
     var x = q.X + q.X;
     var y = q.Y + q.Y;
@@ -145,9 +145,9 @@ Vector3D.transform = function(v1, q) {
     var s9 = (1.0 - xx) - yy;
 
     return new Vector3D (
-        (v1.X*s1 + v1.Y*s2) + v1.Z*s3,
-        (v1.X*s4 + v1.Y*s5) + v1.Z*s6,
-        (v1.X*s7 + v1.Y*s8) + v1.Z*s9
+        (v.X*s1 + v.Y*s2) + v.Z*s3,
+        (v.X*s4 + v.Y*s5) + v.Z*s6,
+        (v.X*s7 + v.Y*s8) + v.Z*s9
     );
 };
 
@@ -169,7 +169,5 @@ Vector3D.areEqual = function(v1, v2) {
         return true;
     }
 };
-
-Object.freeze(Vector3D);
 
 export { Vector3D };

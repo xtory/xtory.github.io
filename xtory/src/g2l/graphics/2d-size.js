@@ -40,6 +40,4 @@ Size2D.areEqual = function(size1, size2) {
     }
 };
 
-Object.freeze(Size2D);
-
 export { Size2D };

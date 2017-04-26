@@ -176,6 +176,4 @@ World2DItem.prototype = {
     }
 };
 
-Object.freeze(World2DItem);
-
 export { World2DItem };

@@ -144,6 +144,4 @@ LineSegment2DHelper.lineSegmentIntersectsBounds = function (
     return true;
 };
 
-Object.freeze(LineSegment2DHelper);
-
 export { LineSegment2DHelper };

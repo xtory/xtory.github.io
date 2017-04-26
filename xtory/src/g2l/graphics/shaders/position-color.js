@@ -6,7 +6,7 @@ function PositionColor() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 PositionColor.VERTEX_SHADER_SOURCE = [
     //
@@ -39,7 +39,5 @@ PositionColor.FRAGMENT_SHADER_SOURCE = [
     '}'
 
 ].join('\n');
-
-Object.freeze(PositionColor);
 
 export { PositionColor };

@@ -46,6 +46,4 @@ TextureCoordinateHelper.toST = function(u, v) {
     };
 };
 
-Object.freeze(TextureCoordinateHelper);
-
 export { TextureCoordinateHelper };

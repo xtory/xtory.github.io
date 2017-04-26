@@ -154,6 +154,4 @@ function TextureLoader(_loader) {
     };
 }
 
-Object.freeze(TextureLoader);
-
 export { TextureLoader };

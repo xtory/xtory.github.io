@@ -35,7 +35,7 @@ function MathHelper() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 
 // PI.
@@ -295,7 +295,5 @@ MathHelper.isPowerOfTwo = function(s) {
         return false;
     }
 };
-
-Object.freeze(MathHelper);
 
 export { MathHelper };

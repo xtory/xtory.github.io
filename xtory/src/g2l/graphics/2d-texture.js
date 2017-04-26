@@ -44,6 +44,4 @@ function Texture2D(_textureLoader) {
     });
 }
 
-Object.freeze(Texture2D);
-
 export { Texture2D };

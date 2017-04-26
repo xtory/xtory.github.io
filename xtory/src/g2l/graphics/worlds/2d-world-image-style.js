@@ -32,6 +32,4 @@ World2DImageStyle.areEqual = function(style1, style2) {
     }
 }
 
-Object.freeze(World2DImageStyle);
-
 export { World2DImageStyle };

@@ -6,7 +6,7 @@ function PhongShading() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 PhongShading.VERTEX_SHADER_SOURCE = [
     //
@@ -70,5 +70,3 @@ PhongShading.FRAGMENT_SHADER_SOURCE = [
     '}'
 
 ].join('\n');
-
-Object.freeze(PhongShading);

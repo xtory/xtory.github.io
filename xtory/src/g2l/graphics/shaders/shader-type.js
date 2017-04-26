@@ -6,11 +6,9 @@ function ShaderType() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 ShaderType.VERTEX_SHADER = 0;
 ShaderType.FRAGMENT_SHADER = 1;
-
-Object.freeze(ShaderType);
 
 export { ShaderType };

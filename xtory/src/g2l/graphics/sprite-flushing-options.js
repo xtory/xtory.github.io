@@ -6,11 +6,9 @@ function SpriteFlushingOptions() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
-SpriteFlushingOptions.VERTEX_POSITIONS           = 0x00000001;
-SpriteFlushingOptions.VERTEX_TEXTURE_COORDINATES = 0x00000002;
-
-Object.freeze(SpriteFlushingOptions);
+SpriteFlushingOptions.VERTEX_POSITIONS           = 0x0001;
+SpriteFlushingOptions.VERTEX_TEXTURE_COORDINATES = 0x0002;
 
 export { SpriteFlushingOptions };

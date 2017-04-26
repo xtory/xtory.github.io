@@ -97,10 +97,8 @@ function SmoothCamera (
 JSHelper.inherit(SmoothCamera, Camera);
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 SmoothCamera.DEFAULT_ZOOM_DURATION = 250; // milliseconds.
-
-Object.freeze(SmoothCamera);
 
 export { SmoothCamera };

@@ -25,6 +25,4 @@ ExceptionHelper.displayMessageOf = function(e) {
     alert(e);
 };
 
-Object.freeze(ExceptionHelper);
-
 export { ExceptionHelper };

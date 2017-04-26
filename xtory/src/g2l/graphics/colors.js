@@ -11,7 +11,7 @@ function Colors() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 Colors.DEFAULT_BACKGROUND = new Color(32/255, 32/255, 32/255, 1);
 
@@ -136,7 +136,5 @@ Colors.PHOTOSHOP_DARK_WARM_BROWN = new Color(117/255, 76/255, 36/255, 1);
 // OSX
 //
 Colors.OSX_SOLID_KELP = new Color(89/255, 136/255, 123/255, 1);
-
-Object.freeze(Colors);
 
 export { Colors };

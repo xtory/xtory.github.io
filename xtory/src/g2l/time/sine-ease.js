@@ -207,6 +207,4 @@ function SineEase(_easeMode, _duration, _isLooped) {
     }
 }
 
-Object.freeze(SineEase);
-
 export { SineEase };

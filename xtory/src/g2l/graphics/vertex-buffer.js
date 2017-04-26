@@ -61,6 +61,4 @@ VertexBuffer.prototype = {
     }
 };
 
-Object.freeze(VertexBuffer);
-
 export { VertexBuffer };

@@ -7,6 +7,4 @@ function World2DBoundsChangedEvent(_isMoved, _isResized) {
     this.isResized = _isResized;
 }
 
-Object.freeze(World2DBoundsChangedEvent);
-
 export { World2DBoundsChangedEvent };

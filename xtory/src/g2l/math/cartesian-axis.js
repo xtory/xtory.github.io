@@ -6,12 +6,10 @@ function CartesianAxis() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 CartesianAxis.X = 0;
 CartesianAxis.Y = 1;
 CartesianAxis.Z = 2;
-
-Object.freeze(CartesianAxis);
 
 export { CartesianAxis };

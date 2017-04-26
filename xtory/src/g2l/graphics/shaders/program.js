@@ -33,6 +33,4 @@ function Program(_programLoader) {
     });
 }
 
-Object.freeze(Program);
-
 export { Program };

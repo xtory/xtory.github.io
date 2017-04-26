@@ -34,6 +34,4 @@ CameraState.prototype = {
     }
 };
 
-Object.freeze(CameraState);
-
 export { CameraState };

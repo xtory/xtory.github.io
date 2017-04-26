@@ -49,6 +49,4 @@ Color.areEqual = function(value1, value2) {
     }
 };
 
-Object.freeze(Color);
-
 export { Color };

@@ -1,28 +1,28 @@
 //import babel from 'rollup-plugin-babel';
 
 export default {
-    entry: './src/gla/gla.js',
+    entry: './src/g2l/entry.js',
     targets: [
 		{
 			format: 'iife',
-			moduleName: 'GorillaLinkAnalysis',
-			dest: './dist/gla.js',
+			moduleName: 'GorillaGL',
+			dest: './dist/g2l.js'
 		}
 		//}, {
 		// 	format: 'es',
-        //     moduleName: 'GorillaLinkAnalysis',
+        //     moduleName: 'GorillaGL',
 		// 	dest: './dist/g2l.es.js'
 		// }, {
 		// 	format: 'amd',
-		// 	moduleName: 'GorillaLinkAnalysis',
+		// 	moduleName: 'GorillaGL',
 		// 	dest: './dist/g2l.amd.js'
 		// }, {
 		// 	format: 'cjs',
-		// 	moduleName: 'GorillaLinkAnalysis',
+		// 	moduleName: 'GorillaGL',
 		// 	dest: './dist/g2l.cjs.js'
 		// }, {
 		// 	format: 'umd',
-		// 	moduleName: 'GorillaLinkAnalysis',
+		// 	moduleName: 'GorillaGL',
 		// 	dest: './dist/g2l.umd.js'
 		// }
 	],

@@ -30,6 +30,4 @@ World2DLineSegmentStyle.areEqual = function(style1, style2) {
     }
 }
 
-Object.freeze(World2DLineSegmentStyle);
-
 export { World2DLineSegmentStyle };

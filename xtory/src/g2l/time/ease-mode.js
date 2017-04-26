@@ -6,12 +6,10 @@ function EaseMode() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 EaseMode.EASE_IN     = 0;
 EaseMode.EASE_OUT    = 1;
 EaseMode.EASE_IN_OUT = 2;
-
-Object.freeze(EaseMode);
 
 export { EaseMode };

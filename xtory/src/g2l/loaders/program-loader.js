@@ -168,6 +168,4 @@ function ProgramLoader(_loader) {
     };
 }
 
-Object.freeze(ProgramLoader);
-
 export { ProgramLoader };

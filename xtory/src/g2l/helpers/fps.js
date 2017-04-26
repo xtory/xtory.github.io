@@ -78,10 +78,8 @@ function Fps() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 Fps.FRAME_COUNT_TO_AVERAGE = 16;
-
-Object.freeze(Fps);
 
 export { Fps };

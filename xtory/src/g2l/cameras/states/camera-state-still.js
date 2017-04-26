@@ -11,6 +11,4 @@ function CameraStateStill(_camera) {
 
 JSHelper.inherit(CameraStateStill, CameraState);
 
-Object.freeze(CameraStateStill);
-
 export { CameraStateStill };

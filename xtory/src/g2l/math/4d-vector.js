@@ -29,7 +29,7 @@ Object.defineProperty(Vector4D.prototype, 'xyz', {
 });
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 Vector4D.ELEMENT_COUNT = 4;
 
@@ -87,7 +87,7 @@ Vector4D.calculateLengthSquaredOf = function(v) {
     return v.x*v.x + v.y*v.y + v.z*v.z + v.w*v.w;
 };
 
-Vector4D.transform = function(m, v) {
+Vector4D.transform = function(v, m) {
     //
     return new Vector4D (
         m.s11*v.x + m.s12*v.y + m.s13*v.z + m.s14*v.w,
@@ -116,7 +116,5 @@ Vector4D.areEqual = function(v1, v2) {
         return true;
     }
 };
-
-Object.freeze(Vector4D);
 
 export { Vector4D };

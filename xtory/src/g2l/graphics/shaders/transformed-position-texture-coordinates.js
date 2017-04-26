@@ -6,7 +6,7 @@ function TransformedPositionTextureCoordinates() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 TransformedPositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
     //
@@ -39,7 +39,5 @@ TransformedPositionTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
     '}'
    
 ].join('\n');
-
-Object.freeze(TransformedPositionTextureCoordinates);
 
 export { TransformedPositionTextureCoordinates };

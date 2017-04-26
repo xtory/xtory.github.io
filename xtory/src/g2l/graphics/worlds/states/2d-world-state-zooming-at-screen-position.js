@@ -120,6 +120,4 @@ World2DStateZoomingAtScreenPosition.prototype.update = function() {
     }
 };
 
-Object.freeze(World2DStateZoomingAtScreenPosition);
-
 export { World2DStateZoomingAtScreenPosition };

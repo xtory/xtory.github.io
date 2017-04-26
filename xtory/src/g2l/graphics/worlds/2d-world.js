@@ -720,11 +720,9 @@ function World2D(_renderer, _style) {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 World2D.DEFAULT_LINE_SEGMENT_LAYER_INDEX = World2DLayerName.LINE_SEGMENTS_BELOW_FAR_IMAGES;
 World2D.DEFAULT_IMAGE_LAYER_INDEX = World2DLayerName.MIDDLE_IMAGES;
-
-Object.freeze(World2D);
 
 export { World2D };

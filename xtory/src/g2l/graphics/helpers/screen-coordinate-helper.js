@@ -64,6 +64,4 @@ ScreenCoordinateHelper.toClipSpace = function(canvas, p) {
     // :Note
 };
 
-Object.freeze(ScreenCoordinateHelper);
-
 export { ScreenCoordinateHelper };

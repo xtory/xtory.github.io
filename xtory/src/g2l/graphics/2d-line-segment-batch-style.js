@@ -12,6 +12,4 @@ function LineSegment2DBatchStyle() {
     */
 }
 
-Object.freeze(LineSegment2DBatchStyle);
-
 export { LineSegment2DBatchStyle };

@@ -472,7 +472,7 @@ function Renderer(_canvas, _style) {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 Renderer.CANVAS_WIDTH = 1024;
 Renderer.CANVAS_HEIGHT = 1024;
@@ -484,7 +484,5 @@ Renderer.DEFAULT_CLEAR_COLOR   = Colors.DEFAULT_BACKGROUND;
 Renderer.DEFAULT_CLEAR_DEPTH   = 1;
 Renderer.DEFAULT_CLEAR_STENCIL = 0;
 Renderer.DEFAULT_TEXTURE_UNIT  = 0;
-
-Object.freeze(Renderer);
 
 export { Renderer };

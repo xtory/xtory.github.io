@@ -38,7 +38,7 @@ function MathHelper() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 
 // PI.
@@ -299,8 +299,6 @@ MathHelper.isPowerOfTwo = function(s) {
     }
 };
 
-Object.freeze(MathHelper);
-
 //
 // Constructor.
 //
@@ -309,13 +307,11 @@ function CartesianAxis() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 CartesianAxis.X = 0;
 CartesianAxis.Y = 1;
 CartesianAxis.Z = 2;
-
-Object.freeze(CartesianAxis);
 
 //
 // Constructor.
@@ -461,7 +457,7 @@ Object.defineProperty(Matrix4x4.prototype, 's44', {
 });
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 Matrix4x4.ELEMENT_COUNT = 16;
 
@@ -828,8 +824,6 @@ Matrix4x4.areEqual = function(m1, m2) {
     return true;
 };
 
-Object.freeze(Matrix4x4);
-
 //
 // Constructor.
 //
@@ -916,7 +910,7 @@ Quaternion.prototype = {
 };
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 Quaternion.ELEMENT_COUNT = 4;
 
@@ -987,8 +981,6 @@ Quaternion.areEqual = function(q1, q2) {
     }
 };
 
-Object.freeze(Quaternion);
-
 //
 // Constructor.
 //
@@ -1008,7 +1000,7 @@ Vector2D.prototype = {
 };
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 Vector2D.ELEMENT_COUNT = 2;
 
@@ -1118,8 +1110,6 @@ Vector2D.areEqual = function(v1, v2) {
     }
 };
 
-Object.freeze(Vector2D);
-
 //
 // Constructor.
 //
@@ -1148,7 +1138,7 @@ Object.defineProperty(Vector4D.prototype, 'xyz', {
 });
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 Vector4D.ELEMENT_COUNT = 4;
 
@@ -1206,7 +1196,7 @@ Vector4D.calculateLengthSquaredOf = function(v) {
     return v.x*v.x + v.y*v.y + v.z*v.z + v.w*v.w;
 };
 
-Vector4D.transform = function(m, v) {
+Vector4D.transform = function(v, m) {
     //
     return new Vector4D (
         m.s11*v.x + m.s12*v.y + m.s13*v.z + m.s14*v.w,
@@ -1236,8 +1226,6 @@ Vector4D.areEqual = function(v1, v2) {
     }
 };
 
-Object.freeze(Vector4D);
-
 //
 // Constructor.
 //
@@ -1262,7 +1250,7 @@ Object.defineProperty(Vector3D.prototype, 'xy', {
 });
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 Vector3D.ELEMENT_COUNT = 3;
 
@@ -1337,24 +1325,24 @@ Vector3D.calculateCrossProductOf = function(v1, v2) {
     );
 };
 
-Vector3D.transformPoint = function(m, p) {
+Vector3D.transformPoint = function(p, m) {
     //
-    var v = new Vector4D(p.x, p.y, p.z, 1);
-    var v2 = Vector4D.Transform(m, v);
+    var v1 = new Vector4D(p.x, p.y, p.z, 1);
+    var v2 = Vector4D.transform(v1, m);
 
     var s = 1 / v2.w;
     return new Vector3D(v2.x*s, v2.y*s, v2.z*s);
 };
 
-Vector3D.transformVector = function(m, v) {
+Vector3D.transformVector = function(v, m) {
     //
     var v2 = new Vector4D(v.x, v.y, v.z, 0);
-    v = Vector4D.Transform(m, v2);
+    var v3 = Vector4D.transform(v2, m);
 
-    return new Vector3D(v.x, v.y, v.z);
+    return new Vector3D(v3.x, v3.y, v3.z);
 };
 
-Vector3D.transform = function(v1, q) {
+Vector3D.transform = function(v, q) {
     //
     var x = q.X + q.X;
     var y = q.Y + q.Y;
@@ -1380,9 +1368,9 @@ Vector3D.transform = function(v1, q) {
     var s9 = (1.0 - xx) - yy;
 
     return new Vector3D (
-        (v1.X*s1 + v1.Y*s2) + v1.Z*s3,
-        (v1.X*s4 + v1.Y*s5) + v1.Z*s6,
-        (v1.X*s7 + v1.Y*s8) + v1.Z*s9
+        (v.X*s1 + v.Y*s2) + v.Z*s3,
+        (v.X*s4 + v.Y*s5) + v.Z*s6,
+        (v.X*s7 + v.Y*s8) + v.Z*s9
     );
 };
 
@@ -1405,8 +1393,6 @@ Vector3D.areEqual = function(v1, v2) {
     }
 };
 
-Object.freeze(Vector3D);
-
 //
 // Constructor.
 //
@@ -1415,13 +1401,11 @@ function AxisGroup() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 AxisGroup.X_AXIS = new Vector3D(1, 0, 0);
 AxisGroup.Y_AXIS = new Vector3D(0, 1, 0);
 AxisGroup.Z_AXIS = new Vector3D(0, 0, 1);
-
-Object.freeze(AxisGroup);
 
 //
 // Constructor.
@@ -1429,8 +1413,6 @@ Object.freeze(AxisGroup);
 function ViewFrustum() {
     // No contents.
 }
-
-Object.freeze(ViewFrustum);
 
 //
 // Constructor.
@@ -1694,7 +1676,7 @@ Camera.prototype = {
 };
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 Camera.DEFAULT_FACING_DIRECTION       = Vector3D.negateVector(AxisGroup.Z_AXIS);
 Camera.DEFAULT_UP_DIRECTION           = AxisGroup.Y_AXIS;
@@ -1703,8 +1685,6 @@ Camera.MIN_DISTANCE_TO_NEAR_PLANE     = 10;
 Camera.MAX_DISTANCE_TO_FAR_PLANE      = 1000000;                           // = 10^6
 Camera.DEFAULT_DISTANCE_TO_NEAR_PLANE = Camera.MIN_DISTANCE_TO_NEAR_PLANE; // = 10.
 Camera.DEFAULT_DISTANCE_TO_FAR_PLANE  = 100000;                            // = 10^5
-
-Object.freeze(Camera);
 
 //
 // Constructor.
@@ -1742,8 +1722,6 @@ CameraState.prototype = {
     }
 };
 
-Object.freeze(CameraState);
-
 //
 // Constructor.
 //
@@ -1763,8 +1741,6 @@ JSHelper.inherit = function(subobject, superobject) {
     subobject.prototype = new helper();
 };
 
-Object.freeze(JSHelper);
-
 //
 // Constructor.
 //
@@ -1775,8 +1751,6 @@ function CameraStateStill(_camera) {
 
 JSHelper.inherit(CameraStateStill, CameraState);
 
-Object.freeze(CameraStateStill);
-
 //
 // Constructor.
 //
@@ -1785,13 +1759,11 @@ function EaseMode() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 EaseMode.EASE_IN     = 0;
 EaseMode.EASE_OUT    = 1;
 EaseMode.EASE_IN_OUT = 2;
-
-Object.freeze(EaseMode);
 
 // Note:
 // Adapted from
@@ -1884,8 +1856,6 @@ function Stopwatch() {
     //     ); 
     // }
 }
-
-Object.freeze(Stopwatch);
 
 //
 // Constructor.
@@ -2092,8 +2062,6 @@ function SineEase(_easeMode, _duration, _isLooped) {
     };
 }
 
-Object.freeze(SineEase);
-
 //
 // Constructor.
 //
@@ -2180,8 +2148,6 @@ CameraStateZooming.prototype.update = function() {
         this.camera.state = new CameraStateStill(this.camera);
     }
 };
-
-Object.freeze(CameraStateZooming);
 
 //
 // Constructor.
@@ -2276,11 +2242,9 @@ function SmoothCamera (
 JSHelper.inherit(SmoothCamera, Camera);
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 SmoothCamera.DEFAULT_ZOOM_DURATION = 250; // milliseconds.
-
-Object.freeze(SmoothCamera);
 
 //
 // Constructor.
@@ -2308,8 +2272,6 @@ CanvasCoordinateHelper.fromDrawToDisplaySpace = function(canvas, p) {
     };
 };
 
-Object.freeze(CanvasCoordinateHelper);
-
 //
 // Constructor.
 //
@@ -2318,13 +2280,11 @@ function ClearOptions() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
-ClearOptions.COLOR_BUFFER   = 0x00004000; // = gl.COLOR_BUFFER_BIT
-ClearOptions.DEPTH_BUFFER   = 0x00000100; // = gl.DEPTH_BUFFER_BIT
-ClearOptions.STENCIL_BUFFER = 0x00000400; // = gl.STENCIL_BUFFER_BIT
-
-Object.freeze(ClearOptions);
+ClearOptions.COLOR_BUFFER   = 0x4000; // = gl.COLOR_BUFFER_BIT
+ClearOptions.DEPTH_BUFFER   = 0x0100; // = gl.DEPTH_BUFFER_BIT
+ClearOptions.STENCIL_BUFFER = 0x0400; // = gl.STENCIL_BUFFER_BIT
 
 // Note:
 // OpenGL's color is composed of (r, g, b, a) channels.
@@ -2377,8 +2337,6 @@ Color.areEqual = function(value1, value2) {
     }
 };
 
-Object.freeze(Color);
-
 // Reference:
 // Photoshop CS2 Swatches.
 
@@ -2390,7 +2348,7 @@ function Colors() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 Colors.DEFAULT_BACKGROUND = new Color(32/255, 32/255, 32/255, 1);
 
@@ -2516,8 +2474,6 @@ Colors.PHOTOSHOP_DARK_WARM_BROWN = new Color(117/255, 76/255, 36/255, 1);
 //
 Colors.OSX_SOLID_KELP = new Color(89/255, 136/255, 123/255, 1);
 
-Object.freeze(Colors);
-
 // Note:
 // Whether in OpenGL or DirectX, depth buffers have values 0 ~ 1, and conventionally,
 // 0: near plane, 1: far plane. We can change it (such as: using gl.depthRange()
@@ -2531,7 +2487,7 @@ function DepthBufferValues() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 DepthBufferValues.NEAR_CLIP_PLANE = 0.0; // = default zNear of gl.getParameter(gl.DEPTH_RANGE).
 DepthBufferValues.FAR_CLIP_PLANE  = 1.0; // = default zFar of gl.getParameter(gl.DEPTH_RANGE).
@@ -2559,8 +2515,6 @@ DepthBufferValues.isDepthOutOfRange = function(depth) {
         return false;
     }
 };
-
-Object.freeze(DepthBufferValues);
 
 //
 // Constructor.
@@ -2641,8 +2595,6 @@ IndexBuffer.prototype = {
     }
 };
 
-Object.freeze(IndexBuffer);
-
 //
 // Constructor.
 //
@@ -2651,13 +2603,11 @@ function Line2DIntersectionResult() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 Line2DIntersectionResult.OBJECT_ON_LEFT_SIDE_OF_LINE    = 0;
 Line2DIntersectionResult.OBJECT_ON_RIGHT_SIDE_OF_LINE   = 1;
 Line2DIntersectionResult.OBJECT_INTERSECTING_OR_ON_LINE = 2;
-
-Object.freeze(Line2DIntersectionResult);
 
 //
 // Constructor.
@@ -2729,8 +2679,6 @@ Line2DHelper.lineIntersectsPoint = function(p1, p2, p) {
     }
 };
 
-Object.freeze(Line2DHelper);
-
 // Note:
 // Sprite.createVertexXxx() returns a Float32Array directly, but LineSegment2D
 // doesn't. Instead, LineSegment2D's vertexPositions, vertexColors, indices are
@@ -2769,7 +2717,7 @@ function LineSegment2D (
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 LineSegment2D.VERTEX_COUNT  = 4;
 LineSegment2D.POSITION_SIZE = 3; // (x, y, z)
@@ -2851,8 +2799,6 @@ LineSegment2D.createVertexColors = function(a, color) {
     a[12]=color.r;    a[13]=color.g;    a[14]=color.b;    a[15]=color.a;
 };
 
-Object.freeze(LineSegment2D);
-
 //
 // Constructor.
 //
@@ -2867,8 +2813,6 @@ function LineSegment2DBatchStyle() {
     */
 }
 
-Object.freeze(LineSegment2DBatchStyle);
-
 //
 // Constructor.
 //
@@ -2877,14 +2821,12 @@ function PrimitiveType() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 PrimitiveType.LINE_LIST      = 1; // = gl.LINES
 PrimitiveType.LINE_STRIP     = 3; // = gl.LINE_STRIP
 PrimitiveType.TRIANGLE_LIST  = 4; // = gl.TRIANGLES
 PrimitiveType.TRIANGLE_STRIP = 5; // = gl.TRIANGLE_STRIP
-
-Object.freeze(PrimitiveType);
 
 //
 // Constructor.
@@ -3233,7 +3175,7 @@ function LineSegment2DBatch(_renderer, _style) {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 LineSegment2DBatch.VERTEX_SHADER_SOURCE = [
     //
@@ -3272,8 +3214,6 @@ LineSegment2DBatch.FRAGMENT_SHADER_SOURCE = [
     '}'
    
 ].join('\n');
-
-Object.freeze(LineSegment2DBatch);
 
 //
 // Constructor.
@@ -3417,8 +3357,6 @@ LineSegment2DHelper.lineSegmentIntersectsBounds = function (
     return true;
 };
 
-Object.freeze(LineSegment2DHelper);
-
 // Note:
 // NDC stands for 'normalized device coordinates'.
 
@@ -3465,7 +3403,7 @@ function Ndc() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 Ndc.MIN_X = -1; // Left.
 Ndc.MAX_X =  1; // Right.
@@ -3473,8 +3411,6 @@ Ndc.MIN_Y = -1; // Bottom.
 Ndc.MAX_Y =  1; // Top.
 Ndc.MIN_Z = -1; // Near.
 Ndc.MAX_Z =  1; // Far.
-
-Object.freeze(Ndc);
 
 //
 // Constructor.
@@ -3484,7 +3420,7 @@ function PositionColor() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 PositionColor.VERTEX_SHADER_SOURCE = [
     //
@@ -3518,8 +3454,6 @@ PositionColor.FRAGMENT_SHADER_SOURCE = [
 
 ].join('\n');
 
-Object.freeze(PositionColor);
-
 //
 // Constructor.
 //
@@ -3528,7 +3462,7 @@ function PositionOnly() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 PositionOnly.VERTEX_SHADER_SOURCE = [
     //
@@ -3554,8 +3488,6 @@ PositionOnly.FRAGMENT_SHADER_SOURCE = [
 
 ].join('\n');
 
-Object.freeze(PositionOnly);
-
 //
 // Constructor.
 //
@@ -3564,7 +3496,7 @@ function PositionTextureCoordinates() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 PositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
     //
@@ -3600,8 +3532,6 @@ PositionTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
    
 ].join('\n');
 
-Object.freeze(PositionTextureCoordinates);
-
 //
 // Constructor.
 //
@@ -3636,8 +3566,6 @@ function Program(_programLoader) {
         get: function() { return _webGLProgram; }
     });
 }
-
-Object.freeze(Program);
 
 // Note:
 // GDI+'s Rectangle and WPF's Rect are both (left, top, width, height). But cuz
@@ -3698,8 +3626,6 @@ Rect.areEqual = function(rect1, rect2) {
         return true;
     }
 };
-
-Object.freeze(Rect);
 
 //
 // Constructor.
@@ -3764,8 +3690,6 @@ VertexBuffer.prototype = {
     }
 };
 
-Object.freeze(VertexBuffer);
-
 //
 // Constructor.
 //
@@ -3805,8 +3729,6 @@ function BufferLoader(_loader) {
     };
 }
 
-Object.freeze(BufferLoader);
-
 //
 // Constructor.
 //
@@ -3815,12 +3737,10 @@ function ShaderType() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 ShaderType.VERTEX_SHADER = 0;
 ShaderType.FRAGMENT_SHADER = 1;
-
-Object.freeze(ShaderType);
 
 //
 // Constructor.
@@ -3989,8 +3909,6 @@ function ProgramLoader(_loader) {
     };
 }
 
-Object.freeze(ProgramLoader);
-
 //
 // Constructor.
 //
@@ -4036,8 +3954,6 @@ function Texture2D(_textureLoader) {
         set: function(value) { _webGLTexture = value; }
     });
 }
-
-Object.freeze(Texture2D);
 
 // Note:
 // DB uses
@@ -4192,8 +4108,6 @@ function TextureLoader(_loader) {
     };
 }
 
-Object.freeze(TextureLoader);
-
 //
 // Constructor.
 //
@@ -4261,8 +4175,6 @@ function Loader(_renderer) {
     };
 }
 
-Object.freeze(Loader);
-
 //
 // Constructor.
 //
@@ -4270,8 +4182,6 @@ function RendererStyle() {
     //
     this.canvasUsesDefaultStyle = true;
 }
-
-Object.freeze(RendererStyle);
 
 // Note:
 // This engine doesn't handle window's resize event anymore. See the article...
@@ -4734,7 +4644,7 @@ function Renderer(_canvas, _style) {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 Renderer.CANVAS_WIDTH = 1024;
 Renderer.CANVAS_HEIGHT = 1024;
@@ -4746,8 +4656,6 @@ Renderer.DEFAULT_CLEAR_COLOR   = Colors.DEFAULT_BACKGROUND;
 Renderer.DEFAULT_CLEAR_DEPTH   = 1;
 Renderer.DEFAULT_CLEAR_STENCIL = 0;
 Renderer.DEFAULT_TEXTURE_UNIT  = 0;
-
-Object.freeze(Renderer);
 
 // Note:
 // NDC stands for 'normalized device coordinates'.
@@ -4812,8 +4720,6 @@ ScreenCoordinateHelper.toClipSpace = function(canvas, p) {
     // :Note
 };
 
-Object.freeze(ScreenCoordinateHelper);
-
 //
 // Constructor.
 //
@@ -4856,8 +4762,6 @@ Size2D.areEqual = function(size1, size2) {
     }
 };
 
-Object.freeze(Size2D);
-
 //
 // Constructor.
 //
@@ -4868,8 +4772,6 @@ function Size3D(_width, _height, _depth) {
     this.depth  = _depth;
 }
 
-Object.freeze(Size3D);
-
 //
 // Constructor.
 //
@@ -4878,12 +4780,10 @@ function SpriteFlushingOptions() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
-SpriteFlushingOptions.VERTEX_POSITIONS           = 0x00000001;
-SpriteFlushingOptions.VERTEX_TEXTURE_COORDINATES = 0x00000002;
-
-Object.freeze(SpriteFlushingOptions);
+SpriteFlushingOptions.VERTEX_POSITIONS           = 0x0001;
+SpriteFlushingOptions.VERTEX_TEXTURE_COORDINATES = 0x0002;
 
 //
 // Constructor.
@@ -4939,7 +4839,7 @@ function Sprite (
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 Sprite.VERTEX_COUNT            = 4;
 Sprite.POSITION_SIZE           = 3; // (x, y, z)
@@ -4984,8 +4884,6 @@ Sprite.createVertexTextureCoordinates = function(a, rect) {
     a[6]=rect.left;     a[7]=rect.top;    // upper-left.
 };
 
-Object.freeze(Sprite);
-
 // Note:
 // WebGL only uses vertex/index buffers (no arrays, for drawing), so this engine
 // provides no areDbFrequentlyChanged option, which is provided in SpriteBatch of
@@ -5004,8 +4902,6 @@ function SpriteBatchStyle() {
     this.areDbFrequentlyChanged = true;
     */
 }
-
-Object.freeze(SpriteBatchStyle);
 
 // Note:
 // SpriteBatch only supports vertex buffers, no index buffers.
@@ -5385,7 +5281,7 @@ function SpriteBatch(_renderer, _style) {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 SpriteBatch.VERTEX_SHADER_SOURCE = [
     //
@@ -5427,8 +5323,6 @@ SpriteBatch.FRAGMENT_SHADER_SOURCE = [
     '}'
    
 ].join('\n');
-
-Object.freeze(SpriteBatch);
 
 // Note:
 // Texture Coordinates.
@@ -5478,8 +5372,6 @@ TextureCoordinateHelper.toST = function(u, v) {
     };
 };
 
-Object.freeze(TextureCoordinateHelper);
-
 //
 // Constructor.
 //
@@ -5488,7 +5380,7 @@ function TransformedPositionColor() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 TransformedPositionColor.VERTEX_SHADER_SOURCE = [
     //
@@ -5520,8 +5412,6 @@ TransformedPositionColor.FRAGMENT_SHADER_SOURCE = [
    
 ].join('\n');
 
-Object.freeze(TransformedPositionColor);
-
 //
 // Constructor.
 //
@@ -5530,7 +5420,7 @@ function TransformedPositionColorTextureCoordinates() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 TransformedPositionColorTextureCoordinates.VERTEX_SHADER_SOURCE = [
     //
@@ -5568,8 +5458,6 @@ TransformedPositionColorTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
    
 ].join('\n');
 
-Object.freeze(TransformedPositionColorTextureCoordinates);
-
 //
 // Constructor.
 //
@@ -5578,7 +5466,7 @@ function TransformedPositionTextureCoordinates() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 TransformedPositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
     //
@@ -5611,8 +5499,6 @@ TransformedPositionTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
     '}'
    
 ].join('\n');
-
-Object.freeze(TransformedPositionTextureCoordinates);
 
 //
 // Constructor.
@@ -5649,8 +5535,6 @@ ArrayHelper.remove = function(array, item) {
     return false;
 };
 
-Object.freeze(ArrayHelper);
-
 //
 // Constructor.
 //
@@ -5671,8 +5555,6 @@ IndexHelper.isIndexValid = function(itemCount, index) {
     }
 };
 
-Object.freeze(IndexHelper);
-
 //
 // Constructor.
 //
@@ -5682,8 +5564,6 @@ function World2DBoundsChangedEvent(_isMoved, _isResized) {
     this.isResized = _isResized;
 }
 
-Object.freeze(World2DBoundsChangedEvent);
-
 //
 // Constructor.
 //
@@ -5692,7 +5572,7 @@ function World2DLayerName() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 World2DLayerName.BACKGROUND                                                   =  0;
 World2DLayerName.RESERVED_ITEMS_BETWEEN_BACKGROUND_AND_FARTHEST_LINE_SEGMENTS =  1;
@@ -5714,8 +5594,6 @@ World2DLayerName.NEAREST_RESERVED_ITEMS                                       = 
 //
 World2DLayerName.FARTHEST_ITEMS = World2DLayerName.BACKGROUND;
 World2DLayerName.NEAREST_ITEMS  = World2DLayerName.NEAREST_RESERVED_ITEMS;
-
-Object.freeze(World2DLayerName);
 
 //
 // Constructor.
@@ -5753,8 +5631,6 @@ World2DState.prototype = {
     }
 };
 
-Object.freeze(World2DState);
-
 //
 // Constructor.
 //
@@ -5764,8 +5640,6 @@ function World2DStateNormal(_world) {
 }
 
 JSHelper.inherit(World2DStateNormal, World2DState);
-
-Object.freeze(World2DStateNormal);
 
 //
 // Constructor.
@@ -5881,8 +5755,6 @@ World2DStateZoomingAtScreenPosition.prototype.update = function() {
     }
 };
 
-Object.freeze(World2DStateZoomingAtScreenPosition);
-
 //
 // Constructor.
 //
@@ -5918,8 +5790,6 @@ World2DStyle.areEqual = function(style1, style2) {
         return true;
     }
 };
-
-Object.freeze(World2DStyle);
 
 // Note:
 // OpenGL viewport's (X, Y) means the lower-left corner.
@@ -6629,12 +6499,10 @@ function World2D(_renderer, _style) {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 World2D.DEFAULT_LINE_SEGMENT_LAYER_INDEX = World2DLayerName.LINE_SEGMENTS_BELOW_FAR_IMAGES;
 World2D.DEFAULT_IMAGE_LAYER_INDEX = World2DLayerName.MIDDLE_IMAGES;
-
-Object.freeze(World2D);
 
 //
 // Constructor.
@@ -6667,8 +6535,6 @@ World2DImageStyle.areEqual = function(style1, style2) {
         return true;
     }
 };
-
-Object.freeze(World2DImageStyle);
 
 //
 // Constructor.
@@ -6848,8 +6714,6 @@ World2DItem.prototype = {
     }
 };
 
-Object.freeze(World2DItem);
-
 //
 // Constructor.
 //
@@ -6881,8 +6745,6 @@ World2DLineSegmentStyle.areEqual = function(style1, style2) {
         return true;
     }
 };
-
-Object.freeze(World2DLineSegmentStyle);
 
 //
 // Constructor.
@@ -6958,7 +6820,7 @@ function World2DLineSegment (
                     _world.convertPositionFromWorldToScreenSpace(_finishPosition);
 
                 // Test:
-                _self.InvalidateBounds();
+                _self.invalidateBounds();
                 // :Test
             }
         });
@@ -7182,8 +7044,6 @@ World2DLineSegment.prototype.checkIfOutOfBounds = function() {
         this.isOutOfBounds = true;
     }
 };
-
-Object.freeze(World2DLineSegment);
 
 //
 // Constructor.
@@ -7506,7 +7366,19 @@ World2DImage.prototype.beginSpriteBatch = function() {
     this.world.spriteBatch.begin();
 };
 
-Object.freeze(World2DImage);
+//
+// Constructor.
+//
+function ComparisonResults() {
+    // No contents.
+}
+
+//
+// Static constants.
+//
+ComparisonResults.ITEM1_PRECEDES_ITEM2   = -1; // One of the integers which are less than 0.
+ComparisonResults.ITEMS_IN_SAME_POSITION =  0;
+ComparisonResults.ITEM1_FOLLOWS_ITEM2    =  1; // One of the integers which are greater than 0.
 
 //
 // Constructor.
@@ -7534,8 +7406,6 @@ ExceptionHelper.displayMessageOf = function(e) {
 
     alert(e);
 };
-
-Object.freeze(ExceptionHelper);
 
 // Note:
 // Adapted from
@@ -7617,11 +7487,9 @@ function Fps() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 Fps.FRAME_COUNT_TO_AVERAGE = 16;
-
-Object.freeze(Fps);
 
 //
 // Constructor.
@@ -7631,13 +7499,30 @@ function MouseButton() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 MouseButton.LEFT   = 0;
 MouseButton.MIDDLE = 1;
 MouseButton.RIGHT  = 2;
- 
-Object.freeze(MouseButton);
+
+//
+// Constructor.
+//
+function RandomHelper() {
+    // No contents.
+}
+
+RandomHelper.next = function (
+    min, // which is an integer.
+    max  // which is an integer.
+){
+    // Temp: Not tested yet!!!!!
+    
+    min = Math.ceil(min);
+    max = Math.floor(max);
+
+    return Math.floor((max - min) * Math.random()) + min;
+};
 
 //
 // Constructor.
@@ -7645,8 +7530,6 @@ Object.freeze(MouseButton);
 function Plane() {
     // No contents.
 }
-
-Object.freeze(Plane);
 
 // g2l stands for GorillaGL.
 
@@ -7705,11 +7588,13 @@ exports.World2DStateNormal = World2DStateNormal;
 exports.World2DStateZoomingAtScreenPosition = World2DStateZoomingAtScreenPosition;
 exports.World2DStyle = World2DStyle;
 exports.ArrayHelper = ArrayHelper;
+exports.ComparisonResults = ComparisonResults;
 exports.ExceptionHelper = ExceptionHelper;
 exports.Fps = Fps;
 exports.IndexHelper = IndexHelper;
 exports.JSHelper = JSHelper;
 exports.MouseButton = MouseButton;
+exports.RandomHelper = RandomHelper;
 exports.BufferLoader = BufferLoader;
 exports.Loader = Loader;
 exports.ProgramLoader = ProgramLoader;

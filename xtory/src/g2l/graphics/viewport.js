@@ -39,6 +39,4 @@ Object.defineProperty(Viewport.prototype, 'aspectRatio', {
     get: function() { return this.width / this.height; }
 });
 
-Object.freeze(Viewport);
-
 export { Viewport };

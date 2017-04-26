@@ -57,7 +57,7 @@ function Sprite (
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 Sprite.VERTEX_COUNT            = 4;
 Sprite.POSITION_SIZE           = 3; // (x, y, z)
@@ -101,7 +101,5 @@ Sprite.createVertexTextureCoordinates = function(a, rect) {
     a[4]=rect.left;     a[5]=rect.bottom; // lower-left.
     a[6]=rect.left;     a[7]=rect.top;    // upper-left.
 };
-
-Object.freeze(Sprite);
 
 export { Sprite };

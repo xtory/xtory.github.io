@@ -6,7 +6,7 @@ function World2DLayerName() {
 }
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 World2DLayerName.BACKGROUND                                                   =  0;
 World2DLayerName.RESERVED_ITEMS_BETWEEN_BACKGROUND_AND_FARTHEST_LINE_SEGMENTS =  1;
@@ -28,7 +28,5 @@ World2DLayerName.NEAREST_RESERVED_ITEMS                                       = 
 //
 World2DLayerName.FARTHEST_ITEMS = World2DLayerName.BACKGROUND;
 World2DLayerName.NEAREST_ITEMS  = World2DLayerName.NEAREST_RESERVED_ITEMS;
-
-Object.freeze(World2DLayerName);
 
 export { World2DLayerName };

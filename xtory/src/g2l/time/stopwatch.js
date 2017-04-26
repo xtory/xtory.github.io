@@ -90,6 +90,4 @@ function Stopwatch() {
     // }
 }
 
-Object.freeze(Stopwatch);
-
 export { Stopwatch };

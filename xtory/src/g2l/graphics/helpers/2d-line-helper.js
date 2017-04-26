@@ -71,6 +71,4 @@ Line2DHelper.lineIntersectsPoint = function(p1, p2, p) {
     }
 };
 
-Object.freeze(Line2DHelper);
-
 export { Line2DHelper };

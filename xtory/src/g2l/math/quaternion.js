@@ -88,7 +88,7 @@ Quaternion.prototype = {
 };
 
 //
-// Static constants (after Object.freeze()).
+// Static constants.
 //
 Quaternion.ELEMENT_COUNT = 4;
 
@@ -158,7 +158,5 @@ Quaternion.areEqual = function(q1, q2) {
         return true;
     }
 };
-
-Object.freeze(Quaternion);
 
 export { Quaternion };
