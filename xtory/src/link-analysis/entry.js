@@ -1,4 +1,6 @@
 // Charting.
+export { AxisGroup }                  from './charting/helpers/axis-group';
+export { AxisGroupStyle }             from './charting/helpers/axis-group-style';
 export { Chart }                      from './charting/chart';
 export { ChartImage }                 from './charting/graphics/chart-image';
 export { ChartLayerName }             from './charting/chart-layer-name';

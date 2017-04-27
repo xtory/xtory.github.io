@@ -17,10 +17,10 @@ function main() {
     var fps;
     var then;
     var lastAverageFps;
+    var options;
 
     // Test
     var lineSegmentBatch;
-    var options;
     var usesLineSegmentBatch;
 
     try {

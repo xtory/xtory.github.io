@@ -55,16 +55,15 @@ function Matrix4x4 (
     _s41, _s42, _s43, _s44
 ){
     // Note:
-    // When storing matrices in memory, there are two ways of storing their
-    // elements:
+    // When storing matrices in memory, there're two ways of storing their elements:
     // 1. Stored in the order s11, s12, s13, ..., s43, s44
-    // => called 'row major' (used by DirectX), or
+    // => called 'row major' (used by Direct3D), or
     // 2. Stored in the order s11, s21, s31, ..., s34, s44
     // => called 'column major' (used by OpenGL)
 
     // Note:
-    // 'm x n' matrix always means 'm rows, n columns' whether it's row or
-    // column major.
+    // 'm x n' matrix always means 'm rows, n columns' whether it's row or column
+    // major.
 
     // var _db = [
     //     _s11, _s21, _s31, _s41,
@@ -80,6 +79,11 @@ function Matrix4x4 (
     this.db[2]=_s31;    this.db[6]=_s32;    this.db[10]=_s33;    this.db[14]=_s34;
     this.db[3]=_s41;    this.db[7]=_s42;    this.db[11]=_s43;    this.db[15]=_s44;
 }
+
+Matrix4x4.prototype = {
+    //
+    // No contents.
+};
 
 Object.defineProperty(Matrix4x4.prototype, 's11', {
     get: function() { return this.db[0]; }

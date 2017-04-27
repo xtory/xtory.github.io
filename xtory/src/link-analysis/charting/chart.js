@@ -4,7 +4,7 @@ import { Layout }     from '../graph-layouts/layout';
 //
 // Constructor.
 //
-function Chart(_style) {
+function Chart(_renderer, _style) {
     //
     var _self;
     var _layout;
@@ -27,6 +27,10 @@ function Chart(_style) {
     //
     // Properties.
     //
+    Object.defineProperty(_self, 'renderer', {
+        get: function() { return _renderer; }
+    });
+
     Object.defineProperty(_self, 'style', {
         //
         get: function() {

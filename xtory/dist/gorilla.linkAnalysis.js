@@ -5,6 +5,87 @@ this.gorilla = this.gorilla || {};
 //
 // Constructor.
 //
+function AxisGroupStyle() {
+    //
+    var g2l = gorilla.graphicsLibrary;
+
+    this.lineSegmentColor = new g2l.Color(0, 0, 0, 0.125);
+    this.lineSegmentThicknesss = 5.0; // in world space.
+}
+
+AxisGroupStyle.areEqual = function(style1, style2) {
+    //
+    if ((style1 instanceof AxisGroupStyle) === false ||
+        (style2 instanceof AxisGroupStyle) === false) {
+        return false;
+    }
+
+    if (gorilla.graphicsLibrary.Color.areEqual(style1.lineSegmentColor, style2.lineSegmentColor) === false ||
+        style1.lineSegmentThicknesss !== style2.lineSegmentThicknesss) {
+        //
+        return false;
+
+    } else {
+        //
+        return true;
+    }
+};
+
+//
+// Constructor.
+//
+function AxisGroup(_canvas, _style) {
+    //
+    var g2l = gorilla.graphicsLibrary;
+
+    var _self;
+    var _isVisible;
+    var _chartLineSegments;
+    
+    try {
+        //
+        _self = this;
+
+        _isVisible = false;
+
+        _chartLineSegments = [];
+
+    } catch (e) {
+        //
+        console.log('g2l.AxisGroup: ' + e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(_self, 'canvas', {
+        get: function() { return _canvas; }
+    });
+
+    Object.defineProperty(_self, 'style', {
+        //
+        get: function() {
+            return _style;
+        },
+
+        set: function(value) {
+            //
+            if (AxisGroupStyle.areEqual(value, _style) === true) {
+                return;
+            }
+
+            // ...
+
+            _style = value;
+        }
+    });
+}
+
+//
+// Constructor.
+//
 function ChartStyle() {
     //
     //this.vertexSpacing = 150.0;
@@ -820,7 +901,7 @@ function Layout(_chart) {
 //
 // Constructor.
 //
-function Chart(_style) {
+function Chart(_renderer, _style) {
     //
     var _self;
     var _layout;
@@ -843,6 +924,10 @@ function Chart(_style) {
     //
     // Properties.
     //
+    Object.defineProperty(_self, 'renderer', {
+        get: function() { return _renderer; }
+    });
+
     Object.defineProperty(_self, 'style', {
         //
         get: function() {
@@ -943,6 +1028,8 @@ ChartLayerName.NEAREST_ITEM  = ChartLayerName.LEGENDS;
 
 // Charting.
 
+exports.AxisGroup = AxisGroup;
+exports.AxisGroupStyle = AxisGroupStyle;
 exports.Chart = Chart;
 exports.ChartImage = ChartImage;
 exports.ChartLayerName = ChartLayerName;

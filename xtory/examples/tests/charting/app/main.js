@@ -24,11 +24,14 @@ function main() {
     var info;
     var fps;
     var then;
+    var countOptions;
+    var layoutOptions;
 
     // Helpers.
     var isMouseLeftButtonPressed;
     var lastMouseScreenPosition;
     var isZooming;
+    //var isSettingUpWorldItems;
 
     try {
         //
@@ -45,8 +48,6 @@ function main() {
         layout = chart.layout;
 
         setUpTextures();
-
-        setUpWorldItems();
 
         setUpInfo();
 
@@ -100,18 +101,20 @@ function main() {
 
     function setUpWorldItems() {
         //
+        //isSettingUpWorldItems = true;
+        
+        tearDownWorldItems();
+
         worldImages = [];
         worldLineSegments = [];
         ends = [];
         links = [];
 
-        worldImageCount = 100; //50; //2000;
-        worldLineSegmentCount = 250;
-
         var worldImageSize = new g2l.Size2D(32, 32); // LA icon's default size: (32, 32)
         var worldLineSegmentThickness = 1.5; // LA link's default thickness: 1.5
 
-        var halfLength = 1000; //5000;
+        var halfLength = worldImageCount * 50;
+
         for (var i=0; i<worldImageCount; i++) {
             //
             var p = new g2l.Vector2D (
@@ -215,28 +218,48 @@ function main() {
             index1 = -1;
             index2 = -1;
         }
+
+       // isSettingUpWorldItems = false;
+    }
+
+    function tearDownWorldItems() {
+        //
+        if (worldLineSegments !== undefined) {
+            //
+            for (var i=0; i<worldLineSegments.length; i++) {
+                //
+                world.removeItem(worldLineSegments[i]);
+            }
+        }
+
+        if (worldImages !== undefined) {
+            //
+            for (var i=0; i<worldImages.length; i++) {
+                //
+                world.removeItem(worldImages[i]);
+            }
+        }
     }
 
     function setUpInfo() {
         //
-        var divs = (
-            document.
-            getElementById('info').
-            getElementsByTagName('div')
-        );
+        // var divs = (
+        //     document.
+        //     getElementById('info').
+        //     getElementsByTagName('p')
+        // );
 
         info = {
-            title: divs[0],
-            fps:   divs[1],
-            more:  divs[2],
-            layout: divs[3]
+            'title':  document.getElementById('title'),
+            'fps':    document.getElementById('fps'),
+            'status': document.getElementById('status')
         };
 
         info.title.innerHTML = title;
 
         info.fps.innerHTML = 'FPS: 0';
 
-        info.more.innerHTML = (
+        info.status.innerHTML = (
             'World-to-screen scale factor: 1<br>' +
             'Drawn image count: 0<br>' +
             'Drawn line segment count: 0'
@@ -245,8 +268,55 @@ function main() {
         fps = new g2l.Fps();
         then = 0;
 
-        var layout = document.getElementById('layout');
-        layout.addEventListener('click', onClick);
+        countOptions = {};
+        layoutOptions = {};
+        
+        var id = 'template-10-20';
+        var option = document.getElementById(id);
+        option.addEventListener('click', onTemplateClick);
+        countOptions[id] = option;
+
+        id = 'template-25-50';
+        var option = document.getElementById(id);
+        option.addEventListener('click', onTemplateClick);
+        countOptions[id] = option;
+
+        id = 'template-50-100';
+        var option = document.getElementById(id);
+        option.addEventListener('click', onTemplateClick);
+        countOptions[id] = option;
+
+        id = 'template-100-200';
+        option = document.getElementById(id);
+        option.addEventListener('click', onTemplateClick);
+        countOptions[id] = option;
+
+        id = 'template-250-500';
+        var option = document.getElementById(id);
+        option.addEventListener('click', onTemplateClick);
+        countOptions[id] = option;
+
+        id = 'template-500-1000';
+        var option = document.getElementById(id);
+        option.addEventListener('click', onTemplateClick);
+        countOptions[id] = option;
+
+        id = 'template-1000-2000';
+        option = document.getElementById(id);
+        option.addEventListener('click', onTemplateClick);
+        countOptions[id] = option;
+
+        id = 'template-2500-5000';
+        option = document.getElementById(id);
+        option.addEventListener('click', onTemplateClick);
+        countOptions[id] = option;
+
+        id = 'circular-layout';
+        option = document.getElementById(id);
+        option.addEventListener('click', onLayoutClick);        
+        layoutOptions[id] = option;
+
+        countOptions['template-50-100'].click();
     }
 
     function hookEvents() {
@@ -284,7 +354,7 @@ function main() {
 
         info.fps.innerHTML = 'FPS: ' + fps.average;
 
-        info.more.innerHTML = (
+        info.status.innerHTML = (
             'World-to-screen scale factor: '+ world.worldToScreenScaleFactor.toFixed(5) + '<br>' +
             'Drawn image count: ' + world.drawnImageCount + '<br>' +
             'Drawn line segment count: ' + world.drawnLineSegmentCount
@@ -419,32 +489,101 @@ function main() {
         );
     }
 
-    function onClick(event) {
+    function onTemplateClick(event) {
         //
-        // if (event.target === options[0]) {
-        //     //
-        //     usesLineSegmentBatch = false;
-
-        // } else if (
-        //     event.target === options[1]
-        // ){
-        //     usesLineSegmentBatch = true;
+        // if (isSettingUpWorldItems === true) {
+        //     return;
         // }
 
-        // for (var i=0; i<options.length; i++) {
-        //     //
-        //     var item = options[i];
+        if (event.target === countOptions['template-10-20']) {
+            //
+            worldImageCount = 10;
+            worldLineSegmentCount = 20;
 
-        //     if (item === event.target) {
-        //         //
-        //         item.style.opacity = '1.0';
+            setUpWorldItems();
 
-        //     } else {
-        //         //
-        //         item.style.opacity = '0.45';
-        //     }
-        // }
+        } else if (
+            event.target === countOptions['template-25-50']
+        ){
+            worldImageCount = 25;
+            worldLineSegmentCount = 50;
 
+            setUpWorldItems();
+
+        } else if (
+            event.target === countOptions['template-50-100']
+        ){
+            worldImageCount = 50;
+            worldLineSegmentCount = 100;
+
+            setUpWorldItems();
+
+        } else if (
+            event.target === countOptions['template-100-200']
+        ){
+            worldImageCount = 100;
+            worldLineSegmentCount = 200;
+
+            setUpWorldItems();
+
+        } else if (
+            event.target === countOptions['template-250-500']
+        ){
+            worldImageCount = 250;
+            worldLineSegmentCount = 500;
+
+            setUpWorldItems();
+
+        } else if (
+            event.target === countOptions['template-500-1000']
+        ){
+            worldImageCount = 500;
+            worldLineSegmentCount = 1000;
+
+            setUpWorldItems();
+
+        } else if (
+            event.target === countOptions['template-1000-2000']
+        ){
+            worldImageCount = 1000;
+            worldLineSegmentCount = 2000;
+
+            setUpWorldItems();
+
+        } else if (
+            event.target === countOptions['template-2500-5000']
+        ){
+            worldImageCount = 2500;
+            worldLineSegmentCount = 5000;
+
+            setUpWorldItems();
+
+        } else {
+            //
+            throw 'A not-supported exception raised.';
+        }
+
+        for (var key in countOptions) {
+            //
+            if (countOptions.hasOwnProperty(key) === false) {
+                continue;
+            }
+
+            var item = countOptions[key];
+
+            if (item === event.target) {
+                //
+                item.style.opacity = '1.0';
+
+            } else {
+                //
+                item.style.opacity = '0.45';
+            }
+        }
+    }
+
+    function onLayoutClick(event) {
+        //
         performLayout();
     }
 }
