@@ -1,3 +1,4 @@
+this.gorilla = this.gorilla || {};
 (function (exports) {
 'use strict';
 
@@ -7531,7 +7532,7 @@ function Plane() {
     // No contents.
 }
 
-// g2l stands for GorillaGL.
+// g2l stands for gorilla.graphicsLibrary.
 
 // Cameras.
 
@@ -7613,4 +7614,4 @@ exports.EaseMode = EaseMode;
 exports.SineEase = SineEase;
 exports.Stopwatch = Stopwatch;
 
-}((this.GorillaGL = this.GorillaGL || {})));
+}((this.gorilla.graphicsLibrary = this.gorilla.graphicsLibrary || {})));

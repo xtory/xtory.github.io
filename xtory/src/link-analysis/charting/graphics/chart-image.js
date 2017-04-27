@@ -7,7 +7,9 @@ function ChartImage (
     _centerPosition, // in world space.
     _size            // in world space.
 ){
-    GorillaGL.World2DImage.call (
+    var g2l = gorilla.graphicsLibrary;
+
+    g2l.World2DImage.call (
         _chart.world,
         _texture,
         _centerPosition,
@@ -28,7 +30,10 @@ function ChartImage (
     }
 }
 
-GorillaGL.JSHelper.inherit(ChartImage, GorillaGL.World2DImage);
+gorilla.graphicsLibrary.JSHelper.inherit (
+    ChartImage,
+    gorilla.graphicsLibrary.World2DImage
+);
 
 ChartImage.prototype.draw = function() {
     //

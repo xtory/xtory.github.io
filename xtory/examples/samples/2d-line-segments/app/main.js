@@ -2,7 +2,7 @@ function main() {
     //
     'use strict';
 
-    var g2l = GorillaGL;
+    var g2l = gorilla.graphicsLibrary;
 
     var title;
     var renderer;

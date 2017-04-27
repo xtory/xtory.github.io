@@ -2,8 +2,8 @@ function main() {
     //
     'use strict';
 
-    var g2l = GorillaGL;
-    var gla = GorillaLinkAnalysis;
+    var g2l = gorilla.graphicsLibrary;
+    var gla = gorilla.linkAnalysis;
 
     var title;
     var renderer;
@@ -47,8 +47,6 @@ function main() {
         setUpTextures();
 
         setUpWorldItems();
-
-        setUpLayout();
 
         setUpInfo();
 
@@ -219,36 +217,6 @@ function main() {
         }
     }
 
-    function setUpLayout() {
-        //
-        var style = new gla.CircularLayoutStyle();
-        layout.startPerformingCircularlayout (
-            style,
-            ends, links,
-            world.centerPosition
-        );
-
-        // Test:
-        for (var i=0; i<ends.length; i++) {
-            //
-            var item = layout.getGraphVertexAt(i);
-            worldImages[i].centerPosition = item;
-        }
-
-        for (var i=0; i<links.length; i++) {
-            //
-            var item = links[i];
-
-            var end1 = worldImages[item.sourceGraphVertexIndex];
-            var end2 = worldImages[item.destinationGraphVertexIndex];
-
-            var worldLineSegment = worldLineSegments[i];
-            worldLineSegment.startPosition = end1.centerPosition;
-            worldLineSegment.finishPosition = end2.centerPosition;
-        }
-        // :Test
-    }
-
     function setUpInfo() {
         //
         var divs = (
@@ -260,7 +228,8 @@ function main() {
         info = {
             title: divs[0],
             fps:   divs[1],
-            more:  divs[2]
+            more:  divs[2],
+            layout: divs[3]
         };
 
         info.title.innerHTML = title;
@@ -275,6 +244,9 @@ function main() {
         
         fps = new g2l.Fps();
         then = 0;
+
+        var layout = document.getElementById('layout');
+        layout.addEventListener('click', onClick);
     }
 
     function hookEvents() {
@@ -317,6 +289,37 @@ function main() {
             'Drawn image count: ' + world.drawnImageCount + '<br>' +
             'Drawn line segment count: ' + world.drawnLineSegmentCount
         );
+    }
+
+    function performLayout() {
+        //
+        var style = new gla.CircularLayoutStyle();
+        layout.startPerformingCircularlayout (
+            style,
+            ends, links,
+            world.centerPosition
+        );
+
+        // Test:
+        for (var i=0; i<ends.length; i++) {
+            //
+            var item = layout.getGraphVertexAt(i);
+            
+            worldImages[i].centerPosition = item;
+        }
+
+        for (var i=0; i<links.length; i++) {
+            //
+            var item = links[i];
+
+            var end1 = worldImages[item.sourceGraphVertexIndex];
+            var end2 = worldImages[item.destinationGraphVertexIndex];
+
+            var worldLineSegment = worldLineSegments[i];
+            worldLineSegment.startPosition = end1.centerPosition;
+            worldLineSegment.finishPosition = end2.centerPosition;
+        }
+        // :Test
     }
 
     //
@@ -414,5 +417,34 @@ function main() {
                 isZooming = false;
             }
         );
+    }
+
+    function onClick(event) {
+        //
+        // if (event.target === options[0]) {
+        //     //
+        //     usesLineSegmentBatch = false;
+
+        // } else if (
+        //     event.target === options[1]
+        // ){
+        //     usesLineSegmentBatch = true;
+        // }
+
+        // for (var i=0; i<options.length; i++) {
+        //     //
+        //     var item = options[i];
+
+        //     if (item === event.target) {
+        //         //
+        //         item.style.opacity = '1.0';
+
+        //     } else {
+        //         //
+        //         item.style.opacity = '0.45';
+        //     }
+        // }
+
+        performLayout();
     }
 }

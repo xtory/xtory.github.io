@@ -1,4 +1,4 @@
-// g2l stands for GorillaGL.
+// g2l stands for gorilla.graphicsLibrary.
 
 // Cameras.
 export { Camera }                                     from './cameras/camera';

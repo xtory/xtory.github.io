@@ -7,10 +7,8 @@
     "example": "examples"
   },
   "scripts": {
-    "build-g2l": "rollup -c rollup-g2l.config.js",
-    "build-g2l-all": "rollup -c rollup-g2l.config.js && uglifyjs dist/g2l.js -cm > dist/min/g2l.min.js",
-    "build": "rollup -c rollup-g2l.config.js && rollup -c rollup-gla.config.js",
-    "build-all": "rollup -c rollup-g2l.config.js && uglifyjs dist/g2l.js -cm > dist/min/g2l.min.js && rollup -c rollup-gla.config.js && uglifyjs dist/gla.js -cm > dist/min/gla.min.js"
+    "build": "rollup -c ./src/graphics-library/rollup.config.js && rollup -c ./src/link-analysis/rollup.config.js",
+    "build-all": "rollup -c ./src/graphics-library/rollup.config.js && uglifyjs ./dist/gorilla.graphicsLibrary.js -cm > ./dist/min/gorilla.graphicsLibrary.min.js && rollup -c ./src/link-analysis/rollup.config.js && uglifyjs ./dist/gorilla.linkAnalysis.js -cm > ./dist/min/gorilla.linkAnalysis.min.js"
   },
   "repository": {
     "type": "git",

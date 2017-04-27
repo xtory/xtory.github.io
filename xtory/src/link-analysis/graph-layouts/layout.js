@@ -8,7 +8,7 @@ import { GraphVertex }            from './graph-vertex';
 //
 function Layout(_chart) {
     //
-    var g2l = GorillaGL;
+    var g2l = gorilla.graphicsLibrary;
 
     var _self;
     var _state;
