@@ -139,7 +139,8 @@ function Layout(_chart) {
             throw 'An argument-out-of-range exception raised.';
         }
 
-        return _graphVertices[index].position;
+        //return _graphVertices[index].position;
+        return _graphVertices[index];
     };
 }
 

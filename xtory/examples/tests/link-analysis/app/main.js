@@ -5,6 +5,7 @@ function main() {
     var g2l = gorilla.graphicsLibrary;
     var gla = gorilla.linkAnalysis;
 
+    var self;
     var title;
     var renderer;
     var loader;
@@ -24,18 +25,22 @@ function main() {
     var info;
     var fps;
     var then;
-    var countOptions;
+    var templateOptions;
     var layoutOptions;
+    var viewportOptions;
 
     // Helpers.
     var isMouseLeftButtonPressed;
     var lastMouseScreenPosition;
     var isZooming;
-    //var isSettingUpWorldItems;
+
+    var state;
 
     try {
         //
-        title = '2D world';
+        self = this;
+
+        title = 'Link Analysis';
 
         renderer = new g2l.Renderer();
         document.body.appendChild(renderer.canvas);
@@ -56,6 +61,8 @@ function main() {
         isZooming = false;
 
         hookEvents();
+
+        state = new MainStateNormal();
 
         renderer.run(updateScene, drawScene);
 
@@ -101,8 +108,6 @@ function main() {
 
     function setUpWorldItems() {
         //
-        //isSettingUpWorldItems = true;
-        
         tearDownWorldItems();
 
         worldImages = [];
@@ -218,8 +223,6 @@ function main() {
             index1 = -1;
             index2 = -1;
         }
-
-       // isSettingUpWorldItems = false;
     }
 
     function tearDownWorldItems() {
@@ -243,12 +246,6 @@ function main() {
 
     function setUpInfo() {
         //
-        // var divs = (
-        //     document.
-        //     getElementById('info').
-        //     getElementsByTagName('p')
-        // );
-
         info = {
             'title':  document.getElementById('title'),
             'fps':    document.getElementById('fps'),
@@ -268,55 +265,67 @@ function main() {
         fps = new g2l.Fps();
         then = 0;
 
-        countOptions = {};
+        templateOptions = {};
         layoutOptions = {};
+        viewportOptions = {};
         
         var id = 'template-10-20';
         var option = document.getElementById(id);
-        option.addEventListener('click', onTemplateClick);
-        countOptions[id] = option;
+        templateOptions[id] = option;
 
         id = 'template-25-50';
         var option = document.getElementById(id);
-        option.addEventListener('click', onTemplateClick);
-        countOptions[id] = option;
+        templateOptions[id] = option;
 
         id = 'template-50-100';
         var option = document.getElementById(id);
-        option.addEventListener('click', onTemplateClick);
-        countOptions[id] = option;
+        templateOptions[id] = option;
 
         id = 'template-100-200';
         option = document.getElementById(id);
-        option.addEventListener('click', onTemplateClick);
-        countOptions[id] = option;
+        templateOptions[id] = option;
 
         id = 'template-250-500';
         var option = document.getElementById(id);
-        option.addEventListener('click', onTemplateClick);
-        countOptions[id] = option;
+        templateOptions[id] = option;
 
         id = 'template-500-1000';
         var option = document.getElementById(id);
-        option.addEventListener('click', onTemplateClick);
-        countOptions[id] = option;
+        templateOptions[id] = option;
 
         id = 'template-1000-2000';
         option = document.getElementById(id);
-        option.addEventListener('click', onTemplateClick);
-        countOptions[id] = option;
+        templateOptions[id] = option;
 
         id = 'template-2500-5000';
         option = document.getElementById(id);
-        option.addEventListener('click', onTemplateClick);
-        countOptions[id] = option;
+        templateOptions[id] = option;
+
+        for (var key in templateOptions) {
+            //
+            if (templateOptions.hasOwnProperty(key) === false) {
+                continue;
+            }
+
+            var item = templateOptions[key];
+            item.addEventListener('click', onTemplateClick);
+        }
 
         id = 'circular-layout';
         option = document.getElementById(id);
-        option.addEventListener('click', onLayoutClick);        
         layoutOptions[id] = option;
 
-        countOptions['template-50-100'].click();
+        for (var key in layoutOptions) {
+            //
+            if (layoutOptions.hasOwnProperty(key) === false) {
+                continue;
+            }
+
+            var item = layoutOptions[key];
+            item.addEventListener('click', onLayoutClick);
+        }
+
+        templateOptions['template-50-100'].click();
     }
 
     function hookEvents() {
@@ -331,6 +340,8 @@ function main() {
 
     function updateScene() {
         //
+        state.update();
+
         world.update();
         
         fps.update();
@@ -370,12 +381,13 @@ function main() {
             world.centerPosition
         );
 
-        // Test:
+        // Teemp:
+        /*
         for (var i=0; i<ends.length; i++) {
             //
             var item = layout.getGraphVertexAt(i);
             
-            worldImages[i].centerPosition = item;
+            worldImages[i].centerPosition = item.position;
         }
 
         for (var i=0; i<links.length; i++) {
@@ -389,7 +401,19 @@ function main() {
             worldLineSegment.startPosition = end1.centerPosition;
             worldLineSegment.finishPosition = end2.centerPosition;
         }
-        // :Test
+        */
+
+        state = new MainStateMovingEndsToResult (
+            worldImages,
+            worldLineSegments,
+            ends,
+            links,
+            layout,
+            function() {
+                state = new MainStateNormal();
+            }
+        );
+        // :Temp
     }
 
     //
@@ -491,11 +515,7 @@ function main() {
 
     function onTemplateClick(event) {
         //
-        // if (isSettingUpWorldItems === true) {
-        //     return;
-        // }
-
-        if (event.target === countOptions['template-10-20']) {
+        if (event.target === templateOptions['template-10-20']) {
             //
             worldImageCount = 10;
             worldLineSegmentCount = 20;
@@ -503,7 +523,7 @@ function main() {
             setUpWorldItems();
 
         } else if (
-            event.target === countOptions['template-25-50']
+            event.target === templateOptions['template-25-50']
         ){
             worldImageCount = 25;
             worldLineSegmentCount = 50;
@@ -511,7 +531,7 @@ function main() {
             setUpWorldItems();
 
         } else if (
-            event.target === countOptions['template-50-100']
+            event.target === templateOptions['template-50-100']
         ){
             worldImageCount = 50;
             worldLineSegmentCount = 100;
@@ -519,7 +539,7 @@ function main() {
             setUpWorldItems();
 
         } else if (
-            event.target === countOptions['template-100-200']
+            event.target === templateOptions['template-100-200']
         ){
             worldImageCount = 100;
             worldLineSegmentCount = 200;
@@ -527,7 +547,7 @@ function main() {
             setUpWorldItems();
 
         } else if (
-            event.target === countOptions['template-250-500']
+            event.target === templateOptions['template-250-500']
         ){
             worldImageCount = 250;
             worldLineSegmentCount = 500;
@@ -535,7 +555,7 @@ function main() {
             setUpWorldItems();
 
         } else if (
-            event.target === countOptions['template-500-1000']
+            event.target === templateOptions['template-500-1000']
         ){
             worldImageCount = 500;
             worldLineSegmentCount = 1000;
@@ -543,7 +563,7 @@ function main() {
             setUpWorldItems();
 
         } else if (
-            event.target === countOptions['template-1000-2000']
+            event.target === templateOptions['template-1000-2000']
         ){
             worldImageCount = 1000;
             worldLineSegmentCount = 2000;
@@ -551,7 +571,7 @@ function main() {
             setUpWorldItems();
 
         } else if (
-            event.target === countOptions['template-2500-5000']
+            event.target === templateOptions['template-2500-5000']
         ){
             worldImageCount = 2500;
             worldLineSegmentCount = 5000;
@@ -563,13 +583,13 @@ function main() {
             throw 'A not-supported exception raised.';
         }
 
-        for (var key in countOptions) {
+        for (var key in templateOptions) {
             //
-            if (countOptions.hasOwnProperty(key) === false) {
+            if (templateOptions.hasOwnProperty(key) === false) {
                 continue;
             }
 
-            var item = countOptions[key];
+            var item = templateOptions[key];
 
             if (item === event.target) {
                 //

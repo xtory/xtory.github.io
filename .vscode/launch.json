@@ -10,7 +10,7 @@
             "request": "launch",
             "file": "${workspaceRoot}/xtory/examples/tutorials/a01-colored-triangles/index.html",
             "runtimeArgs": [
-                "-allow-file-access-from-files"
+                "--allow-file-access-from-files"
             ]
         }, {
             "name": "tutorials/a02-texturing",
@@ -18,7 +18,7 @@
             "request": "launch",
             "file": "${workspaceRoot}/xtory/examples/tutorials/a02-texturing/index.html",
             "runtimeArgs": [
-                "-allow-file-access-from-files"
+                "--allow-file-access-from-files"
             ]
         }, {
             "name": "tutorials/a03-alpha-blending",
@@ -26,7 +26,7 @@
             "request": "launch",
             "file": "${workspaceRoot}/xtory/examples/tutorials/a03-alpha-blending/index.html",
             "runtimeArgs": [
-                "-allow-file-access-from-files"
+                "--allow-file-access-from-files"
             ]
         }, {
             "name": "tutorials/a04-multitexturing",
@@ -34,7 +34,7 @@
             "request": "launch",
             "file": "${workspaceRoot}/xtory/examples/tutorials/a04-multitexturing/index.html",
             "runtimeArgs": [
-                "-allow-file-access-from-files"
+                "--allow-file-access-from-files"
             ]
         }, {
             "name": "tutorials/a05-sprites",
@@ -42,7 +42,7 @@
             "request": "launch",
             "file": "${workspaceRoot}/xtory/examples/tutorials/a05-sprites/index.html",
             "runtimeArgs": [
-                "-allow-file-access-from-files"
+                "--allow-file-access-from-files"
             ]
         }, {
             "name": "tutorials/b01-lighting",
@@ -50,7 +50,7 @@
             "request": "launch",
             "file": "${workspaceRoot}/xtory/examples/tutorials/b01-lighting/index.html",
             "runtimeArgs": [
-                "-allow-file-access-from-files"
+                "--allow-file-access-from-files"
             ]
         }, {
             "name": "samples/2d-line-segments",
@@ -58,15 +58,15 @@
             "request": "launch",
             "file": "${workspaceRoot}/xtory/examples/samples/2d-line-segments/index.html",
             "runtimeArgs": [
-                "-allow-file-access-from-files"
+                "--allow-file-access-from-files"
             ]
         }, {
-            "name": "tests/charting",
+            "name": "tests/link-analysis",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/xtory/examples/tests/charting/index.html",
+            "file": "${workspaceRoot}/xtory/examples/tests/link-analysis/index.html",
             "runtimeArgs": [
-                "-allow-file-access-from-files"
+                "--allow-file-access-from-files"
             ]
         }, {
             "name": "tests/io",
@@ -74,7 +74,7 @@
             "request": "launch",
             "file": "${workspaceRoot}/xtory/examples/tests/io/index.html",
             "runtimeArgs": [
-                "-allow-file-access-from-files"
+                "--allow-file-access-from-files"
             ]
         }, {
             "name": "tests/no-subject",
@@ -82,7 +82,7 @@
             "request": "launch",
             "file": "${workspaceRoot}/xtory/examples/tests/no-subject/index.html",
             "runtimeArgs": [
-                "-allow-file-access-from-files"
+                "--allow-file-access-from-files"
             ]
         }
     ]
