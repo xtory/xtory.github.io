@@ -394,7 +394,9 @@ function Matrix4x4 (
 
 Matrix4x4.prototype = {
     //
-    // No contents.
+    clone: function() {
+        return Matrix4x4.fromArray(this.elements);
+    }
 };
 
 Object.defineProperty(Matrix4x4.prototype, 's11', {
@@ -911,6 +913,10 @@ Quaternion.prototype = {
         ];        
 
         return Matrix4x4.fromArray(a);
+    },
+
+    clone: function() {
+        return new Quaternion(this.x, this.y, this.z, this.w);
     }
 };
 
@@ -1001,6 +1007,10 @@ Vector2D.prototype = {
     //
     toArray: function() {
         return [ this.x, this.y ];
+    },
+
+    clone: function() {
+        return new Vector2D(this.x, this.y);
     }
 };
 
@@ -1135,6 +1145,10 @@ Vector4D.prototype = {
     //
     toArray: function() {
         return [ this.x, this.y, this.z, this.w ];
+    },
+
+    clone: function() {
+        return new Vector4D(this.x, this.y, this.z, this.w);
     }
 };
 
@@ -1247,6 +1261,10 @@ Vector3D.prototype = {
     //
     toArray: function() {
         return [ this.x, this.y, this.z ];
+    },
+
+    clone: function() {
+        return new Vector3D(this.x, this.y, this.z);
     }
 };
 
@@ -1483,7 +1501,7 @@ function Camera (
         
     } catch (e) {
         //
-        console.log('g2l.Camera: ', e);
+        console.log('gorilla.graphicsLibrary.Camera: ', e);
 
         throw e;
     }
@@ -1704,7 +1722,7 @@ function CameraState(_camera) {
         
     } catch (e) {
         //
-        console.log('g2l.CameraState: ', e);
+        console.log('gorilla.graphicsLibrary.CameraState: ', e);
 
         throw e;
     }
@@ -1791,7 +1809,7 @@ function Stopwatch() {
 
     } catch (e) {
         //
-        console.log('g2l.Stopwatch: ' + e);
+        console.log('gorilla.graphicsLibrary.Stopwatch: ' + e);
 
         throw e;
     }
@@ -1909,7 +1927,7 @@ function SineEase(_easeMode, _duration, _isLooped) {
 
     } catch (e) {
         //
-        console.log('g2l.SineEase: ' + e);
+        console.log('gorilla.graphicsLibrary.SineEase: ' + e);
 
         throw e;
     }
@@ -2093,7 +2111,7 @@ function CameraStateZooming (
 
     } catch (e) {
         //
-        console.log('g2l.CameraStateZooming: ', e);
+        console.log('gorilla.graphicsLibrary.CameraStateZooming: ', e);
 
         throw e;
     }
@@ -2186,7 +2204,7 @@ function SmoothCamera (
         
     } catch (e) {
         //
-        console.log('g2l.SmoothCamera: ', e);
+        console.log('gorilla.graphicsLibrary.SmoothCamera: ', e);
 
         throw e;
     }
@@ -2539,7 +2557,7 @@ function IndexBuffer(_bufferLoader) {
 
     } catch (e) {
         //
-        console.log('g2l.IndexBuffer: ' + e);
+        console.log('gorilla.graphicsLibrary.IndexBuffer: ' + e);
 
         throw e;
     }
@@ -2881,7 +2899,7 @@ function LineSegment2DBatch(_renderer, _style) {
 
     } catch (e) {
         //
-        console.log('g2l.LineSegment2DBatch: ' + e);
+        console.log('gorilla.graphicsLibrary.LineSegment2DBatch: ' + e);
 
         throw e;
     }
@@ -3555,7 +3573,7 @@ function Program(_programLoader) {
 
     } catch (e) {
         //
-        console.log('g2l.Program: ' + e);
+        console.log('gorilla.graphicsLibrary.Program: ' + e);
 
         throw e;
     }
@@ -3651,7 +3669,7 @@ function VertexBuffer(_bufferLoader) {
 
     } catch (e) {
         //
-        console.log('g2l.VertexBuffer: ' + e);
+        console.log('gorilla.graphicsLibrary.VertexBuffer: ' + e);
 
         throw e;
     }
@@ -3710,7 +3728,7 @@ function BufferLoader(_loader) {
 
     } catch (e) {
         //
-        console.log('g2l.BufferLoader: ' + e);
+        console.log('gorilla.graphicsLibrary.BufferLoader: ' + e);
 
         throw e;
     }
@@ -3762,7 +3780,7 @@ function ProgramLoader(_loader) {
 
     } catch (e) {
         //
-        console.log('g2l.ProgramLoader: ' + e);
+        console.log('gorilla.graphicsLibrary.ProgramLoader: ' + e);
 
         throw e;
     }
@@ -3932,7 +3950,7 @@ function Texture2D(_textureLoader) {
 
     } catch (e) {
         //
-        console.log('g2l.Texture2D: ' + e);
+        console.log('gorilla.graphicsLibrary.Texture2D: ' + e);
 
         throw e;
     }
@@ -3982,7 +4000,7 @@ function TextureLoader(_loader) {
 
     } catch (e) {
         //
-        console.log('g2l.TextureLoader: ' + e);
+        console.log('gorilla.graphicsLibrary.TextureLoader: ' + e);
 
         throw e;
     }
@@ -4093,7 +4111,7 @@ function TextureLoader(_loader) {
 
             } catch (e) {
                 //
-                console.log('g2l.TextureLoader.loadTexture2D(): ' + e);
+                console.log('gorilla.graphicsLibrary.TextureLoader.loadTexture2D(): ' + e);
 
                 throw e;
             }
@@ -4136,7 +4154,7 @@ function Loader(_renderer) {
 
     } catch (e) {
         //
-        console.log('g2l.Loader: ' + e);
+        console.log('gorilla.graphicsLibrary.Loader: ' + e);
 
         throw e;
     }
@@ -4226,7 +4244,7 @@ function Renderer(_canvas, _style) {
 
     } catch (e) {
         //
-        console.log('g2l.Renderer: ' + e);
+        console.log('gorilla.graphicsLibrary.Renderer: ' + e);
 
         throw e;
     }
@@ -4962,7 +4980,7 @@ function SpriteBatch(_renderer, _style) {
 
     } catch (e) {
         //
-        console.log('g2l.SpriteBatch: ' + e);
+        console.log('gorilla.graphicsLibrary.SpriteBatch: ' + e);
 
         throw e;
     }
@@ -5613,7 +5631,7 @@ function World2DState(_world) {
 
     } catch (e) {
         //
-        console.log('g2l.World2DState: ', e);
+        console.log('gorilla.graphicsLibrary.World2DState: ', e);
 
         throw e;
     }
@@ -5698,7 +5716,7 @@ function World2DStateZoomingAtScreenPosition (
 
     } catch (e) {
         //
-        console.log('g2l.World2DStateZoomingAtScreenPosition: ', e);
+        console.log('gorilla.graphicsLibrary.World2DStateZoomingAtScreenPosition: ', e);
 
         throw e;
     }
@@ -5874,7 +5892,7 @@ function World2D(_renderer, _style) {
 
     } catch (e) {
         //
-        console.log('g2l.World2D: ' + e);
+        console.log('gorilla.graphicsLibrary.World2D: ' + e);
 
         throw e;
     }
@@ -6571,7 +6589,7 @@ function World2DItem(_world) {
 
     } catch (e) {
         //
-        console.log('g2l.World2DItem: ' + e);
+        console.log('gorilla.graphicsLibrary.World2DItem: ' + e);
 
         throw e;
     }
@@ -6902,7 +6920,7 @@ function World2DLineSegment (
 
     } catch (e) {
         //
-        console.log('g2l.World2DLineSegment: ' + e);
+        console.log('gorilla.graphicsLibrary.World2DLineSegment: ' + e);
 
         throw e;
     }
@@ -7202,7 +7220,7 @@ function World2DImage (
 
     } catch (e) {
         //
-        console.log('g2l.World2DImage: ' + e);
+        console.log('gorilla.graphicsLibrary.World2DImage: ' + e);
 
         throw e;
     }
@@ -7449,7 +7467,7 @@ function Fps() {
 
     } catch (e) {
         //
-        console.log('g2l.Fps: ' + e);
+        console.log('gorilla.graphicsLibrary.Fps: ' + e);
 
         throw e;
     }

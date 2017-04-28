@@ -59,7 +59,7 @@ function SpriteBatch(_renderer, _style) {
 
     } catch (e) {
         //
-        console.log('g2l.SpriteBatch: ' + e);
+        console.log('gorilla.graphicsLibrary.SpriteBatch: ' + e);
 
         throw e;
     }

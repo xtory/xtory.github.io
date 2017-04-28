@@ -3,7 +3,9 @@
 //
 function ChartStyle() {
     //
-    //this.vertexSpacing = 150.0;
+    this.boundsLinkScreenThicknesses = true;
+    this.minLinkScreenThickness      = 1.5;
+    this.maxLinkScreenThickness      = 30.0;
 }
 
 ChartStyle.areEqual = function(style1, style2) {
@@ -13,16 +15,16 @@ ChartStyle.areEqual = function(style1, style2) {
         return false;
     }
 
-    // if (style1.vertexSpacing !== style2.vertexSpacing) {
-    //     //
-    //     return false;
+    if (style1.boundsLinkScreenThicknesses !== style2.boundsLinkScreenThicknesses ||
+        style1.minLinkScreenThickness !== style2.minLinkScreenThickness ||
+        style1.maxLinkScreenThickness !== style2.maxLinkScreenThickness) {
+        //
+        return false;
 
-    // } else {
-    //     //
-    //     return true;
-    // }
-
-    return true;
+    } else {
+        //
+        return true;
+    }
 };
 
 export { ChartStyle };

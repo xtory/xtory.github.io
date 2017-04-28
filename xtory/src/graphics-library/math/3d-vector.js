@@ -19,6 +19,10 @@ Vector3D.prototype = {
     //
     toArray: function() {
         return [ this.x, this.y, this.z ];
+    },
+
+    clone: function() {
+        return new Vector3D(this.x, this.y, this.z);
     }
 };
 

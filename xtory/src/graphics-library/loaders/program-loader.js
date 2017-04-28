@@ -16,7 +16,7 @@ function ProgramLoader(_loader) {
 
     } catch (e) {
         //
-        console.log('g2l.ProgramLoader: ' + e);
+        console.log('gorilla.graphicsLibrary.ProgramLoader: ' + e);
 
         throw e;
     }

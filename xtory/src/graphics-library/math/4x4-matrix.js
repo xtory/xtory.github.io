@@ -82,7 +82,9 @@ function Matrix4x4 (
 
 Matrix4x4.prototype = {
     //
-    // No contents.
+    clone: function() {
+        return Matrix4x4.fromArray(this.elements);
+    }
 };
 
 Object.defineProperty(Matrix4x4.prototype, 's11', {

@@ -11,7 +11,7 @@ function GraphLayoutState(_layout) {
         
     } catch (e) {
         //
-        console.log('g2l.GraphLayoutState: ', e);
+        console.log('gorilla.linkAnalysis.GraphLayoutState: ', e);
 
         throw e;
     }

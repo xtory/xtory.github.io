@@ -58,7 +58,7 @@ function World2DStateZoomingAtScreenPosition (
 
     } catch (e) {
         //
-        console.log('g2l.World2DStateZoomingAtScreenPosition: ', e);
+        console.log('gorilla.graphicsLibrary.World2DStateZoomingAtScreenPosition: ', e);
 
         throw e;
     }

@@ -29,7 +29,7 @@ function Layout(_chart) {
 
     } catch (e) {
         //
-        console.log('g2l.Layout: ' + e);
+        console.log('gorilla.linkAnalysis.Layout: ' + e);
 
         throw e;
     }
@@ -75,7 +75,7 @@ function Layout(_chart) {
         for (var i=0; i<ends.length; i++) {
             //
             var graphVertex = new GraphVertex (
-                ends[i].centerPosition
+                ends[i].centerPosition.clone()
             );
 
             _graphVertices.push(graphVertex);
@@ -119,14 +119,17 @@ function Layout(_chart) {
 
         _circularLayout.perform(_graphVertices, _graphEdges);
 
-        for (var i=0; i<_graphVertices.Count; i++) {
+        for (var i=0; i<_graphVertices.length; i++) {
             //
             var item = _graphVertices[i];
 
             item.position = 
                 g2l.Vector2D.addVectors(centerPosition, item.position);
 
+            // Test:
+            /*
             _graphVertices[i] = item;
+            */
         }
     };
 

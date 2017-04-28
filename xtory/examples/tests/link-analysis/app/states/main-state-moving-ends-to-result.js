@@ -75,17 +75,21 @@ function MainStateMovingEndsToResult (
             finish: []
         };
 
+        if (_worldImages.length !== _layout.graphVertexCount) {
+            throw '_worldImages.length !== _layout.graphVertexCount';
+        }
+
         for (var i=0; i<_worldImages.length; i++) {
             //
             _worldImagePositions.start.push (
-                _worldImages[i].centerPosition
+                _worldImages[i].centerPosition.clone() //_worldImages[i].centerPosition
             );
         }
 
         for (var i=0; i<_layout.graphVertexCount; i++) {
             //
             _worldImagePositions.finish.push (
-                _layout.getGraphVertexAt(i).position
+                _layout.getGraphVertexAt(i).position.clone()
             );
         }
     }
@@ -120,13 +124,10 @@ MainStateMovingEndsToResult.prototype.update = function() {
             var p1 = worldImagePositions.start[i];
             var p2 = worldImagePositions.finish[i];
 
-            worldImages[i].centerPosition = g2l.Vector2D.addVectors (
-                p1,
-                g2l.Vector2D.multiplyVectorByScalar (
-                    g2l.Vector2D.subtractVectors(p2, p1),
-                    ratio
-                )
-            );            
+            worldImages[i].centerPosition = new g2l.Vector2D (
+                p1.x + (p2.x - p1.x) * ratio,
+                p1.y + (p2.y - p1.y) * ratio
+            );
         }
 
         for (var i=0; i<links.length; i++) {
@@ -137,12 +138,34 @@ MainStateMovingEndsToResult.prototype.update = function() {
             var end2 = worldImages[item.destinationGraphVertexIndex];
 
             var worldLineSegment = worldLineSegments[i];
-            worldLineSegment.startPosition = end1.centerPosition;
-            worldLineSegment.finishPosition = end2.centerPosition;
+            // worldLineSegment.startPosition = end1.centerPosition;
+            // worldLineSegment.finishPosition = end2.centerPosition;
+            worldLineSegment.startPosition = end1.centerPosition.clone();
+            worldLineSegment.finishPosition = end2.centerPosition.clone();
         }
 
     } else {
         //
+        for (var i=0; i<ends.length; i++) {
+            //
+            var item = layout.getGraphVertexAt(i);
+
+            worldImages[i].centerPosition =
+                worldImagePositions.finish[i].clone();
+        }
+
+        for (var i=0; i<links.length; i++) {
+            //
+            var item = links[i];
+
+            var end1 = worldImages[item.sourceGraphVertexIndex];
+            var end2 = worldImages[item.destinationGraphVertexIndex];
+
+            var worldLineSegment = worldLineSegments[i];
+            worldLineSegment.startPosition = end1.centerPosition.clone();
+            worldLineSegment.finishPosition = end2.centerPosition.clone();
+        }
+
         //_main.state = new MainStateNormal(_main);
         if (this.finishingCallback !== undefined) {
             this.finishingCallback();

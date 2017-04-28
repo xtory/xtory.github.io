@@ -68,7 +68,7 @@ function Camera (
         
     } catch (e) {
         //
-        console.log('g2l.Camera: ', e);
+        console.log('gorilla.graphicsLibrary.Camera: ', e);
 
         throw e;
     }

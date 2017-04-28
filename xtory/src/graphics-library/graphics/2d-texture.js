@@ -16,7 +16,7 @@ function Texture2D(_textureLoader) {
 
     } catch (e) {
         //
-        console.log('g2l.Texture2D: ' + e);
+        console.log('gorilla.graphicsLibrary.Texture2D: ' + e);
 
         throw e;
     }

@@ -23,7 +23,7 @@ function TextureLoader(_loader) {
 
     } catch (e) {
         //
-        console.log('g2l.TextureLoader: ' + e);
+        console.log('gorilla.graphicsLibrary.TextureLoader: ' + e);
 
         throw e;
     }
@@ -134,7 +134,7 @@ function TextureLoader(_loader) {
 
             } catch (e) {
                 //
-                console.log('g2l.TextureLoader.loadTexture2D(): ' + e);
+                console.log('gorilla.graphicsLibrary.TextureLoader.loadTexture2D(): ' + e);
 
                 throw e;
             }

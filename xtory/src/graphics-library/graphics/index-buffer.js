@@ -16,7 +16,7 @@ function IndexBuffer(_bufferLoader) {
 
     } catch (e) {
         //
-        console.log('g2l.IndexBuffer: ' + e);
+        console.log('gorilla.graphicsLibrary.IndexBuffer: ' + e);
 
         throw e;
     }

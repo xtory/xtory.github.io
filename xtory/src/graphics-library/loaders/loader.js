@@ -26,7 +26,7 @@ function Loader(_renderer) {
 
     } catch (e) {
         //
-        console.log('g2l.Loader: ' + e);
+        console.log('gorilla.graphicsLibrary.Loader: ' + e);
 
         throw e;
     }

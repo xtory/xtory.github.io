@@ -84,6 +84,10 @@ Quaternion.prototype = {
         ];        
 
         return Matrix4x4.fromArray(a);
+    },
+
+    clone: function() {
+        return new Quaternion(this.x, this.y, this.z, this.w);
     }
 };
 

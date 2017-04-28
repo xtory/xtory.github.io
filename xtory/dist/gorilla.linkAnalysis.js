@@ -36,7 +36,7 @@ AxisGroupStyle.areEqual = function(style1, style2) {
 //
 function AxisGroup(_canvas, _style) {
     //
-    var g2l = gorilla.graphicsLibrary;
+    //var g2l = gorilla.graphicsLibrary;
 
     var _self;
     var _isVisible;
@@ -52,7 +52,7 @@ function AxisGroup(_canvas, _style) {
 
     } catch (e) {
         //
-        console.log('g2l.AxisGroup: ' + e);
+        console.log('gorilla.linkAnalysis.AxisGroup: ' + e);
 
         throw e;
     }
@@ -88,7 +88,9 @@ function AxisGroup(_canvas, _style) {
 //
 function ChartStyle() {
     //
-    //this.vertexSpacing = 150.0;
+    this.boundsLinkScreenThicknesses = true;
+    this.minLinkScreenThickness      = 1.5;
+    this.maxLinkScreenThickness      = 30.0;
 }
 
 ChartStyle.areEqual = function(style1, style2) {
@@ -98,16 +100,16 @@ ChartStyle.areEqual = function(style1, style2) {
         return false;
     }
 
-    // if (style1.vertexSpacing !== style2.vertexSpacing) {
-    //     //
-    //     return false;
+    if (style1.boundsLinkScreenThicknesses !== style2.boundsLinkScreenThicknesses ||
+        style1.minLinkScreenThickness !== style2.minLinkScreenThickness ||
+        style1.maxLinkScreenThickness !== style2.maxLinkScreenThickness) {
+        //
+        return false;
 
-    // } else {
-    //     //
-    //     return true;
-    // }
-
-    return true;
+    } else {
+        //
+        return true;
+    }
 };
 
 //
@@ -172,7 +174,7 @@ function CircularLayout(_style) {
 
     } catch (e) {
         //
-        console.log('g2l.CircularLayout: ' + e);
+        console.log('gorilla.linkAnalysis.CircularLayout: ' + e);
 
         throw e;
     }
@@ -708,7 +710,7 @@ function GraphLayoutState(_layout) {
         
     } catch (e) {
         //
-        console.log('g2l.GraphLayoutState: ', e);
+        console.log('gorilla.linkAnalysis.GraphLayoutState: ', e);
 
         throw e;
     }
@@ -784,7 +786,7 @@ function Layout(_chart) {
 
     } catch (e) {
         //
-        console.log('g2l.Layout: ' + e);
+        console.log('gorilla.linkAnalysis.Layout: ' + e);
 
         throw e;
     }
@@ -830,7 +832,7 @@ function Layout(_chart) {
         for (var i=0; i<ends.length; i++) {
             //
             var graphVertex = new GraphVertex (
-                ends[i].centerPosition
+                ends[i].centerPosition.clone()
             );
 
             _graphVertices.push(graphVertex);
@@ -874,14 +876,17 @@ function Layout(_chart) {
 
         _circularLayout.perform(_graphVertices, _graphEdges);
 
-        for (var i=0; i<_graphVertices.Count; i++) {
+        for (var i=0; i<_graphVertices.length; i++) {
             //
             var item = _graphVertices[i];
 
             item.position = 
                 g2l.Vector2D.addVectors(centerPosition, item.position);
 
+            // Test:
+            /*
             _graphVertices[i] = item;
+            */
         }
     };
 
@@ -917,7 +922,7 @@ function Chart(_renderer, _style) {
 
     } catch (e) {
         //
-        console.log('g2l.CircularLayout: ' + e);
+        console.log('gorilla.linkAnalysis.CircularLayout: ' + e);
 
         throw e;
     }
@@ -986,7 +991,7 @@ function ChartImage (
         
     } catch (e) {
         //
-        console.log('g2l.ChartImage: ', e);
+        console.log('gorilla.linkAnalysis.ChartImage: ', e);
 
         throw e;
     }

@@ -15,6 +15,10 @@ Vector2D.prototype = {
     //
     toArray: function() {
         return [ this.x, this.y ];
+    },
+
+    clone: function() {
+        return new Vector2D(this.x, this.y);
     }
 };
 

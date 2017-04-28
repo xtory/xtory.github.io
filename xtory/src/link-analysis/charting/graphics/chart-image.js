@@ -24,7 +24,7 @@ function ChartImage (
         
     } catch (e) {
         //
-        console.log('g2l.ChartImage: ', e);
+        console.log('gorilla.linkAnalysis.ChartImage: ', e);
 
         throw e;
     }

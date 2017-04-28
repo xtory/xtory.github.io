@@ -159,7 +159,7 @@ function World2DImage (
 
     } catch (e) {
         //
-        console.log('g2l.World2DImage: ' + e);
+        console.log('gorilla.graphicsLibrary.World2DImage: ' + e);
 
         throw e;
     }

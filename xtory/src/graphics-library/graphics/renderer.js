@@ -49,7 +49,7 @@ function Renderer(_canvas, _style) {
 
     } catch (e) {
         //
-        console.log('g2l.Renderer: ' + e);
+        console.log('gorilla.graphicsLibrary.Renderer: ' + e);
 
         throw e;
     }

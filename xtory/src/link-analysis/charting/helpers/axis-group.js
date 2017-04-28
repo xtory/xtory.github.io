@@ -5,7 +5,7 @@ import { AxisGroupStyle } from './axis-group-style';
 //
 function AxisGroup(_canvas, _style) {
     //
-    var g2l = gorilla.graphicsLibrary;
+    //var g2l = gorilla.graphicsLibrary;
 
     var _self;
     var _isVisible;
@@ -21,7 +21,7 @@ function AxisGroup(_canvas, _style) {
 
     } catch (e) {
         //
-        console.log('g2l.AxisGroup: ' + e);
+        console.log('gorilla.linkAnalysis.AxisGroup: ' + e);
 
         throw e;
     }

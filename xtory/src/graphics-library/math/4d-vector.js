@@ -21,6 +21,10 @@ Vector4D.prototype = {
     //
     toArray: function() {
         return [ this.x, this.y, this.z, this.w ];
+    },
+
+    clone: function() {
+        return new Vector4D(this.x, this.y, this.z, this.w);
     }
 };
 

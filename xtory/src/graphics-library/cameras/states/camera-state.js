@@ -11,7 +11,7 @@ function CameraState(_camera) {
         
     } catch (e) {
         //
-        console.log('g2l.CameraState: ', e);
+        console.log('gorilla.graphicsLibrary.CameraState: ', e);
 
         throw e;
     }

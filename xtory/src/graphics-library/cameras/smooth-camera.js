@@ -36,7 +36,7 @@ function SmoothCamera (
         
     } catch (e) {
         //
-        console.log('g2l.SmoothCamera: ', e);
+        console.log('gorilla.graphicsLibrary.SmoothCamera: ', e);
 
         throw e;
     }

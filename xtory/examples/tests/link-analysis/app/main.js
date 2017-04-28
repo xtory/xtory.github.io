@@ -159,6 +159,8 @@ function main() {
             net.push([]);
         }
 
+        var chartStyle = chart.style;
+
         var index1 = -1;
         var index2 = -1;
         for (var i=0; i<worldLineSegmentCount; i++) {
@@ -196,7 +198,9 @@ function main() {
                 // Part 1.
                 world,
                 // Part 2.
-                worldImages[index1].centerPosition, worldImages[index2].centerPosition,
+                //worldImages[index1].centerPosition, worldImages[index2].centerPosition,
+                worldImages[index1].centerPosition.clone(),
+                worldImages[index2].centerPosition.clone(),
                 // Part 3.
                 worldLineSegmentThickness,
                 // Part 4.
@@ -204,6 +208,12 @@ function main() {
                     Math.random(), Math.random(), Math.random(), 0.5
                 )
             );
+
+            var style = worldLineSegment.style;
+            style.boundsScreenThickness = chartStyle.boundsLinkScreenThickness;
+            style.minScreenThickness = chartStyle.minLinkScreenThickness;
+            style.maxScreenThickness = chartStyle.maxLinkScreenThickness;
+            worldLineSegment.style = style;
 
             world.addItem (
                 g2l.World2DLayerName.LINE_SEGMENTS_BELOW_MIDDLE_IMAGES,
@@ -297,6 +307,12 @@ function main() {
         option = document.getElementById(id);
         templateOptions[id] = option;
 
+        // id = 'template-2500-5000';
+        // option = document.getElementById(id);
+        // templateOptions[id] = option;
+        // id = 'template-3000-3000';
+        // option = document.getElementById(id);
+        // templateOptions[id] = option;
         id = 'template-2500-5000';
         option = document.getElementById(id);
         templateOptions[id] = option;
@@ -378,7 +394,7 @@ function main() {
         layout.startPerformingCircularlayout (
             style,
             ends, links,
-            world.centerPosition
+            world.centerPosition.clone() //world.centerPosition
         );
 
         // Teemp:

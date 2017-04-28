@@ -19,7 +19,7 @@ function Chart(_renderer, _style) {
 
     } catch (e) {
         //
-        console.log('g2l.CircularLayout: ' + e);
+        console.log('gorilla.linkAnalysis.CircularLayout: ' + e);
 
         throw e;
     }

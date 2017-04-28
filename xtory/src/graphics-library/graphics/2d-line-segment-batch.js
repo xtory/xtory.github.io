@@ -50,7 +50,7 @@ function LineSegment2DBatch(_renderer, _style) {
 
     } catch (e) {
         //
-        console.log('g2l.LineSegment2DBatch: ' + e);
+        console.log('gorilla.graphicsLibrary.LineSegment2DBatch: ' + e);
 
         throw e;
     }
