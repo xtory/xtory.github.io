@@ -61,10 +61,10 @@
                 "--allow-file-access-from-files"
             ]
         }, {
-            "name": "tests/link-analysis",
+            "name": "samples/link-analysis",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/xtory/examples/tests/link-analysis/index.html",
+            "file": "${workspaceRoot}/xtory/examples/samples/link-analysis/index.html",
             "runtimeArgs": [
                 "--allow-file-access-from-files"
             ]
