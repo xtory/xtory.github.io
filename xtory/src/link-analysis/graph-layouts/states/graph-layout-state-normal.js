@@ -8,6 +8,6 @@ function GraphLayoutStateNormal(_layout) {
     GraphLayoutState.call(this, _layout);
 }
 
-xtory.graphicsLibrary.JSHelper.inherit(GraphLayoutStateNormal, GraphLayoutState);
+xtory.core.JSHelper.inherit(GraphLayoutStateNormal, GraphLayoutState);
 
 export { GraphLayoutStateNormal };

@@ -2,7 +2,7 @@ function main() {
     //
     'use strict';
 
-    var xgl = xtory.graphicsLibrary;
+    var xc = xtory.core;
 
     var title;
     var renderer;
@@ -31,12 +31,12 @@ function main() {
         /*
         var canvas = document.getElementById('canvas');
 
-        var style = new xgl.RendererStyle();
+        var style = new xc.RendererStyle();
         style.canvasUsesDefaultStyle = false;
-        renderer = new xgl.Renderer(canvas, style);
+        renderer = new xc.Renderer(canvas, style);
         */
 
-        renderer = new xgl.Renderer();
+        renderer = new xc.Renderer();
         // :Test
 
         document.body.appendChild(renderer.canvas);
@@ -44,7 +44,7 @@ function main() {
         loader = renderer.loader;
 
         // Test
-        lineSegmentBatch = new xgl.LineSegment2DBatch(renderer);
+        lineSegmentBatch = new xc.LineSegment2DBatch(renderer);
         usesLineSegmentBatch = false;
 
         setUpShaders();
@@ -55,7 +55,7 @@ function main() {
 
     } catch (e) {
         //
-        xgl.ExceptionHelper.displayMessageOf(e);
+        xc.ExceptionHelper.displayMessageOf(e);
 
         return;
     }
@@ -66,8 +66,8 @@ function main() {
     function setUpShaders() {
         //
         program = loader.setUpProgram (
-            xgl.LineSegment2DBatch.VERTEX_SHADER_SOURCE,
-            xgl.LineSegment2DBatch.FRAGMENT_SHADER_SOURCE
+            xc.LineSegment2DBatch.VERTEX_SHADER_SOURCE,
+            xc.LineSegment2DBatch.FRAGMENT_SHADER_SOURCE
         );
 
         attributeLocations = {
@@ -113,7 +113,7 @@ function main() {
 
         info.fps.innerHTML = 'FPS: 0';
         
-        fps = new xgl.Fps();
+        fps = new xc.Fps();
         then = 0;
         lastAverageFps = 0;
 
@@ -141,15 +141,15 @@ function main() {
 
         var canvas = renderer.canvas;
         
-        var p = new xgl.Vector2D (
+        var p = new xc.Vector2D (
             canvas.clientWidth * 0.5,
             canvas.clientHeight * 0.5
         );
 
-        var p1 = new xgl.Vector3D(p.x,     p.y-200, 0);
-        var p2 = new xgl.Vector3D(p.x,     p.y+200, 1);
-        var p3 = new xgl.Vector3D(p.x-250, p.y,     0.5);
-        var p4 = new xgl.Vector3D(p.x+250, p.y,     0.5);
+        var p1 = new xc.Vector3D(p.x,     p.y-200, 0);
+        var p2 = new xc.Vector3D(p.x,     p.y+200, 1);
+        var p3 = new xc.Vector3D(p.x-250, p.y,     0.5);
+        var p4 = new xc.Vector3D(p.x+250, p.y,     0.5);
 
         if (usesLineSegmentBatch === false) {
             //
@@ -170,7 +170,7 @@ function main() {
                 // Part 2.
                 50,
                 // Part 3.
-                xgl.Colors.PHOTOSHOP_DARK_RED
+                xc.Colors.PHOTOSHOP_DARK_RED
             );
 
             drawLineSegment (
@@ -179,7 +179,7 @@ function main() {
                 // Part 2.
                 35,
                 // Part 2.
-                xgl.Colors.PHOTOSHOP_DARK_YELLOW_ORANGE
+                xc.Colors.PHOTOSHOP_DARK_YELLOW_ORANGE
             );
 
         } else { // _usesLineSegmentBatch === true
@@ -192,7 +192,7 @@ function main() {
                 // Part 2.
                 50,
                 // Part 3.
-                xgl.Colors.PHOTOSHOP_DARK_BLUE
+                xc.Colors.PHOTOSHOP_DARK_BLUE
             );
 
             lineSegmentBatch.drawLineSegment (
@@ -201,7 +201,7 @@ function main() {
                 // Part 2.
                 35,
                 // Part 3.
-                xgl.Colors.PHOTOSHOP_DARK_GREEN
+                xc.Colors.PHOTOSHOP_DARK_GREEN
             );
 
             lineSegmentBatch.end();
@@ -234,7 +234,7 @@ function main() {
         );
 
         renderer.drawPrimitives (
-            xgl.PrimitiveType.TRIANGLE_STRIP,
+            xc.PrimitiveType.TRIANGLE_STRIP,
             0,
             4
         );
@@ -270,30 +270,30 @@ function main() {
         // clockwise' rotated result of the input vector: (p2 - p1). In this case,
         // v is from lower-right to upper-left.
         //
-        var v = xgl.Vector2D.calculatePerpendicularVectorOf (
-            xgl.Vector2D.subtractVectors(p2, p1) // p2 - p1
+        var v = xc.Vector2D.calculatePerpendicularVectorOf (
+            xc.Vector2D.subtractVectors(p2, p1) // p2 - p1
         );
 
-        v = xgl.Vector2D.calculateUnitVectorOf(v);
+        v = xc.Vector2D.calculateUnitVectorOf(v);
 
         var halfScreenThickness = screenThickness * 0.5;
 
         // Note:
         // Use the imagination above, 4 corners are then found below.
 
-        v = xgl.Vector2D.multiplyVectorByScalar(v, halfScreenThickness);
+        v = xc.Vector2D.multiplyVectorByScalar(v, halfScreenThickness);
 
         // Lower right.
-        var p3 = xgl.Vector2D.subtractVectors(p2, v); // p2 - v
+        var p3 = xc.Vector2D.subtractVectors(p2, v); // p2 - v
         
         // Upper right.
-        var p4 = xgl.Vector2D.addVectors(p2, v); // p2 + v
+        var p4 = xc.Vector2D.addVectors(p2, v); // p2 + v
 
         // Lower left.
-        var p5 = xgl.Vector2D.subtractVectors(p1, v); // p1 - v
+        var p5 = xc.Vector2D.subtractVectors(p1, v); // p1 - v
 
         // Upper left.
-        var p6 = xgl.Vector2D.addVectors(p1, v); // p1 + v
+        var p6 = xc.Vector2D.addVectors(p1, v); // p1 + v
 
         var vertexPositions = new Float32Array ([
             // Part 1: Lower right corner.

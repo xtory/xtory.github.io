@@ -2,7 +2,7 @@ function main() {
     //
     'use strict';
 
-    var xgl = xtory.graphicsLibrary;
+    var xc = xtory.core;
 
     var test = [ 10, 100, 100, 1, 1000 ];
 
@@ -10,16 +10,16 @@ function main() {
         //
         if (item1 > item2) {
             //
-            return xgl.ComparisonResults.ITEM1_PRECEDES_ITEM2;
+            return xc.ComparisonResults.ITEM1_PRECEDES_ITEM2;
 
         } else if (
             item1 === item2
         ){
-            return xgl.ComparisonResults.ITEMS_IN_SAME_POSITION;
+            return xc.ComparisonResults.ITEMS_IN_SAME_POSITION;
 
         } else {
             //
-            return xgl.ComparisonResults.ITEM1_FOLLOWS_ITEM2;
+            return xc.ComparisonResults.ITEM1_FOLLOWS_ITEM2;
         }
     });
 

@@ -7,9 +7,9 @@ function ChartImage (
     _centerPosition, // in world space.
     _size            // in world space.
 ){
-    var xgl = xtory.graphicsLibrary;
+    var xc = xtory.core;
 
-    xgl.World2DImage.call (
+    xc.World2DImage.call (
         _chart.world,
         _texture,
         _centerPosition,
@@ -30,10 +30,7 @@ function ChartImage (
     }
 }
 
-xtory.graphicsLibrary.JSHelper.inherit (
-    ChartImage,
-    xtory.graphicsLibrary.World2DImage
-);
+xtory.core.JSHelper.inherit(ChartImage, xtory.core.World2DImage);
 
 ChartImage.prototype.draw = function() {
     //

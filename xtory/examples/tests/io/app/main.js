@@ -2,7 +2,7 @@ function main() {
     //
     'use strict';
 
-    var xgl = xtory.graphicsLibrary;
+    var xc = xtory.core;
 
     var title;
     var renderer;
@@ -31,7 +31,7 @@ function main() {
         //
         title = 'IO';
 
-        renderer = new xgl.Renderer();
+        renderer = new xc.Renderer();
         document.body.appendChild(renderer.canvas);
 
         loader = renderer.loader;
@@ -46,16 +46,16 @@ function main() {
 
         hookEvents();
 
-        modelMatrix = xgl.Matrix4x4.createIdentityMatrix();
-        transform = xgl.Matrix4x4.createIdentityMatrix();
+        modelMatrix = xc.Matrix4x4.createIdentityMatrix();
+        transform = xc.Matrix4x4.createIdentityMatrix();
 
-        backgroundColor = xgl.Colors.DEFAULT_BACKGROUND;
+        backgroundColor = xc.Colors.DEFAULT_BACKGROUND;
 
         renderer.run(updateScene, drawScene);
 
     } catch (e) {
         //
-        xgl.ExceptionHelper.displayMessageOf(e);
+        xc.ExceptionHelper.displayMessageOf(e);
 
         return;
     }
@@ -65,13 +65,13 @@ function main() {
     //
     function setUpCamera() {
         //
-        var p = new xgl.Vector3D(200, 200, 325);
-        var origin = new xgl.Vector3D(0, 0, 0);
+        var p = new xc.Vector3D(200, 200, 325);
+        var origin = new xc.Vector3D(0, 0, 0);
 
-        camera = new xgl.SmoothCamera (
+        camera = new xc.SmoothCamera (
             renderer,
             p,
-            xgl.Vector3D.subtractVectors(origin, p)
+            xc.Vector3D.subtractVectors(origin, p)
         );
     }
 
@@ -130,12 +130,12 @@ function main() {
         // Vertex colors.
         //
         var faceColors = [
-            xgl.Colors.PHOTOSHOP_DARK_RED.toArray(),
-            xgl.Colors.PHOTOSHOP_DARK_YELLOW_ORANGE.toArray(),
-            xgl.Colors.PHOTOSHOP_DARK_GREEN.toArray(),
-            xgl.Colors.PHOTOSHOP_DARK_GREEN_CYAN.toArray(),
-            xgl.Colors.PHOTOSHOP_DARK_BLUE.toArray(),
-            xgl.Colors.PHOTOSHOP_DARK_VIOLET.toArray(),
+            xc.Colors.PHOTOSHOP_DARK_RED.toArray(),
+            xc.Colors.PHOTOSHOP_DARK_YELLOW_ORANGE.toArray(),
+            xc.Colors.PHOTOSHOP_DARK_GREEN.toArray(),
+            xc.Colors.PHOTOSHOP_DARK_GREEN_CYAN.toArray(),
+            xc.Colors.PHOTOSHOP_DARK_BLUE.toArray(),
+            xc.Colors.PHOTOSHOP_DARK_VIOLET.toArray(),
         ];
 
         var vertexColors = [];
@@ -193,8 +193,8 @@ function main() {
     function setUpShaders() {
         //
         program = loader.setUpProgram (
-            xgl.PositionColor.VERTEX_SHADER_SOURCE,
-            xgl.PositionColor.FRAGMENT_SHADER_SOURCE
+            xc.PositionColor.VERTEX_SHADER_SOURCE,
+            xc.PositionColor.FRAGMENT_SHADER_SOURCE
         );
 
         attributeLocations = {
@@ -240,7 +240,7 @@ function main() {
 
         info.fps.innerHTML = 'FPS: 0';
         
-        fps = new xgl.Fps();
+        fps = new xc.Fps();
         then = 0;
         lastAverageFps = 0;
     }
@@ -285,7 +285,7 @@ function main() {
 
         camera.getTransform(transform);
 
-        transform = xgl.Matrix4x4.multiplyMatrices (
+        transform = xc.Matrix4x4.multiplyMatrices (
             transform,
             modelMatrix
         );
@@ -297,7 +297,7 @@ function main() {
         
         renderer.drawIndexedPrimitives (
             indexBuffer,
-            xgl.PrimitiveType.TRIANGLE_LIST,
+            xc.PrimitiveType.TRIANGLE_LIST,
             36
         );
 
@@ -324,18 +324,18 @@ function main() {
 
     function rotateModel(offset) {
         //
-        modelMatrix = xgl.Matrix4x4.multiplyMatrices (
-            xgl.Matrix4x4.createRotationMatrix (
-                xgl.CartesianAxis.Y,
-                xgl.MathHelper.toRadians(offset.x * 0.5)
+        modelMatrix = xc.Matrix4x4.multiplyMatrices (
+            xc.Matrix4x4.createRotationMatrix (
+                xc.CartesianAxis.Y,
+                xc.MathHelper.toRadians(offset.x * 0.5)
             ),
             modelMatrix
         );
 
-        modelMatrix = xgl.Matrix4x4.multiplyMatrices (
-            xgl.Matrix4x4.createRotationMatrix (
-                xgl.CartesianAxis.X,
-                xgl.MathHelper.toRadians(offset.y * 0.5)
+        modelMatrix = xc.Matrix4x4.multiplyMatrices (
+            xc.Matrix4x4.createRotationMatrix (
+                xc.CartesianAxis.X,
+                xc.MathHelper.toRadians(offset.y * 0.5)
             ),
             modelMatrix
         );
@@ -348,12 +348,12 @@ function main() {
         //
         switch (event.button) {
             //
-            case xgl.MouseButton.LEFT: {
+            case xc.MouseButton.LEFT: {
                 //
                 isMouseLeftButtonPressed = true;
 
                 lastMousePosition =
-                    new xgl.Vector2D(event.clientX, event.clientY);
+                    new xc.Vector2D(event.clientX, event.clientY);
 
                 break;
             }
@@ -371,9 +371,9 @@ function main() {
         if (isMouseLeftButtonPressed === true) {
             //
             var mousePosition =
-                new xgl.Vector2D(event.clientX, event.clientY);
+                new xc.Vector2D(event.clientX, event.clientY);
 
-            var offset = xgl.Vector2D.subtractVectors (
+            var offset = xc.Vector2D.subtractVectors (
                 mousePosition,
                 lastMousePosition
             );
@@ -390,7 +390,7 @@ function main() {
         //
         switch (event.button) {
             //
-            case xgl.MouseButton.LEFT: {
+            case xc.MouseButton.LEFT: {
                 isMouseLeftButtonPressed = false;
                 break;
             }
@@ -424,7 +424,7 @@ function main() {
                 var touch = event.touches[0];
 
                 lastTouchPosition =
-                    new xgl.Vector2D(touch.clientX, touch.clientY);
+                    new xc.Vector2D(touch.clientX, touch.clientY);
 
                 break;
             }
@@ -434,13 +434,13 @@ function main() {
                 var touch1 = event.touches[0];
                 var touch2 = event.touches[1];
 
-                var v1 = new xgl.Vector2D(touch1.clientX, touch1.clientY);
-                var v2 = new xgl.Vector2D(touch2.clientX, touch2.clientY);
+                var v1 = new xc.Vector2D(touch1.clientX, touch1.clientY);
+                var v2 = new xc.Vector2D(touch2.clientX, touch2.clientY);
 
-                var v = xgl.Vector2D.subtractVectors(v1, v2);
+                var v = xc.Vector2D.subtractVectors(v1, v2);
 
                 lastTouchDistanceSqured =
-                    xgl.Vector2D.calculateLengthSquaredOf(v);
+                    xc.Vector2D.calculateLengthSquaredOf(v);
 
                 break;
             }
@@ -462,9 +462,9 @@ function main() {
                 var touch = event.touches[0];
 
                 var touchPosition =
-                    new xgl.Vector2D(touch.clientX, touch.clientY);
+                    new xc.Vector2D(touch.clientX, touch.clientY);
 
-                var offset = xgl.Vector2D.subtractVectors (
+                var offset = xc.Vector2D.subtractVectors (
                     touchPosition,
                     lastTouchPosition
                 );
@@ -481,13 +481,13 @@ function main() {
                 var touch1 = event.touches[0];
                 var touch2 = event.touches[1];
 
-                var v1 = new xgl.Vector2D(touch1.clientX, touch1.clientY);
-                var v2 = new xgl.Vector2D(touch2.clientX, touch2.clientY);
+                var v1 = new xc.Vector2D(touch1.clientX, touch1.clientY);
+                var v2 = new xc.Vector2D(touch2.clientX, touch2.clientY);
 
-                var v = xgl.Vector2D.subtractVectors(v1, v2);
+                var v = xc.Vector2D.subtractVectors(v1, v2);
 
                 var touchDistanceSqured =
-                    xgl.Vector2D.calculateLengthSquaredOf(v);
+                    xc.Vector2D.calculateLengthSquaredOf(v);
 
                 var s = 12;
                 if (touchDistanceSqured < lastTouchDistanceSqured) {

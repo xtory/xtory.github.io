@@ -2,7 +2,7 @@ function main() {
     //
     'use strict';
 
-    var xgl = xtory.graphicsLibrary;
+    var xc = xtory.core;
 
     var renderer;
     var loader;
@@ -16,7 +16,7 @@ function main() {
 
     try {
         //
-        renderer = new xgl.Renderer();
+        renderer = new xc.Renderer();
         document.body.appendChild(renderer.canvas);
         
         loader = renderer.loader;
@@ -29,16 +29,16 @@ function main() {
 
         setUpStates();
         
-        transform = xgl.Matrix4x4.createIdentityMatrix();
+        transform = xc.Matrix4x4.createIdentityMatrix();
 
-        sineEase = new xgl.SineEase(xgl.EaseMode.EASE_IN_OUT, 1000, true);
+        sineEase = new xc.SineEase(xc.EaseMode.EASE_IN_OUT, 1000, true);
         sineEase.start();
         
         renderer.run(updateScene, drawScene);
 
     } catch (e) {
         //
-        xgl.ExceptionHelper.displayMessageOf(e);
+        xc.ExceptionHelper.displayMessageOf(e);
 
         return;
     }
@@ -48,13 +48,13 @@ function main() {
     //
     function setUpCamera() {
         //
-        var p = new xgl.Vector3D(0, 0, 1750);
-        var origin = new xgl.Vector3D(0, 0, 0);
+        var p = new xc.Vector3D(0, 0, 1750);
+        var origin = new xc.Vector3D(0, 0, 0);
 
-        camera = new xgl.Camera (
+        camera = new xc.Camera (
             renderer,
             p,
-            xgl.Vector3D.subtractVectors(origin, p)
+            xc.Vector3D.subtractVectors(origin, p)
         );
     }
 
@@ -81,9 +81,9 @@ function main() {
         //
         var vertexColors = new Float32Array (
             [].concat (
-                xgl.Colors.PHOTOSHOP_DARK_RED.toArray(),
-                xgl.Colors.PHOTOSHOP_DARK_GREEN.toArray(),
-                xgl.Colors.PHOTOSHOP_DARK_BLUE.toArray()
+                xc.Colors.PHOTOSHOP_DARK_RED.toArray(),
+                xc.Colors.PHOTOSHOP_DARK_GREEN.toArray(),
+                xc.Colors.PHOTOSHOP_DARK_BLUE.toArray()
             )
         );
 
@@ -93,8 +93,8 @@ function main() {
     function setUpShaders() {
         //
         program = loader.setUpProgram (
-            xgl.PositionColor.VERTEX_SHADER_SOURCE,
-            xgl.PositionColor.FRAGMENT_SHADER_SOURCE
+            xc.PositionColor.VERTEX_SHADER_SOURCE,
+            xc.PositionColor.FRAGMENT_SHADER_SOURCE
         );
 
         attributeLocations = {
@@ -153,7 +153,7 @@ function main() {
         setUpTransform();
 
         renderer.drawPrimitives (
-            xgl.PrimitiveType.TRIANGLE_STRIP,
+            xc.PrimitiveType.TRIANGLE_STRIP,
             0,
             3
         );
@@ -161,17 +161,17 @@ function main() {
 
     function setUpTransform() {
         //
-        var rotation = xgl.Quaternion.fromAxisAngle (
+        var rotation = xc.Quaternion.fromAxisAngle (
             // Part 1.
-            xgl.AxisGroup.Y_AXIS,
+            xc.AxisGroup.Y_AXIS,
             // Part 2.
-            xgl.MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES *
+            xc.MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES *
             sineEase.ratioOfCurrentToTotalTimeOffset
         );
 
         camera.getTransform(transform);
 
-        transform = xgl.Matrix4x4.multiplyMatrices (
+        transform = xc.Matrix4x4.multiplyMatrices (
             transform,
             rotation.toMatrix4x4()
         );

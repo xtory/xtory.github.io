@@ -2,7 +2,7 @@ function main() {
     //
     'use strict';
 
-    var xgl = xtory.graphicsLibrary;
+    var xc = xtory.core;
 
     var renderer;
     var loader;
@@ -17,7 +17,7 @@ function main() {
 
     try {
         //
-        renderer = new xgl.Renderer();
+        renderer = new xc.Renderer();
         document.body.appendChild(renderer.canvas);
 
         loader = renderer.loader;
@@ -30,13 +30,13 @@ function main() {
 
         setUpShaders();
 
-        transform = xgl.Matrix4x4.createIdentityMatrix();
+        transform = xc.Matrix4x4.createIdentityMatrix();
             
         renderer.run(updateScene, drawScene);
 
     } catch (e) {
         //
-        xgl.ExceptionHelper.displayMessageOf(e);
+        xc.ExceptionHelper.displayMessageOf(e);
 
         return;
     }
@@ -46,13 +46,13 @@ function main() {
     //
     function setUpCamera() {
         //
-        var p = new xgl.Vector3D(0, 0, 1250);
-        var origin = new xgl.Vector3D(0, 0, 0);
+        var p = new xc.Vector3D(0, 0, 1250);
+        var origin = new xc.Vector3D(0, 0, 0);
 
-        camera = new xgl.Camera (
+        camera = new xc.Camera (
             renderer,
             p,
-            xgl.Vector3D.subtractVectors(origin, p)
+            xc.Vector3D.subtractVectors(origin, p)
         );
     }
 
@@ -192,7 +192,7 @@ function main() {
         );
 
         renderer.drawPrimitives (
-            xgl.PrimitiveType.TRIANGLE_STRIP,
+            xc.PrimitiveType.TRIANGLE_STRIP,
             0,
             4
         );

@@ -6,7 +6,7 @@ import { CircularLayoutVertexDegree} from './circular-layout-vertex-degree';
 //
 function CircularLayout(_style) {
     //
-    var xgl = xtory.graphicsLibrary;
+    var xc = xtory.core;
     
     var _self;
     var _vertexDegrees;
@@ -100,17 +100,17 @@ function CircularLayout(_style) {
             //
             if (item1.value < item2.value) {
                 //
-                return xgl.ComparisonResults.ITEM1_FOLLOWS_ITEM2;
+                return xc.ComparisonResults.ITEM1_FOLLOWS_ITEM2;
 
             } else if (
                 //
                 item2.value < item1.value
             ){
-                return xgl.ComparisonResults.ITEM1_PRECEDES_ITEM2;
+                return xc.ComparisonResults.ITEM1_PRECEDES_ITEM2;
 
             } else { // item1.value == item2.value
                 //
-                return xgl.ComparisonResults.ITEMS_IN_SAME_POSITION;
+                return xc.ComparisonResults.ITEMS_IN_SAME_POSITION;
             }
         });
 
@@ -157,7 +157,7 @@ function CircularLayout(_style) {
         for (var i=0; i<_vertices.length; i++) {
             //
             //if (_edgedVertexIndices.Contains(i) === false) {
-            if (xgl.ArrayHelper.contains(_edgedVertexIndices, i) === false) {
+            if (xc.ArrayHelper.contains(_edgedVertexIndices, i) === false) {
                 //
                 _unedgedVertexIndices.push(i);
             }
@@ -175,12 +175,12 @@ function CircularLayout(_style) {
         } else if (
             _edgedVertexIndices.length === 1
         ){
-            _circleVertexPositions.push(new xgl.Vector2D(0, 0));
+            _circleVertexPositions.push(new xc.Vector2D(0, 0));
 
         } else { // aka, 1 < _edgedVertexIndices.length
             //
             var totalRadians =
-                xgl.MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES;
+                xc.MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES;
 
             var unitRadians =
                 totalRadians / _edgedVertexIndices.length;
@@ -192,21 +192,21 @@ function CircularLayout(_style) {
             var p1, p2, q, m;
             for (var i=0; i<_edgedVertexIndices.length; i++) {
                 //
-                p1 = new xgl.Vector3D(0, resultRadius, 0);
+                p1 = new xc.Vector3D(0, resultRadius, 0);
             
                 // var m = new Quaternion (
                 //     new Vector3D(0, 0, -1),
                 //     unitRadians * i
                 // ).ToMatrix4x3();
 
-                q = new xgl.Quaternion.fromAxisAngle (
-                    new xgl.Vector3D(0, 0, -1),
+                q = new xc.Quaternion.fromAxisAngle (
+                    new xc.Vector3D(0, 0, -1),
                     unitRadians * i
                 );
 
                 m = q.toMatrix4x4();
 
-                p2 = xgl.Vector3D.transformPoint(p1, m);
+                p2 = xc.Vector3D.transformPoint(p1, m);
 
                 _circleVertexPositions.push(p2.xy);
             }
@@ -338,11 +338,11 @@ function CircularLayout(_style) {
 
         if (_edgedVertexIndices.length === 0) {
             //
-            p = new xgl.Vector2D(0, 0);
+            p = new xc.Vector2D(0, 0);
 
         } else {
             //
-            p = new xgl.Vector2D (
+            p = new xc.Vector2D (
                 maxX + _style.vertexSpacing,
                 maxY
             );
@@ -354,9 +354,9 @@ function CircularLayout(_style) {
             var vertexIndex = _unedgedVertexIndices[i];                
             var vertex = _vertices[vertexIndex];
             
-            vertex.position = xgl.Vector2D.addVectors (
+            vertex.position = xc.Vector2D.addVectors (
                 p,
-                new xgl.Vector2D (
+                new xc.Vector2D (
                     CircularLayout.DEFAULT_UNEDGED_VERTEX_SPACING * count,
                     0
                 )
@@ -480,7 +480,7 @@ function CircularLayout(_style) {
                     // When i != 0, we randomly select an index to process.
 
                     //var index = _random.Next(0, info.groups[0].length);
-                    var index = xgl.RandomHelper.next(0, info.groups[0].length);
+                    var index = xc.RandomHelper.next(0, info.groups[0].length);
 
                     if (isClockwise === true) {
                         //

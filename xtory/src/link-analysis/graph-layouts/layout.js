@@ -8,7 +8,7 @@ import { GraphVertex }            from './graph-vertex';
 //
 function Layout(_chart) {
     //
-    var xgl = xtory.graphicsLibrary;
+    var xc = xtory.core;
 
     var _self;
     var _state;
@@ -124,7 +124,7 @@ function Layout(_chart) {
             var item = _graphVertices[i];
 
             item.position = 
-                xgl.Vector2D.addVectors(centerPosition, item.position);
+                xc.Vector2D.addVectors(centerPosition, item.position);
 
             // Test:
             /*
@@ -138,7 +138,7 @@ function Layout(_chart) {
     //
     this.getGraphVertexAt = function(index) {
         //
-        if (xgl.IndexHelper.isIndexValid(_graphVertices, index) === false) {
+        if (xc.IndexHelper.isIndexValid(_graphVertices, index) === false) {
             throw 'An argument-out-of-range exception raised.';
         }
 
