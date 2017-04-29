@@ -6,7 +6,7 @@ import { CircularLayoutVertexDegree} from './circular-layout-vertex-degree';
 //
 function CircularLayout(_style) {
     //
-    var g2l = gorilla.graphicsLibrary;
+    var xgl = xtory.graphicsLibrary;
     
     var _self;
     var _vertexDegrees;
@@ -26,7 +26,7 @@ function CircularLayout(_style) {
 
     } catch (e) {
         //
-        console.log('gorilla.linkAnalysis.CircularLayout: ' + e);
+        console.log('xtory.linkAnalysis.CircularLayout: ' + e);
 
         throw e;
     }
@@ -100,17 +100,17 @@ function CircularLayout(_style) {
             //
             if (item1.value < item2.value) {
                 //
-                return g2l.ComparisonResults.ITEM1_FOLLOWS_ITEM2;
+                return xgl.ComparisonResults.ITEM1_FOLLOWS_ITEM2;
 
             } else if (
                 //
                 item2.value < item1.value
             ){
-                return g2l.ComparisonResults.ITEM1_PRECEDES_ITEM2;
+                return xgl.ComparisonResults.ITEM1_PRECEDES_ITEM2;
 
             } else { // item1.value == item2.value
                 //
-                return g2l.ComparisonResults.ITEMS_IN_SAME_POSITION;
+                return xgl.ComparisonResults.ITEMS_IN_SAME_POSITION;
             }
         });
 
@@ -157,7 +157,7 @@ function CircularLayout(_style) {
         for (var i=0; i<_vertices.length; i++) {
             //
             //if (_edgedVertexIndices.Contains(i) === false) {
-            if (g2l.ArrayHelper.contains(_edgedVertexIndices, i) === false) {
+            if (xgl.ArrayHelper.contains(_edgedVertexIndices, i) === false) {
                 //
                 _unedgedVertexIndices.push(i);
             }
@@ -175,12 +175,12 @@ function CircularLayout(_style) {
         } else if (
             _edgedVertexIndices.length === 1
         ){
-            _circleVertexPositions.push(new g2l.Vector2D(0, 0));
+            _circleVertexPositions.push(new xgl.Vector2D(0, 0));
 
         } else { // aka, 1 < _edgedVertexIndices.length
             //
             var totalRadians =
-                g2l.MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES; //g2l.MathHelper.toRadians(360);
+                xgl.MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES;
 
             var unitRadians =
                 totalRadians / _edgedVertexIndices.length;
@@ -192,21 +192,21 @@ function CircularLayout(_style) {
             var p1, p2, q, m;
             for (var i=0; i<_edgedVertexIndices.length; i++) {
                 //
-                p1 = new g2l.Vector3D(0, resultRadius, 0);
+                p1 = new xgl.Vector3D(0, resultRadius, 0);
             
                 // var m = new Quaternion (
                 //     new Vector3D(0, 0, -1),
                 //     unitRadians * i
                 // ).ToMatrix4x3();
 
-                q = new g2l.Quaternion.fromAxisAngle (
-                    new g2l.Vector3D(0, 0, -1),
+                q = new xgl.Quaternion.fromAxisAngle (
+                    new xgl.Vector3D(0, 0, -1),
                     unitRadians * i
                 );
 
                 m = q.toMatrix4x4();
 
-                p2 = g2l.Vector3D.transformPoint(p1, m);
+                p2 = xgl.Vector3D.transformPoint(p1, m);
 
                 _circleVertexPositions.push(p2.xy);
             }
@@ -338,11 +338,11 @@ function CircularLayout(_style) {
 
         if (_edgedVertexIndices.length === 0) {
             //
-            p = new g2l.Vector2D(0, 0);
+            p = new xgl.Vector2D(0, 0);
 
         } else {
             //
-            p = new g2l.Vector2D (
+            p = new xgl.Vector2D (
                 maxX + _style.vertexSpacing,
                 maxY
             );
@@ -354,9 +354,9 @@ function CircularLayout(_style) {
             var vertexIndex = _unedgedVertexIndices[i];                
             var vertex = _vertices[vertexIndex];
             
-            vertex.position = g2l.Vector2D.addVectors (
+            vertex.position = xgl.Vector2D.addVectors (
                 p,
-                new g2l.Vector2D (
+                new xgl.Vector2D (
                     CircularLayout.DEFAULT_UNEDGED_VERTEX_SPACING * count,
                     0
                 )
@@ -480,7 +480,7 @@ function CircularLayout(_style) {
                     // When i != 0, we randomly select an index to process.
 
                     //var index = _random.Next(0, info.groups[0].length);
-                    var index = g2l.RandomHelper.next(0, info.groups[0].length);
+                    var index = xgl.RandomHelper.next(0, info.groups[0].length);
 
                     if (isClockwise === true) {
                         //

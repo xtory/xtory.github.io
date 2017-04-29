@@ -11,7 +11,7 @@ function CameraState(_camera) {
         
     } catch (e) {
         //
-        console.log('gorilla.graphicsLibrary.CameraState: ', e);
+        console.log('xtory.graphicsLibrary.CameraState: ', e);
 
         throw e;
     }

@@ -17,7 +17,7 @@ function VertexBuffer(_bufferLoader) {
 
     } catch (e) {
         //
-        console.log('gorilla.graphicsLibrary.VertexBuffer: ' + e);
+        console.log('xtory.graphicsLibrary.VertexBuffer: ' + e);
 
         throw e;
     }

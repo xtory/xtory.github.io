@@ -158,7 +158,7 @@ function World2DLineSegment (
 
     } catch (e) {
         //
-        console.log('gorilla.graphicsLibrary.World2DLineSegment: ' + e);
+        console.log('xtory.graphicsLibrary.World2DLineSegment: ' + e);
 
         throw e;
     }

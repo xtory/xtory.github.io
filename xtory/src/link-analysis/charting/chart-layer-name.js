@@ -8,14 +8,14 @@ function ChartLayerName() {
 //
 // Static constants.
 //
-ChartLayerName.BACKGROUND     = gorilla.graphicsLibrary.World2DLayerName.BACKGROUND;
-ChartLayerName.FILLED_BOXES   = gorilla.graphicsLibrary.World2DLayerName.BACKGROUND + 1;
-ChartLayerName.THEME_LINES    = gorilla.graphicsLibrary.World2DLayerName.BACKGROUND + 2;
-ChartLayerName.LINKS          = gorilla.graphicsLibrary.World2DLayerName.BACKGROUND + 3;
-ChartLayerName.CORNERS        = gorilla.graphicsLibrary.World2DLayerName.BACKGROUND + 4;
-ChartLayerName.UNFILLED_BOXES = gorilla.graphicsLibrary.World2DLayerName.BACKGROUND + 5;
-ChartLayerName.ENDS           = gorilla.graphicsLibrary.World2DLayerName.BACKGROUND + 6;
-ChartLayerName.LEGENDS        = gorilla.graphicsLibrary.World2DLayerName.BACKGROUND + 7;
+ChartLayerName.BACKGROUND     = xtory.graphicsLibrary.World2DLayerName.BACKGROUND;
+ChartLayerName.FILLED_BOXES   = xtory.graphicsLibrary.World2DLayerName.BACKGROUND + 1;
+ChartLayerName.THEME_LINES    = xtory.graphicsLibrary.World2DLayerName.BACKGROUND + 2;
+ChartLayerName.LINKS          = xtory.graphicsLibrary.World2DLayerName.BACKGROUND + 3;
+ChartLayerName.CORNERS        = xtory.graphicsLibrary.World2DLayerName.BACKGROUND + 4;
+ChartLayerName.UNFILLED_BOXES = xtory.graphicsLibrary.World2DLayerName.BACKGROUND + 5;
+ChartLayerName.ENDS           = xtory.graphicsLibrary.World2DLayerName.BACKGROUND + 6;
+ChartLayerName.LEGENDS        = xtory.graphicsLibrary.World2DLayerName.BACKGROUND + 7;
 
 // Helpers
 ChartLayerName.FIRST_ITEM    = ChartLayerName.BACKGROUND;

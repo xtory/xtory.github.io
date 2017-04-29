@@ -11,7 +11,7 @@ function World2DState(_world) {
 
     } catch (e) {
         //
-        console.log('gorilla.graphicsLibrary.World2DState: ', e);
+        console.log('xtory.graphicsLibrary.World2DState: ', e);
 
         throw e;
     }

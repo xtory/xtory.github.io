@@ -30,7 +30,7 @@ function CameraStateZooming (
 
     } catch (e) {
         //
-        console.log('gorilla.graphicsLibrary.CameraStateZooming: ', e);
+        console.log('xtory.graphicsLibrary.CameraStateZooming: ', e);
 
         throw e;
     }

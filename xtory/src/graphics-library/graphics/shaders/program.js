@@ -16,7 +16,7 @@ function Program(_programLoader) {
 
     } catch (e) {
         //
-        console.log('gorilla.graphicsLibrary.Program: ' + e);
+        console.log('xtory.graphicsLibrary.Program: ' + e);
 
         throw e;
     }

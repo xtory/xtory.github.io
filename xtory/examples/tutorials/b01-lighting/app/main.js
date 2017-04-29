@@ -2,7 +2,7 @@ function main() {
     //
     'use strict';
 
-    var g2l = gorilla.graphicsLibrary;
+    var xgl = xtory.graphicsLibrary;
 
     var renderer;
     var loader;
@@ -19,7 +19,7 @@ function main() {
 
     try {
         //
-        renderer = new g2l.Renderer();
+        renderer = new xgl.Renderer();
         document.body.appendChild(renderer.canvas);
 
         loader = renderer.loader;
@@ -34,13 +34,13 @@ function main() {
 
         setUpTime();
 
-        transform = g2l.Matrix4x4.createIdentityMatrix();
+        transform = xgl.Matrix4x4.createIdentityMatrix();
 
         renderer.run(updateScene, drawScene);
 
     } catch (e) {
         //
-        g2l.ExceptionHelper.displayMessageOf(e);
+        xgl.ExceptionHelper.displayMessageOf(e);
         
         return;
     }
@@ -50,13 +50,13 @@ function main() {
     //
     function setUpCamera() {
         //
-        var p = new g2l.Vector3D(0, 0, 325);
-        var origin = new g2l.Vector3D(0, 0, 0);
+        var p = new xgl.Vector3D(0, 0, 325);
+        var origin = new xgl.Vector3D(0, 0, 0);
 
-        camera = new g2l.Camera (
+        camera = new xgl.Camera (
             renderer,
             p,
-            g2l.Vector3D.subtractVectors(origin, p)
+            xgl.Vector3D.subtractVectors(origin, p)
         );
     }
 
@@ -304,16 +304,16 @@ function main() {
 
     function setUpTime() {
         //
-        sineEase = new g2l.SineEase (
-            g2l.EaseMode.EASE_IN_OUT,
+        sineEase = new xgl.SineEase (
+            xgl.EaseMode.EASE_IN_OUT,
             3750,
             true
         );
 
         sineEase.start();
 
-        sineEase2 = new g2l.SineEase (
-            g2l.EaseMode.EASE_IN_OUT,
+        sineEase2 = new xgl.SineEase (
+            xgl.EaseMode.EASE_IN_OUT,
             7500,
             true
         );
@@ -356,37 +356,37 @@ function main() {
 
         renderer.drawIndexedPrimitives (
             indexBuffer,
-            g2l.PrimitiveType.TRIANGLE_LIST,
+            xgl.PrimitiveType.TRIANGLE_LIST,
             36
         );
     }
 
     function setUpTransform() {
         //
-        var modelMatrix = g2l.Matrix4x4.createRotationMatrix (
+        var modelMatrix = xgl.Matrix4x4.createRotationMatrix (
             // Part 1.
-            g2l.CartesianAxis.Y,
+            xgl.CartesianAxis.Y,
             // Part 2.
-           -g2l.MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES *
+           -xgl.MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES *
             sineEase.ratioOfCurrentToTotalTimeOffset
         );
 
-        modelMatrix = g2l.Matrix4x4.multiplyMatrices (
-            g2l.Matrix4x4.createRotationMatrix (
+        modelMatrix = xgl.Matrix4x4.multiplyMatrices (
+            xgl.Matrix4x4.createRotationMatrix (
                 // Part 1.
-                g2l.CartesianAxis.X,
+                xgl.CartesianAxis.X,
                 // Part 2.
-                g2l.MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES *
+                xgl.MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES *
                 sineEase2.ratioOfCurrentToTotalTimeOffset
             ),
             modelMatrix
         );
 
         var transposeOfInverseOfModelMatrix =
-            g2l.Matrix4x4.invertMatrix(modelMatrix);
+            xgl.Matrix4x4.invertMatrix(modelMatrix);
 
         transposeOfInverseOfModelMatrix =
-            g2l.Matrix4x4.transposeMatrix(transposeOfInverseOfModelMatrix);
+            xgl.Matrix4x4.transposeMatrix(transposeOfInverseOfModelMatrix);
         
         renderer.setMatrix4x4Uniform (
             uniformLocations.shared.transposeOfInverseOfModelMatrix,
@@ -395,7 +395,7 @@ function main() {
 
         camera.getTransform(transform);
 
-        transform = g2l.Matrix4x4.multiplyMatrices (
+        transform = xgl.Matrix4x4.multiplyMatrices (
             transform,
             modelMatrix
         );

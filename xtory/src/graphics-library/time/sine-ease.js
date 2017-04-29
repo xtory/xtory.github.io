@@ -49,7 +49,7 @@ function SineEase(_easeMode, _duration, _isLooped) {
 
     } catch (e) {
         //
-        console.log('gorilla.graphicsLibrary.SineEase: ' + e);
+        console.log('xtory.graphicsLibrary.SineEase: ' + e);
 
         throw e;
     }

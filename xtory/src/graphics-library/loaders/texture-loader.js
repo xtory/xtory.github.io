@@ -23,7 +23,7 @@ function TextureLoader(_loader) {
 
     } catch (e) {
         //
-        console.log('gorilla.graphicsLibrary.TextureLoader: ' + e);
+        console.log('xtory.graphicsLibrary.TextureLoader: ' + e);
 
         throw e;
     }
@@ -134,7 +134,7 @@ function TextureLoader(_loader) {
 
             } catch (e) {
                 //
-                console.log('gorilla.graphicsLibrary.TextureLoader.loadTexture2D(): ' + e);
+                console.log('xtory.graphicsLibrary.TextureLoader.loadTexture2D(): ' + e);
 
                 throw e;
             }
@@ -143,7 +143,7 @@ function TextureLoader(_loader) {
         image.addEventListener('error', function() {
             //
             console.log (
-                'g2l.TextureLoader.loadTexture2D() could not load image: ' +
+                'xtory.graphicsLibrary.TextureLoader.loadTexture2D() could not load image: ' +
                 url
             );
         });

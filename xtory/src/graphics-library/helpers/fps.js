@@ -35,7 +35,7 @@ function Fps() {
 
     } catch (e) {
         //
-        console.log('gorilla.graphicsLibrary.Fps: ' + e);
+        console.log('xtory.graphicsLibrary.Fps: ' + e);
 
         throw e;
     }

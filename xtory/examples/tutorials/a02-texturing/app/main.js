@@ -2,7 +2,7 @@ function main() {
     //
     'use strict';
 
-    var g2l = gorilla.graphicsLibrary;
+    var xgl = xtory.graphicsLibrary;
 
     var renderer;
     var loader;
@@ -17,7 +17,7 @@ function main() {
 
     try {
         //
-        renderer = new g2l.Renderer();
+        renderer = new xgl.Renderer();
         document.body.appendChild(renderer.canvas);
 
         loader = renderer.loader;
@@ -32,16 +32,16 @@ function main() {
 
         setUpStates();
         
-        transform = g2l.Matrix4x4.createIdentityMatrix();
+        transform = xgl.Matrix4x4.createIdentityMatrix();
 
-        sineEase = new g2l.SineEase(g2l.EaseMode.EASE_IN_OUT, 1500, true);
+        sineEase = new xgl.SineEase(xgl.EaseMode.EASE_IN_OUT, 1500, true);
         sineEase.start();
             
         renderer.run(updateScene, drawScene);
 
     } catch (e) {
         //
-        g2l.ExceptionHelper.displayMessageOf(e);
+        xgl.ExceptionHelper.displayMessageOf(e);
 
         return;
     }
@@ -51,13 +51,13 @@ function main() {
     //
     function setUpCamera() {
         //
-        var p = new g2l.Vector3D(0, 0, 1250);
-        var origin = new g2l.Vector3D(0, 0, 0);
+        var p = new xgl.Vector3D(0, 0, 1250);
+        var origin = new xgl.Vector3D(0, 0, 0);
 
-        camera = new g2l.Camera (
+        camera = new xgl.Camera (
             renderer,
             p,
-            g2l.Vector3D.subtractVectors(origin, p)
+            xgl.Vector3D.subtractVectors(origin, p)
         );
     }
 
@@ -113,8 +113,8 @@ function main() {
     function setUpShaders() {
         //
         program = loader.setUpProgram (
-            g2l.PositionTextureCoordinates.VERTEX_SHADER_SOURCE,
-            g2l.PositionTextureCoordinates.FRAGMENT_SHADER_SOURCE
+            xgl.PositionTextureCoordinates.VERTEX_SHADER_SOURCE,
+            xgl.PositionTextureCoordinates.FRAGMENT_SHADER_SOURCE
         );
 
         attributeLocations = {
@@ -186,7 +186,7 @@ function main() {
         );
 
         renderer.drawPrimitives (
-            g2l.PrimitiveType.TRIANGLE_STRIP,
+            xgl.PrimitiveType.TRIANGLE_STRIP,
             0,
             4
         );
@@ -194,17 +194,17 @@ function main() {
 
     function setUpTransform() {
         //
-        var rotation = g2l.Quaternion.fromAxisAngle (
+        var rotation = xgl.Quaternion.fromAxisAngle (
             // Part 1.
-            g2l.AxisGroup.Y_AXIS,
+            xgl.AxisGroup.Y_AXIS,
             // Part 2.
-            g2l.MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES *
+            xgl.MathHelper.RADIANS_OF_THREE_SIXTY_DEGREES *
             sineEase.ratioOfCurrentToTotalTimeOffset
         );
 
         camera.getTransform(transform);
 
-        transform = g2l.Matrix4x4.multiplyMatrices (
+        transform = xgl.Matrix4x4.multiplyMatrices (
             transform,
             rotation.toMatrix4x4()
         );

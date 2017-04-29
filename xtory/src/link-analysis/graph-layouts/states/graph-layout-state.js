@@ -11,7 +11,7 @@ function GraphLayoutState(_layout) {
         
     } catch (e) {
         //
-        console.log('gorilla.linkAnalysis.GraphLayoutState: ', e);
+        console.log('xtory.linkAnalysis.GraphLayoutState: ', e);
 
         throw e;
     }

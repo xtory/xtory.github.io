@@ -8,7 +8,7 @@ import { GraphVertex }            from './graph-vertex';
 //
 function Layout(_chart) {
     //
-    var g2l = gorilla.graphicsLibrary;
+    var xgl = xtory.graphicsLibrary;
 
     var _self;
     var _state;
@@ -29,7 +29,7 @@ function Layout(_chart) {
 
     } catch (e) {
         //
-        console.log('gorilla.linkAnalysis.Layout: ' + e);
+        console.log('xtory.linkAnalysis.Layout: ' + e);
 
         throw e;
     }
@@ -124,7 +124,7 @@ function Layout(_chart) {
             var item = _graphVertices[i];
 
             item.position = 
-                g2l.Vector2D.addVectors(centerPosition, item.position);
+                xgl.Vector2D.addVectors(centerPosition, item.position);
 
             // Test:
             /*
@@ -138,7 +138,7 @@ function Layout(_chart) {
     //
     this.getGraphVertexAt = function(index) {
         //
-        if (g2l.IndexHelper.isIndexValid(_graphVertices, index) === false) {
+        if (xgl.IndexHelper.isIndexValid(_graphVertices, index) === false) {
             throw 'An argument-out-of-range exception raised.';
         }
 

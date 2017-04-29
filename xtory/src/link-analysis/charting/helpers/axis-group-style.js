@@ -3,9 +3,9 @@
 //
 function AxisGroupStyle() {
     //
-    var g2l = gorilla.graphicsLibrary;
+    var xgl = xtory.graphicsLibrary;
 
-    this.lineSegmentColor = new g2l.Color(0, 0, 0, 0.125);
+    this.lineSegmentColor = new xgl.Color(0, 0, 0, 0.125);
     this.lineSegmentThicknesss = 5.0; // in world space.
 }
 
@@ -16,7 +16,7 @@ AxisGroupStyle.areEqual = function(style1, style2) {
         return false;
     }
 
-    if (gorilla.graphicsLibrary.Color.areEqual(style1.lineSegmentColor, style2.lineSegmentColor) === false ||
+    if (xtory.graphicsLibrary.Color.areEqual(style1.lineSegmentColor, style2.lineSegmentColor) === false ||
         style1.lineSegmentThicknesss !== style2.lineSegmentThicknesss) {
         //
         return false;

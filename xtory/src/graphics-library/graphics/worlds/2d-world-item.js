@@ -28,7 +28,7 @@ function World2DItem(_world) {
 
     } catch (e) {
         //
-        console.log('gorilla.graphicsLibrary.World2DItem: ' + e);
+        console.log('xtory.graphicsLibrary.World2DItem: ' + e);
 
         throw e;
     }

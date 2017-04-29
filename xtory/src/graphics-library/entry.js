@@ -1,4 +1,4 @@
-// g2l stands for gorilla.graphicsLibrary.
+// xgl stands for xtory.graphicsLibrary.
 
 // Cameras.
 export { Camera }                                     from './cameras/camera';

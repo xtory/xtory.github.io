@@ -7,9 +7,9 @@ function ChartImage (
     _centerPosition, // in world space.
     _size            // in world space.
 ){
-    var g2l = gorilla.graphicsLibrary;
+    var xgl = xtory.graphicsLibrary;
 
-    g2l.World2DImage.call (
+    xgl.World2DImage.call (
         _chart.world,
         _texture,
         _centerPosition,
@@ -24,15 +24,15 @@ function ChartImage (
         
     } catch (e) {
         //
-        console.log('gorilla.linkAnalysis.ChartImage: ', e);
+        console.log('xtory.linkAnalysis.ChartImage: ', e);
 
         throw e;
     }
 }
 
-gorilla.graphicsLibrary.JSHelper.inherit (
+xtory.graphicsLibrary.JSHelper.inherit (
     ChartImage,
-    gorilla.graphicsLibrary.World2DImage
+    xtory.graphicsLibrary.World2DImage
 );
 
 ChartImage.prototype.draw = function() {

@@ -8,6 +8,6 @@ function GraphLayoutStateNormal(_layout) {
     GraphLayoutState.call(this, _layout);
 }
 
-gorilla.graphicsLibrary.JSHelper.inherit(GraphLayoutStateNormal, GraphLayoutState);
+xtory.graphicsLibrary.JSHelper.inherit(GraphLayoutStateNormal, GraphLayoutState);
 
 export { GraphLayoutStateNormal };

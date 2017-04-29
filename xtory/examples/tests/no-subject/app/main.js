@@ -2,13 +2,7 @@ function main() {
     //
     'use strict';
 
-    var g2l = gorilla.graphicsLibrary;
-    var gla = GorillaLinkAnalysis;
-
-    console.log (
-        'gla.ChartLayerName.THEME_LINES: ' +
-        (gla.ChartLayerName.FILLED_BOXES + gla.ChartLayerName.THEME_LINES)
-    );
+    var xgl = xtory.graphicsLibrary;
 
     var test = [ 10, 100, 100, 1, 1000 ];
 
@@ -16,16 +10,16 @@ function main() {
         //
         if (item1 > item2) {
             //
-            return g2l.ComparisonResults.ITEM1_PRECEDES_ITEM2;
+            return xgl.ComparisonResults.ITEM1_PRECEDES_ITEM2;
 
         } else if (
             item1 === item2
         ){
-            return g2l.ComparisonResults.ITEMS_IN_SAME_POSITION;
+            return xgl.ComparisonResults.ITEMS_IN_SAME_POSITION;
 
         } else {
             //
-            return g2l.ComparisonResults.ITEM1_FOLLOWS_ITEM2;
+            return xgl.ComparisonResults.ITEM1_FOLLOWS_ITEM2;
         }
     });
 
@@ -39,5 +33,5 @@ function main() {
     //     var test = 'hi hi';
     // }    
 
-    concole.log(test);
+    console.log(test);
 }

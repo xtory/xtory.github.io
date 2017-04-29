@@ -19,7 +19,7 @@ function Chart(_renderer, _style) {
 
     } catch (e) {
         //
-        console.log('gorilla.linkAnalysis.CircularLayout: ' + e);
+        console.log('xtory.linkAnalysis.CircularLayout: ' + e);
 
         throw e;
     }

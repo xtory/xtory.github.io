@@ -8,7 +8,7 @@
   },
   "scripts": {
     "build": "rollup -c ./src/graphics-library/rollup.config.js && rollup -c ./src/link-analysis/rollup.config.js",
-    "build-all": "rollup -c ./src/graphics-library/rollup.config.js && uglifyjs ./dist/gorilla.graphicsLibrary.js -cm > ./dist/min/gorilla.graphicsLibrary.min.js && rollup -c ./src/link-analysis/rollup.config.js && uglifyjs ./dist/gorilla.linkAnalysis.js -cm > ./dist/min/gorilla.linkAnalysis.min.js"
+    "build-all": "rollup -c ./src/graphics-library/rollup.config.js && uglifyjs ./dist/xtory.graphicsLibrary.js -cm > ./dist/min/xtory.graphicsLibrary.min.js && rollup -c ./src/link-analysis/rollup.config.js && uglifyjs ./dist/xtory.linkAnalysis.js -cm > ./dist/min/xtory.linkAnalysis.min.js"
   },
   "repository": {
     "type": "git",

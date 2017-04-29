@@ -26,7 +26,7 @@ function Loader(_renderer) {
 
     } catch (e) {
         //
-        console.log('gorilla.graphicsLibrary.Loader: ' + e);
+        console.log('xtory.graphicsLibrary.Loader: ' + e);
 
         throw e;
     }

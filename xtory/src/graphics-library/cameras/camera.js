@@ -68,7 +68,7 @@ function Camera (
         
     } catch (e) {
         //
-        console.log('gorilla.graphicsLibrary.Camera: ', e);
+        console.log('xtory.graphicsLibrary.Camera: ', e);
 
         throw e;
     }

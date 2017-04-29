@@ -16,7 +16,7 @@ function BufferLoader(_loader) {
 
     } catch (e) {
         //
-        console.log('gorilla.graphicsLibrary.BufferLoader: ' + e);
+        console.log('xtory.graphicsLibrary.BufferLoader: ' + e);
 
         throw e;
     }

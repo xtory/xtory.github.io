@@ -90,7 +90,7 @@ function World2D(_renderer, _style) {
 
     } catch (e) {
         //
-        console.log('gorilla.graphicsLibrary.World2D: ' + e);
+        console.log('xtory.graphicsLibrary.World2D: ' + e);
 
         throw e;
     }

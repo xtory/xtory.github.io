@@ -2,7 +2,7 @@ function main() {
     //
     'use strict';
 
-    var g2l = gorilla.graphicsLibrary;
+    var xgl = xtory.graphicsLibrary;
 
     var renderer;
     var loader;
@@ -14,7 +14,7 @@ function main() {
 
     try {
         //
-        renderer = new g2l.Renderer();
+        renderer = new xgl.Renderer();
         document.body.appendChild(renderer.canvas);
 
         loader = renderer.loader;
@@ -27,7 +27,7 @@ function main() {
 
     } catch (e) {
         //
-        g2l.ExceptionHelper.displayMessageOf(e);
+        xgl.ExceptionHelper.displayMessageOf(e);
 
         return;
     }
@@ -46,8 +46,8 @@ function main() {
     function setUpShaders() {
         //
         program = loader.setUpProgram (
-            g2l.SpriteBatch.VERTEX_SHADER_SOURCE,
-            g2l.SpriteBatch.FRAGMENT_SHADER_SOURCE
+            xgl.SpriteBatch.VERTEX_SHADER_SOURCE,
+            xgl.SpriteBatch.FRAGMENT_SHADER_SOURCE
         );
 
         attributeLocations = {
@@ -97,12 +97,12 @@ function main() {
         //
         renderer.clear();
 
-        var p = new g2l.Vector2D (
+        var p = new xgl.Vector2D (
             renderer.canvas.clientWidth * 0.5,
             renderer.canvas.clientHeight * 0.5
         );
 
-        var size = new g2l.Vector2D (
+        var size = new xgl.Vector2D (
             texture.width * 0.5,
             texture.height * 0.5
         );
@@ -135,7 +135,7 @@ function main() {
         renderer.setVector4DUniform (
             uniformLocations.unique.color,
             new Float32Array (
-                g2l.Colors.PHOTOSHOP_DARK_GREEN.toArray()
+                xgl.Colors.PHOTOSHOP_DARK_GREEN.toArray()
             )
         );
 
@@ -145,7 +145,7 @@ function main() {
         );
         
         renderer.drawPrimitives (
-            g2l.PrimitiveType.TRIANGLE_STRIP,
+            xgl.PrimitiveType.TRIANGLE_STRIP,
             0,
             4
         );

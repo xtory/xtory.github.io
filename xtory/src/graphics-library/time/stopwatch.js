@@ -19,7 +19,7 @@ function Stopwatch() {
 
     } catch (e) {
         //
-        console.log('gorilla.graphicsLibrary.Stopwatch: ' + e);
+        console.log('xtory.graphicsLibrary.Stopwatch: ' + e);
 
         throw e;
     }

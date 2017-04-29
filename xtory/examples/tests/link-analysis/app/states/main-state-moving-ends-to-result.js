@@ -9,7 +9,7 @@ function MainStateMovingEndsToResult (
     _layout,
     _finishingCallback
 ){
-    var g2l = gorilla.graphicsLibrary;
+    var xgl = xtory.graphicsLibrary;
 
     MainState.call(this);
 
@@ -23,7 +23,7 @@ function MainStateMovingEndsToResult (
 
         setUpWorldImagesPositions();
 
-        _sineEase = new g2l.SineEase(g2l.EaseMode.EASE_OUT, 1500, false);
+        _sineEase = new xgl.SineEase(xgl.EaseMode.EASE_OUT, 1500, false);
         _sineEase.start();
 
     } catch (e) {
@@ -95,14 +95,14 @@ function MainStateMovingEndsToResult (
     }
 }
 
-gorilla.graphicsLibrary.JSHelper.inherit(MainStateMovingEndsToResult, MainState);
+xtory.graphicsLibrary.JSHelper.inherit(MainStateMovingEndsToResult, MainState);
 
 //
 // Prototype.
 //
 MainStateMovingEndsToResult.prototype.update = function() {
     //
-    var g2l = gorilla.graphicsLibrary;
+    var xgl = xtory.graphicsLibrary;
 
     var worldImages = this.worldImages;
     var worldLineSegments = this.worldLineSegments;
@@ -124,7 +124,7 @@ MainStateMovingEndsToResult.prototype.update = function() {
             var p1 = worldImagePositions.start[i];
             var p2 = worldImagePositions.finish[i];
 
-            worldImages[i].centerPosition = new g2l.Vector2D (
+            worldImages[i].centerPosition = new xgl.Vector2D (
                 p1.x + (p2.x - p1.x) * ratio,
                 p1.y + (p2.y - p1.y) * ratio
             );

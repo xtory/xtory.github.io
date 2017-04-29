@@ -5,8 +5,6 @@ import { AxisGroupStyle } from './axis-group-style';
 //
 function AxisGroup(_canvas, _style) {
     //
-    //var g2l = gorilla.graphicsLibrary;
-
     var _self;
     var _isVisible;
     var _chartLineSegments;
@@ -21,7 +19,7 @@ function AxisGroup(_canvas, _style) {
 
     } catch (e) {
         //
-        console.log('gorilla.linkAnalysis.AxisGroup: ' + e);
+        console.log('xtory.linkAnalysis.AxisGroup: ' + e);
 
         throw e;
     }
