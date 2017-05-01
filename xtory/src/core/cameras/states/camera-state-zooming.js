@@ -1,8 +1,8 @@
-import { CameraState }      from './camera-state';
-import { CameraStateStill } from './camera-state-still';
-import { EaseMode }         from '../../time/ease-mode';
-import { JSHelper }         from '../../base/helpers/js-helper';
-import { SineEase }         from '../../time/sine-ease';
+import { CameraState }       from './camera-state';
+import { CameraStateStill }  from './camera-state-still';
+import { EaseMode }          from '../../time/ease-mode';
+import { InheritanceHelper } from '../../base/helpers/inheritance-helper';
+import { SineEase }          from '../../time/sine-ease';
 
 //
 // Constructor.
@@ -60,7 +60,7 @@ function CameraStateZooming (
     });
 }
 
-JSHelper.inherit(CameraStateZooming, CameraState);
+InheritanceHelper.inherit(CameraStateZooming, CameraState);
 
 //
 // Prototype.

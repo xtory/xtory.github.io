@@ -1,4 +1,4 @@
-import { JSHelper }                from '../../base/helpers/js-helper';
+import { InheritanceHelper }       from '../../base/helpers/inheritance-helper';
 import { LineSegment2D }           from '../2d-line-segment';
 import { LineSegment2DHelper }     from '../helpers/2d-line-segment-helper';
 import { Vector2D }                from '../../math/2d-vector';
@@ -164,7 +164,7 @@ function World2DLineSegment (
     }
 }
 
-JSHelper.inherit(World2DLineSegment, World2DItem);
+InheritanceHelper.inherit(World2DLineSegment, World2DItem);
 
 World2DLineSegment.prototype.update = function() {
     //

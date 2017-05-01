@@ -6,4 +6,7 @@ function MainStateNormal() {
     MainState.call(this);
 }
 
-xtory.core.JSHelper.inherit(MainStateNormal, MainState);
+xtory.core.InheritanceHelper.inherit (
+    MainStateNormal,
+    MainState
+);

@@ -1,11 +1,11 @@
 //
 // Constructor.
 //
-function JSHelper() {
+function InheritanceHelper() {
     // No contents.
 }
 
-JSHelper.inherit = function(subobject, superobject) {
+InheritanceHelper.inherit = function(subobject, superobject) {
     //
     var helper = function() {
         //
@@ -17,4 +17,4 @@ JSHelper.inherit = function(subobject, superobject) {
     subobject.prototype = new helper();
 };
 
-export { JSHelper };
+export { InheritanceHelper };

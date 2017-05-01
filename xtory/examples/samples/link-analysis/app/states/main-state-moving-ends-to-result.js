@@ -95,7 +95,10 @@ function MainStateMovingEndsToResult (
     }
 }
 
-xtory.core.JSHelper.inherit(MainStateMovingEndsToResult, MainState);
+xtory.core.InheritanceHelper.inherit (
+    MainStateMovingEndsToResult,
+    MainState
+);
 
 //
 // Prototype.

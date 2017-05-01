@@ -1,5 +1,5 @@
 import { EaseMode }           from '../../../time/ease-mode';
-import { JSHelper }           from '../../../base/helpers/js-helper';
+import { InheritanceHelper }  from '../../../base/helpers/inheritance-helper';
 import { SineEase }           from '../../../time/sine-ease';
 import { Size2D }             from '../../2d-size';
 import { Vector2D }           from '../../../math/2d-vector';
@@ -64,7 +64,7 @@ function World2DStateZoomingAtScreenPosition (
     }
 }
 
-JSHelper.inherit(World2DStateZoomingAtScreenPosition, World2DState);
+InheritanceHelper.inherit(World2DStateZoomingAtScreenPosition, World2DState);
 
 World2DStateZoomingAtScreenPosition.prototype.update = function() {
     //

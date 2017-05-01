@@ -1,4 +1,4 @@
-import { JSHelper }           from '../../base/helpers/js-helper';
+import { InheritanceHelper }  from '../../base/helpers/inheritance-helper';
 import { Size2D }             from '../2d-size';
 import { Sprite }             from '../sprite';
 import { Vector2D }           from '../../math/2d-vector';
@@ -165,7 +165,7 @@ function World2DImage (
     }
 }
 
-JSHelper.inherit(World2DImage, World2DItem);
+InheritanceHelper.inherit(World2DImage, World2DItem);
 
 World2DImage.prototype.update = function() {
     //

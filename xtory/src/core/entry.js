@@ -6,7 +6,7 @@ export { Event }                                      from './base/event';
 export { ExceptionHelper }                            from './base/helpers/exception-helper';
 export { Fps }                                        from './base/fps';
 export { IndexHelper }                                from './base/helpers/index-helper';
-export { JSHelper }                                   from './base/helpers/js-helper';
+export { InheritanceHelper }                          from './base/helpers/inheritance-helper';
 export { MouseButton }                                from './base/mouse-button';
 export { RandomHelper }                               from './base/helpers/random-helper';
 

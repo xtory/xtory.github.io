@@ -30,7 +30,10 @@ function ChartImage (
     }
 }
 
-xtory.core.JSHelper.inherit(ChartImage, xtory.core.World2DImage);
+xtory.core.InheritanceHelper.inherit (
+    ChartImage,
+    xtory.core.World2DImage
+);
 
 ChartImage.prototype.draw = function() {
     //

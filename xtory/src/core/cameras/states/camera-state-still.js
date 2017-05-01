@@ -1,5 +1,5 @@
 import { CameraState } from './camera-state';
-import { JSHelper } from '../../base/helpers/js-helper';
+import { InheritanceHelper } from '../../base/helpers/inheritance-helper';
 
 //
 // Constructor.
@@ -9,6 +9,6 @@ function CameraStateStill(_camera) {
     CameraState.call(this, _camera);
 }
 
-JSHelper.inherit(CameraStateStill, CameraState);
+InheritanceHelper.inherit(CameraStateStill, CameraState);
 
 export { CameraStateStill };

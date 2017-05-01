@@ -2,7 +2,7 @@ import { Camera }             from './camera';
 import { CameraState }        from './states/camera-state';
 import { CameraStateStill }   from './states/camera-state-still';
 import { CameraStateZooming } from './states/camera-state-zooming';
-import { JSHelper }           from '../base/helpers/js-helper';
+import { InheritanceHelper }  from '../base/helpers/inheritance-helper';
 
 //
 // Constructor.
@@ -94,7 +94,7 @@ function SmoothCamera (
     };
 }
 
-JSHelper.inherit(SmoothCamera, Camera);
+InheritanceHelper.inherit(SmoothCamera, Camera);
 
 //
 // Static constants.
