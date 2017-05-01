@@ -7,7 +7,6 @@ export { ExceptionHelper }                            from './bases/helpers/exce
 export { Fps }                                        from './bases/fps';
 export { IndexHelper }                                from './bases/helpers/index-helper';
 export { InheritanceHelper }                          from './bases/helpers/inheritance-helper';
-export { MouseButton }                                from './bases/mouse-button';
 export { RandomHelper }                               from './bases/helpers/random-helper';
 
 // Cameras.
@@ -64,6 +63,9 @@ export { World2DState }                               from './graphics/worlds/st
 export { World2DStateNormal }                         from './graphics/worlds/states/2d-world-state-normal';
 export { World2DStateZoomingAtScreenPosition }        from './graphics/worlds/states/2d-world-state-zooming-at-screen-position';
 export { World2DStyle }                               from './graphics/worlds/2d-world-style';
+
+// IO.
+export { MouseButton }                                from './io/mouse-button';
 
 // Loaders.
 export { BufferLoader }                               from './loaders/buffer-loader';
