@@ -1,5 +1,5 @@
 import { EaseMode }           from '../../../time/ease-mode';
-import { JSHelper }           from '../../../helpers/js-helper';
+import { JSHelper }           from '../../../base/helpers/js-helper';
 import { SineEase }           from '../../../time/sine-ease';
 import { Size2D }             from '../../2d-size';
 import { Vector2D }           from '../../../math/2d-vector';

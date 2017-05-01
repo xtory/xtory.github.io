@@ -1,5 +1,6 @@
 import { MathHelper } from './helpers/math-helper';
 
+
 //
 // Constructor.
 //

@@ -1,4 +1,4 @@
-import { JSHelper } from '../../../helpers/js-helper';
+import { JSHelper } from '../../../base/helpers/js-helper';
 import { World2DState } from './2d-world-state';
 
 //

@@ -2,7 +2,7 @@ import { Camera }             from './camera';
 import { CameraState }        from './states/camera-state';
 import { CameraStateStill }   from './states/camera-state-still';
 import { CameraStateZooming } from './states/camera-state-zooming';
-import { JSHelper }           from '../helpers/js-helper';
+import { JSHelper }           from '../base/helpers/js-helper';
 
 //
 // Constructor.

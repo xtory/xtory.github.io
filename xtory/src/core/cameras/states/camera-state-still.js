@@ -1,5 +1,5 @@
 import { CameraState } from './camera-state';
-import { JSHelper } from '../../helpers/js-helper';
+import { JSHelper } from '../../base/helpers/js-helper';
 
 //
 // Constructor.

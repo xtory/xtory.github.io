@@ -1,4 +1,4 @@
-import { JSHelper }                from '../../helpers/js-helper';
+import { JSHelper }                from '../../base/helpers/js-helper';
 import { LineSegment2D }           from '../2d-line-segment';
 import { LineSegment2DHelper }     from '../helpers/2d-line-segment-helper';
 import { Vector2D }                from '../../math/2d-vector';

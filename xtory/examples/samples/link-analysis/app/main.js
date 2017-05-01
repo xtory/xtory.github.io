@@ -7,10 +7,9 @@ function main() {
 
     var self;
     var title;
-    var renderer;
-    var loader;
-    var world; // 2D world.
     var chart;
+    var canvas;
+    var world;
     var layout;
 
     var textures;
@@ -40,16 +39,21 @@ function main() {
         //
         self = this;
 
-        title = 'Link Analysis';
+        title = 'Link analysis';
 
-        renderer = new xc.Renderer();
-        document.body.appendChild(renderer.canvas);
+        // renderer = new xc.Renderer();
+        // document.body.appendChild(renderer.canvas);
 
-        loader = renderer.loader;
+        // loader = renderer.loader;
 
-        setUpWorld();
+        // setUpWorld();
 
         chart = new xla.Chart();
+
+        canvas = chart.renderer.canvas;
+        document.body.appendChild(canvas);
+
+        world = chart.world;
         layout = chart.layout;
 
         setUpTextures();
@@ -64,7 +68,7 @@ function main() {
 
         state = new MainStateNormal();
 
-        renderer.run(updateScene, drawScene);
+        //chart.run();
 
     } catch (e) {
         //
@@ -76,16 +80,18 @@ function main() {
     //
     // Functions.
     //
-    function setUpWorld() {
-        //
-        var style = new xc.World2DStyle();
-        style.backgroundColor = xc.Colors.WHITE;
+    // function setUpWorld() {
+    //     //
+    //     var style = new xc.World2DStyle();
+    //     style.backgroundColor = xc.Colors.WHITE;
 
-        world = new xc.World2D(renderer, style);
-    }
+    //     world = new xc.World2D(renderer, style);
+    // }
 
     function setUpTextures() {
         //
+        var loader = chart.renderer.loader;
+
         textures = [];
 
         var urls = [
@@ -120,11 +126,16 @@ function main() {
 
         var halfLength = worldImageCount * 50;
 
+        var center = world.centerPosition;
+
         for (var i=0; i<worldImageCount; i++) {
             //
-            var p = new xc.Vector2D (
-                halfLength * (-0.5 + Math.random()), // -length/2 ~ length/2
-                halfLength * (-0.5 + Math.random())  // -length/2 ~ length/2
+            var p = xc.Vector2D.addVectors (
+                center,
+                new xc.Vector2D (
+                    halfLength * (-0.5 + Math.random()), // -length/2 ~ length/2
+                    halfLength * (-0.5 + Math.random())  // -length/2 ~ length/2
+                )
             );
 
             var worldImage = new xc.World2DImage (
@@ -346,28 +357,26 @@ function main() {
 
     function hookEvents() {
         //
+        //renderer.run(updateScene, drawScene);
+        // chart.updating.push(onChartUpdating);
+        // chart.updated.push(onChartUpdated);
+        // chart.drawing.push(onChartDrawing);
+        // chart.drew.push(onChartDrew);
+
+        // if (xc.ArrayHelper.contains(chart.updating, onChartUpdating) === true) {
+        //     xc.ArrayHelper.remove(chart.updating, onChartUpdating);
+        // }
+        xc.EventHelper.addEventListener(chart, 'updating', onChartUpdating);
+        xc.EventHelper.addEventListener(chart, 'updated',  onChartUpdated);
+        xc.EventHelper.addEventListener(chart, 'drawing',  onChartDrawing);
+        xc.EventHelper.addEventListener(chart, 'drew',     onChartDrew);
+
         //window.addEventListener('resize', onResize);
 
-        renderer.canvas.addEventListener('mousedown',  onMouseDown);
-        renderer.canvas.addEventListener('mousemove',  onMouseMove);
-        renderer.canvas.addEventListener('mouseup',    onMouseUp);
-        renderer.canvas.addEventListener('wheel',      onWheel);
-    }
-
-    function updateScene() {
-        //
-        state.update();
-
-        world.update();
-        
-        fps.update();
-    }
-
-    function drawScene() {
-        //
-        world.draw();
-
-        drawInfo();
+        canvas.addEventListener('mousedown',  onMouseDown);
+        canvas.addEventListener('mousemove',  onMouseMove);
+        canvas.addEventListener('mouseup',    onMouseUp);
+        canvas.addEventListener('wheel',      onWheel);
     }
 
     function drawInfo() {
@@ -381,6 +390,7 @@ function main() {
 
         info.fps.innerHTML = 'FPS: ' + fps.average;
 
+        var world = chart.world;
         info.status.innerHTML = (
             'World-to-screen scale factor: '+ world.worldToScreenScaleFactor.toFixed(5) + '<br>' +
             'Drawn image count: ' + world.drawnImageCount + '<br>' +
@@ -397,7 +407,7 @@ function main() {
             world.centerPosition.clone() //world.centerPosition
         );
 
-        // Teemp:
+        // Temp:
         /*
         for (var i=0; i<ends.length; i++) {
             //
@@ -435,6 +445,26 @@ function main() {
     //
     // Event listeners.
     //
+    function onChartUpdating(event) {
+        //
+        state.update();
+    }
+
+    function onChartUpdated(event) {
+        //
+        fps.update();
+    }
+
+    function onChartDrawing(event) {
+        //
+        // No contents.
+    }
+
+    function onChartDrew(event) {
+        //
+        drawInfo();
+    }
+
     function onMouseDown(event) {
         //
         switch (event.button) {
@@ -447,7 +477,7 @@ function main() {
                 //     new xc.Vector2D(event.clientX, -event.clientY);
                 lastMouseScreenPosition = new xc.Vector2D (
                     event.clientX,
-                    renderer.canvas.clientHeight - event.clientY
+                    canvas.clientHeight - event.clientY
                 );
 
                 break;
@@ -467,7 +497,7 @@ function main() {
             //
             var mouseScreenPosition = new xc.Vector2D (
                 event.clientX,
-                renderer.canvas.clientHeight - event.clientY
+                canvas.clientHeight - event.clientY
             );
 
             var offset = xc.Vector2D.subtractVectors (
@@ -477,7 +507,7 @@ function main() {
 
             lastMouseScreenPosition = mouseScreenPosition;
 
-            world.move (
+            chart.move (
                 xc.Vector2D.negateVector(offset)
             );
         }
@@ -516,10 +546,10 @@ function main() {
 
         var delta = (event.deltaY < 0) ? 100 : -100;
 
-        world.zoomAt (
+        chart.zoomAt (
             new xc.Vector2D (
                 event.clientX,
-                renderer.canvas.clientHeight - event.clientY
+                canvas.clientHeight - event.clientY
             ),
             delta,
             undefined,

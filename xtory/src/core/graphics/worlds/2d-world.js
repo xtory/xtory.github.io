@@ -5,15 +5,16 @@
 // And screen space follows the viewport's rule, that is, (0, 0) means the lower-
 // left corner, not the upper-left corner.
 //
-import { ArrayHelper }                         from '../../helpers/array-helper';
+import { ArrayHelper }                         from '../../base/helpers/array-helper';
 import { ClearOptions }                        from '../clear-options';
-import { IndexHelper }                         from '../../helpers/index-helper';
+import { Event }                               from '../../base/event';
+import { EventHelper }                         from '../../base/helpers/event-helper';
+import { IndexHelper }                         from '../../base/helpers/index-helper';
 import { MathHelper }                          from '../../math/helpers/math-helper';
 import { Size2D }                              from '../2d-size';
 import { SpriteBatch }                         from '../sprite-batch';
 import { LineSegment2DBatch }                  from '../2d-line-segment-batch';
 import { Vector2D }                            from '../../math/2d-vector';
-import { World2DBoundsChangedEvent }           from './2d-world-bounds-changed-event';
 import { World2DLayerName }                    from './2d-world-layer-name';
 import { World2DStateNormal }                  from './states/2d-world-state-normal';
 import { World2DStateZoomingAtScreenPosition } from './states/2d-world-state-zooming-at-screen-position';
@@ -55,6 +56,8 @@ function World2D(_renderer, _style) {
 
     // Test:
     var _lastCanvasClientSize;
+
+    this.eventListeners = undefined;
     // :Test
 
     try {
@@ -79,7 +82,7 @@ function World2D(_renderer, _style) {
         /*
         this.resize();
         */
-        _lastCanvasClientSize = new Size2D(0, 0);
+        _lastCanvasClientSize = new Size2D(undefined, undefined);
         resize();
         // :Test
 
@@ -87,6 +90,8 @@ function World2D(_renderer, _style) {
         _drawnImageCount = 0;
         _drawnLineSegmentCount = 0;
         _lastDrawnItem = null;
+
+        hookEvents();
 
     } catch (e) {
         //
@@ -215,10 +220,16 @@ function World2D(_renderer, _style) {
             );
         }
         */
-        //onBoundsChanged(false, true);
-        onBoundsChanged (
-            new World2DBoundsChangedEvent(false, true)
-        );
+
+        var eventName = 'boundsChanged';
+        if (EventHelper.checkIfHasEventListeners(_self, eventName) === true) {
+            //
+            var event = new Event(eventName);
+            event.isMoved = false;
+            event.isResized = true;
+
+            EventHelper.dispatchEvent(_self, event);
+        };
         // :Test
     };
 
@@ -272,6 +283,11 @@ function World2D(_renderer, _style) {
             */
             _layers = null;
         }
+    }
+
+    function hookEvents() {
+        //
+        EventHelper.addEventListener(_self, 'boundsChanged', onBoundsChanged);
     }
 
     //
@@ -444,9 +460,16 @@ function World2D(_renderer, _style) {
             );
         }
         */
-        onBoundsChanged (
-            new World2DBoundsChangedEvent(true, false)
-        );
+
+        var eventName = 'boundsChanged';
+        if (EventHelper.checkIfHasEventListeners(_self, eventName) === true) {
+            //
+            var event = new Event(eventName);
+            event.isMoved = true;
+            event.isResized = false;
+
+            EventHelper.dispatchEvent(_self, event);
+        };
         // :Test
     };
 
@@ -556,16 +579,20 @@ function World2D(_renderer, _style) {
             //
             this.BoundsChanged (
                 this,
-                new BoundsChangedEventArgs (
-                    isCenterPositionChanged,
-                    isSizeChanged
-                )
+                new BoundsChangedEventArgs(isMoved, isResized)
             );
         }
         */
-        onBoundsChanged (
-            new World2DBoundsChangedEvent(isMoved, isResized)
-        );
+
+        var eventName = 'boundsChanged';
+        if (EventHelper.checkIfHasEventListeners(_self, eventName) === true) {
+            //
+            var event = new Event(eventName);
+            event.isMoved = isMoved;
+            event.isResized = isResized;
+
+            EventHelper.dispatchEvent(_self, event);
+        };
         // :Test
     };
 

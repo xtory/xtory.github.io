@@ -1,3 +1,15 @@
+// Base.
+export { ArrayHelper }                                from './base/helpers/array-helper';
+export { ComparisonResults }                          from './base/comparison-results';
+export { EventHelper }                                from './base/helpers/event-helper';
+export { Event }                                      from './base/event';
+export { ExceptionHelper }                            from './base/helpers/exception-helper';
+export { Fps }                                        from './base/fps';
+export { IndexHelper }                                from './base/helpers/index-helper';
+export { JSHelper }                                   from './base/helpers/js-helper';
+export { MouseButton }                                from './base/mouse-button';
+export { RandomHelper }                               from './base/helpers/random-helper';
+
 // Cameras.
 export { Camera }                                     from './cameras/camera';
 export { CameraState }                                from './cameras/states/camera-state';
@@ -42,7 +54,6 @@ export { TransformedPositionColorTextureCoordinates } from './graphics/shaders/t
 export { TransformedPositionTextureCoordinates }      from './graphics/shaders/transformed-position-texture-coordinates';
 export { VertexBuffer }                               from './graphics/vertex-buffer';
 export { World2D }                                    from './graphics/worlds/2d-world';
-export { World2DBoundsChangedEvent }                  from './graphics/worlds/2d-world-bounds-changed-event';
 export { World2DImage }                               from './graphics/worlds/2d-world-image';
 export { World2DImageStyle }                          from './graphics/worlds/2d-world-image-style';
 export { World2DItem }                                from './graphics/worlds/2d-world-item';
@@ -53,16 +64,6 @@ export { World2DState }                               from './graphics/worlds/st
 export { World2DStateNormal }                         from './graphics/worlds/states/2d-world-state-normal';
 export { World2DStateZoomingAtScreenPosition }        from './graphics/worlds/states/2d-world-state-zooming-at-screen-position';
 export { World2DStyle }                               from './graphics/worlds/2d-world-style';
-
-// Helpers.
-export { ArrayHelper }                                from './helpers/array-helper';
-export { ComparisonResults }                          from './helpers/comparison-results';
-export { ExceptionHelper }                            from './helpers/exception-helper';
-export { Fps }                                        from './helpers/fps';
-export { IndexHelper }                                from './helpers/index-helper';
-export { JSHelper }                                   from './helpers/js-helper';
-export { MouseButton }                                from './helpers/mouse-button';
-export { RandomHelper }                               from './helpers/random-helper';
 
 // Loaders.
 export { BufferLoader }                               from './loaders/buffer-loader';

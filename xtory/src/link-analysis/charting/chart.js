@@ -6,16 +6,36 @@ import { Layout }     from '../graph-layouts/layout';
 //
 function Chart(_renderer, _style) {
     //
+    var xc = xtory.core;
+
     var _self;
+    var _renderer;
+    var _loader;
+    var _world;
     var _layout;
+
+    // Events.
+    // this.updating = [];
+    // this.updated  = [];
+    // this.drawing  = [];
+    // this.drew     = [];
+    this.eventListeners = {};
 
     try {
         //
         _self = this;
 
+        _renderer = new xc.Renderer();
+
+        _loader = _renderer.loader;
+
         if (_style === undefined) {
             _style = new ChartStyle();
         }
+
+        setUpWorld();
+
+        _renderer.run(update, draw);
 
     } catch (e) {
         //
@@ -29,6 +49,19 @@ function Chart(_renderer, _style) {
     //
     Object.defineProperty(_self, 'renderer', {
         get: function() { return _renderer; }
+    });
+
+    Object.defineProperty(_self, 'world', {
+        //get: function() { return _world; }
+        get: function() {
+            //
+            if (_world === undefined) {
+                //
+                setUpWorld();
+            }
+
+            return _world;
+        }
     });
 
     Object.defineProperty(_self, 'style', {
@@ -59,7 +92,84 @@ function Chart(_renderer, _style) {
 
             return _layout;
         }
-    })
+    });
+
+    //
+    // Private methods.
+    //
+    function setUpWorld() {
+        //
+        var style = new xc.World2DStyle();
+        style.backgroundColor = xc.Colors.WHITE;
+
+        _world = new xc.World2D(_renderer, style);
+    }
+
+    function update() {
+        //
+        // var eventType = 'updating';
+        // if ((eventType in _self.eventListeners) === true) {
+        //     //
+        //     var event = {
+        //         type: eventType
+        //     };
+
+        //     xc.EventHelper.dispatchEvent(_self, event);
+        // }
+
+        var eventName = 'updating';
+        if ((eventName in _self.eventListeners) === true) {
+            //
+            var event = new xc.Event(eventName);
+            xc.EventHelper.dispatchEvent(_self, event);
+        }
+
+        _world.update();
+
+        eventName = 'updated';
+        if ((eventName in _self.eventListeners) === true) {
+            //
+            var event = new xc.Event(eventName);
+            xc.EventHelper.dispatchEvent(_self, event);
+        }
+    }
+
+    function draw() {
+        //
+        var eventName = 'drawing';
+        if ((eventName in _self.eventListeners) === true) {
+            //
+            var event = new xc.Event(eventName);
+            xc.EventHelper.dispatchEvent(_self, event);
+        }
+
+        _world.draw();
+
+        eventName = 'drew';
+        if ((eventName in _self.eventListeners) === true) {
+            //
+            var event = new xc.Event(eventName);
+            xc.EventHelper.dispatchEvent(_self, event);
+        }
+    }
+
+    //
+    // Privileged methods.
+    //
+    this.move = function(screenPositionOffset) {
+        //
+        _world.move(screenPositionOffset);
+    };
+
+    this.zoomAt = function(screenPosition, delta, updatingCallback, finishingCallback) {
+        //
+        _world.zoomAt (
+            screenPosition,
+            delta,
+            updatingCallback,
+            finishingCallback
+        );
+    };
 }
 
 export { Chart };
