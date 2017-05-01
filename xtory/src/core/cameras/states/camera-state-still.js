@@ -1,5 +1,5 @@
 import { CameraState } from './camera-state';
-import { InheritanceHelper } from '../../base/helpers/inheritance-helper';
+import { InheritanceHelper } from '../../bases/helpers/inheritance-helper';
 
 //
 // Constructor.

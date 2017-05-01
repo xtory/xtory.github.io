@@ -1,7 +1,7 @@
 import { CameraState }       from './camera-state';
 import { CameraStateStill }  from './camera-state-still';
 import { EaseMode }          from '../../time/ease-mode';
-import { InheritanceHelper } from '../../base/helpers/inheritance-helper';
+import { InheritanceHelper } from '../../bases/helpers/inheritance-helper';
 import { SineEase }          from '../../time/sine-ease';
 
 //

@@ -5,11 +5,11 @@
 // And screen space follows the viewport's rule, that is, (0, 0) means the lower-
 // left corner, not the upper-left corner.
 //
-import { ArrayHelper }                         from '../../base/helpers/array-helper';
+import { ArrayHelper }                         from '../../bases/helpers/array-helper';
 import { ClearOptions }                        from '../clear-options';
-import { Event }                               from '../../base/event';
-import { EventHelper }                         from '../../base/helpers/event-helper';
-import { IndexHelper }                         from '../../base/helpers/index-helper';
+import { Event }                               from '../../bases/event';
+import { EventHelper }                         from '../../bases/helpers/event-helper';
+import { IndexHelper }                         from '../../bases/helpers/index-helper';
 import { MathHelper }                          from '../../math/helpers/math-helper';
 import { Size2D }                              from '../2d-size';
 import { SpriteBatch }                         from '../sprite-batch';

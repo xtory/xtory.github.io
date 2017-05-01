@@ -1,5 +1,5 @@
 import { EaseMode }           from '../../../time/ease-mode';
-import { InheritanceHelper }  from '../../../base/helpers/inheritance-helper';
+import { InheritanceHelper }  from '../../../bases/helpers/inheritance-helper';
 import { SineEase }           from '../../../time/sine-ease';
 import { Size2D }             from '../../2d-size';
 import { Vector2D }           from '../../../math/2d-vector';
@@ -91,12 +91,10 @@ World2DStateZoomingAtScreenPosition.prototype.update = function() {
     );
 
     var canvasCenterPosition = // in world space.
-        this.world.centerPosition; //base.Canvas.CenterPosition;
+        this.world.centerPosition;
 
-    //var p = base.Canvas.ToWorldSpace(this.screenPosition);
     var p = this.world.convertPositionFromScreenToWorldSpace(this.screenPosition);
 
-    //base.Canvas.SetBounds(canvasCenterPosition, size);
     this.world.setBounds(canvasCenterPosition, size);
 
     var positionOffset = Vector2D.subtractVectors (

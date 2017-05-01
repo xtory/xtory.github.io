@@ -1,4 +1,4 @@
-import { InheritanceHelper }  from '../../base/helpers/inheritance-helper';
+import { InheritanceHelper }  from '../../bases/helpers/inheritance-helper';
 import { Size2D }             from '../2d-size';
 import { Sprite }             from '../sprite';
 import { Vector2D }           from '../../math/2d-vector';
@@ -87,7 +87,7 @@ function World2DImage (
                 _size = value;
 
                 // Calculates the size in screen space as well.
-                _screenSize = //_size * base.Canvas.WorldToScreenScaleFactor;
+                _screenSize =
                     Size2D.multiplySizeByScalar(_size, _world.worldToScreenScaleFactor);
 
                 // Test:

@@ -1,14 +1,14 @@
-// Base.
-export { ArrayHelper }                                from './base/helpers/array-helper';
-export { ComparisonResults }                          from './base/comparison-results';
-export { EventHelper }                                from './base/helpers/event-helper';
-export { Event }                                      from './base/event';
-export { ExceptionHelper }                            from './base/helpers/exception-helper';
-export { Fps }                                        from './base/fps';
-export { IndexHelper }                                from './base/helpers/index-helper';
-export { InheritanceHelper }                          from './base/helpers/inheritance-helper';
-export { MouseButton }                                from './base/mouse-button';
-export { RandomHelper }                               from './base/helpers/random-helper';
+// Bases.
+export { ArrayHelper }                                from './bases/helpers/array-helper';
+export { ComparisonResults }                          from './bases/comparison-results';
+export { EventHelper }                                from './bases/helpers/event-helper';
+export { Event }                                      from './bases/event';
+export { ExceptionHelper }                            from './bases/helpers/exception-helper';
+export { Fps }                                        from './bases/fps';
+export { IndexHelper }                                from './bases/helpers/index-helper';
+export { InheritanceHelper }                          from './bases/helpers/inheritance-helper';
+export { MouseButton }                                from './bases/mouse-button';
+export { RandomHelper }                               from './bases/helpers/random-helper';
 
 // Cameras.
 export { Camera }                                     from './cameras/camera';

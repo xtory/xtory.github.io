@@ -1,4 +1,4 @@
-import { InheritanceHelper }       from '../../base/helpers/inheritance-helper';
+import { InheritanceHelper }       from '../../bases/helpers/inheritance-helper';
 import { LineSegment2D }           from '../2d-line-segment';
 import { LineSegment2DHelper }     from '../helpers/2d-line-segment-helper';
 import { Vector2D }                from '../../math/2d-vector';

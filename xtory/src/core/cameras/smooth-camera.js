@@ -2,7 +2,7 @@ import { Camera }             from './camera';
 import { CameraState }        from './states/camera-state';
 import { CameraStateStill }   from './states/camera-state-still';
 import { CameraStateZooming } from './states/camera-state-zooming';
-import { InheritanceHelper }  from '../base/helpers/inheritance-helper';
+import { InheritanceHelper }  from '../bases/helpers/inheritance-helper';
 
 //
 // Constructor.
