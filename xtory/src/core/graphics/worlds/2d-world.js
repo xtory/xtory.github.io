@@ -8,7 +8,7 @@
 import { ArrayHelper }                         from '../../bases/helpers/array-helper';
 import { ClearOptions }                        from '../clear-options';
 import { Event }                               from '../../bases/event';
-import { EventHelper }                         from '../../bases/helpers/event-helper';
+import { EventTargetHelper }                   from '../../bases/helpers/event-target-helper';
 import { IndexHelper }                         from '../../bases/helpers/index-helper';
 import { MathHelper }                          from '../../math/helpers/math-helper';
 import { Size2D }                              from '../2d-size';
@@ -57,7 +57,7 @@ function World2D(_renderer, _style) {
     // Test:
     var _lastCanvasClientSize;
 
-    this.eventListeners = undefined;
+    this.elGroups = {}; // elGroups = event-listener groups.
     // :Test
 
     try {
@@ -222,13 +222,13 @@ function World2D(_renderer, _style) {
         */
 
         var eventName = 'boundsChanged';
-        if (EventHelper.checkIfHasEventListeners(_self, eventName) === true) {
+        if (EventTargetHelper.checkIfHasEventListeners(_self, eventName) === true) {
             //
             var event = new Event(eventName);
             event.isMoved = false;
             event.isResized = true;
 
-            EventHelper.dispatchEvent(_self, event);
+            EventTargetHelper.dispatchEvent(_self, event);
         };
         // :Test
     };
@@ -287,7 +287,7 @@ function World2D(_renderer, _style) {
 
     function hookEvents() {
         //
-        EventHelper.addEventListener(_self, 'boundsChanged', onBoundsChanged);
+        EventTargetHelper.addEventListener(_self, 'boundsChanged', onBoundsChanged);
     }
 
     //
@@ -462,13 +462,13 @@ function World2D(_renderer, _style) {
         */
 
         var eventName = 'boundsChanged';
-        if (EventHelper.checkIfHasEventListeners(_self, eventName) === true) {
+        if (EventTargetHelper.checkIfHasEventListeners(_self, eventName) === true) {
             //
             var event = new Event(eventName);
             event.isMoved = true;
             event.isResized = false;
 
-            EventHelper.dispatchEvent(_self, event);
+            EventTargetHelper.dispatchEvent(_self, event);
         };
         // :Test
     };
@@ -585,13 +585,13 @@ function World2D(_renderer, _style) {
         */
 
         var eventName = 'boundsChanged';
-        if (EventHelper.checkIfHasEventListeners(_self, eventName) === true) {
+        if (EventTargetHelper.checkIfHasEventListeners(_self, eventName) === true) {
             //
             var event = new Event(eventName);
             event.isMoved = isMoved;
             event.isResized = isResized;
 
-            EventHelper.dispatchEvent(_self, event);
+            EventTargetHelper.dispatchEvent(_self, event);
         };
         // :Test
     };

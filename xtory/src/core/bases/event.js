@@ -1,11 +1,11 @@
 // Note:
-// See the note in the beginning of EventHelper constructor function.
+// See the note in the beginning of EventTargetHelper constructor function.
 
 //
 // Constructor.
 //
 function Event(_name) {
-    this.target = undefined; // which will be assigned in EventHelper.dispatchEvent()
+    this.target = undefined; // which will be assigned in EventTargetHelper.dispatchEvent()
     this.name = _name;
 }
 

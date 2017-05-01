@@ -107,49 +107,53 @@ function Chart(_renderer, _style) {
 
     function update() {
         //
-        // var eventType = 'updating';
-        // if ((eventType in _self.eventListeners) === true) {
-        //     //
-        //     var event = {
-        //         type: eventType
-        //     };
-
-        //     xc.EventHelper.dispatchEvent(_self, event);
-        // }
-
         var eventName = 'updating';
-        if ((eventName in _self.eventListeners) === true) {
+        if (xc.EventTargetHelper.checkIfHasEventListeners (
+                _self,
+                eventName
+            ) === true) {
             //
-            var event = new xc.Event(eventName);
-            xc.EventHelper.dispatchEvent(_self, event);
+            xc.EventTargetHelper.dispatchEvent (
+                _self,
+                new xc.Event(eventName)
+            )
         }
-
+        
         _world.update();
 
         eventName = 'updated';
-        if ((eventName in _self.eventListeners) === true) {
+        if (xc.EventTargetHelper.checkIfHasEventListeners (
+                _self,
+                eventName
+            ) === true) {
             //
             var event = new xc.Event(eventName);
-            xc.EventHelper.dispatchEvent(_self, event);
+            xc.EventTargetHelper.dispatchEvent(_self, event);
         }
     }
 
     function draw() {
         //
         var eventName = 'drawing';
-        if ((eventName in _self.eventListeners) === true) {
+        if (xc.EventTargetHelper.checkIfHasEventListeners (
+                _self,
+                eventName
+            ) === true) {
             //
             var event = new xc.Event(eventName);
-            xc.EventHelper.dispatchEvent(_self, event);
+            xc.EventTargetHelper.dispatchEvent(_self, event);
         }
 
         _world.draw();
 
         eventName = 'drew';
-        if ((eventName in _self.eventListeners) === true) {
+        if (xc.EventTargetHelper.checkIfHasEventListeners (
+                _self,
+                eventName
+            ) === true) {
             //
             var event = new xc.Event(eventName);
-            xc.EventHelper.dispatchEvent(_self, event);
+            xc.EventTargetHelper.dispatchEvent(_self, event);
         }
     }
 

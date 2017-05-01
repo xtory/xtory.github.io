@@ -1,7 +1,7 @@
 // Bases.
 export { ArrayHelper }                                from './bases/helpers/array-helper';
 export { ComparisonResults }                          from './bases/comparison-results';
-export { EventHelper }                                from './bases/helpers/event-helper';
+export { EventTargetHelper }                          from './bases/helpers/event-target-helper';
 export { Event }                                      from './bases/event';
 export { ExceptionHelper }                            from './bases/helpers/exception-helper';
 export { Fps }                                        from './bases/fps';

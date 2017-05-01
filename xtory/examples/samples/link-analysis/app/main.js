@@ -366,10 +366,10 @@ function main() {
         // if (xc.ArrayHelper.contains(chart.updating, onChartUpdating) === true) {
         //     xc.ArrayHelper.remove(chart.updating, onChartUpdating);
         // }
-        xc.EventHelper.addEventListener(chart, 'updating', onChartUpdating);
-        xc.EventHelper.addEventListener(chart, 'updated',  onChartUpdated);
-        xc.EventHelper.addEventListener(chart, 'drawing',  onChartDrawing);
-        xc.EventHelper.addEventListener(chart, 'drew',     onChartDrew);
+        xc.EventTargetHelper.addEventListener(chart, 'updating', onChartUpdating);
+        xc.EventTargetHelper.addEventListener(chart, 'updated',  onChartUpdated);
+        xc.EventTargetHelper.addEventListener(chart, 'drawing',  onChartDrawing);
+        xc.EventTargetHelper.addEventListener(chart, 'drew',     onChartDrew);
 
         //window.addEventListener('resize', onResize);
 
