@@ -72,7 +72,7 @@
             "name": "tests/io",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/xtory/examples/tests/io/index.html",
+            "file": "${workspaceRoot}/xtory/tests/more/io/index.html",
             "runtimeArgs": [
                 "--allow-file-access-from-files"
             ]
@@ -80,7 +80,7 @@
             "name": "tests/no-subject",
             "type": "chrome",
             "request": "launch",
-            "file": "${workspaceRoot}/xtory/examples/tests/no-subject/index.html",
+            "file": "${workspaceRoot}/xtory/tests/more/no-subject/index.html",
             "runtimeArgs": [
                 "--allow-file-access-from-files"
             ]

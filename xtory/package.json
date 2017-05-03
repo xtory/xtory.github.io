@@ -8,7 +8,8 @@
   },
   "scripts": {
     "build": "rollup -c ./src/core/rollup.config.js && rollup -c ./src/link-analysis/rollup.config.js",
-    "build-all": "mkdirp ./dist/min && rollup -c ./src/core/rollup.config.js && uglifyjs ./dist/xtory.core.js -cm > ./dist/min/xtory.core.min.js && rollup -c ./src/link-analysis/rollup.config.js && uglifyjs ./dist/xtory.linkAnalysis.js -cm > ./dist/min/xtory.linkAnalysis.min.js"
+    "build-all": "mkdirp ./dist/min/ && rollup -c ./src/core/rollup.config.js && uglifyjs ./dist/xtory.core.js -cm > ./dist/min/xtory.core.min.js && rollup -c ./src/link-analysis/rollup.config.js && uglifyjs ./dist/xtory.linkAnalysis.js -cm > ./dist/min/xtory.linkAnalysis.min.js",
+    "test": "mkdirp ./tests/unit/dist/ && rollup -c ./tests/unit/rollup.config.js && mocha --recursive ./tests/unit/src/"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,7 @@
   "homepage": "https://github.com/xtory/xtory.github.io#readme",
   "devDependencies": {
     "mkdirp": "^0.5.1",
+    "mocha": "^3.3.0",
     "rollup": "^0.41.6",
     "uglify": "^0.1.5"
   }

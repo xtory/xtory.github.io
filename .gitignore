@@ -1,3 +1,4 @@
 /xtory/node_modules
+/xtory/dist/min
+/xtory/tests/unit/dist
 /xtory/npm-debug.log
-/xtory/dist/min/*
