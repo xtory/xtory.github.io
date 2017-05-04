@@ -1,12 +1,12 @@
 //import babel from 'rollup-plugin-babel';
 
 export default {
-    entry: './src/link-analysis/entry.js',
+    entry: './src/core/entry.js',
     targets: [{
-		format: 'iife',
-		moduleName: 'xtory.linkAnalysis',
-		dest: './dist/xtory.linkAnalysis.js',
-	}],
+		format: 'cjs',
+		moduleName: 'xtory.core',
+		dest: './tests/unit/dist/xtory.core.cjs.js'
+	}]
     // plugins: [
     //     babel ({
     //         exclude: 'node_modules/**'

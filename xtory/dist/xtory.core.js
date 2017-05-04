@@ -37,6 +37,10 @@ ArrayHelper.remove = function(array, item) {
     return false;
 };
 
+// Note:
+// [References]
+// Array.prototype.sort()
+
 //
 // Constructor.
 //
@@ -7707,7 +7711,7 @@ function Plane() {
     // No contents.
 }
 
-// Bases.
+// Base.
 
 exports.ArrayHelper = ArrayHelper;
 exports.ComparisonResults = ComparisonResults;

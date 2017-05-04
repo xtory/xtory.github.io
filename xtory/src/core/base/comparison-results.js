@@ -1,3 +1,7 @@
+// Note:
+// [References]
+// Array.prototype.sort()
+
 //
 // Constructor.
 //

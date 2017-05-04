@@ -1,5 +1,5 @@
 import { EaseMode }           from '../../../time/ease-mode';
-import { InheritanceHelper }  from '../../../bases/helpers/inheritance-helper';
+import { InheritanceHelper }  from '../../../base/helpers/inheritance-helper';
 import { SineEase }           from '../../../time/sine-ease';
 import { Size2D }             from '../../2d-size';
 import { Vector2D }           from '../../../math/2d-vector';
