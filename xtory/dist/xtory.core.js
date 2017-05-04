@@ -3776,161 +3776,6 @@ Ndc.MAX_Y =  1; // Top.
 Ndc.MIN_Z = -1; // Near.
 Ndc.MAX_Z =  1; // Far.
 
-//
-// Constructor.
-//
-function PositionColor() {
-    // No contents.
-}
-
-//
-// Static constants.
-//
-PositionColor.VERTEX_SHADER_SOURCE = [
-    //
-    'precision highp float;', // which is the default vertex shader precision.
-
-    'attribute vec3 vertexPosition;',
-    'attribute vec4 vertexColor;',
-
-    'uniform mat4 transform;',
-
-    'varying vec4 _color;',
-
-    'void main() {',
-        //
-        'gl_Position = transform * vec4(vertexPosition, 1.0);',
-        
-        '_color = vertexColor;',
-    '}'
-
-].join('\n');
-
-PositionColor.FRAGMENT_SHADER_SOURCE = [
-    //
-    'precision mediump float;', // which is the recommended fragment shader precision.
-
-    'varying vec4 _color;',
-
-    'void main() {',
-        'gl_FragColor = _color;',
-    '}'
-
-].join('\n');
-
-//
-// Constructor.
-//
-function PositionOnly() {
-    // No contents.
-}
-
-//
-// Static constants.
-//
-PositionOnly.VERTEX_SHADER_SOURCE = [
-    //
-    'precision highp float;', // which is the default vertex shader precision.
-
-    'attribute vec3 vertexPosition;',
-
-    'uniform mat4 transform;',
-
-    'void main() {',
-        'gl_Position = transform * vec4(vertexPosition, 1.0);',
-    '}'
-   
-].join('\n');
-
-PositionOnly.FRAGMENT_SHADER_SOURCE = [
-    //
-    'precision mediump float;', // which is the recommended fragment shader precision.
-
-    'void main() {',
-        'gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);',
-    '}'
-
-].join('\n');
-
-//
-// Constructor.
-//
-function PositionTextureCoordinates() {
-    // No contents.
-}
-
-//
-// Static constants.
-//
-PositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
-    //
-    'precision highp float;', // which is the default vertex shader precision.
-
-    'attribute vec3 vertexPosition;',
-    'attribute vec2 vertexTextureCoordinates;',
-
-    'uniform mat4 transform;',
-
-    'varying vec2 _textureCoordinates;',
-
-    'void main() {',
-        //
-        'gl_Position = transform * vec4(vertexPosition, 1.0);',
-
-        '_textureCoordinates = vertexTextureCoordinates;',
-    '}'
-
-].join('\n');
-
-PositionTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
-    //
-   'precision mediump float;', // which is the recommended fragment shader precision.
-
-   'uniform sampler2D sampler;',
-
-   'varying vec2 _textureCoordinates;',
-
-   'void main() {',
-       'gl_FragColor = texture2D(sampler, _textureCoordinates);',
-   '}'
-   
-].join('\n');
-
-//
-// Constructor.
-//
-function Program(_programLoader) {
-    //
-    var _self;
-    var _gl;
-    var _webGLProgram;
-
-    try {
-        //
-        _self = this;
-        _gl = _programLoader.loader.renderer.gl;
-
-        _webGLProgram = _gl.createProgram();
-
-    } catch (e) {
-        //
-        console.log('xtory.core.Program: ' + e);
-
-        throw e;
-    }
-
-    //
-    // Properties.
-    //
-    Object.defineProperty(_self, 'programLoader', {
-        get: function() { return _programLoader; }
-    });
-
-    Object.defineProperty(_self, 'webGLProgram', {
-        get: function() { return _webGLProgram; }
-    });
-}
-
 // Note:
 // GDI+'s Rectangle and WPF's Rect are both (left, top, width, height). But cuz
 // OpenGL's texture coordinates is from lower-left (0, 0) to upper-right (1, 1),
@@ -4091,6 +3936,41 @@ function BufferLoader(_loader) {
     this.createIndexBuffer = function() {
         return new IndexBuffer(_self);
     };
+}
+
+//
+// Constructor.
+//
+function Program(_programLoader) {
+    //
+    var _self;
+    var _gl;
+    var _webGLProgram;
+
+    try {
+        //
+        _self = this;
+        _gl = _programLoader.loader.renderer.gl;
+
+        _webGLProgram = _gl.createProgram();
+
+    } catch (e) {
+        //
+        console.log('xtory.core.Program: ' + e);
+
+        throw e;
+    }
+
+    //
+    // Properties.
+    //
+    Object.defineProperty(_self, 'programLoader', {
+        get: function() { return _programLoader; }
+    });
+
+    Object.defineProperty(_self, 'webGLProgram', {
+        get: function() { return _webGLProgram; }
+    });
 }
 
 //
@@ -5735,134 +5615,6 @@ TextureCoordinateHelper.toST = function(u, v) {
         t: 1 - v
     };
 };
-
-//
-// Constructor.
-//
-function TransformedPositionColor() {
-    // No contents.
-}
-
-//
-// Static constants.
-//
-TransformedPositionColor.VERTEX_SHADER_SOURCE = [
-    //
-    'precision highp float;', // which is the default vertex shader precision.
-
-    'attribute vec4 vertexPosition;',
-    'attribute vec4 vertexColor;',
-
-    'varying vec4 _color;',
-
-    'void main() {',
-        //
-        'gl_Position = vertexPosition;',
-
-        '_color = vertexColor;',
-    '}'
-
-].join('\n');
-
-TransformedPositionColor.FRAGMENT_SHADER_SOURCE = [
-    //
-    'precision mediump float;', // which is the recommended fragment shader precision.
-
-    'varying vec4 _color;',
-
-    'void main() {',
-        'gl_FragColor = _color;',
-    '}'
-   
-].join('\n');
-
-//
-// Constructor.
-//
-function TransformedPositionColorTextureCoordinates() {
-    // No contents.
-}
-
-//
-// Static constants.
-//
-TransformedPositionColorTextureCoordinates.VERTEX_SHADER_SOURCE = [
-    //
-    'precision highp float;', // which is the default vertex shader precision.
-
-    'attribute vec4 vertexPosition;',
-    'attribute vec4 vertexColor;',
-    'attribute vec2 vertexTextureCoordinates;',
-
-    'varying vec4 _color;',
-    'varying vec2 _textureCoordinates;',
-
-    'void main() {',
-        //
-        'gl_Position = vertexPosition;',
-       
-        '_color = vertexColor;',
-        '_textureCoordinates = vertexTextureCoordinates;',
-    '}'
-
-].join('\n');
-
-TransformedPositionColorTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
-    //
-    'precision mediump float;', // which is the recommended fragment shader precision.
-
-    'uniform sampler2D sampler;',
-
-    'varying vec4 _color;',
-    'varying vec2 _textureCoordinates;',
-
-    'void main() {',
-        'gl_FragColor = _color * texture2D(sampler, _textureCoordinates);',
-    '}'
-   
-].join('\n');
-
-//
-// Constructor.
-//
-function TransformedPositionTextureCoordinates() {
-    // No contents.
-}
-
-//
-// Static constants.
-//
-TransformedPositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
-    //
-    'precision highp float;', // which is the default vertex shader precision.
-
-    'attribute vec4 vertexPosition;',
-    'attribute vec2 vertexTextureCoordinates;',
-
-    'varying vec2 _textureCoordinates;',
-
-    'void main() {',
-        //
-        'gl_Position = vertexPosition;',
-
-        '_textureCoordinates = vertexTextureCoordinates;',
-    '}'
-
-].join('\n');
-
-TransformedPositionTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
-    //
-    'precision mediump float;', // which is the recommended fragment shader precision.
-
-    'uniform sampler2D sampler;',
-
-    'varying vec2 _textureCoordinates;',
-
-    'void main() {',
-        'gl_FragColor = texture2D(sampler, _textureCoordinates);',
-    '}'
-   
-].join('\n');
 
 //
 // Constructor.
@@ -7711,6 +7463,254 @@ function Plane() {
     // No contents.
 }
 
+//
+// Constructor.
+//
+function PositionColor() {
+    // No contents.
+}
+
+//
+// Static constants.
+//
+PositionColor.VERTEX_SHADER_SOURCE = [
+    //
+    'precision highp float;', // which is the default vertex shader precision.
+
+    'attribute vec3 vertexPosition;',
+    'attribute vec4 vertexColor;',
+
+    'uniform mat4 transform;',
+
+    'varying vec4 _color;',
+
+    'void main() {',
+        //
+        'gl_Position = transform * vec4(vertexPosition, 1.0);',
+        
+        '_color = vertexColor;',
+    '}'
+
+].join('\n');
+
+PositionColor.FRAGMENT_SHADER_SOURCE = [
+    //
+    'precision mediump float;', // which is the recommended fragment shader precision.
+
+    'varying vec4 _color;',
+
+    'void main() {',
+        'gl_FragColor = _color;',
+    '}'
+
+].join('\n');
+
+//
+// Constructor.
+//
+function PositionOnly() {
+    // No contents.
+}
+
+//
+// Static constants.
+//
+PositionOnly.VERTEX_SHADER_SOURCE = [
+    //
+    'precision highp float;', // which is the default vertex shader precision.
+
+    'attribute vec3 vertexPosition;',
+
+    'uniform mat4 transform;',
+
+    'void main() {',
+        'gl_Position = transform * vec4(vertexPosition, 1.0);',
+    '}'
+   
+].join('\n');
+
+PositionOnly.FRAGMENT_SHADER_SOURCE = [
+    //
+    'precision mediump float;', // which is the recommended fragment shader precision.
+
+    'void main() {',
+        'gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);',
+    '}'
+
+].join('\n');
+
+//
+// Constructor.
+//
+function PositionTextureCoordinates() {
+    // No contents.
+}
+
+//
+// Static constants.
+//
+PositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
+    //
+    'precision highp float;', // which is the default vertex shader precision.
+
+    'attribute vec3 vertexPosition;',
+    'attribute vec2 vertexTextureCoordinates;',
+
+    'uniform mat4 transform;',
+
+    'varying vec2 _textureCoordinates;',
+
+    'void main() {',
+        //
+        'gl_Position = transform * vec4(vertexPosition, 1.0);',
+
+        '_textureCoordinates = vertexTextureCoordinates;',
+    '}'
+
+].join('\n');
+
+PositionTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
+    //
+   'precision mediump float;', // which is the recommended fragment shader precision.
+
+   'uniform sampler2D sampler;',
+
+   'varying vec2 _textureCoordinates;',
+
+   'void main() {',
+       'gl_FragColor = texture2D(sampler, _textureCoordinates);',
+   '}'
+   
+].join('\n');
+
+//
+// Constructor.
+//
+function TransformedPositionColor() {
+    // No contents.
+}
+
+//
+// Static constants.
+//
+TransformedPositionColor.VERTEX_SHADER_SOURCE = [
+    //
+    'precision highp float;', // which is the default vertex shader precision.
+
+    'attribute vec4 vertexPosition;',
+    'attribute vec4 vertexColor;',
+
+    'varying vec4 _color;',
+
+    'void main() {',
+        //
+        'gl_Position = vertexPosition;',
+
+        '_color = vertexColor;',
+    '}'
+
+].join('\n');
+
+TransformedPositionColor.FRAGMENT_SHADER_SOURCE = [
+    //
+    'precision mediump float;', // which is the recommended fragment shader precision.
+
+    'varying vec4 _color;',
+
+    'void main() {',
+        'gl_FragColor = _color;',
+    '}'
+   
+].join('\n');
+
+//
+// Constructor.
+//
+function TransformedPositionColorTextureCoordinates() {
+    // No contents.
+}
+
+//
+// Static constants.
+//
+TransformedPositionColorTextureCoordinates.VERTEX_SHADER_SOURCE = [
+    //
+    'precision highp float;', // which is the default vertex shader precision.
+
+    'attribute vec4 vertexPosition;',
+    'attribute vec4 vertexColor;',
+    'attribute vec2 vertexTextureCoordinates;',
+
+    'varying vec4 _color;',
+    'varying vec2 _textureCoordinates;',
+
+    'void main() {',
+        //
+        'gl_Position = vertexPosition;',
+       
+        '_color = vertexColor;',
+        '_textureCoordinates = vertexTextureCoordinates;',
+    '}'
+
+].join('\n');
+
+TransformedPositionColorTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
+    //
+    'precision mediump float;', // which is the recommended fragment shader precision.
+
+    'uniform sampler2D sampler;',
+
+    'varying vec4 _color;',
+    'varying vec2 _textureCoordinates;',
+
+    'void main() {',
+        'gl_FragColor = _color * texture2D(sampler, _textureCoordinates);',
+    '}'
+   
+].join('\n');
+
+//
+// Constructor.
+//
+function TransformedPositionTextureCoordinates() {
+    // No contents.
+}
+
+//
+// Static constants.
+//
+TransformedPositionTextureCoordinates.VERTEX_SHADER_SOURCE = [
+    //
+    'precision highp float;', // which is the default vertex shader precision.
+
+    'attribute vec4 vertexPosition;',
+    'attribute vec2 vertexTextureCoordinates;',
+
+    'varying vec2 _textureCoordinates;',
+
+    'void main() {',
+        //
+        'gl_Position = vertexPosition;',
+
+        '_textureCoordinates = vertexTextureCoordinates;',
+    '}'
+
+].join('\n');
+
+TransformedPositionTextureCoordinates.FRAGMENT_SHADER_SOURCE = [
+    //
+    'precision mediump float;', // which is the recommended fragment shader precision.
+
+    'uniform sampler2D sampler;',
+
+    'varying vec2 _textureCoordinates;',
+
+    'void main() {',
+        'gl_FragColor = texture2D(sampler, _textureCoordinates);',
+    '}'
+   
+].join('\n');
+
 // Base.
 
 exports.ArrayHelper = ArrayHelper;
@@ -7740,16 +7740,11 @@ exports.LineSegment2DBatch = LineSegment2DBatch;
 exports.LineSegment2DBatchStyle = LineSegment2DBatchStyle;
 exports.LineSegment2DHelper = LineSegment2DHelper;
 exports.Ndc = Ndc;
-exports.PositionColor = PositionColor;
-exports.PositionOnly = PositionOnly;
-exports.PositionTextureCoordinates = PositionTextureCoordinates;
 exports.PrimitiveType = PrimitiveType;
-exports.Program = Program;
 exports.Rect = Rect;
 exports.Renderer = Renderer;
 exports.RendererStyle = RendererStyle;
 exports.ScreenCoordinateHelper = ScreenCoordinateHelper;
-exports.ShaderType = ShaderType;
 exports.Size2D = Size2D;
 exports.Size3D = Size3D;
 exports.Sprite = Sprite;
@@ -7758,9 +7753,6 @@ exports.SpriteBatchStyle = SpriteBatchStyle;
 exports.SpriteFlushingOptions = SpriteFlushingOptions;
 exports.Texture2D = Texture2D;
 exports.TextureCoordinateHelper = TextureCoordinateHelper;
-exports.TransformedPositionColor = TransformedPositionColor;
-exports.TransformedPositionColorTextureCoordinates = TransformedPositionColorTextureCoordinates;
-exports.TransformedPositionTextureCoordinates = TransformedPositionTextureCoordinates;
 exports.VertexBuffer = VertexBuffer;
 exports.World2D = World2D;
 exports.World2DImage = World2DImage;
@@ -7788,6 +7780,14 @@ exports.CartesianAxis = CartesianAxis;
 exports.Plane = Plane;
 exports.Quaternion = Quaternion;
 exports.ViewFrustum = ViewFrustum;
+exports.PositionColor = PositionColor;
+exports.PositionOnly = PositionOnly;
+exports.PositionTextureCoordinates = PositionTextureCoordinates;
+exports.Program = Program;
+exports.ShaderType = ShaderType;
+exports.TransformedPositionColor = TransformedPositionColor;
+exports.TransformedPositionColorTextureCoordinates = TransformedPositionColorTextureCoordinates;
+exports.TransformedPositionTextureCoordinates = TransformedPositionTextureCoordinates;
 exports.EaseMode = EaseMode;
 exports.SineEase = SineEase;
 exports.Stopwatch = Stopwatch;

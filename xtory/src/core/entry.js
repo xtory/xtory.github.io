@@ -30,16 +30,11 @@ export { LineSegment2DBatch }                         from './graphics/2d-line-s
 export { LineSegment2DBatchStyle }                    from './graphics/2d-line-segment-batch-style';
 export { LineSegment2DHelper }                        from './graphics/helpers/2d-line-segment-helper';
 export { Ndc }                                        from './graphics/ndc';
-export { PositionColor }                              from './graphics/shaders/position-color';
-export { PositionOnly }                               from './graphics/shaders/position-only';
-export { PositionTextureCoordinates }                 from './graphics/shaders/position-texture-coordinates';
 export { PrimitiveType }                              from './graphics/primitive-type';
-export { Program }                                    from './graphics/shaders/program';
 export { Rect }                                       from './graphics/rect';
 export { Renderer }                                   from './graphics/renderer';
 export { RendererStyle }                              from './graphics/renderer-style';
 export { ScreenCoordinateHelper }                     from './graphics/helpers/screen-coordinate-helper';
-export { ShaderType }                                 from './graphics/shaders/shader-type';
 export { Size2D }                                     from './graphics/2d-size';
 export { Size3D }                                     from './graphics/3d-size';
 export { Sprite }                                     from './graphics/sprite';
@@ -48,9 +43,6 @@ export { SpriteBatchStyle }                           from './graphics/sprite-ba
 export { SpriteFlushingOptions }                      from './graphics/sprite-flushing-options';
 export { Texture2D }                                  from './graphics/2d-texture';
 export { TextureCoordinateHelper }                    from './graphics/helpers/texture-coordinate-helper';
-export { TransformedPositionColor }                   from './graphics/shaders/transformed-position-color';
-export { TransformedPositionColorTextureCoordinates } from './graphics/shaders/transformed-position-color-texture-coordinates';
-export { TransformedPositionTextureCoordinates }      from './graphics/shaders/transformed-position-texture-coordinates';
 export { VertexBuffer }                               from './graphics/vertex-buffer';
 export { World2D }                                    from './graphics/worlds/2d-world';
 export { World2DImage }                               from './graphics/worlds/2d-world-image';
@@ -84,6 +76,16 @@ export { CartesianAxis }                              from './math/cartesian-axi
 export { Plane }                                      from './math/plane';
 export { Quaternion }                                 from './math/quaternion';
 export { ViewFrustum }                                from './math/view-frustum';
+
+// Shaders.
+export { PositionColor }                              from './shaders/position-color';
+export { PositionOnly }                               from './shaders/position-only';
+export { PositionTextureCoordinates }                 from './shaders/position-texture-coordinates';
+export { Program }                                    from './shaders/program';
+export { ShaderType }                                 from './shaders/shader-type';
+export { TransformedPositionColor }                   from './shaders/transformed-position-color';
+export { TransformedPositionColorTextureCoordinates } from './shaders/transformed-position-color-texture-coordinates';
+export { TransformedPositionTextureCoordinates }      from './shaders/transformed-position-texture-coordinates';
 
 // Time.
 export { EaseMode }                                   from './time/ease-mode';

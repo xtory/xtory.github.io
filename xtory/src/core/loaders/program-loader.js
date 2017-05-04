@@ -1,5 +1,5 @@
-import { Program }    from '../graphics/shaders/program';
-import { ShaderType } from '../graphics/shaders/shader-type';
+import { Program }    from '../shaders/program';
+import { ShaderType } from '../shaders/shader-type';
 
 //
 // Constructor.
