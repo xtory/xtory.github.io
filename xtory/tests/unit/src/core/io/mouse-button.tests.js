@@ -12,7 +12,7 @@ describe('xtory.core.io.MouseButton', function() {
         // 0: Main button pressed, usually the left button or the un-initialized
         // state.
         assert(xc.MouseButton.LEFT === 0);
-
+        
         // 1: Auxiliary button pressed, usually the wheel button or the middle
         // button (if present).
         assert(xc.MouseButton.MIDDLE === 1);

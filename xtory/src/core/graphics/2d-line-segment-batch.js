@@ -351,42 +351,40 @@ function LineSegment2DBatch(_renderer, _style) {
 //
 // Static constants.
 //
-LineSegment2DBatch.VERTEX_SHADER_SOURCE = [
+LineSegment2DBatch.VERTEX_SHADER_SOURCE = (
     //
-    'precision highp float;', // which is the default vertex shader precision.
+    'precision highp float;' + // which is the default vertex shader precision.
 
-    'attribute vec3 vertexPosition;',
-    'attribute vec4 vertexColor;',
+    'attribute vec3 vertexPosition;' +
+    'attribute vec4 vertexColor;' +
 
-    'uniform vec2 canvasClientSize;',
+    'uniform vec2 canvasClientSize;' +
 
-    'varying vec4 _color;',
+    'varying vec4 _color;' +
 
-    'void main() {',
+    'void main() {' +
         //
         // Converts the (vertex) position from screen to 'clip' space with w = 1,
         // just like what ScreenCoordinateHelper.toClipSpace() does.
-        'gl_Position = vec4 (',
-            '-1.0 + 2.0 * (vertexPosition.xy / canvasClientSize.xy),',
-            'vertexPosition.z,',
-            '1.0',
-        ');',
+        'gl_Position = vec4 (' +
+            '-1.0 + 2.0 * (vertexPosition.xy / canvasClientSize.xy),' +
+            'vertexPosition.z,' +
+            '1.0' +
+        ');' +
 
-        '_color = vertexColor;',
+        '_color = vertexColor;' +
     '}'
+);
 
-].join('\n');
-
-LineSegment2DBatch.FRAGMENT_SHADER_SOURCE = [
+LineSegment2DBatch.FRAGMENT_SHADER_SOURCE = (
     //
-    'precision mediump float;', // which is the recommended fragment shader precision.
+    'precision mediump float;' + // which is the recommended fragment shader precision.
 
-    'varying vec4 _color;',
+    'varying vec4 _color;' +
 
-    'void main() {',
-        'gl_FragColor = _color;',
+    'void main() {' +
+        'gl_FragColor = _color;' +
     '}'
-   
-].join('\n');
+);
 
 export { LineSegment2DBatch };

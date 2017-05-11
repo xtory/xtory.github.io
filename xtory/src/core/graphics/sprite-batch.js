@@ -385,45 +385,43 @@ function SpriteBatch(_renderer, _style) {
 //
 // Static constants.
 //
-SpriteBatch.VERTEX_SHADER_SOURCE = [
+SpriteBatch.VERTEX_SHADER_SOURCE = (
     //
-    'precision highp float;', // which is the default vertex shader precision.
+    'precision highp float;' + // which is the default vertex shader precision.
 
-    'attribute vec3 vertexPosition;',
-    'attribute vec2 vertexTextureCoordinates;',
+    'attribute vec3 vertexPosition;' +
+    'attribute vec2 vertexTextureCoordinates;' +
 
-    'uniform vec2 canvasClientSize;',
+    'uniform vec2 canvasClientSize;' +
 
-    'varying vec2 _textureCoordinates;',
+    'varying vec2 _textureCoordinates;' +
 
-    'void main() {',
+    'void main() {' +
         //
         // Converts the (vertex) position from screen to 'clip' space with w = 1,
         // just like what ScreenCoordinateHelper.toClipSpace() does.
-        'gl_Position = vec4 (',
-            '-1.0 + 2.0 * (vertexPosition.xy / canvasClientSize.xy),',
-            'vertexPosition.z,',
-            '1.0',
-        ');',
+        'gl_Position = vec4 (' +
+            '-1.0 + 2.0 * (vertexPosition.xy / canvasClientSize.xy),' +
+            'vertexPosition.z,' +
+            '1.0' +
+        ');' +
 
-        '_textureCoordinates = vertexTextureCoordinates;',
+        '_textureCoordinates = vertexTextureCoordinates;' +
     '}'
+);
 
-].join('\n');
-
-SpriteBatch.FRAGMENT_SHADER_SOURCE = [
+SpriteBatch.FRAGMENT_SHADER_SOURCE = (
     //
-    'precision mediump float;', // which is the recommended fragment shader precision.
+    'precision mediump float;' + // which is the recommended fragment shader precision.
 
-    'uniform vec4 color;',
-    'uniform sampler2D sampler;',
+    'uniform vec4 color;' +
+    'uniform sampler2D sampler;' +
 
-    'varying vec2 _textureCoordinates;',
+    'varying vec2 _textureCoordinates;' +
 
-    'void main() {',
-        'gl_FragColor = color * texture2D(sampler, _textureCoordinates);',
+    'void main() {' +
+        'gl_FragColor = color * texture2D(sampler, _textureCoordinates);' +
     '}'
-   
-].join('\n');
+);
 
 export { SpriteBatch };

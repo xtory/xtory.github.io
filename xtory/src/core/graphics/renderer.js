@@ -45,8 +45,6 @@ function Renderer(_canvas, _style) {
 
         setUpWebGLContext();
 
-        setUpTimers();
-
     } catch (e) {
         //
         console.log('xtory.core.Renderer: ' + e);
@@ -267,32 +265,6 @@ function Renderer(_canvas, _style) {
         //
         _gl.enable(_gl.CULL_FACE); // default: disable.
         _gl.cullFace(_gl.BACK); // default: BACK.
-    }
-
-    function setUpTimers() {
-        //
-        // Note:
-        // Provides requestAnimationFrame in a cross browser way.
-        // @author paulirish / http://paulirish.com/
-
-        if (window.requestAnimationFrame === undefined) {
-            //
-            window.requestAnimationFrame = (function() {
-                //
-                return (
-                    window.webkitRequestAnimationFrame ||
-                    window.mozRequestAnimationFrame ||
-                    window.oRequestAnimationFrame ||
-                    window.msRequestAnimationFrame ||
-                    function (
-                        callback, // function FrameRequestCallback
-                        element   // DOMElement Element
-                    ){
-                        window.setTimeout(callback, 1000/60);
-                    }
-                );
-            })();
-        }
     }
 
     //

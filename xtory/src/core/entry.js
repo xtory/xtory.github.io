@@ -1,3 +1,6 @@
+// Polyfills.
+import './polyfills.js';
+
 // Base.
 export { ArrayHelper }                                from './base/helpers/array-helper';
 export { ComparisonResults }                          from './base/comparison-results';
