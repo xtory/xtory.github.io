@@ -10,7 +10,7 @@ to "scripts" in package.json
 3. add rollup.config.js
 
 4.
-npm install --save-dev uglify rollup mocha mkdirp
+npm install --save-dev uglify rollup jest mkdirp
 
 5.
 npm run build
